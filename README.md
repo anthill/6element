@@ -14,14 +14,16 @@ La réalisation de ces objectifs passe par le dévelopement des produits suivant
 - un dashboard utilisant la datavisualisation pour que les collectivités puissent anticiper, optimiser et prendre des décisions
 - une application mobile grand public
 
+![Schema](img/schema.png)
+
 Voici le détail des produits avec ce qui a déjà été réalisé en vert.
 
 ### Modèle prédictif
 
 Il s'agit d'un modèle mathématique utilisant à la fois des données passées et des données contextuelles pour faire des prédictions d'affluence dans les décheteries. 
 
-- <font color='green'>aggrégation et nettoyage des données journalières</font>
-- <font color='green'>modèle prédictif à la journée</font>
+- aggrégation et nettoyage des données journalières <img src="img/done.jpg" style="float:right;" />
+- modèle prédictif à la journée <img src="img/done.jpg" style="float:right;" />
 - feature temporelle de l'année précédente
 - ajouter des données contextuelles
     - jours fériés, vacances scolaires
@@ -36,7 +38,7 @@ Il s'agit d'un modèle mathématique utilisant à la fois des données passées 
 
 Pour l'instant, il s'agit d'une visualisation des résultats du modèle mais qui doit se déveloper au fur et à mesure en outils d'aide à la décision.
 
-- <font color='green'>le calendrier d3js</font>
+- le calendrier d3js <img src="img/done.jpg" style="float:right;" />
 - faire une map leaflet
 - faire une visu genre radar pour la fréquentaiton horraire 
 

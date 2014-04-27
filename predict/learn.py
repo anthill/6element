@@ -184,7 +184,7 @@ Z = predictedfuture.reshape(len(decheteries),nb_days)
 dates_string=map(lambda x: x.strftime("%Y-%m-%d"),dates)
 output = pandas.DataFrame(Z, columns=dates_string, index=decheteries)
 output.index.name = "decheterie"
-output.to_csv("data/predictions.csv")
+output.to_csv("../dashboard/data/predictions.csv")
 
 feature_importance = regressor.feature_importances_
 feature_importance = 100.0 * (feature_importance / feature_importance.max())

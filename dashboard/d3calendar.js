@@ -57,7 +57,7 @@
         .attr("d", monthPath);
 
 
-    d3.csv("../predict/data/predictions.csv", function(error, csv) {
+    d3.csv("data/predictions.csv", function(error, csv) {
         console.log('csv', csv);
 
         // doing only one decheterie for now

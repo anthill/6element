@@ -1,5 +1,3 @@
-#Binful
-
 ## Predictive model
 
 To run the predicitve algorithm on your computer:

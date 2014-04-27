@@ -48,7 +48,7 @@
         
         // one yearly calendar object per year
         var svg = d3.select(container).selectAll("svg")
-            .data(d3.range(2010, 2015)) // TODO change this range to reflect garbage contributions
+            .data(d3.range(2012, 2015)) // TODO change this range to reflect garbage contributions
             .enter().append("svg")
             .attr("width", width)
             .attr("height", height)

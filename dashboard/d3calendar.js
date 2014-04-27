@@ -1,12 +1,12 @@
 (function(){ // http://bl.ocks.org/mbostock/4063318
     'use strict';
-    
+
     /*
     the original CSV had these columns:
     Date,Open,High,Low,Close,Volume,Adj Close
     2010-10-01,10789.72,10907.41,10759.14,10829.68,4298910000,10829.68
     */
-    
+
     var width = 960,
         height = 136,
         cellSize = 17; // cell size
@@ -56,24 +56,24 @@
         .attr("class", "month")
         .attr("d", monthPath);
 
-    
-    d3.csv("predictions.csv", function(error, csv) {
+
+    d3.csv("../predict/data/predictions.csv", function(error, csv) {
         console.log('csv', csv);
-    
+
         // doing only one decheterie for now
         var oneDechData = csv[0];
         var dech = oneDechData.decheterie;
         delete oneDechData.decheterie;
-        
+
         var data = oneDechData;
-        
+
         /*var data = d3.nest()
             .key(function(d) { return d.Date; })
             .rollup(function(d) { return (d[0].Close - d[0].Open) / d[0].Open; })
             .map(csv);
 
         console.log('data', data);*/
-        
+
         rect.filter(function(d) { return d in data; })
             .attr("class", function(d) { return "day " + color(data[d]); })
             .select("title")

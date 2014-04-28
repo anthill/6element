@@ -45,17 +45,19 @@ Pour l'instant, il s'agit d'une visualisation des résultats du modèle mais qui
 ### App mobile
 
 Cette application permettra :
-    - d'orienter vers la décheterie la plus adaptée au type de déchet
-    - de proposer le meilleur créneau
-    - de proposer une voie alternative (site de dons, assocition de récuperation, autre particulier, agriculteur)
-    - de se renseigner comme demandeur d'un type déchet
+
+- d'orienter vers la décheterie la plus adaptée au type de déchet
+- de proposer le meilleur créneau
+- de proposer une voie alternative (site de dons, assocition de récuperation, autre particulier, agriculteur)
+- de se renseigner comme demandeur d'un type déchet
 
 Les étapes de dévelopement:
 
 - design/UX
 - developement d'une première version
 - crowdsourcer les premiers acteurs alternatifs
-    - emaus
+    - Emmaüs
     - associations recup'r etc
     - sites genre don.fr
+    - monextel
 - mettre en place un backend/api qui récupère les données de l'app

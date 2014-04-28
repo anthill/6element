@@ -1,29 +1,36 @@
-(function(){
+(function(global){
     'use strict';
+    var BORDEAUX_COORDS = [44.84, -0.57]
+            
+    var map = L.map('map').setView(BORDEAUX_COORDS, 11);
+            
+    L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
     
-    // unfortunate this is defer-loaded
-    d3.csv("data/predictions.csv", function(error, csv) {
-        console.log('csv', csv);
-
-        var map = document.body.querySelector('.map');
-        var calendar = document.body.querySelector('.calendar');
+    
+    // unfortunate this is defer-loaded. xhr can happen in parallel of document loading
+    // TODO make promises for all of this
+    d3.csv("data/predictions.csv", function(error, predictions) {
+        if(error)
+            throw error;
+        console.log('predictions', predictions);
         
-        csv.forEach(function(dech){
-            var dechName = dech.decheterie;
-            delete dech.decheterie;
-            Object.freeze(dech);
+        d3.csv("data/coords.csv", function(error, coords) {
+            if(error)
+                throw error;
+            console.log('coords', coords);
+        
+            var coordsByName = coords.reduce(function(acc, curr){
+                acc[curr.decheterie] = curr;
+                return acc;
+            }, Object.create(null));
             
-            var button = document.createElement('button');
-            button.textContent = dechName;
-            
-            button.addEventListener('click', function(e){
-                calendar.innerHTML = ''; // empty
-                makeCalendar(dech, calendar);
-            });
-            
-            map.appendChild(button);
+            populateMap(predictions, coordsByName, map);
+        
         });
+            
         
     });
 
-})()
+})(this);

@@ -99,9 +99,18 @@
                 width: 1000px; /* TODO find something better eventually */
             }
             
+            h1{
+                text-align: center;
+                margin: 0;
+                padding: 0;
+            }
+            
         </style>
         
+        <script src="lib/promise.js" defer data-polyfill> </script>
+        
         <script src="lib/tiretbas-natives.js" defer> </script>
+        
         <script src="bower_components/d3/d3.js" defer> </script>
         <script src="leaflet/leaflet-src.js" defer> </script>
         
@@ -116,9 +125,7 @@
     <!--
         TODO:
         * historical data
-        * change color scale
         * add separation line
-        * add title to calendar
     -->
 
     <body>
@@ -126,8 +133,10 @@
             
         </div>
         <div class="overlay" hidden>
+            
             <div class="calendar">
-
+                <h1></h1>
+                <div class="data"></div>
             </div>
         </div>
         

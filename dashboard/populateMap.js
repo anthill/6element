@@ -11,6 +11,8 @@
         });
         
         var calendar = document.body.querySelector('.calendar');
+        var calendarData = calendar.querySelector('.data');
+        var calendarTitle = calendar.querySelector('h1');
         
         predictions.forEach(function(dech){
             var dechName = dech.decheterie;
@@ -28,12 +30,14 @@
                 .on('click', function(e){
                     console.log('data for', dechName, dech);
                     
-                    calendar._empty();
+                    calendarData._empty();
                     overlay._show();
                     
                     var docFrag = document.createDocumentFragment();
                     makeCalendar(dech, docFrag);
-                    calendar.appendChild(docFrag);
+                    calendarData.appendChild(docFrag);
+                    
+                    calendarTitle.textContent = dechName;
                     
                     calendar.style.opacity = "0";
                     setTimeout(function(){

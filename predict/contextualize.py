@@ -4,22 +4,56 @@ import pandas
 import glob
 import re
 import datetime
+from datetime import date, timedelta as td
 import numpy as np
 
 daily = pandas.read_csv("data/temporal_daily.csv",index_col=0, parse_dates=[0])
 
 # unpivot table (date, decheterie1, decheterie2,...) => (date, nom_decheterie, affluence)
-
 N, K = daily.shape
 data = {'frequence' : daily.values.ravel('F'),
         'nom_decheterie' : np.asarray(daily.columns).repeat(N),
         'date' : np.tile(np.asarray(daily.index), K)}
 learning_table = pandas.DataFrame(data, columns=['date', 'nom_decheterie', 'frequence'])
 
+# adding a year for the predictions
+startdate = date(2014,1,1)
+enddate = date(2014,12,31)
+delta = enddate - startdate
+next_year = [startdate + td(days=i) for i in range(delta.days + 1)]
+decheteries=  list(set(learning_table["nom_decheterie"]))
+dates, nom_decheteries = [],[]
+for decheterie in decheteries:
+	for d in next_year:
+		dates += [d]
+		nom_decheteries += [decheterie]
+
+learning_table = learning_table.append(pandas.DataFrame({"date":dates,"nom_decheterie":nom_decheteries,"frequence":np.NaN*np.ones(len(nom_decheteries))}), ignore_index=True)
+
 learning_table["year"] = learning_table["date"].apply(lambda x: x.year)
 learning_table["month"] = learning_table["date"].apply(lambda x: x.month)
+learning_table["dayofmonth"] = learning_table["date"].apply(lambda x: x.day)
 learning_table["dayofweek"] = learning_table["date"].apply(lambda x: x.dayofweek)
 learning_table["dayofyear"] = learning_table["date"].apply(lambda x: x.dayofyear)
+
+def add_previous_activity(df, name, timedelta):
+	df.index = zip(df.nom_decheterie, df.date)
+	shifted_copy = df[["frequence",]].rename(columns={"frequence": name})
+	shifted_copy.index = zip(df.nom_decheterie, map(lambda x: x + timedelta, df.date))
+	return pandas.merge(df, shifted_copy, left_index=True, how="left", right_index=True)
+
+
+# learning_table = add_previous_activity(learning_table, "prev_week", datetime.timedelta(days = 7))
+
+def add_previous_activity2(df, name, diff):
+	df.index = zip(df.nom_decheterie, df.year, df.month, df.dayofmonth)
+	shifted_copy = df[["frequence",]].rename(columns={"frequence": name})
+	shifted_copy.index = zip(df.nom_decheterie, map(lambda x : x+diff, df.year), df.month, df.dayofmonth)
+	return pandas.merge(df, shifted_copy, left_index=True, how="left", right_index=True)
+
+learning_table = add_previous_activity2(learning_table,"prev_year", 1)
+# we replace missing values from 2013 by zero
+learning_table["prev_year"] = learning_table["prev_year"].fillna(0)
 
 # from http://catalogue.datalocale.fr/dataset/liste-ctd-cg33/resource/aaafb2dd-feb3-43e2-8b5b-50bb66da75f9
 data = pandas.read_csv("data/Opendata_Decheteries_v2.csv", sep=",")

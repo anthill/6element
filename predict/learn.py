@@ -16,8 +16,11 @@ from sklearn.preprocessing import OneHotEncoder, Imputer, StandardScaler
 data = pandas.read_csv("data/learning_table.csv")
 
 selected_features = [
+# "prev_week",
+"prev_year",
 "year",
 "month",
+"dayofmonth",
 "dayofweek",
 "dayofyear",
 "Label",
@@ -89,11 +92,6 @@ selected_features = [
 ]
 
 to_predict = "frequence"
-
-# data = data[data["Label"] == "Ambares-et-Lagrave"]
-data = data.dropna(subset=["frequence"]+selected_features)
-# data = data.fillna(0)
-data.index = range(len(data))
 predictors = data[selected_features]
 
 # deal with categorical features
@@ -111,31 +109,37 @@ def category_encode(dataframe, name):
 # (X, labels) = category_encode(predictors, "Label")
 labels = set(predictors.ix[:, "Label"])
 int_conversion = {value : i for (value, i) in zip(labels, range(len(labels)))}
+reverse_int_conversion = {i : value for (value, i) in zip(labels, range(len(labels)))}
 predictors["Label"] = predictors["Label"].apply(lambda x: int_conversion[x])
-X = predictors
-labels = predictors.columns
-# X = category_encode(X, "MOA")
-Y = data[to_predict]
 
-# deal with missing values
-imputer = Imputer(missing_values="NaN", strategy="mean", axis=0)
-imputer.fit(X)
-Imputer(axis=0, copy=True, missing_values="NaN", strategy="mean", verbose=0)
-X = imputer.transform(X)
+# separate what is to learn and what should be outputed
+X = predictors[predictors.year != 2014]
+X = X.dropna(subset= selected_features)
+# X = category_encode(X, "MOA")
+Y = data[to_predict].ix[X.index]
+Y = Y.dropna(subset= [to_predict,])
+X = X.ix[Y.index]
+X.index = range(len(X))
+Y.index = range(len(X))
+X_out = predictors[predictors.year == 2014]
+X_out = X_out.dropna(subset = selected_features)
+X_out.index = range(len(X_out))
 
 # scale
 scaler = StandardScaler().fit(X)
 X = scaler.fit_transform(X,Y)
+X_out_scaled = scaler.fit_transform(X_out)
 
 print "shufling"
 index = np.random.permutation(range(len(X)))
 X = X[index]
-Y = Y[index]
+Y = Y.ix[index]
 
 print "learning"
-params = {"n_estimators": 500, "max_depth": 9, "min_samples_split": 1,
-          "learning_rate": 0.01, "loss": "ls", "verbose": 1}
-regressor = ensemble.GradientBoostingRegressor(**params)
+# params = {"n_estimators": 500, "max_depth": 9, "min_samples_split": 1,
+#           "learning_rate": 0.01, "loss": "ls", "verbose": 1}
+# regressor = ensemble.GradientBoostingRegressor(**params)
+regressor = ensemble.RandomForestRegressor(n_estimators=10, max_depth=9, min_samples_split=2, min_samples_leaf=1, max_features='auto', bootstrap=True, oob_score=False, n_jobs=-1, random_state=None, verbose=1)
 
 # scores = cross_validation.cross_val_score(regressor, x_norm, y, cv=3)
 # print("Accuracy: %0.2f (+/- %0.2f)" % (scores.mean(), scores.std() * 2))
@@ -153,38 +157,7 @@ print "MSE : %s" % np.sqrt(mean_squared_error(expected, predicted))
 # plt.plot(range(len(expected)), predicted, "r")
 # plt.show()
 
-# plot next week
-nb_days = 100
-dates = [datetime.date.today() + datetime.timedelta(days=i) for i in range(0, nb_days)]
-decheteries = list(set(data["Label"]))
-defaults = []
-for label in decheteries:
-    a = data[data["Label"] == label]
-    a = a[selected_features]
-    a["Label"] = a["Label"].apply(lambda x: int_conversion[x])
-    defaults += [a.ix[a.index[0]]]
-
-Xfuture = []
-for default in defaults:
-    for date in dates:
-        x = np.array(default)
-        x[0] = date.year
-        x[1] = date.month
-        x[2] = date.weekday()
-        x[3] = date.timetuple().tm_yday
-        Xfuture += [x]
-
-Xfuture = np.array(Xfuture)
-predictedfuture = regressor.predict(Xfuture)
-Z = predictedfuture.reshape(len(decheteries),nb_days)
-# plt.pcolor(Z, edgecolors='k', linewidths=1)
-# plt.show()
-
-# output predictions
-dates_string=map(lambda x: x.strftime("%Y-%m-%d"),dates)
-output = pandas.DataFrame(Z, columns=dates_string, index=decheteries)
-output.index.name = "decheterie"
-output.to_csv("../dashboard/data/predictions.csv")
+# most important features
 
 feature_importance = regressor.feature_importances_
 feature_importance = 100.0 * (feature_importance / feature_importance.max())
@@ -195,4 +168,16 @@ for f,w in zip(labels[sorted_idx], feature_importance[sorted_idx]):
     print "%d) %s : %f" % (i, f, w)
     i+=1
     if i > 100: break
+
+# output results
+
+predictedfuture = regressor.predict(X_out_scaled)
+def doDate(row):
+    return "%04d/%02d/%02d" % (row["year"],row["month"],row["dayofmonth"])
+X_out["date"] = X_out.apply(doDate, axis = 1)
+X_out["decheterie"] = X_out["Label"].apply(lambda x: reverse_int_conversion[x])
+output = pandas.DataFrame({"decheterie": X_out["decheterie"], "date": X_out["date"], "frequence": predictedfuture})
+output = output.drop_duplicates(["decheterie","date"])
+output = output.pivot(index="decheterie", columns="date", values="frequence")
+output.to_csv("../dashboard/data/predictions.csv")
 

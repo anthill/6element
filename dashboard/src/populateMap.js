@@ -16,6 +16,11 @@
                 overlay._hide();
             }
         });
+        document._on('keypress', function(e){
+            if(!overlay.hasAttribute('hidden') && e.keyCode === 27) // esc
+                overlay._hide();
+        });
+        
         
         var calendar = document.body.querySelector('.calendar');
         var calendarData = calendar.querySelector('.data');
@@ -52,8 +57,7 @@
                     calendar._once('transitionend', function(){
                         calendar.style.transition = '';
                         calendar.style.opacity = '';
-                    })
-                    
+                    });
                     
                 });
         });

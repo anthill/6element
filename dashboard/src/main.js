@@ -103,7 +103,7 @@
         Object.keys(predictions).forEach(function(dechName){
             if(!(dechName in data)){
                 console.warn("There are predictions for", dechName, "which name doesn't have corresponding historical data");
-                data[dechName] = Object.create(null); // so the script doesn't stupidly crash
+                data[dechName] = Object.create(null); // so the script doesn't crash stupidly
             }
             
             var predData = predictions[dechName];

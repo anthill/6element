@@ -1,7 +1,14 @@
 (function(global){
     'use strict';
-    
-    global.populateMap = function populateMap(predictions, coords, leafletMap){
+    /*
+    expects predictions to be an object key'd on recycling center name and value'd with objects: 
+    {
+        'YYYY-MM-DD': number // amount. TODO: Should be a number
+    }
+    */
+    global.populateMap = function populateMap(data, coords, leafletMap){
+        
+        console.log('populateMap data', data);
         
         var overlay = document.body.querySelector('.overlay');
         overlay._on('click', function(e){
@@ -11,11 +18,11 @@
         });
         
         var calendar = document.body.querySelector('.calendar');
+        var calendarData = calendar.querySelector('.data');
+        var calendarTitle = calendar.querySelector('h1');
         
-        predictions.forEach(function(dech){
-            var dechName = dech.decheterie;
-            delete dech.decheterie;
-            Object.freeze(dech);
+        Object.keys(data).forEach(function(dechName){
+            var dech = data[dechName];
 
             var dechCoords = coords[dechName];
             if(!dechCoords || (dechCoords.long === "0" && dechCoords.lat === "0")){
@@ -26,14 +33,16 @@
             L.marker([dechCoords.lat, dechCoords.long]).addTo(leafletMap)
                 .bindPopup(dechName)
                 .on('click', function(e){
-                    console.log('data for', dechName, dech);
+                    //console.log('data for', dechName, dech);
                     
-                    calendar._empty();
+                    calendarData._empty();
                     overlay._show();
                     
                     var docFrag = document.createDocumentFragment();
                     makeCalendar(dech, docFrag);
-                    calendar.appendChild(docFrag);
+                    calendarData.appendChild(docFrag);
+                    
+                    calendarTitle.textContent = dechName;
                     
                     calendar.style.opacity = "0";
                     setTimeout(function(){

@@ -8,6 +8,10 @@
                 box-sizing: border-box;
                 -moz-box-sizing: border-box;
             }
+            
+            [hidden]{
+                display: none !important;
+            }
         </style>
         
         <link href="leaflet/leaflet.css" rel="stylesheet">
@@ -83,12 +87,7 @@
                 align-items: center;
                 justify-content: center;
             }
-            
-            .overlay[hidden]{
-                display:none; /* 'cause HTML... */
-                opacity: 0;
-            }
-            
+
             .calendar{
                 padding: 20px;
                 
@@ -99,16 +98,25 @@
                 width: 1000px; /* TODO find something better eventually */
             }
             
+            .calendar h1{
+                text-align: center;
+                margin: 0;
+                padding: 0;
+            }
+            
         </style>
         
+        <script src="lib/promise.js" defer data-polyfill> </script>
+        
         <script src="lib/tiretbas-natives.js" defer> </script>
+        
         <script src="bower_components/d3/d3.js" defer> </script>
         <script src="leaflet/leaflet-src.js" defer> </script>
         
-        <script src="d3calendar.js" defer> </script>
-        <script src="populateMap.js" defer> </script>
-        <script src="main.js" defer> </script>
-        </script>
+        <script src="src/canonicalRecycleCenterName.js"> </script>
+        <script src="src/d3calendar.js" defer> </script>
+        <script src="src/populateMap.js" defer> </script>
+        <script src="src/main.js" defer> </script>
         
         <title> TITLE </title>    
     </head>
@@ -116,9 +124,8 @@
     <!--
         TODO:
         * historical data
-        * change color scale
-        * add separation line
-        * add title to calendar
+        * geoloc all recycling centers.
+        * add cosmetic metrics
     -->
 
     <body>
@@ -126,8 +133,10 @@
             
         </div>
         <div class="overlay" hidden>
+            
             <div class="calendar">
-
+                <h1></h1>
+                <div class="data"></div>
             </div>
         </div>
         

@@ -17,7 +17,7 @@
         format = d3.time.format("%Y-%m-%d");
 
     var color = d3.scale.quantize()
-        .domain([200, 500])
+        .domain([50, 600])
         .range(d3.range(11).map(function(d) { return "q" + d + "-11"; }));
 
     function monthPath(t0) {
@@ -39,7 +39,7 @@
         Take data and a container and builds a calendar view in the container
         @data formatted as:
         {
-            'YYYY-MM-DD': amount, // string
+            'YYYY-MM-DD': amount, // number
             'YYYY-MM-DD': amount
         }
         @container: Node
@@ -85,7 +85,7 @@
         rect.filter(function(d) { return d in data; })
             .attr("class", function(d) { return "day " + color(data[d]); })
             .select("title")
-            .text(function(d) { return d + ": " + Number(data[d]).toFixed(2) });
+            .text(function(d) { return d + ": " + data[d].toFixed(2) });
     };
     
     

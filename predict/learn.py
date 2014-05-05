@@ -173,7 +173,7 @@ for f,w in zip(labels[sorted_idx], feature_importance[sorted_idx]):
 
 predictedfuture = regressor.predict(X_out_scaled)
 def doDate(row):
-    return "%04d/%02d/%02d" % (row["year"],row["month"],row["dayofmonth"])
+    return "%04d-%02d-%02d" % (row["year"],row["month"],row["dayofmonth"])
 X_out["date"] = X_out.apply(doDate, axis = 1)
 X_out["decheterie"] = X_out["Label"].apply(lambda x: reverse_int_conversion[x])
 output = pandas.DataFrame({"decheterie": X_out["decheterie"], "date": X_out["date"], "frequence": predictedfuture})

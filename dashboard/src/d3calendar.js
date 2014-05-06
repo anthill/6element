@@ -16,10 +16,6 @@
         percent = d3.format(".1%"),
         format = d3.time.format("%Y-%m-%d");
 
-    var color = d3.scale.quantize()
-        .domain([50, 600])
-        .range(d3.range(11).map(function(d) { return "q" + d + "-11"; }));
-
     function monthPath(t0) {
         var t1 = new Date(t0.getFullYear(), t0.getMonth() + 1, 0),
             d0 = +day(t0), w0 = +week(t0),

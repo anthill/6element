@@ -1,5 +1,9 @@
 (function(global){
     'use strict';
+    
+    var today = new Date();
+    var TODAY_DATE_KEY = today.getFullYear()+'-'+today.getMonth()+'-'+today.getDate();
+    
     /*
     expects predictions to be an object key'd on recycling center name and value'd with objects:
     {
@@ -34,32 +38,54 @@
                 console.warn('No long/lat coordinates for', dechName);
                 return;
             }
+            
+            
+            function markerClickHandler(e){
+                calendarData._empty();
+                overlay._show();
 
-            L.circle([dechCoords.lat, dechCoords.long], 200, {"color": "#99FF00", "fillColor": "#99FF00", "fillopacity":1}).addTo(leafletMap)
-                .bindPopup(dechName)
-                .on('click', function(e){
-                    //console.log('data for', dechName, dech);
+                var docFrag = document.createDocumentFragment();
+                makeCalendar(dech, docFrag);
+                calendarData.appendChild(docFrag);
 
-                    calendarData._empty();
-                    overlay._show();
+                calendarTitle.textContent = dechName;
 
-                    var docFrag = document.createDocumentFragment();
-                    makeCalendar(dech, docFrag);
-                    calendarData.appendChild(docFrag);
-
-                    calendarTitle.textContent = dechName;
-
-                    calendar.style.opacity = "0";
-                    setTimeout(function(){
-                        calendar.style.transition = 'opacity 0.7s';
-                        calendar.style.opacity = '1';
-                    });
-                    calendar._once('transitionend', function(){
-                        calendar.style.transition = '';
-                        calendar.style.opacity = '';
-                    });
-                    
+                calendar.style.opacity = "0";
+                setTimeout(function(){
+                    calendar.style.transition = 'opacity 0.7s';
+                    calendar.style.opacity = '1';
                 });
+                calendar._once('transitionend', function(){
+                    calendar.style.transition = '';
+                    calendar.style.opacity = '';
+                });
+            }
+            
+            // Add markers asap with an approximate color
+            var icon = L.divIcon({
+                className: 'recycling-center',
+                iconSize: L.Point(0, 0) // when iconSize is set, CSS is respected. Otherwise, it's overridden -_-#
+            });
+            
+            var marker = L.marker([dechCoords.lat, dechCoords.long], {icon: icon});
+            marker.on('click', markerClickHandler);
+            
+            leafletMap.addLayer(marker);
+            
+            // when receiving the data, update the marker color to today's color
+            dataP.then(function(data){
+                var relevantData = data[dechName];
+                var colorClass = color(relevantData[TODAY_DATE_KEY]);
+                console.log(dechName, TODAY_DATE_KEY, colorClass);
+                
+                leafletMap.removeLayer(marker);
+                icon = L.divIcon({
+                    className: ['recycling-center', colorClass].join(' '),
+                    iconSize: L.Point(0, 0) // when iconSize is set, CSS is respected. Otherwise, it's overridden -_-#
+                });  
+                marker = L.marker([dechCoords.lat, dechCoords.long], {icon: icon}).addTo(leafletMap)
+            });
+            
         });
     };
 

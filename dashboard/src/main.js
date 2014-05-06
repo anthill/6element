@@ -126,5 +126,7 @@
 
         populateMap(data, coordsByName, map);
     });
-
+    
+    global.dataP = dataP;
+    
 })(this);

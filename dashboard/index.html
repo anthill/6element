@@ -118,7 +118,29 @@
                 margin: 0;
                 padding: 0;
             }
-
+            
+            .recycling-center{
+                width: 20px;
+                height: 20px;
+                border-radius: 50%;
+                
+                background-color: hsl(98, 51%, 60%);
+                
+                border: 1px black solid
+            }
+            
+            .recycling-center.q0-11{background-color:hsl(60, 100%, 87%)}
+            .recycling-center.q1-11{background-color:hsl(67, 88%, 80%)}
+            .recycling-center.q2-11{background-color:hsl(73, 76%, 74%)}
+            .recycling-center.q3-11{background-color:hsl(80, 68%, 68%)}
+            .recycling-center.q4-11{background-color:hsl(88, 59%, 63%)}
+            .recycling-center.q5-11{background-color:hsl(98, 51%, 60%)}
+            .recycling-center.q6-11{background-color:hsl(118, 41%, 56%)}
+            .recycling-center.q7-11{background-color:hsl(124, 56%, 45%)}
+            .recycling-center.q8-11{background-color:hsl(146, 71%, 35%)}
+            .recycling-center.q9-11{background-color:hsl(149, 85%, 27%)}
+            .recycling-center.q10-11{background-color:hsl(152, 100%, 20%)}
+            
         </style>
 
         <script src="lib/promise.js" defer data-polyfill> </script>
@@ -129,6 +151,7 @@
         <script src="leaflet/leaflet-src.js" defer> </script>
 
         <script src="src/canonicalRecycleCenterName.js"> </script>
+        <script src="src/colorClass.js" defer> </script>
         <script src="src/d3calendar.js" defer> </script>
         <script src="src/populateMap.js" defer> </script>
         <script src="src/main.js" defer> </script>
@@ -138,9 +161,10 @@
 
     <!--
         TODO:
-        * historical data
         * geoloc all recycling centers.
         * add cosmetic metrics
+        * circles for markers
+        * 
     -->
 
     <body>

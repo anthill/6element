@@ -16,7 +16,7 @@
     */
     global.populateMap = function populateMap(data, coords, leafletMap){
 
-        console.log('populateMap data', data);
+        //console.log('populateMap data', data);
 
         var overlay = document.body.querySelector('.overlay');
         overlay._on('click', function(e){

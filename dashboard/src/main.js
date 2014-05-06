@@ -30,7 +30,7 @@
     // change to an object key'd on decheterie names which value will be a 'YYYY-MM-DD' -> amount (number) object
     // canonicalize recycling center names too
     historicalP = historicalP.then(function uniformizeHistoricalData(historical){
-        console.log('historical', historical);
+        //console.log('historical', historical);
         return historical.reduce(function(acc, dayData){
 
             var date = dayData['Date'];
@@ -114,7 +114,7 @@
             });
         });
 
-        console.log(data);
+        //console.log(data);
 
         return data;
     })

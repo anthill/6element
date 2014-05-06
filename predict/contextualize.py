@@ -36,14 +36,28 @@ learning_table["dayofmonth"] = learning_table["date"].apply(lambda x: x.day)
 learning_table["dayofweek"] = learning_table["date"].apply(lambda x: x.dayofweek)
 learning_table["dayofyear"] = learning_table["date"].apply(lambda x: x.dayofyear)
 
-def add_previous_activity(df, name, timedelta):
+# adding meteo
+meteo = pandas.read_csv("data/meteo.csv")
+meteo = meteo.groupby(["year","month","day"]).mean().reset_index()
+def doDate(row):
+	return "%04d/%02d/%02d" % (row["year"], row["month"], row["day"])
+meteo["date"] = pandas.to_datetime(meteo.apply(doDate, axis=1))
+meteo.set_index("date", inplace=True)
+meteo = meteo.resample("d").interpolate()
+meteo = meteo[["year","month","day", "precipitation", "humidity", "temperature"]]
+meteo.rename(columns={"day": "dayofmonth"}, inplace=True)
+learning_table = pandas.merge(learning_table, meteo, how="left", on=["year", "month", "dayofmonth"])
+
+def add_previous_activity(df, name, new_name, timedelta):
 	df.index = zip(df.nom_decheterie, df.date)
-	shifted_copy = df[["frequence",]].rename(columns={"frequence": name})
+	shifted_copy = df[[name,]].rename(columns={name: new_name})
 	shifted_copy.index = zip(df.nom_decheterie, map(lambda x: x + timedelta, df.date))
 	return pandas.merge(df, shifted_copy, left_index=True, how="left", right_index=True)
 
 
-# learning_table = add_previous_activity(learning_table, "prev_week", datetime.timedelta(days = 7))
+learning_table = add_previous_activity(learning_table, "temperature", "prev_week_temperature", datetime.timedelta(days = 7))
+learning_table = add_previous_activity(learning_table, "humidity", "prev_week_humidity", datetime.timedelta(days = 7))
+learning_table = add_previous_activity(learning_table, "precipitation", "prev_week_precipitation", datetime.timedelta(days = 7))
 
 def add_previous_activity2(df, name, diff):
 	df.index = zip(df.nom_decheterie, df.year, df.month, df.dayofmonth)

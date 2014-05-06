@@ -23,21 +23,72 @@ def parse(day, month, year):
             else:
                 precipitation = float(values[11].split(" ")[0])
 
+            try:
+                nebulosity = int(values[1].split("/")[0])
+            except:
+                nebulosity = 0
+
+            try:
+                visibility = float(values[3].split(" ")[0])
+            except:
+                visibility = 0.
+
+            try:
+                temperature = float(values[4].split(" ")[0])
+            except:
+                temperature = 0.
+
+            try:
+                humidity = float(values[5][:2])
+            except:
+                humidity = 0.
+
+            try:
+                humidex = float(values[6])
+            except:
+                humidex = 0.
+
+            try:
+                windchill = float(values[7].split(" ")[0])
+            except:
+                windchill = 0.
+
+            try:
+                wind = float(values[9].split(" ")[0])
+            except:
+                wind = 0.
+
+            try:
+                gust = float(values[9].split("(")[1].split(" ")[0])
+            except:
+                gust = 0.
+
+            try:
+                wind = float(values[9].split(" ")[0])
+            except:
+                wind = 0.
+
+            try:
+                pressure = float(values[10].split(" ")[0]),
+            except:
+                pressure = 0.
+
             output = output.append( {"hour": int(values[0].split(" ")[0]),
-            "nebulosity": int(values[1].split("/")[0]),
-            "visibility": float(values[3].split(" ")[0]),
-            "temperature": float(values[4].split(" ")[0]),
-            "humidity": float(values[5][:2]),
-            "humidex": float(values[6]),
-            "windchill": float(values[7].split(" ")[0]),
-            "wind": float(values[9].split(" ")[0]),
-            "gust": float(values[9].split("(")[1].split(" ")[0]),
-            "pressure": float(values[10].split(" ")[0]),
+            "nebulosity": nebulosity,
+            "visibility": visibility,
+            "temperature": temperature,
+            "humidity": humidity,
+            "humidex": humidex,
+            "windchill": windchill,
+            "wind": wind,
+            "gust": gust,
+            "pressure": pressure,
             "precipitation": precipitation
             }, ignore_index=True)
 
         return output
     except:
+        print "error"
         return pandas.DataFrame(columns=['windchill', 'humidex', 'visibility', 'pressure', 'precipitation', 'temperature', 'hour', 'gust', 'humidity', 'nebulosity', 'wind'])
 
 
@@ -54,6 +105,7 @@ for mydate in days:
     res["month"] = mydate.month
     res["year"] = mydate.year
     final = final.append(res, ignore_index=True)
+    print len(final)
 
 
 final.to_csv("data/meteo.csv", index=False)

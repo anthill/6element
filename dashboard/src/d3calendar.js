@@ -1,12 +1,12 @@
 (function(global){ // http://bl.ocks.org/mbostock/4063318
     'use strict';
-    
+
     /*
     the original CSV had these columns:
     Date,Open,High,Low,Close,Volume,Adj Close
     2010-10-01,10789.72,10907.41,10759.14,10829.68,4298910000,10829.68
     */
-    
+
     var width = 960,
         height = 136,
         cellSize = 17; // cell size
@@ -28,9 +28,9 @@
     }
 
     d3.select(self.frameElement).style("height", "2910px");
-    
-    
-    
+
+
+
     /*
         Take data and a container and builds a calendar view in the container
         @data formatted as:
@@ -41,7 +41,7 @@
         @container: Node
     */
     global.makeCalendar = function makeCalendar(data, container){
-        
+
         // one yearly calendar object per year
         var svg = d3.select(container).selectAll("svg")
             .data(d3.range(2012, 2015)) // TODO change this range to reflect garbage contributions
@@ -68,7 +68,7 @@
             .attr("x", function(d) { return week(d) * cellSize; })
             .attr("y", function(d) { return day(d) * cellSize; })
             .attr("data-date", format)
-            .attr("data-amount", function(d) { return data[format(d)].toFixed(2); })
+            .attr("data-amount", function(d) { var amount = data[format(d)]; return amount === undefined ? null : amount.toFixed(2); })
             .datum(format);
 
         svg.selectAll(".month")
@@ -76,10 +76,10 @@
             .enter().append("path")
             .attr("class", "month")
             .attr("d", monthPath);
-        
+
         rect.filter(function(d) { return d in data; })
             .attr("class", function(d) { return "day " + color(data[d]); });
     };
-    
-    
+
+
 })(this);

@@ -83,7 +83,9 @@
                     className: ['recycling-center', colorClass].join(' '),
                     iconSize: L.Point(0, 0) // when iconSize is set, CSS is respected. Otherwise, it's overridden -_-#
                 });  
-                marker = L.marker([dechCoords.lat, dechCoords.long], {icon: icon}).addTo(leafletMap)
+                marker = L.marker([dechCoords.lat, dechCoords.long], {icon: icon})
+                    .addTo(leafletMap)
+                    .on('click', markerClickHandler)
             });
             
         });

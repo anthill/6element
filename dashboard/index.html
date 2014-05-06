@@ -2,27 +2,27 @@
 <html lang="fr">
     <head>
         <meta charset="utf-8">
-        
-        <style> 
+
+        <style>
             *{
                 box-sizing: border-box;
                 -moz-box-sizing: border-box;
             }
-            
+
             [hidden]{
                 display: none !important;
             }
         </style>
-        
+
         <link href="leaflet/leaflet.css" rel="stylesheet">
-        
+
         <style>
             body{
                 width: 100vw;
                 height: 100vh;
                 padding: 0;
                 margin: 0;
-                
+
                 background-color: indianred;
                 background-image: repeating-linear-gradient(-45deg,
                     hsl(82, 49%, 90%),
@@ -30,7 +30,7 @@
                     hsl(208, 31%, 90%) 120px
                 );
             }
-            
+
             body {
               font: 10px sans-serif;
               shape-rendering: crispEdges;
@@ -47,14 +47,15 @@
               stroke-width: 2px;
             }
 
-            /*.RdYlGn .q0-11{fill:hsl(346, 100%, 32%)}
+            /*
+            .RdYlGn .q0-11{fill:hsl(346, 100%, 32%)}
             .RdYlGn .q1-11{fill:hsl(3, 69%, 50%)}
             .RdYlGn .q2-11{fill:hsl(14, 89%, 61%)}
             .RdYlGn .q3-11{fill:hsl(30, 98%, 69%)}
             .RdYlGn .q4-11{fill:hsl(44, 98%, 77%)}
             */
-            
-            .RdYlGn .q0-11{fill:hsl(60, 100%, 87%)}
+
+/*            .RdYlGn .q0-11{fill:hsl(60, 100%, 87%)}
             .RdYlGn .q1-11{fill:hsl(67, 88%, 80%)}
             .RdYlGn .q2-11{fill:hsl(73, 76%, 74%)}
             .RdYlGn .q3-11{fill:hsl(80, 68%, 68%)}
@@ -64,25 +65,39 @@
             .RdYlGn .q7-11{fill:hsl(124, 56%, 45%)}
             .RdYlGn .q8-11{fill:hsl(146, 71%, 35%)}
             .RdYlGn .q9-11{fill:hsl(149, 85%, 27%)}
-            .RdYlGn .q10-11{fill:hsl(152, 100%, 20%)}
+            .RdYlGn .q10-11{fill:hsl(152, 100%, 20%)}*/
+
+
+
+            .RdYlGn .q0-11{fill:rgb(165,0,38)}
+            .RdYlGn .q1-11{fill:rgb(215,48,39)}
+            .RdYlGn .q2-11{fill:rgb(244,109,67)}
+            .RdYlGn .q3-11{fill:rgb(253,174,97)}
+            .RdYlGn .q4-11{fill:rgb(254,224,139)}
+            .RdYlGn .q5-11{fill:rgb(255,255,191)}
+            .RdYlGn .q6-11{fill:rgb(217,239,139)}
+            .RdYlGn .q7-11{fill:rgb(166,217,106)}
+            .RdYlGn .q8-11{fill:rgb(102,189,99)}
+            .RdYlGn .q9-11{fill:rgb(26,152,80)}
+            .RdYlGn .q10-11{fill:rgb(0,104,55)}
         </style>
-        
-        
+
+
         <style>
             div#map{
                 height: 100vh;
                 width: 100vw;
             }
-            
+
             .overlay{
                 position: fixed;
                 width: 100vw;
                 height: 100vh;
-                
+
                 top: 0;
-                
+
                 background-color: hsla(0, 0%, 0%, 0.5);
-                
+
                 display: flex;
                 align-items: center;
                 justify-content: center;
@@ -90,37 +105,37 @@
 
             .calendar{
                 padding: 20px;
-                
+
                 background-color: white;
-                
+
                 border-radius: 10px;
-                
+
                 width: 1000px; /* TODO find something better eventually */
             }
-            
+
             .calendar h1{
                 text-align: center;
                 margin: 0;
                 padding: 0;
             }
-            
+
         </style>
-        
+
         <script src="lib/promise.js" defer data-polyfill> </script>
-        
+
         <script src="lib/tiretbas-natives.js" defer> </script>
-        
+
         <script src="bower_components/d3/d3.js" defer> </script>
         <script src="leaflet/leaflet-src.js" defer> </script>
-        
+
         <script src="src/canonicalRecycleCenterName.js"> </script>
         <script src="src/d3calendar.js" defer> </script>
         <script src="src/populateMap.js" defer> </script>
         <script src="src/main.js" defer> </script>
-        
-        <title> TITLE </title>    
+
+        <title> TITLE </title>
     </head>
-    
+
     <!--
         TODO:
         * historical data
@@ -130,15 +145,15 @@
 
     <body>
         <div id="map">
-            
+
         </div>
         <div class="overlay" hidden>
-            
+
             <div class="calendar">
                 <h1></h1>
                 <div class="data"></div>
             </div>
         </div>
-        
+
     </body>
 </html>

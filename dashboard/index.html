@@ -37,9 +37,10 @@
             }
 
             .day {
-              fill: #fff;
-              stroke: #ccc;
+                fill: #fff;
+                stroke: #ccc;
             }
+            
 
             .month {
               fill: none;
@@ -58,6 +59,11 @@
             .RdYlGn .q8-11{fill:hsl(146, 71%, 35%)}
             .RdYlGn .q9-11{fill:hsl(149, 85%, 27%)}
             .RdYlGn .q10-11{fill:hsl(152, 100%, 20%)}
+            
+            
+            .day:hover{
+                fill: indianred;
+            }
         </style>
 
 
@@ -95,6 +101,10 @@
                 text-align: center;
                 margin: 0;
                 padding: 0;
+            }
+            
+            .calendar .day-details{
+                font-size: 2em;
             }
             
             .recycling-center{
@@ -154,6 +164,9 @@
             <div class="calendar">
                 <h1></h1>
                 <div class="data"></div>
+                <div class="day-details">
+                    <span class="date"></span> - <span class="amount"></span>
+                </div>
             </div>
         </div>
 

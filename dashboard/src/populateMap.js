@@ -34,6 +34,32 @@
         var calendarData = calendar.querySelector('.data');
         var calendarTitle = calendar.querySelector('h1');
 
+        
+        
+        var lastMouseMove;
+        
+        function moveHandler(){
+            var target = lastMouseMove.target;
+            lastMouseMove = undefined;
+            
+            if(target.tagName.toLowerCase() !== 'rect' || !target.classList.contains('day'))
+                return;
+            
+            calendar.querySelector('.day-details .date').textContent = target.getAttribute('data-date');
+            calendar.querySelector('.day-details .amount').textContent = target.getAttribute('data-amount');
+            
+            
+        }
+        
+        calendar._on('mousemove', function(e){
+            if(!lastMouseMove)
+                requestAnimationFrame(moveHandler);
+            
+            lastMouseMove = e;
+        });
+        
+        
+        
         Object.keys(data).forEach(function(dechName){
             var dech = data[dechName];
 

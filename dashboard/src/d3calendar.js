@@ -65,12 +65,14 @@
             .attr("class", "day")
             .attr("width", cellSize)
             .attr("height", cellSize)
-            .attr("x", function(d) { return week(d) * cellSize; }) // week and day positioning (smart idea)
+            .attr("x", function(d) { return week(d) * cellSize; })
             .attr("y", function(d) { return day(d) * cellSize; })
+            .attr("data-date", format)
+            .attr("data-amount", function(d) { console.log('d', format(d)); return data[format(d)].toFixed(2); })
             .datum(format);
 
-        rect.append("title") // ?
-            .text(function(d) { return d; });
+        /*rect.append("title") // ?
+            .text(function(d) { return d; });*/
 
         svg.selectAll(".month")
             .data(function(d) { return d3.time.months(new Date(d, 0, 1), new Date(d + 1, 0, 1)); })
@@ -80,8 +82,8 @@
         
         rect.filter(function(d) { return d in data; })
             .attr("class", function(d) { return "day " + color(data[d]); })
-            .select("title")
-            .text(function(d) { return d + ": " + data[d].toFixed(2) });
+            /*.select("title")
+            .text(function(d) { return d + ": " + data[d].toFixed(2) });*/
     };
     
     

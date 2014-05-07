@@ -6,7 +6,7 @@
     }
     
     var today = new Date();
-    var TODAY_DATE_KEY = today.getFullYear()+'-'+padDate(today.getMonth())+'-'+padDate(today.getDate());
+    var TODAY_DATE_KEY = today.getFullYear()+'-'+padDate(today.getMonth()+1)+'-'+padDate(today.getDate());
     
     /*
     expects predictions to be an object key'd on recycling center name and value'd with objects:
@@ -106,6 +106,8 @@
             dataP.then(function(data){
                 var relevantData = data[dechName];
                 var colorClass = color(relevantData[TODAY_DATE_KEY]);
+                
+                console.log(dechName, relevantData, TODAY_DATE_KEY, relevantData[TODAY_DATE_KEY]);
                 
                 leafletMap.removeLayer(marker);
                 icon = L.divIcon({

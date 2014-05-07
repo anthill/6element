@@ -11,8 +11,15 @@
         height = 136,
         cellSize = 17; // cell size
 
-    var day = d3.time.format("%w"),
-        week = d3.time.format("%U"),
+    
+    var day = function(date){
+            return (date.getDay() + 6) % 7; // should be -1, but would mess with %
+        },
+        week = function(date){
+            var w = d3.time.format("%U")(date);
+            
+            return date.getDay() === 0 ? w-1 : w ; // 0 is Sunday
+        },
         percent = d3.format(".1%"),
         format = d3.time.format("%Y-%m-%d");
 

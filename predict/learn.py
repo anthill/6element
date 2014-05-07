@@ -17,6 +17,12 @@ data = pandas.read_csv("data/learning_table.csv")
 
 selected_features = [
 # "prev_week",
+"precipitation",
+"humidity",
+"temperature",
+"prev_week_temperature",
+"prev_week_humidity",
+"prev_week_precipitation",
 "prev_year",
 "year",
 "month",
@@ -136,10 +142,10 @@ X = X[index]
 Y = Y.ix[index]
 
 print "learning"
-# params = {"n_estimators": 500, "max_depth": 9, "min_samples_split": 1,
-#           "learning_rate": 0.01, "loss": "ls", "verbose": 1}
-# regressor = ensemble.GradientBoostingRegressor(**params)
-regressor = ensemble.RandomForestRegressor(n_estimators=10, max_depth=9, min_samples_split=2, min_samples_leaf=1, max_features='auto', bootstrap=True, oob_score=False, n_jobs=-1, random_state=None, verbose=1)
+params = {"n_estimators": 500, "max_depth": 9, "min_samples_split": 1,
+          "learning_rate": 0.01, "loss": "ls", "verbose": 1}
+regressor = ensemble.GradientBoostingRegressor(**params)
+# regressor = ensemble.RandomForestRegressor(n_estimators=10, max_depth=9, min_samples_split=2, min_samples_leaf=1, max_features='auto', bootstrap=True, oob_score=False, n_jobs=-1, random_state=None, verbose=1)
 
 # scores = cross_validation.cross_val_score(regressor, x_norm, y, cv=3)
 # print("Accuracy: %0.2f (+/- %0.2f)" % (scores.mean(), scores.std() * 2))
@@ -157,6 +163,18 @@ print "MSE : %s" % np.sqrt(mean_squared_error(expected, predicted))
 # plt.plot(range(len(expected)), predicted, "r")
 # plt.show()
 
+
+# output results
+predictedfuture = regressor.predict(X_out_scaled)
+def doDate(row):
+    return "%04d-%02d-%02d" % (row["year"],row["month"],row["dayofmonth"])
+X_out["date"] = X_out.apply(doDate, axis = 1)
+X_out["decheterie"] = X_out["Label"].apply(lambda x: reverse_int_conversion[x])
+output = pandas.DataFrame({"decheterie": X_out["decheterie"], "date": X_out["date"], "frequence": predictedfuture})
+output = output.drop_duplicates(["decheterie","date"])
+output = output.pivot(index="decheterie", columns="date", values="frequence")
+output.to_csv("../dashboard/data/predictions.csv")
+
 # most important features
 
 feature_importance = regressor.feature_importances_
@@ -168,16 +186,3 @@ for f,w in zip(labels[sorted_idx], feature_importance[sorted_idx]):
     print "%d) %s : %f" % (i, f, w)
     i+=1
     if i > 100: break
-
-# output results
-
-predictedfuture = regressor.predict(X_out_scaled)
-def doDate(row):
-    return "%04d-%02d-%02d" % (row["year"],row["month"],row["dayofmonth"])
-X_out["date"] = X_out.apply(doDate, axis = 1)
-X_out["decheterie"] = X_out["Label"].apply(lambda x: reverse_int_conversion[x])
-output = pandas.DataFrame({"decheterie": X_out["decheterie"], "date": X_out["date"], "frequence": predictedfuture})
-output = output.drop_duplicates(["decheterie","date"])
-output = output.pivot(index="decheterie", columns="date", values="frequence")
-output.to_csv("../dashboard/data/predictions.csv")
-

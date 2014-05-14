@@ -38,6 +38,13 @@ learning_table["dayofyear"] = learning_table["date"].apply(lambda x: x.dayofyear
 
 # adding meteo
 meteo = pandas.read_csv("data/meteo.csv")
+######## TRICKS: I take 2009 meteo for 2014
+meteo_past = meteo[meteo.year == 2007]
+meteo_past["year"] = 2014
+meteo = meteo[meteo.year != 2014]
+meteo = meteo.append(meteo_past, ignore_index=True)
+########
+
 meteo = meteo.groupby(["year","month","day"]).mean().reset_index()
 def doDate(row):
 	return "%04d/%02d/%02d" % (row["year"], row["month"], row["day"])

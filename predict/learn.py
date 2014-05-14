@@ -176,13 +176,13 @@ output = output.pivot(index="decheterie", columns="date", values="frequence")
 output.to_csv("../dashboard/data/predictions.csv")
 
 # most important features
-
 feature_importance = regressor.feature_importances_
 feature_importance = 100.0 * (feature_importance / feature_importance.max())
 sorted_idx = np.argsort(feature_importance)[::-1]
+feature_labels = predictors.columns
 print "100 most important features:"
 i=1
-for f,w in zip(labels[sorted_idx], feature_importance[sorted_idx]):
+for f,w in zip(feature_labels[sorted_idx], feature_importance[sorted_idx]):
     print "%d) %s : %f" % (i, f, w)
     i+=1
     if i > 100: break

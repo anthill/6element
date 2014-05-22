@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>6element : l'open-innovation des déchets</title>
+
+		<meta name="description" content="6element est un projet de gestion des décheteries basé sur l'open-data et l'open-source.">
+		<meta name="author" content="Alexandre Vallette">
+
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<link rel="stylesheet" href="css/reveal.min.css">
+		<link rel="stylesheet" href="css/theme/simple.css" id="theme">
+		<link rel="stylesheet" href="css/github.css">
+
+		<!-- For syntax highlighting -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- If the query includes 'print-pdf', include the PDF print sheet -->
+		<script>
+			if( window.location.search.match( /print-pdf/gi ) ) {
+				var link = document.createElement( 'link' );
+				link.rel = 'stylesheet';
+				link.type = 'text/css';
+				link.href = 'css/print/pdf.css';
+				document.getElementsByTagName( 'head' )[0].appendChild( link );
+			}
+		</script>
+
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+
+		<div class="reveal">
+
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+				<section>
+					<h1>6element</h1>
+					<h3>L'open-innovation au service de la gestion des déchets</h3>
+					<p>
+						<small>Un projet open-source par <a href="http://anthill.github.io/">ANTS</a></small>
+					</p>
+				</section>
+
+				<section>
+					<h2>ANTS</h2>
+					<p>
+						ANTS est un laboratoire d'innovation qui a pour objectif de 
+					</p>
+
+				</section>
+
+				<section>
+					<section>
+						<h2>Contexte</h2>
+						<p>
+							Chaque mois le nord de la Gironde produit une tour Eiffeil de déchèts qui sont ... enterrés
+						</p>
+					</section>
+					<section>
+						<h2>Le problème 1</h2>
+						<ul>
+							<li>No order here</li>
+							<li>Or here</li>
+							<li>Or here</li>
+							<li>Or here</li>
+						</ul>
+					</section>
+					<section>
+						<h2>Conseillers sur le projet:</h2>
+						<ol>
+							<li>Olivier de Morgeat</li>
+							<li>Xavier Corval</li>
+							<li>Jean Karinthi</li>
+							<li>...</li>
+						</ol>
+					</section>
+				</section>
+
+
+				<section>
+					<section>
+						<h2>Objectif numero 1</h2>
+						<p>
+							Générer de la donnée propre sur les déchets afin de de comprendre les flux et ...
+						</p>
+						<h2>Solution</h2>
+						<ul>
+							<li>Capteurs</li>
+							<li>Modèle</li>
+							<li>Optimisation pour les collectivités</li>
+							<li>App grand public</li>
+						</ul>
+					</section>
+					<section>
+						<h2>Objectif numéro 2</h2>
+						<p>
+							Créer une plateforme numérique d'économie circulaire
+						</p>
+						<ul>
+							<li>app</li>
+							<li>réseau crowdsourcé de réutilisateurs</li>
+						</ul>
+						difficultés: qualifier les données pour les utilisateurs
+						avantages: - les collectivité montrent l'exemple de Responsabilité Sociales des Entreprises
+							- developement durable
+							- solidarité / création d'emploi
+							- création de valeur
+					</section>
+					<section>
+						<h2>Objectif numéro 3</h2>
+						<p>
+							Démontrer l'intérêt de l'open-innovation pour les territoires
+						</p>
+						<ul>
+							<li>usage d'open-data</li>
+							<li>cercle vertueux de l'open-source</li>
+							<li>fablab</li>
+						</ul>
+					</section>
+				</section>
+
+
+			</div>
+
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.min.js"></script>
+
+		<script>
+
+			// Full list of configuration options available here:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+
+				theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+				transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/fade/none
+
+				// Parallax scrolling
+				// parallaxBackgroundImage: 'https://s3.amazonaws.com/hakim-static/reveal-js/reveal-parallax-1.jpg',
+				// parallaxBackgroundSize: '2100px 900px',
+
+				// Optional libraries used to extend on reveal.js
+				dependencies: [
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+					{ src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+				]
+			});
+
+		</script>
+
+	</body>
+</html>

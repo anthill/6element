@@ -1,13 +1,6 @@
-/*
-  Custom variant to avoid font-overrides
-  when using Octicons
-*/
-/*
-  Octicons
-*/
-/*
-  Overrides, Design, Theme
-*/
+@import url(revealjs.css);
+@import url(octicons.css);
+
 /* Override to resolve Font-Awesome and RevealJS styling on icon- */
 i[class^="icon-"] {
   font-family: FontAwesome;
@@ -52,7 +45,7 @@ body::before {
   -webkit-mask-box-image: url(../../img/ants.png) 100% 100% 0 0;
   background: #4183c4;
   position: absolute;
-  opacity: .08;
+  opacity: .3;
   height: 30%;
   width: 7%;
   left: 91%;
@@ -60,7 +53,7 @@ body::before {
 
 /* Authorship/Info footer*/
 body::after {
-  content: "Official GitHub training curriculum v4.1.0";
+  content: "ANTS template";
   position: absolute;
   bottom: 0;
   right: 0;
@@ -106,10 +99,10 @@ pre code {
   word-wrap: break-word; }
 
 h1 {
-  font-family: "Apex New", "Helvetica Neue", Helvetica !important;
+  font-family: "Hiragino Kaku Gothic Std";
   font-weight: bold !important;
   color: #333333 !important;
-  font-size: 1.5em !important;
+  font-size: 4em !important;
   display: inline !important;
   line-height: 2em !important;
   text-align: center; }
@@ -119,16 +112,20 @@ h1 {
   font-size: 3.5em; }
 
 h2 {
-  font-family: "Apex New", "Helvetica Neue", Helvetica !important;
+  font-family: "Hiragino Kaku Gothic Std";
   font-weight: book !important;
   color: #333333 !important;
-  font-size: 1.5em !important;
+  font-size: 1.3em !important;
   display: inline !important;
   margin-bottom: 1em !important;
   text-align: center; }
 
 h3 {
-  line-height: 1.5em !important; }
+  line-height: 0.2em !important; }
+
+iframe {
+  
+}
 
 /* Branding & Logos */
 .brand {

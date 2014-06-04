@@ -123,8 +123,26 @@ h2 {
 h3 {
   line-height: 0.2em !important; }
 
-iframe {
-  
+ul.people li{
+    height: 200px;
+}
+ul.people li img{
+    height: 150px;
+}
+
+ul.people li > *{
+    vertical-align: top;
+}
+ul.people li > div{
+    padding-left: 1em;
+}
+ul.people li > div .name{
+    display: block;
+    font-weight: bold;
+    font-size: 0.9em;
+}
+ul.people li > div .bio{
+    font-size: 0.7em;
 }
 
 /* Branding & Logos */

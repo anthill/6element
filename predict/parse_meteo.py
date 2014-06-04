@@ -64,11 +64,6 @@ def parse(day, month, year):
                 gust = 0.
 
             try:
-                wind = float(values[9].split(" ")[0])
-            except:
-                wind = 0.
-
-            try:
                 pressure = float(values[10].split(" ")[0]),
             except:
                 pressure = 0.

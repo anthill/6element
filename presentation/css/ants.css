@@ -115,14 +115,36 @@ h2 {
   font-family: "Hiragino Kaku Gothic Std";
   font-weight: book !important;
   color: #333333 !important;
-  font-size: 1.3em !important;
+  font-size: 2em !important;
   display: inline !important;
   margin-bottom: 1em !important;
-  text-align: center; }
+  text-align: center; 
+}
 
 h3 {
-  line-height: 0.2em !important; }
+  font-family: "Hiragino Kaku Gothic Std";
+  font-weight: book !important;
+  color: #333333 !important;
+  font-size: 1.5em !important;
+  display: inline !important;
+  margin-bottom: 1em !important;
+  text-align: center; 
+}
 
+.table-layout{
+    display: table;
+}
+.table-layout > *{
+    display: table-row;
+}
+.table-layout > * > *{
+    display: table-cell;
+}
+
+.antsfont {
+  font-family: "Hiragino Kaku Gothic Std";
+  font-weight: bold !important;
+}
 ul.people li{
     height: 200px;
 }

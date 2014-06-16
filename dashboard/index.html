@@ -72,6 +72,23 @@
                 height: 100vh;
                 width: 100vw;
             }
+            
+            div#info{
+                position: fixed;
+                top: 0;
+                right: 0;
+                
+                padding: 0 1em;
+                border-bottom-left-radius: 1em;
+                
+                width: 20%;
+                
+                font-size: 1rem;
+                
+                background-color: rgba(255, 255, 255, 0.7);
+                
+                font-family: Helvetica;
+            }
 
             .overlay{
                 position: fixed;
@@ -117,18 +134,24 @@
                 border: 1px black solid
             }
             
-            .recycling-center.q0-11{background-color: rgb(0,104,55); }
-            .recycling-center.q1-11{background-color: rgb(26,152,80); }
-            .recycling-center.q2-11{background-color: rgb(102,189,99);}
-            .recycling-center.q3-11{background-color: rgb(166,217,106);}
-            .recycling-center.q4-11{background-color: rgb(217,239,139);}
-            .recycling-center.q5-11{background-color: rgb(255,255,191);}
-            .recycling-center.q6-11{background-color: rgb(254,224,139);}
-            .recycling-center.q7-11{background-color: rgb(253,174,97);}
-            .recycling-center.q8-11{background-color: rgb(244,109,67);}
-            .recycling-center.q9-11{background-color: rgb(215,48,39); }
-            .recycling-center.q10-11{background-color: rgb(165,0,38); }
+            .q0-11{background-color: rgb(0,104,55); }
+            .q1-11{background-color: rgb(26,152,80); }
+            .q2-11{background-color: rgb(102,189,99);}
+            .q3-11{background-color: rgb(166,217,106);}
+            .q4-11{background-color: rgb(217,239,139);}
+            .q5-11{background-color: rgb(255,255,191);}
+            .q6-11{background-color: rgb(254,224,139);}
+            .q7-11{background-color: rgb(253,174,97);}
+            .q8-11{background-color: rgb(244,109,67);}
+            .q9-11{background-color: rgb(215,48,39); }
+            .q10-11{background-color: rgb(165,0,38); }
             
+            .full{color: rgb(165,0,38); }
+            .empty{color: rgb(0,104,55); }
+            
+            .full, .empty{
+                font-weight: bold;
+            }
         </style>
 
         <script src="lib/promise.js" defer data-polyfill> </script>
@@ -156,8 +179,13 @@
         <div id="map">
 
         </div>
+        <div id="info">
+            <p>Chaque rond correspond à une déchèterie.
+            <p><span class="full">Rouge</span> signifie qu'il est prévu que la déchèterie est très chargée aujourd'hui. 
+            <p><span class="empty">Vert</span> signifie qu'il est prévu que la déchèterie n'est pas très chargée aujourd'hui.
+            <p>Cliquer sur une déchèterie pour voir l'affluence historique ainsi que les prédictions pour les jours à venir.
+        </div>
         <div class="overlay" hidden>
-
             <div class="calendar">
                 <h1></h1>
                 <div class="data"></div>
@@ -166,6 +194,7 @@
                 </div>
             </div>
         </div>
+        
 
     </body>
 </html>

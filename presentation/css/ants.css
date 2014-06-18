@@ -145,27 +145,40 @@ h3 {
   font-family: "Hiragino Kaku Gothic Std";
   font-weight: bold !important;
 }
-ul.people li{
-    height: 200px;
-}
-ul.people li img{
-    height: 150px;
-}
 
-ul.people li > *{
-    vertical-align: top;
+
+ul.inline-list li > *{
+  vertical-align: top;
 }
-ul.people li > div{
-    padding-left: 1em;
+ul.inline-list li > div{
+  padding-left: 0em;
 }
-ul.people li > div .name{
+ul.inline-list li > div .name{
+    padding-top: 0.9em;
     display: block;
     font-weight: bold;
     font-size: 0.9em;
 }
-ul.people li > div .bio{
+ul.inline-list li > div .bio{
     font-size: 0.7em;
 }
+
+ul.inline-list{
+  list-style: none;
+  display: block;
+}
+
+ul.inline-list li{
+  float:left;
+  clear: none;
+  width: 300px;
+}
+
+ul.inline-list img{
+  vertical-align: text-top;
+  height: 140px;
+}
+
 
 /* Branding & Logos */
 .brand {

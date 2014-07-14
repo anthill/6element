@@ -2,6 +2,7 @@
 import numpy as np
 import cv2
 import pylab as plt
+from matplotlib.patches import Rectangle
 
 # run prepare.py to create the training set
 
@@ -18,13 +19,21 @@ car_cascade = cv2.CascadeClassifier('models/cascade.xml')
 img = cv2.imread('../data/original_images/garidech_146.jpg')
 resized_image = cv2.resize(img, (600, 225))
 
+plt.imshow(resized_image)
+currentAxis = plt.gca()
+
 xx,yy = [],[]
 cars = car_cascade.detectMultiScale(resized_image)
 for (x,y,w,h) in cars:
 	xx += [x+w/2.]
 	yy += [y+h/2.]
 	print ((x,y),(x+w,y+h))
+	coords = (x, y), w, h
+	currentAxis.add_patch(Rectangle(*coords, fill=True, alpha=0.2, color='#00FF00', edgecolor='#00FF00', linewidth=3))
 
 plt.scatter(xx,yy, color="r")
-plt.imshow(resized_image)
 plt.show()
+
+
+
+

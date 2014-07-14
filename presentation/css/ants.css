@@ -14,7 +14,7 @@ html, body, .reveal {
   font-size: 30px;
   line-height: 1.35em; }
 
-img {
+img .fullwidth {
   height: auto !important;
   width: 100% !important; }
 

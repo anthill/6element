@@ -86,7 +86,7 @@ def smooth(x, window_len=11):
 
 
 # plot affluence and wastes for one recycle center
-name = "grenade"
+name = "garidech"
 
 fig = plt.figure()
 # plot affluence
@@ -96,7 +96,14 @@ plt.xticks( rotation=25 )
 
 xfmt = md.DateFormatter('%Y-%m-%d %H:%M:%S')
 ax.xaxis.set_major_formatter(xfmt)
-y = smooth(data[name]["cars"])[:len(dates)]
+def cut(x):
+	t=x-2
+	if t <0:
+		return 0
+	else:
+		return t
+y = map(cut, data[name]["cars"])
+y = smooth(y)[:len(dates)]
 ax.plot(dates, y, label=name)
 # plot bins
 ax = fig.add_subplot(2, 1, 2)

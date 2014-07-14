@@ -1,9 +1,5 @@
 *.DS_Store
 presentation/node_modules/
-*.jpg
+vision/data/*
 *.dat
-*.info
-*.csv
-*.pkl
-*.pgm
 *.vec

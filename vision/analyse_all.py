@@ -1,4 +1,4 @@
-
+a
 import numpy as np
 import cv2
 import pylab as plt
@@ -116,11 +116,14 @@ for waste in data[name].keys():
 	if waste != "cars":
 		y = smooth(data[name][waste])[:len(dates)]
 		ax.plot(dates, y, label=waste)
-legend = ax.legend(loc='lower right', shadow=True)
-for label in legend.get_texts():
-    label.set_fontsize('large')
+# legend = ax.legend(loc='lower right', shadow=True)
+# for label in legend.get_texts():
+#     label.set_fontsize('large')
 
-plt.show()
+# plt.show()
 
-
+mpl_fig1 = plt.gcf()
+my_creds = tls.get_credentials_file()
+py_fig1 = tls.mpl_to_plotly(mpl_fig1, verbose=True)
+py.iplot_mpl(mpl_fig1, strip_style=True, filename='garideche')
 

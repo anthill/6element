@@ -20,15 +20,7 @@
 		<link rel="stylesheet" href="lib/css/zenburn.css">
 
 		<!-- If the query includes 'print-pdf', include the PDF print sheet -->
-		<script>
-			if( window.location.search.match( /print-pdf/gi ) ) {
-				var link = document.createElement( 'link' );
-				link.rel = 'stylesheet';
-				link.type = 'text/css';
-				link.href = 'css/print/pdf.css';
-				document.getElementsByTagName( 'head' )[0].appendChild( link );
-			}
-		</script>
+		<link rel="stylesheet" href="css/print/pdf.css">
 
 		<!--[if lt IE 9]>
 		<script src="lib/js/html5shiv.js"></script>
@@ -48,7 +40,8 @@
 					<h2>Hacking public<br/><br/> infrastructures</h2>
 					<hr />
 					<br /><br />
-					<h6>An open-source project by <a class="antsfont" href="http://anthill.github.io/">ANTS</a></h6>
+					<h6>An open-source project by <a class="antsfont" href="http://anthill.github.io/">ANTS</a></h6><br />
+					<h6><a  href="http://csvconf.com/">CSVConf</a> Berlin, 14 July 2014
 
 				</section>
 				

@@ -3,3 +3,4 @@ presentation/node_modules/
 vision/data/*
 *.dat
 *.vec
+*.pyc

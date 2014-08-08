@@ -1,4 +1,3 @@
-a
 import numpy as np
 import cv2
 import pylab as plt

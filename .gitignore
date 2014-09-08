@@ -1,6 +1,6 @@
 *.DS_Store
 presentation/node_modules/
-vision/data/*
+sensor/vision/data/*
 *.dat
 *.vec
 *.pyc

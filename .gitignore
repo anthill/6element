@@ -1,4 +1,5 @@
 *.DS_Store
+node_modules
 presentation/node_modules/
 sensor/vision/data/*
 *.dat

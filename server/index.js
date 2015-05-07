@@ -14,11 +14,26 @@ dropAllTables()
         return database.Sensors.create({
             name: 'bla'
         })
+        .then(function(sensorId){
+            setInterval(function(){
+                database.SensorMeasurements.create({
+                    'sensor_id': sensorId,
+                    'amount': Math.round(Math.random()*100),
+                    'measurement_date': (new Date()).toISOString()
+                })
+                    .then(function(res){
+                        console.log('SensorMeasurements success!', res);
+                    })
+                    .catch(function(err){
+                        console.error('SensorMeasurements error', err);
+                    });
+            }, 3000)
+        })
     })
     .then(function(res){
-        console.log('success!', res);
+        console.log('sensor success!', res);
     })
     .catch(function(err){
-        console.error('some error', err);
+        console.error('sensor error', err);
     })
 

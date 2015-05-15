@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start-db-container": "docker rm 6element-database; docker run --name 6element-database -p 6000:5432 -e POSTGRES_PASSWORD=password -d postgres:9.4"
+    "start-db-container": "docker rm 6element-database; docker run --name 6element-database -p 6000:5432 -e POSTGRES_PASSWORD=password -d postgres:9.4",
+    "watch": "watchify client/src/main.js -o client/app.js -d -v",
+    "build": "browserify client/src/main.js -o client/app.js -d"
   },
   "repository": {
     "type": "git",
@@ -26,11 +28,15 @@
   },
   "homepage": "https://github.com/anthill/6element",
   "dependencies": {
+    "browserify": "^10.2.0",
     "es6-shim": "^0.31.0",
+    "leaflet": "^0.7.3",
     "pg": "^4.3.0",
+    "react": "^0.13.3",
     "sql": "^0.51.0"
   },
   "devDependencies": {
-    "eslint": "^0.20.0"
+    "eslint": "^0.21.0",
+    "watchify": "^3.2.1"
   }
 }

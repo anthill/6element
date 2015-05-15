@@ -5,3 +5,5 @@ sensor/vision/data/*
 *.dat
 *.vec
 *.pyc
+
+client/app.js

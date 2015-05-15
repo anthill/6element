@@ -7,6 +7,10 @@ var createTables = require('../database/management/createTables');
 
 var database = require('../database');
 
+function rand(n){
+    return Math.floor(n*Math.random());
+}
+
 // if(process.env.NODE_ENV !== "production") // commented for now. TODO Find proper way to handle both prod & dev envs
 dropAllTables()
     .then(createTables)
@@ -18,7 +22,9 @@ dropAllTables()
             setInterval(function(){
                 database.SensorMeasurements.create({
                     'sensor_id': sensorId,
-                    'amount': Math.round(Math.random()*100),
+                    'signal_strengths': Array(rand(40)).fill().map(function(){
+                        return Math.round(rand(100)) - 100;
+                    }),
                     'measurement_date': (new Date()).toISOString()
                 })
                     .then(function(res){
@@ -27,7 +33,7 @@ dropAllTables()
                     .catch(function(err){
                         console.error('SensorMeasurements error', err);
                     });
-            }, 3000)
+            }, 5000)
         })
     })
     .then(function(res){
@@ -35,5 +41,10 @@ dropAllTables()
     })
     .catch(function(err){
         console.error('sensor error', err);
-    })
+    });
+
+
+
+
+
 

@@ -6,22 +6,14 @@ var Panel =  React.createFactory(require('./Panel.js'));
 var MapComponent =  React.createFactory(require('./MapComponent.js'));
 
 /*
-interface Application Props{
-    recyclingCentersData: Map (recyclingCenter_id -> {recyclingCenter_infos}),
-    predictions: Map (recyclingCenter_id -> {recyclingCenter_predictions})
-    predict: function(Date()) -> new rendering with updated prediction,
-    changeVersion: function(int) -> new rendering with actualized version
+interface ApplicationProps{
+    mapBoxToken: string,
+    mapId,
+    mapCenter
 }
-interface Application State{
-    version: int,
-    selectedRecyclingCenter: {},
-    selectedDate: dateString,
-    predictions: Map (recyclingCenter_id -> {recyclingCenter_predictions})
+interface ApplicationState{
 }
 */
-
-var token = 'anthill.m68f42m4';
-
 
 module.exports = React.createClass({
 
@@ -45,7 +37,9 @@ module.exports = React.createClass({
 
         // build Map
         var map = new MapComponent({
-            token: token
+            mapBoxToken: props.mapBoxToken,
+            mapId: props.mapId,
+            mapCenter: props.mapCenter
         });
 
         return React.DOM.div({id: 'app'},

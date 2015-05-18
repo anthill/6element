@@ -20,8 +20,7 @@ interface Application State{
 }
 */
 
-var token = 'sk.eyJ1IjoiYW50aGlsbCIsImEiOiJXWnRUYTlBIn0.rTDIxSqklXFKt_GEoPP9qw';
-throw 'change token';
+var token = 'anthill.m68f42m4';
 
 
 module.exports = React.createClass({

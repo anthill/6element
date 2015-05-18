@@ -4,7 +4,9 @@ var React = require('react');
 var L = require('leaflet');
 /*
 interface MapComponent Props{
-    token: string,
+    mapBoxToken: string,
+    mapId: string,
+    mapCenter: [long, lat]
 }
 
 interface MapComponent State{
@@ -29,12 +31,18 @@ module.exports = React.createClass({
         var self = this;
         this.map = L.map(this.getDOMNode(), {
             layers: [
-                L.tileLayer('https://api.tiles.mapbox.com/v4/anthill.e8d69669/{z}/{x}/{y}.png?access_token=' + this.props.token, {
-                    attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-                })
+                L.tileLayer(
+                    'https://api.tiles.mapbox.com/v4/' +
+                    this.props.mapId +
+                    '/{z}/{x}/{y}.png?access_token=' +
+                    this.props.mapBoxToken, 
+                    {
+                        attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+                    }
+                )
             ],
             attributionControl: false,
-            center: PARIS_COORDS,
+            center: this.props.mapCenter,
             zoom: 12
         });
 

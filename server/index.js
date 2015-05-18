@@ -12,27 +12,15 @@ var PORT = 6482;
 
 app.use(compression());
 
-// Allow CORS headers since it's an API
-app.use(function(req, res, next) {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "Origin, Content-Type, Accept");
-    next();
-});
-
-
-
-app.use("/css/leaflet.css", express.static(__dirname + '/node_modules/leaflet/dist/leaflet.css'));
-app.use("/css", express.static(__dirname + '/viz/css'));
-app.use("/images", express.static(__dirname + '/viz/images'));
+app.use("/css/leaflet.css", express.static(path.join(__dirname, '../node_modules/leaflet/dist/leaflet.css')));
+app.use("/css", express.static(path.join(__dirname, '../client/css')));
+app.use("/images", express.static(path.join(__dirname, '../client/images')));
 
 app.get('/', function(req, res){
-    if(req.query.s === secret)
-        res.sendFile(path.join(__dirname, 'viz/index.html'));
-    else
-        res.status(404).send(path.join(__dirname, '404'))
+    res.sendFile(path.join(__dirname, '../client/index.html'));
 });
 app.get('/app.js', function(req, res){
-    res.sendFile(path.join(__dirname, 'viz/app.js'));
+    res.sendFile(path.join(__dirname, '../client/app.js'));
 });
 
 

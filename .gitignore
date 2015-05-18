@@ -7,3 +7,5 @@ sensor/vision/data/*
 *.pyc
 
 client/app.js
+
+*-credentials.json

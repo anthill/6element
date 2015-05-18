@@ -36,7 +36,7 @@ var Panel = React.createClass({
         // console.log('PANEL props.selectedRecyclingCenter', props.selectedRecyclingCenter);
 
         // build tabs
-        var tabs = new Tabs({
+        /*var tabs = new Tabs({
             tabNames: ['Predictions'],
             selectedTab: state.selectedTab,
             onTabChange: function(tabNumber){
@@ -45,32 +45,15 @@ var Panel = React.createClass({
                     selectedTab: tabNumber
                 });
             }
-        });
+        });*/
 
-        // build tab content
-        var tabContent;
-
-        if (this.state.selectedTab === 0){
-            tabContent = new PredictionContent({
-                version: props.version,
-                recyclingCenterInfos: props.selectedRecyclingCenter,
-                dateEntriesMap: props.dateEntriesMap,
-                predictions: props.predictions,
-                date: props.selectedDate,
-                onDateSelection: props.onDateSelection,
-                onVersionSelection: props.onVersionSelection
-            });
-        }
         // else {
         //     tabContent = new AnalyseContent({
         //         recyclingCenterInfos: props.selectedRecyclingCenter
         //     });
         // }
 
-        return React.DOM.div({id: 'panel'},
-            tabs,
-            tabContent
-        );
+        return React.DOM.div({id: 'panel'}, '');
     }
 });
 

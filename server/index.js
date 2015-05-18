@@ -1,50 +1,44 @@
 "use strict";
 
-require('es6-shim');
+var path = require('path');
+var express = require('express');
+var app = express();
+var compression = require('compression');
+var errlog = console.error.bind(console);
+ 
+var fs = require('fs');
 
-var dropAllTables = require('../database/management/dropAllTables');
-var createTables = require('../database/management/createTables');
+var PORT = 6482;
 
-var database = require('../database');
+app.use(compression());
 
-function rand(n){
-    return Math.floor(n*Math.random());
-}
-
-// if(process.env.NODE_ENV !== "production") // commented for now. TODO Find proper way to handle both prod & dev envs
-dropAllTables()
-    .then(createTables)
-    .then(function(){
-        return database.Sensors.create({
-            name: 'bla'
-        })
-        .then(function(sensorId){
-            setInterval(function(){
-                database.SensorMeasurements.create({
-                    'sensor_id': sensorId,
-                    'signal_strengths': Array(rand(40)).fill().map(function(){
-                        return Math.round(rand(100)) - 100;
-                    }),
-                    'measurement_date': (new Date()).toISOString()
-                })
-                    .then(function(res){
-                        console.log('SensorMeasurements success!', res);
-                    })
-                    .catch(function(err){
-                        console.error('SensorMeasurements error', err);
-                    });
-            }, 5000)
-        })
-    })
-    .then(function(res){
-        console.log('sensor success!', res);
-    })
-    .catch(function(err){
-        console.error('sensor error', err);
-    });
+// Allow CORS headers since it's an API
+app.use(function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, Content-Type, Accept");
+    next();
+});
 
 
 
+app.use("/css/leaflet.css", express.static(__dirname + '/node_modules/leaflet/dist/leaflet.css'));
+app.use("/css", express.static(__dirname + '/viz/css'));
+app.use("/images", express.static(__dirname + '/viz/images'));
+
+app.get('/', function(req, res){
+    if(req.query.s === secret)
+        res.sendFile(path.join(__dirname, 'viz/index.html'));
+    else
+        res.status(404).send(path.join(__dirname, '404'))
+});
+app.get('/app.js', function(req, res){
+    res.sendFile(path.join(__dirname, 'viz/app.js'));
+});
 
 
-
+app.listen(PORT, function () {
+    console.log('Server running on', [
+        'http://localhost:',
+        PORT
+    ].join(''));
+});

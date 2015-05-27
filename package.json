@@ -1,0 +1,47 @@
+{
+  "name": "6element",
+  "version": "1.0.0",
+  "description": "Reducing waste with sensors and an app",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start-db-container": "docker rm 6element-database; docker run --name 6element-database -p 6000:5432 -e POSTGRES_PASSWORD=password -d postgres:9.4",
+    "watch": "watchify client/src/main.js -o client/browserify-bundle.js -d -v",
+    "build": "browserify client/src/main.js -o client/browserify-bundle.js -d",
+    "start": "node server/index.js",
+    "lint": "eslint ./" 
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/anthill/6element.git"
+  },
+  "keywords": [
+    "waste",
+    "app",
+    "mobile",
+    "citizen",
+    "sustainable",
+    "development"
+  ],
+  "author": "David Bruant <bruant.d@gmail.com> (https://twitter.com/DavidBruant)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/anthill/6element/issues"
+  },
+  "homepage": "https://github.com/anthill/6element",
+  "dependencies": {
+    "better-log": "^1.1.0",
+    "browserify": "^10.2.0",
+    "compression": "^1.4.4",
+    "es6-shim": "^0.31.2",
+    "express": "^4.12.4",
+    "leaflet": "^0.7.3",
+    "pg": "^4.3.0",
+    "react": "^0.13.3",
+    "sql": "^0.51.0"
+  },
+  "devDependencies": {
+    "eslint": "^0.21.0",
+    "watchify": "^3.2.1"
+  }
+}

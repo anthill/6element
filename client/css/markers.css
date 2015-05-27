@@ -1,0 +1,30 @@
+.recyclingCenter{
+	/*background-color: white;*/
+    /*font-size: 2em;*/
+    /*fill: black;*/
+    fill-opacity: 0.7;
+    stroke: hsl(155, 100%, 0%);
+    stroke-opacity: 1;
+    stroke-width: 1;
+}
+
+.recyclingCenter.selected{
+	stroke: hsl(0, 100%, 100%);
+	stroke-width: 2;
+}
+
+.recyclingCenterName.displayed{
+	display: block;
+}
+
+.recyclingCenterName{
+	display: none;
+	color: white;
+}
+
+.recyclingCenterName.selected{
+	text-decoration: underline;
+}
+
+.line{
+}

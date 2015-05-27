@@ -2,6 +2,26 @@
 
 6element is a open innovation project of waste optimisation.
 
+
+### Contributing
+
+#### Getting started
+
+Initialization
+
+````
+git clone git@github.com:anthill/6element.git
+cd 6element
+npm install
+docker pull postgres:9.4
+````
+
+
+
+
+
+
+
 ### Presentation 
 
 The slides describing the projects are in this folder.
@@ -37,4 +57,6 @@ You can use the car detector or the bin detector individually, but for a complet
 ```
 %run analyse_all.py
 ```
+
+
 

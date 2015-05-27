@@ -1,6 +1,13 @@
 *.DS_Store
+node_modules
 presentation/node_modules/
 sensor/vision/data/*
 *.dat
 *.vec
 *.pyc
+
+client/browserify-bundle.js
+
+*-credentials.json
+
+npm-debug.log

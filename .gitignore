@@ -6,6 +6,8 @@ sensor/vision/data/*
 *.vec
 *.pyc
 
-client/app.js
+client/browserify-bundle.js
 
 *-credentials.json
+
+npm-debug.log

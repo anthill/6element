@@ -3,6 +3,8 @@
 var cachedMetadata;
 
 module.exports = function(origin, path, args){
+    args = args || [];
+    
     return new Promise(function(resolve, reject){
         if(cachedMetadata)
             resolve(cachedMetadata);

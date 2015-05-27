@@ -6,12 +6,30 @@ var Panel =  React.createFactory(require('./Panel.js'));
 var MapComponent =  React.createFactory(require('./MapComponent.js'));
 
 /*
+
+interface AffluenceHistory{
+    
+}
+
+interface RecyclingCenter{
+    name: string,
+    id: RecyclingCenterId,
+    lon: number,
+    lat: number,
+    max: number,
+    current: number
+}
+
+
 interface ApplicationProps{
     mapBoxToken: string,
     mapId,
-    mapCenter
+    mapCenter,
+    recyclingCenters: RecyclingCenter[]
 }
+
 interface ApplicationState{
+
 }
 */
 
@@ -39,7 +57,8 @@ module.exports = React.createClass({
         var map = new MapComponent({
             mapBoxToken: props.mapBoxToken,
             mapId: props.mapId,
-            mapCenter: props.mapCenter
+            mapCenter: props.mapCenter,
+            recyclingCenters: props.recyclingCenters
         });
 
         return React.DOM.div({id: 'app'},

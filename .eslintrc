@@ -27,7 +27,8 @@
         "camelcase": 0,
         "no-extra-strict": 0,
         "no-spaced-func": 0,
-        "consistent-return": 0
+        "consistent-return": 0,
+        "comma-spacing": 0
     },
     "globals": {
         "Promise": true

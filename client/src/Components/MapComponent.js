@@ -2,11 +2,15 @@
 
 var React = require('react');
 var L = require('leaflet');
+
+var getColor = require('../getColor');
+
 /*
 interface MapComponent Props{
     mapBoxToken: string,
     mapId: string,
-    mapCenter: [long, lat]
+    mapCenter: [lat, lon],
+    recyclingCenters
 }
 
 interface MapComponent State{
@@ -14,8 +18,6 @@ interface MapComponent State{
 }
 */
 
-// var myLines = utils.makeMap( lineDesc );
-var PARIS_COORDS = [48.8567, 2.3508];
 
 var iconMap = new Map();
 iconMap.set('recycling-center', 'flaticon-paris1 recycling-center');
@@ -51,40 +53,40 @@ module.exports = React.createClass({
         });
     },
 
-    /*createRecyclingCenterMarker: function(recyclingCenter, size, min, max){
+    createRecyclingCenterMarker: function(recyclingCenter, size){
 
         var props = this.props;
 
         // check if recyclingCenter is selected, and define selectedClass
         var isSelected = this.props.selectedRecyclingCenter === recyclingCenter.id;
-        var selectedClass = isSelected ? ' selected' : '';
-
-        var className = 'recyclingCenter' + selectedClass;
+        var classes = [
+            'recyclingCenter',
+            isSelected ? 'selected' : ''
+        ];
 
         var position = L.latLng(Number(recyclingCenter.lat), Number(recyclingCenter.lon));
-
-        var value = props.recyclingCenterEntriesMap.get(recyclingCenter.id);
 
         // create Leaflet marker
         var marker = L.circleMarker(
             position,
             {
                 // icon: myIcon,
-                className: className,
+                className: classes.join(' '),
                 radius: size,
-                fillColor: utils.getColor(Math.log(value + 10), Math.log(max + 10), Math.log(min + 10))
+                fillColor: getColor(recyclingCenter.current, recyclingCenter.max, 0)
             }
         );
 
         // add click event on marker
         marker.on('click', function(){
+            console.log('click', recyclingCenter.name);
             props.onRecyclingCenterClick(recyclingCenter.id);
         });
 
         return marker;
     },
 
-    createRecyclingCenterName: function(recyclingCenter, zoom){
+    /*createRecyclingCenterName: function(recyclingCenter, zoom){
 
         var props = this.props;
 
@@ -155,60 +157,44 @@ module.exports = React.createClass({
     },*/
 
     render: function() {
-
         var self = this;
         var props = this.props;
         var map = this.map;
 
-        if (map){
-
-            // console.log('MAP selected', props.selectedRecyclingCenter);
+        if(map){
+            console.log('MAP selected', props.recyclingCenter);
 
             // remove all markers to avoid superposition
             if (this.allMarkers)
                 map.removeLayer(this.allMarkers);
 
-            if (this.allLines)
-                map.removeLayer(this.allLines);
-
             var zoom = map.getZoom();
 
-            var size;
-
-            if (zoom <= 10)
-                size = 0;
-            else if (zoom <= 12)
-                size = 6;
-            else
-                size = 9;
-
-            var min = 0;
-            var max = 1;
+            var size = Math.max(2, 2*(zoom-7));
 
             // create recyclingCenter markers
             var recyclingCenterMarkers = [];
-            //var recyclingCenterInfoMarkers = [];
 
-            props.recyclingCenters.forEach(function(recyclingCenter){
-                var markers = self.createRecyclingCenterMarker(recyclingCenter, size, min, max);
-                // if (zoom > 13){
-                    var markersName = self.createRecyclingCenterName(recyclingCenter, zoom);
-                    recyclingCenterMarkers.push(markersName);    
-                // }
-                    
-                recyclingCenterMarkers.push(markers);    
-            });
+            console.log('props', props);
+            if(props.recyclingCenters){
+                props.recyclingCenters.forEach(function(recyclingCenter){
+                    var marker = self.createRecyclingCenterMarker(recyclingCenter, size);
+                    // if (zoom > 13){
+                        //var markersName = self.createRecyclingCenterName(recyclingCenter, zoom);
+                        //recyclingCenterMarkers.push(markersName);    
+                    // }
 
+                    recyclingCenterMarkers.push(marker);    
+                });
 
-            this.allMarkers = L.layerGroup(
-                recyclingCenterMarkers
-            );
-            // this.allLines = L.layerGroup(
-            //     polylines
-            // );
+                console.log("recyclingCenterMarkers", recyclingCenterMarkers);
 
-            //this.allLines.addTo(map);
-            this.allMarkers.addTo(map);
+                this.allMarkers = L.layerGroup(
+                    recyclingCenterMarkers
+                );
+                
+                this.allMarkers.addTo(map);
+            }
             
         }
 

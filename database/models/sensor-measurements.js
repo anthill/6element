@@ -4,21 +4,21 @@ var sql = require('sql');
 sql.setDialect('postgres');
 var databaseP = require('../management/databaseClientP');
 
-var sensorMesurements = sql.define({
-    name: 'sensor_measurements',
-    columns: ['id', 'sensor_id', 'amount', 'measurement_date']
+var affluenceSensorMeasurements = sql.define({
+    name: 'affluence_sensor_measurements',
+    columns: ['id', 'sensor_id', 'signal_strengths', 'measurement_date']
 });
 
 module.exports = {
     create: function (data) {
         return databaseP.then(function (db) {
             
-            var query = sensorMesurements
+            var query = affluenceSensorMeasurements
                 .insert(data)
                 .returning('id')
                 .toQuery();
 
-            console.log('sensorMesurements create query', query);
+            //console.log('sensorMesurements create query', query);
 
             return new Promise(function (resolve, reject) {
                 db.query(query, function (err, result) {

@@ -4,10 +4,7 @@ var sql = require('sql');
 sql.setDialect('postgres');
 var databaseP = require('../management/databaseClientP');
 
-var sensors = sql.define({
-    name: 'sensors',
-    columns: ['id', 'name', 'installed_at']
-});
+var sensors = require('../management/declarations.js').sensors;
 
 module.exports = {
     create: function (data) {

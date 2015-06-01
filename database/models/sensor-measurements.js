@@ -4,10 +4,7 @@ var sql = require('sql');
 sql.setDialect('postgres');
 var databaseP = require('../management/databaseClientP');
 
-var affluenceSensorMeasurements = sql.define({
-    name: 'affluence_sensor_measurements',
-    columns: ['id', 'sensor_id', 'signal_strengths', 'measurement_date']
-});
+var affluenceSensorMeasurements = require('../management/declarations.js').affluence_sensor_measurements;
 
 module.exports = {
     create: function (data) {

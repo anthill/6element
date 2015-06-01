@@ -7,12 +7,17 @@ var path = require('path');
 var express = require('express');
 var app = express();
 var compression = require('compression');
-var errlog = console.error.bind(console);
+var errlog = function(str){
+    return function(err){
+        console.error(str, err.stack);
+    }
+}
  
 var fs = require('fs');
 
 var PORT = 6482;
 
+var database = require('../database');
 var dropAllTables = require('../database/management/dropAllTables');
 var createTables = require('../database/management/createTables');
 var fillDBWithFakeData = require('./fillDBWithFakeData.js');
@@ -43,7 +48,13 @@ app.get('/browserify-bundle.js', function(req, res){
 
 
 app.get('/live-affluence', function(req, res){
-    res.send(recyclingCenters);
+    database.complexQueries.currentRecyclingCenterAffluences()
+        .then(function(data){
+            console.log('currentRecyclingCenterAffluences', data, data.length);
+            res.send(data);
+        })
+        .catch(errlog('/live-affluence'));
+    
 });
 
 

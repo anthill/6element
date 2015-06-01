@@ -17,7 +17,7 @@ interface RecyclingCenter{
     lon: number,
     lat: number,
     max: number,
-    current: number
+    latest: number
 }
 
 

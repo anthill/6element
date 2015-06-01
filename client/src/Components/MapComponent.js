@@ -66,6 +66,7 @@ module.exports = React.createClass({
 
         var position = L.latLng(Number(recyclingCenter.lat), Number(recyclingCenter.lon));
 
+        console.log('recyclingCenter', recyclingCenter)
         // create Leaflet marker
         var marker = L.circleMarker(
             position,
@@ -73,7 +74,7 @@ module.exports = React.createClass({
                 // icon: myIcon,
                 className: classes.join(' '),
                 radius: size,
-                fillColor: getColor(recyclingCenter.current, recyclingCenter.max, 0)
+                fillColor: getColor(recyclingCenter.latest, recyclingCenter.max, 0)
             }
         );
 

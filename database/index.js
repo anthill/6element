@@ -21,8 +21,9 @@ module.exports = {
     complexQueries: {
         currentRecyclingCenterAffluences: function(){
             return databaseP.then(function(db) {
-                // This has no good reason to be in 2 queries, but SQL is hard
-                
+                /*
+                    For each recycling center, get the last measurement date
+                */
                 var latestRecyclingCenterMeasurementDate = recyclingCenter
                     .subQuery('latest_recycling_center_measurement_date')
                     .select(
@@ -38,7 +39,9 @@ module.exports = {
                     )
                     .group(recyclingCenter.id, sensor.id);
                 
-                
+                /*
+                    For each recycling center, get the measurement value associated to the last measurement date
+                */
                 var latestRecyclingCenterMeasurementValue = recyclingCenter
                     .subQuery('latest_recycling_center_measurement_value')
                     .select(
@@ -59,6 +62,10 @@ module.exports = {
                             ))
                     );
                 
+                /*
+                    For each recycling center, get the maximum measurement (and recycling center infos)
+                    TODO restrict maximum to the last few months
+                */
                 var maxMeasurementPerRecyclingCenter = recyclingCenter
                     .subQuery('max_measurement_per_recycling_center')
                     .select(
@@ -74,7 +81,12 @@ module.exports = {
                     )
                     .group(recyclingCenter.id, sensor.id);
                 
-                
+                /*
+                    For each recycling center, get
+                    * recycling center infos (long lat)
+                    * maximum number of signals
+                    * latest measured number of signals
+                */
                 var query = recyclingCenter
                     .select('*')
                     .from(maxMeasurementPerRecyclingCenter

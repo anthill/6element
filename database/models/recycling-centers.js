@@ -4,10 +4,7 @@ var sql = require('sql');
 sql.setDialect('postgres');
 var databaseP = require('../management/databaseClientP');
 
-var recyclingCenters = sql.define({
-    name: 'recycling_centers',
-    columns: ['id', 'name', 'lon', 'lat']
-});
+var recyclingCenters = require('../management/declarations.js').recycling_centers;
 
 module.exports = {
     create: function (data) {

@@ -28,7 +28,8 @@ cd 6element/client/src
 cp mapbox mapbox-creadentials.json.example mapbox-creadentials.json
 ````
 
-Sign up to [mapbox](https://www.mapbox.com/), a free app using OpenStreetMap. 
+Sign up to [mapbox](https://www.mapbox.com/)
+
 Copy your default API access token and paste it in mapbox-creadentials.json
 
 Create a new map (or use the default one) and copy its map ID and paste it in the same file.
@@ -39,14 +40,14 @@ cd home/6element/
 npm run watch
 ````
 
-In a new consol
+In a new console
 
 ````
 npm start
 
 ````
 
-You can now open the URL return
+You can now open the returned URL
 
 
 

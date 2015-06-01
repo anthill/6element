@@ -1,6 +1,7 @@
 ## Scope
 
 6element is a open innovation project of waste optimisation.
+[Learn more](http://ants.builders/pages/6element.html)
 
 
 ### Contributing
@@ -9,6 +10,10 @@
 
 Initialization
 
+You can install [npm] (https://github.com/nodesource/distributions#install-nodejs) 
+and [docker] (https://docs.docker.com/installation/ubuntulinux/#installing-docker-on-ubuntu)
+
+
 ````
 git clone git@github.com:anthill/6element.git
 cd 6element
@@ -16,47 +21,33 @@ npm install
 docker pull postgres:9.4
 ````
 
+Then, you must copy create the missing file
+
+````
+cd 6element/client/src
+cp mapbox mapbox-creadentials.json.example mapbox-creadentials.json
+````
+
+Sign up to [mapbox](https://www.mapbox.com/)
+
+Copy your default API access token and paste it in mapbox-creadentials.json
+
+Create a new map (or use the default one) and copy its map ID and paste it in the same file.
 
 
+````
+cd home/6element/
+npm run watch
+````
 
+In a new console
 
+````
+npm start
 
+````
 
-### Presentation 
-
-The slides describing the projects are in this folder.
-
-### Get the data
-
-Just do `make get-data` to download all the necessary datasets.
-
-### Dashboard
-
-In `dashboard` you'll find the front end of the visualisation dashboard.
-
-```
-make dashboard
-```
-
-to launch the interface then visible in your browser at `http://localhost:8000/`
-
-### Learning algo
-
-In `predict` lies the learning algorithm. Once you get the data, enter the ipython prompt and use:
-
-```
-%run contextualize.py
-%run learn.py
-```
-
-### Computer vision
-
-The algorithm concerning the computer vision part are in `vision`.
-You can use the car detector or the bin detector individually, but for a complete analysis use:
-
-```
-%run analyse_all.py
-```
+You can now open the returned URL
 
 
 

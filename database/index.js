@@ -95,9 +95,7 @@ module.exports = {
                     )
                     .toQuery();
                 
-                
-                
-                console.log('currentRecyclingCenterAffluences query', query);
+                // console.log('currentRecyclingCenterAffluences query', query);
 
                 return new Promise(function (resolve, reject) {
                     db.query(query, function (err, result) {

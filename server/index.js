@@ -30,7 +30,7 @@ function rand(n){
 dropAllTables()
     .then(createTables)
     .then(fillDBWithFakeData)
-    .catch(errlog);
+    .catch(errlog('drop and create'));
 
 
 app.use(compression());
@@ -50,7 +50,6 @@ app.get('/browserify-bundle.js', function(req, res){
 app.get('/live-affluence', function(req, res){
     database.complexQueries.currentRecyclingCenterAffluences()
         .then(function(data){
-            console.log('currentRecyclingCenterAffluences', data, data.length);
             res.send(data);
         })
         .catch(errlog('/live-affluence'));

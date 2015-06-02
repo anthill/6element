@@ -10,8 +10,8 @@
 
 Initialization
 
-You can install [npm] (https://github.com/nodesource/distributions#install-nodejs) 
-and [docker] (https://docs.docker.com/installation/ubuntulinux/#installing-docker-on-ubuntu)
+You can install [npm](https://github.com/nodesource/distributions#install-nodejs) 
+and [docker](https://docs.docker.com/installation/ubuntulinux/#installing-docker-on-ubuntu)
 
 
 ````
@@ -24,27 +24,26 @@ docker pull postgres:9.4
 Then, you must copy create the missing file
 
 ````
-cd 6element/client/src
-cp mapbox mapbox-creadentials.json.example mapbox-creadentials.json
+cp client/src/mapbox-credentials.json.example client/src/mapbox-credentials.json
 ````
 
 Sign up to [mapbox](https://www.mapbox.com/)
 
-Copy your default API access token and paste it in mapbox-creadentials.json
+Copy your default API access token and paste it in `/client/srcmapbox-creadentials.json` 
 
 Create a new map (or use the default one) and copy its map ID and paste it in the same file.
 
 
 ````
-cd home/6element/
 npm run watch
 ````
 
 In a new console
 
 ````
+npm run start-db-container
+npm run sql-generate
 npm start
-
 ````
 
 You can now open the returned URL

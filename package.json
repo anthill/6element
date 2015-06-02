@@ -32,6 +32,7 @@
   },
   "homepage": "https://github.com/anthill/6element",
   "dependencies": {
+    "6sense": "0.0.4",
     "better-log": "^1.1.0",
     "browserify": "^10.2.0",
     "compression": "^1.4.4",

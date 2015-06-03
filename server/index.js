@@ -3,7 +3,7 @@
 require('es6-shim');
 require('better-log').install();
 
-var hardCodedSensors = require("./hardCodedSensors.js");
+// var hardCodedSensorIdP = require("./hardCodedSensors.js");
 var decoder = require('6sense/js/codec/decodeFromSMS.js');
 
 var path = require('path');
@@ -32,8 +32,8 @@ function rand(n){
 
 dropAllTables()
     .then(createTables)
-    //.then(fillDBWithFakeData)
-    .then(hardCodedSensors)
+    .then(fillDBWithFakeData)
+    // .then(hardCodedSensors)
     .catch(errlog('drop and create'));
 
 

@@ -6,6 +6,7 @@ COPY package.json /6element/
 COPY client /6element/client/
 COPY database /6element/database/
 COPY server /6element/server/
+COPY utils /6element/utils/
 
 WORKDIR /6element
 

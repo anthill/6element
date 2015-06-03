@@ -10,6 +10,6 @@ COPY client /6element/client/
 COPY database /6element/database/		
 COPY server /6element/server/		
 
-WORKDIR 6element
+WORKDIR /6element
 RUN npm install
-RUN npm run build
+RUN browserify /6element/client/src/main.js -o /6element/client/browserify-bundle.js -d

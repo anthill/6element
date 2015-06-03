@@ -46,7 +46,8 @@ function generateSensors(recyclingCenterIds){
     return Promise.all(recyclingCenterIds.map(function(rcId, i){
         return database.Sensors.create({
             name: 'sensor '+i,
-            installed_at: rcId
+            installed_at: rcId,
+            phone_number: "xxx"
         });
     }));
 }

@@ -1,17 +1,16 @@
 6element:
   build: .
   command: forever server/index.js
+  volumes:
+    - ".:/6element"
   links:
-   - db
+   - "db:postgres"
   ports:
-   - 4000:4000
+   - "4000:4000"
   environment:
-   - VIRTUAL_HOST=broker.ants.builders 
+   - VIRTUAL_HOST=6element.ants.builders 
    - VIRTUAL_PORT=4000
-   - POSTGRES_PASSWORD=password
 db:
   image: postgres:9.4
-  ports:
-   - 6000:5432
   environment:
    - POSTGRES_PASSWORD=password

@@ -6,10 +6,10 @@ var boot2dockerIp = require('../../utils/boot2dockerIp')
 var conStringP = 
 	boot2dockerIp()
 		.then(function(ip){
-			return "postgres://postgres:password@" + ip + ":6000/postgres";
+			return "postgres://postgres:password@" + process.env.POSTGRES_PORT_5432_TCP_ADDR + ":" + process.env.POSTGRES_PORT_5432_TCP_PORT + "/postgres";
 		})
 		.catch(function(error){
-			return "postgres://postgres:password@localhost:6000/postgres";
+			return "postgres://postgres:password@" + process.env.POSTGRES_PORT_5432_TCP_ADDR + ":" + process.env.POSTGRES_PORT_5432_TCP_PORT + "/postgres";
 		});
 
 

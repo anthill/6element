@@ -54,12 +54,12 @@ var LineChart = React.createClass({
         var data = defaultData;
         
         // fill chart data
-        data.labels = props.labels.map(function(label, index){return index % 4 ? "" : label});
+        data.labels = props.labels;
 
         data.datasets[0].data = props.observed;
 
         // display metrics
-        var sumLegend = new React.DOM.div(
+        /*var sumLegend = new React.DOM.div(
             {
                 className: 'metrics table-layout'
             },
@@ -75,7 +75,7 @@ var LineChart = React.createClass({
                 "Mean",
                 React.DOM.div({className: 'obs'}, Math.round(props.metrics.obsMean))
             )
-        );
+        );*/
 
 
         // creating full chart component    
@@ -87,9 +87,12 @@ var LineChart = React.createClass({
                     scaleShowVerticalLines: false,
                     pointHitDetectionRadius: 4,
                     pointDot: false
-                }
-            }),
-            sumLegend
+                },
+                width: 350,
+                height: 200
+            })
+            /*,
+            sumLegend*/
         );
 
 		return fullChart;

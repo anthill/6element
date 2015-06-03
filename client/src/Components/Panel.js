@@ -40,9 +40,7 @@ var Panel = React.createClass({
         var state = this.state;
 
         console.log('panel props', props);
-        
-        var cellStyle = {border: '1px solid #AAA'};
-        
+                
         return React.DOM.div({id: 'panel'}, [
             React.DOM.h1({}, '6element - affluence déchèteries en direct'),
             
@@ -51,27 +49,15 @@ var Panel = React.createClass({
                 undefined,
             
             props.recyclingCenter ?
-                React.DOM.table({}, [
-                    React.DOM.tr({}, props.recyclingCenter.details.map(function(d){
-                        return React.DOM.td({style: cellStyle}, dateLabel(d.measurement_date));
-                    })),
-                    React.DOM.tr({}, props.recyclingCenter.details.map(function(d){
-                        return React.DOM.td({style: cellStyle}, d.measurement);
-                    }))
-                
-                ])
-            
-            
-            
-                /*LineChart({
-                    labels: dateLabels(props.recyclingCenter.details.map(function(d){
-                        return d.measurement_date;
-                    })),
+                LineChart({
+                    labels: props.recyclingCenter.details.map(function(d){
+                        return dateLabel(d.measurement_date);
+                    }),
                     observed: props.recyclingCenter.details.map(function(d){
                         return d.measurement;
                     }),
                     metrics: {}
-                })*/ :
+                }) :
                 undefined
         ]);
     }

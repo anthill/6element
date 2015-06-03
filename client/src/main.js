@@ -24,6 +24,8 @@ var topLevelStore = {
         serverAPI.getRecyclingCenterDetails(rc.id)
             .then(function(details){
                 console.log('rc details', rc, details);
+                
+                // sort by asc time in case it's not already thus sorted
                 details.sort(function(d1, d2){
                     return new Date(d1.measurement_date).getTime() - new Date(d2.measurement_date).getTime()
                 })

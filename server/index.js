@@ -10,6 +10,9 @@ var path = require('path');
 var express = require('express');
 var app = express();
 var compression = require('compression');
+var bodyParser = require('body-parser');
+
+
 var errlog = function(str){
     return function(err){
         console.error(str, err.stack);
@@ -37,6 +40,8 @@ var sensorIdP = dropAllTables()
 
 
 app.use(compression());
+app.use(bodyParser.urlencoded());
+app.use(bodyParser.json());
 
 app.use("/css/leaflet.css", express.static(path.join(__dirname, '../node_modules/leaflet/dist/leaflet.css')));
 app.use("/css", express.static(path.join(__dirname, '../client/css')));
@@ -62,12 +67,10 @@ app.get('/live-affluence', function(req, res){
 // endpoint receiving the sms from twilio
 app.post('/twilio', function(req, res) {
 
+    console.log("Received sms");
+
     sensorIdP.then(function(sensorId){
         if (req.body.Body !== undefined){
-
-                console.log("Received sms from ", req.body.From);
-
-
                 // decode message
                 decoder(req.body.Body)
                     .then(function(decodedMsg){

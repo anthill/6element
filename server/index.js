@@ -3,10 +3,16 @@
 require('es6-shim');
 require('better-log').install();
 
+var hardCodedSensors = require("./hardCodedSensors.js");
+var decoder = require('6sense/js/codec/decodeFromSMS.js');
+
 var path = require('path');
 var express = require('express');
 var app = express();
 var compression = require('compression');
+var bodyParser = require('body-parser');
+
+
 var errlog = function(str){
     return function(err){
         console.error(str, err.stack);
@@ -15,7 +21,7 @@ var errlog = function(str){
  
 var fs = require('fs');
 
-var PORT = 6482;
+var PORT = 4000;
 
 var database = require('../database');
 var dropAllTables = require('../database/management/dropAllTables');
@@ -26,14 +32,16 @@ function rand(n){
     return Math.floor(n*Math.random());
 }
 
-
-dropAllTables()
+var sensorIdP = dropAllTables()
     .then(createTables)
-    .then(fillDBWithFakeData)
+    //.then(fillDBWithFakeData)
+    .then(hardCodedSensors)
     .catch(errlog('drop and create'));
 
 
 app.use(compression());
+app.use(bodyParser.urlencoded());
+app.use(bodyParser.json());
 
 app.use("/css/leaflet.css", express.static(path.join(__dirname, '../node_modules/leaflet/dist/leaflet.css')));
 app.use("/css", express.static(path.join(__dirname, '../client/css')));
@@ -56,6 +64,42 @@ app.get('/live-affluence', function(req, res){
     
 });
 
+// endpoint receiving the sms from twilio
+app.post('/twilio', function(req, res) {
+
+    console.log("Received sms");
+
+    sensorIdP.then(function(sensorId){
+        if (req.body.Body !== undefined){
+                // decode message
+                decoder(req.body.Body)
+                    .then(function(decodedMsg){
+
+                        // [{"date":"2015-05-20T13:48:00.000Z","signal_strengths":[]},{"date":"2015-05-20T13:49:00.000Z","signal_strengths":[]},{"date":"2015-05-20T13:50:00.000Z","signal_strengths":[]},{"date":"2015-05-20T13:51:00.000Z","signal_strengths":[]},{"date":"2015-05-20T13:52:00.000Z","signal_strengths":[]}]
+
+                        Promise.all(decodedMsg.map(function(message){
+
+                            // persist message in database
+                            return database.SensorMeasurements.create({
+                                'sensor_id': sensorId,
+                                'signal_strengths': message.signal_strengths,
+                                'measurement_date': message.date
+                            });
+
+                        }))
+                        .then(function(msg){
+                            console.log("Storage SUCCESS");
+                            res.json("OK");
+                        })
+                        .catch(function(msg){
+                            console.log("Storage FAILURE: " + msg);
+                            res.json("FAIL");
+                        });
+                    })
+            }
+    });
+
+});
 
 app.listen(PORT, function () {
     console.log('Server running on', [

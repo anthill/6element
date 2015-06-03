@@ -30,7 +30,8 @@ CREATE TABLE IF NOT EXISTS sensors (
     id          SERIAL PRIMARY KEY,
     name        VARCHAR(100) NOT NULL,
     -- type         some_enum -- affluence/bin-level
-    installed_at integer REFERENCES recycling_centers (id)
+    installed_at integer REFERENCES recycling_centers (id),
+    phone_number  text NOT NULL
 ) INHERITS(lifecycle);
 CREATE TRIGGER updated_at_sensors BEFORE UPDATE ON sensors FOR EACH ROW EXECUTE PROCEDURE update_updated_at_column();
 

@@ -6,6 +6,9 @@
 
 	width: 25vw;
 	height: 100%;
+    
+    overflow-x: scroll;
+
 }
 
 .line-chart{

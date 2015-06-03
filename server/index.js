@@ -18,7 +18,7 @@ var errlog = function(str){
  
 var fs = require('fs');
 
-var PORT = 6482;
+var PORT = 4000;
 
 var database = require('../database');
 var dropAllTables = require('../database/management/dropAllTables');

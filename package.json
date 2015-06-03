@@ -7,7 +7,6 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start-db-container": "docker rm 6element-database; docker run --name 6element-database -p 6000:5432 -e POSTGRES_PASSWORD=password -d postgres:9.4",
     "sql-generate": "node-sql-generate --dsn postgres://postgres:password@localhost:6000/postgres > ./database/management/declarations.js",
-    "sql-generate-b2d": "node-sql-generate --dsn postgres://postgres:password@$(boot2docker ip):6000/postgres > ./database/management/declarations.js",
     "watch": "watchify client/src/main.js -o client/browserify-bundle.js -d -v",
     "build": "browserify client/src/main.js -o client/browserify-bundle.js -d",
     "start": "node server/index.js",

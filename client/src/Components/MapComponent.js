@@ -182,7 +182,7 @@ module.exports = React.createClass({
                     recyclingCenterMarkers.push(marker);    
                 });
 
-                console.log("recyclingCenterMarkers", recyclingCenterMarkers);
+                //console.log("recyclingCenterMarkers", recyclingCenterMarkers);
 
                 this.allMarkers = L.layerGroup(
                     recyclingCenterMarkers

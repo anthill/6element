@@ -32,52 +32,6 @@
 	margin: 2em auto;
 }
 
-/* TABS */
-.tabs {
-	position: relative;
-	width: 100%;
-	/*margin-bottom: 2em;*/
-}
-
-.tabs > div {
-	display: inline-block;
-	width: 100%;
-	height: 100%;
-	background-color: rgb(200, 200, 200);
-	color: white;
-	font-size: 0.8em;
-	text-align: center;
-	cursor: pointer;
-	padding: 5px;
-
-}
-
-.tabs > div.focused {
-	background-color: black;
-}
-
-/* CONTENT */
-
-#buttons{
-	display: flex;
-	cursor: pointer;
-}
-
-#version-button{
-	flex: 1;
-	font-size: 0.8em;
-	background-color: white;
-	border: 1px black solid;
-	border-right: none;
-	padding: 5px;
-	text-align: center;
-}
-
-#version-button.active{
-	background-color: black;
-	color: white;
-}
-
 #recyclingCenter-name {
 	text-align: center;
 	margin-top: 2em;

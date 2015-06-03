@@ -32,7 +32,7 @@ function rand(n){
     return Math.floor(n*Math.random());
 }
 
-var sensorIdP = dropAllTables()
+dropAllTables()
     .then(createTables)
     //.then(fillDBWithFakeData)
     .then(hardCodedSensors)
@@ -69,35 +69,37 @@ app.post('/twilio', function(req, res) {
 
     console.log("Received sms");
 
-    sensorIdP.then(function(sensorId){
-        if (req.body.Body !== undefined){
-                // decode message
-                decoder(req.body.Body)
-                    .then(function(decodedMsg){
+    // find sensor id by phone number
+    database.Sensors.findByPhoneNumber(req.body.From)
+        .then(function(sensor){
+            if (req.body.Body !== undefined){
+                    // decode message
+                    decoder(req.body.Body)
+                        .then(function(decodedMsg){
 
-                        // [{"date":"2015-05-20T13:48:00.000Z","signal_strengths":[]},{"date":"2015-05-20T13:49:00.000Z","signal_strengths":[]},{"date":"2015-05-20T13:50:00.000Z","signal_strengths":[]},{"date":"2015-05-20T13:51:00.000Z","signal_strengths":[]},{"date":"2015-05-20T13:52:00.000Z","signal_strengths":[]}]
+                            // [{"date":"2015-05-20T13:48:00.000Z","signal_strengths":[]},{"date":"2015-05-20T13:49:00.000Z","signal_strengths":[]},{"date":"2015-05-20T13:50:00.000Z","signal_strengths":[]},{"date":"2015-05-20T13:51:00.000Z","signal_strengths":[]},{"date":"2015-05-20T13:52:00.000Z","signal_strengths":[]}]
 
-                        Promise.all(decodedMsg.map(function(message){
+                            Promise.all(decodedMsg.map(function(message){
 
-                            // persist message in database
-                            return database.SensorMeasurements.create({
-                                'sensor_id': sensorId,
-                                'signal_strengths': message.signal_strengths,
-                                'measurement_date': message.date
+                                // persist message in database
+                                return database.SensorMeasurements.create({
+                                    'sensor_id': sensor.id,
+                                    'signal_strengths': message.signal_strengths,
+                                    'measurement_date': message.date
+                                });
+
+                            }))
+                            .then(function(msg){
+                                console.log("Storage SUCCESS");
+                                res.json("OK");
+                            })
+                            .catch(function(msg){
+                                console.log("Storage FAILURE: " + msg);
+                                res.json("FAIL");
                             });
-
-                        }))
-                        .then(function(msg){
-                            console.log("Storage SUCCESS");
-                            res.json("OK");
                         })
-                        .catch(function(msg){
-                            console.log("Storage FAILURE: " + msg);
-                            res.json("FAIL");
-                        });
-                    })
-            }
-    });
+                }
+        });
 
 });
 

@@ -101,6 +101,17 @@ app.post('/twilio', function(req, res) {
 
 });
 
+app.get('/recycling-center/:rcId', function(req, res){
+    var rcId = Number(req.params.rcId);
+    
+    database.complexQueries.getRecyclingCenterDetails(rcId)
+        .then(function(data){
+            res.send(data);
+        })
+        .catch(errlog('/recycling-center/'+req.params.rcId));
+});
+
+
 app.listen(PORT, function () {
     console.log('Server running on', [
         'http://localhost:',

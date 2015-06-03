@@ -1,59 +1,79 @@
 'use strict';
 
 var React = require('react');
+var LineChart = React.createFactory(require('./LineChart.js'));
+
 
 /*
-interface Panel Props{
-    version: string,
-    selectedRecyclingCenter: {recyclingCenter_infos},
-    selectedDate: Date(),
-    dateEntriesMap: Map (date -> value),
-    predictions: {recyclingCenter_predictions},
-    onDateSelection: function -> void,
-    onVersionSelection: function -> change version and/or predict
+
+interface PanelProps{
+    recyclingCenter: RecyclingCenter
 }
-interface Panel State{
-    selectedTab: integer
+interface PanelState{
+
 }
+
 */
+
+function dateLabel(d){
+    var dateobj = new Date(d);
+
+    var minutes = dateobj.getMinutes();
+
+    return [
+        dateobj.getHours(),
+        'h',
+        minutes <= 9 ? '0'+minutes : minutes
+    ].join('');
+}
+
 
 var Panel = React.createClass({
 
     getInitialState: function(){
-        return {
-            selectedTab: 0
-        };
+        return {}
     },
 
     render: function() {
-
         var self = this;
         var props = this.props;
         var state = this.state;
 
-        // console.log('PANEL state', this.state);
-        // console.log('PANEL props', props);
-        // console.log('PANEL props.selectedRecyclingCenter', props.selectedRecyclingCenter);
-
-        // build tabs
-        /*var tabs = new Tabs({
-            tabNames: ['Predictions'],
-            selectedTab: state.selectedTab,
-            onTabChange: function(tabNumber){
-                // console.log('tabnumber', tabNumber);
-                self.setState({
-                    selectedTab: tabNumber
-                });
-            }
-        });*/
-
-        // else {
-        //     tabContent = new AnalyseContent({
-        //         recyclingCenterInfos: props.selectedRecyclingCenter
-        //     });
-        // }
-
-        return React.DOM.div({id: 'panel'}, '');
+        console.log('panel props', props);
+        
+        var cellStyle = {border: '1px solid #AAA'};
+        
+        return React.DOM.div({id: 'panel'}, [
+            React.DOM.h1({}, '6element - affluence déchèteries en direct'),
+            
+            props.recyclingCenter ?
+                React.DOM.h2({}, props.recyclingCenter.name) :
+                undefined,
+            
+            props.recyclingCenter ?
+                React.DOM.table({}, [
+                    React.DOM.tr({}, props.recyclingCenter.details.map(function(d){
+                        return React.DOM.td({style: cellStyle}, dateLabel(d.measurement_date));
+                    })),
+                    React.DOM.tr({}, props.recyclingCenter.details.map(function(d){
+                        return React.DOM.td({style: cellStyle}, d.measurement);
+                    }))
+                
+                ])
+            
+            
+            
+                /*LineChart({
+                    labels: dateLabels(props.recyclingCenter.details.map(function(d){
+                        return d.measurement_date;
+                    })),
+                    observed: props.recyclingCenter.details.map(function(d){
+                        return d.measurement;
+                    }),
+                    metrics: {}
+                })*/ :
+                undefined
+        ]);
     }
 });
 

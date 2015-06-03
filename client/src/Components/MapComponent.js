@@ -10,7 +10,9 @@ interface MapComponent Props{
     mapBoxToken: string,
     mapId: string,
     mapCenter: [lat, lon],
-    recyclingCenters
+    recyclingCenters : RecyclingCenter[],
+    selectedRecyclingCenter: RecyclingCenter
+    onRecylcingCenterSelected(rc): void
 }
 
 interface MapComponent State{
@@ -80,7 +82,7 @@ module.exports = React.createClass({
         // add click event on marker
         marker.on('click', function(){
             console.log('click', recyclingCenter.name);
-            props.onRecyclingCenterClick(recyclingCenter.id);
+            props.onRecylcingCenterSelected(recyclingCenter);
         });
 
         return marker;
@@ -162,8 +164,6 @@ module.exports = React.createClass({
         var map = this.map;
 
         if(map){
-            console.log('MAP selected', props.recyclingCenter);
-
             // remove all markers to avoid superposition
             if (this.allMarkers)
                 map.removeLayer(this.allMarkers);
@@ -175,14 +175,9 @@ module.exports = React.createClass({
             // create recyclingCenter markers
             var recyclingCenterMarkers = [];
 
-            console.log('props', props);
             if(props.recyclingCenters){
                 props.recyclingCenters.forEach(function(recyclingCenter){
                     var marker = self.createRecyclingCenterMarker(recyclingCenter, size);
-                    // if (zoom > 13){
-                        //var markersName = self.createRecyclingCenterName(recyclingCenter, zoom);
-                        //recyclingCenterMarkers.push(markersName);    
-                    // }
 
                     recyclingCenterMarkers.push(marker);    
                 });

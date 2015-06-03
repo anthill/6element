@@ -1,7 +1,7 @@
 'use strict';
 
 var React = require('react');
-var dataLoader = require('./dataLoader.js');
+var serverAPI = require('./serverAPI.js');
 
 var Application = React.createFactory(require('./Components/Application.js'));
 
@@ -12,24 +12,44 @@ var mapbox = require('./mapbox-credentials.json');
 
 var BORDEAUX_COORDS = [44.84, -0.57];
 
-var recyclingCentersP = dataLoader(location.origin, '/live-affluence');
+var recyclingCentersP = serverAPI.getRecyclingCenters();
 
 var topLevelStore = {
     mapBoxToken: mapbox.token,
     mapId: mapbox.mapId,
-    mapCenter: BORDEAUX_COORDS
+    mapCenter: BORDEAUX_COORDS,
+    recyclingCenters: undefined,
+    selectedRecyclingCenter: undefined,
+    getRecyclingCenterDetails: function(rc){
+        serverAPI.getRecyclingCenterDetails(rc.id)
+            .then(function(details){
+                console.log('rc details', rc, details);
+                details.sort(function(d1, d2){
+                    return new Date(d1.measurement_date).getTime() - new Date(d2.measurement_date).getTime()
+                })
+            
+                rc.details = details;
+                topLevelStore.selectedRecyclingCenter = rc;
+                render();
+            })
+            .catch(errlog);
+    }
 };
 
+function render(){
+    React.render(new Application(topLevelStore), document.body);
+}
+
 // Initial rendering
-React.render(new Application(topLevelStore), document.body);
+render();
 
 // Render again when receiving recyclingCenters from API
 recyclingCentersP
     .then(function(recyclingCenters){
-        console.log(recyclingCenters);
+        console.log('recyclingCenters', recyclingCenters);
     
         topLevelStore.recyclingCenters = recyclingCenters;
     
-        React.render(new Application(topLevelStore), document.body);
+        render();
     })
     .catch(errlog);

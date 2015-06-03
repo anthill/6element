@@ -4,12 +4,8 @@ MAINTAINER Alexandre Vallette <alexandre.vallette@ants.builders>
 # RUN npm install nodemon -g
 
 RUN mkdir /6element
-
-COPY package.json /6element/		
-COPY client /6element/client/		
-COPY database /6element/database/		
-COPY server /6element/server/		
-
 WORKDIR /6element
+
+COPY . .
 RUN npm install
-RUN browserify /6element/client/src/main.js -o /6element/client/browserify-bundle.js -d
+RUN npm run build

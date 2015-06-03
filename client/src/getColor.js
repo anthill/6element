@@ -20,9 +20,7 @@ var colorScale = [
 	'#ff0000'
 ];
 
-module.exports = function getColor(v, max, min) {
-    console.log(v, max, min);
-    
+module.exports = function getColor(v, max, min) {    
     var nbColors = colorScale.length;
 
     if(v <= min)

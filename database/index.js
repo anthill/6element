@@ -3,7 +3,6 @@
 var decl = require('./management/declarations.js');
 var databaseP = require('./management/databaseClientP');
 
-
 var recyclingCenter = decl.recycling_centers;
 var sensor = decl.sensors;
 var sensorMeasurement = decl.affluence_sensor_measurements;
@@ -105,6 +104,37 @@ module.exports = {
                 });
             });
             
+        },
+        
+        getRecyclingCenterDetails: function(rcId){
+            return databaseP.then(function(db){
+
+                var query = sensor
+                    .select(
+                        sensor.id,
+                        sensorMeasurement.measurement_date,
+                        sensorMeasurement
+                            .literal('array_length(affluence_sensor_measurements.signal_strengths, 1)')
+                            .as('measurement')
+                    )
+                    .from(
+                        sensor
+                            .join(sensorMeasurement)
+                            .on(sensor.id.equals(sensorMeasurement.sensor_id))
+                    )
+                    .where(sensor.installed_at.equals(rcId))
+                    .toQuery();
+
+                console.log('getRecyclingCenterDetails query', query);
+                
+                return new Promise(function (resolve, reject) {
+                    db.query(query, function (err, result) {
+                        if (err) reject(err);
+                        else resolve(result.rows);
+                    });
+                });
+            })
+
         }
     }
 };

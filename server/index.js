@@ -32,11 +32,11 @@ function rand(n){
     return Math.floor(n*Math.random());
 }
 
-dropAllTables()
-    .then(createTables)
-    //.then(fillDBWithFakeData)
-    .then(hardCodedSensors)
-    .catch(errlog('drop and create'));
+// dropAllTables()
+//     .then(createTables)
+//     //.then(fillDBWithFakeData)
+//     .then(hardCodedSensors)
+//     .catch(errlog('drop and create'));
 
 
 app.use(compression());

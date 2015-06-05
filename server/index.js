@@ -11,7 +11,7 @@ var express = require('express');
 var app = express();
 var compression = require('compression');
 var bodyParser = require('body-parser');
-
+var xml = require('xml');
 
 var errlog = function(str){
     return function(err){
@@ -91,11 +91,13 @@ app.post('/twilio', function(req, res) {
                             }))
                             .then(function(msg){
                                 console.log("Storage SUCCESS");
-                                res.json("OK");
+                                res.set('Content-Type', 'text/xml');
+                                res.send(xml({"Response":""}));
                             })
                             .catch(function(msg){
                                 console.log("Storage FAILURE: " + msg);
-                                res.json("FAIL");
+                                res.set('Content-Type', 'text/xml');
+                                res.send(xml({"Response":""}));
                             });
                         })
                 }

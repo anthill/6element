@@ -1,6 +1,6 @@
 # General information about trashes
 
-![dechets gironde](dechets_girondins.jpg)
+![Trashes in Gironde](trashes_Gironde.jpg)
 
 We can talk about trashes in three different ways:
 * Collect  (CUB)

@@ -1,6 +1,6 @@
 # General information about trashes
 
-![Trashes in Gironde](trashes_Gironde.jpg)
+![Trashes in RC](RCTrashes.png)
 
 We can talk about trashes in three different ways:
 * Collect  (CUB)
@@ -10,14 +10,18 @@ We can talk about trashes in three different ways:
 There are **83 recycling centers** in Gironde
 There are **2 storage center** , where they bury trashes, in Gironde.
 
-**Machines which are not broken** are not re-used and are thrown out with trashes (in Gironde). Only Ustom keep them (they sort them by themselves) and store them in a **recycling center (=RECYCLERIE != dechetterie)** (same concept that Emmaüs). It is located in Pessac sur Dordogne. [LV's I]
+**Machines which are not broken** are not re-used and are thrown out with trashes (in Gironde). Only Ustom keep them (they sort them by themselves) and store them in a **"reclyclerie" ( != recycling center)** (same concept as Emmaüs). It is located in Pessac sur Dordogne. [LV's I]
+
+![Trashes in Gironde](trashes_Gironde.jpg)
 
 There are **3 different ways to throw out trashes** [LV's I]:
 * Door to door/"Porte à porte" (**PAP**) : wast trucks
-* "Point d'apport volontaire" (**PAV**): sorting point (tentative de traduction de borne de tri). There are also cities which don't pick unrecycling trashes but place at residents's disposals.
+* "Point d'apport volontaire" (**PAV**): sorting point (*=borne de tri*). There are also cities which don't pick unrecycling trashes but place at residents's disposals.
 * Recycling centers
 
 **Bulky systems** are not included in this organization because it doesn't always depend on cities. Trashes from bulky system have the same destiny if they are collected by the collectivity. Otherwise, they are usually not recycled but directly burned or burried. [LV's I]
+
+![Bulky](bulky.png)
 
 **Compost** is currently not collected separately from the others trashes.  [LV's I]
 *[Personal consideration] : That's too bas,  Idea of a new project about compost collection?*
@@ -33,6 +37,8 @@ There are **3 different ways to throw out trashes** [LV's I]:
 * People leaving in detached house with garden are the **main users** of recycling center [Vitry's interview]
 * Urbans don't come in recycling center, they throw out their trashes on the street. [V's I]
 * Public recycling centers are not made for **professionals** who are supposed to use private professional recycling centers. There are 5-6 in this kind in Gironde. Some local authority accept them in recycling centers but *try* to make them pay. [LV's I]
+
+![Professional](professional.png)
 * Punctual users: punctual events such as a move or spring clean. [doc LV]
 * Bigger the place we live in is, more trash we can accumulate before throwing out everything at the same time. People living in tiny places can't keep any trash and have to throw them out immediately. [doc LV]
  * *How do they solve this problem?* 

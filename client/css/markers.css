@@ -13,18 +13,13 @@
 	stroke-width: 2;
 }
 
-.recyclingCenterName.displayed{
-	display: block;
+.recyclingCenterName{
+	display: block; padding: 5px; background-color: rgba(0,0,0, 0.5); white-space: nowrap; border-radius: 5px;
+	color: 	#DDD;
 }
 
-.recyclingCenterName{
-	display: none;
-	color: white;
-}
 
 .recyclingCenterName.selected{
 	text-decoration: underline;
 }
 
-.line{
-}

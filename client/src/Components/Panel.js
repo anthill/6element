@@ -42,7 +42,7 @@ var Panel = React.createClass({
         console.log('panel props', props);
                 
         return React.DOM.div({id: 'panel'}, [
-            React.DOM.h1({}, '6element - affluence déchèteries en direct'),
+            React.DOM.h1({}, '6element - AFFLUENCE déchèteries en direct'),
             
             props.recyclingCenter ?
                 React.DOM.h2({}, props.recyclingCenter.name) :

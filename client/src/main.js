@@ -2,6 +2,7 @@
 
 var React = require('react');
 var serverAPI = require('./serverAPI.js');
+var makeMap = require('./utils.js').makeMap;
 
 var Application = React.createFactory(require('./Components/Application.js'));
 
@@ -12,14 +13,12 @@ var mapbox = require('./mapbox-credentials.json');
 
 var BORDEAUX_COORDS = [44.84, -0.57];
 
-var recyclingCentersP = serverAPI.getRecyclingCenters();
-
 var topLevelStore = {
     mapBoxToken: mapbox.token,
     mapId: mapbox.mapId,
     mapCenter: BORDEAUX_COORDS,
-    recyclingCenters: undefined,
-    selectedRecyclingCenter: undefined,
+    recyclingCenterMap: undefined,
+    selectedID: undefined,
     getRecyclingCenterDetails: function(rc){
         serverAPI.getRecyclingCenterDetails(rc.id)
             .then(function(details){
@@ -31,7 +30,7 @@ var topLevelStore = {
                 })
             
                 rc.details = details;
-                topLevelStore.selectedRecyclingCenter = rc;
+                topLevelStore.selectedID = rc.id;
                 render();
             })
             .catch(errlog);
@@ -46,11 +45,11 @@ function render(){
 render();
 
 // Render again when receiving recyclingCenters from API
-recyclingCentersP
+serverAPI.getRecyclingCenters()
     .then(function(recyclingCenters){
         console.log('recyclingCenters', recyclingCenters);
     
-        topLevelStore.recyclingCenters = recyclingCenters;
+        topLevelStore.recyclingCenterMap = makeMap(recyclingCenters);
     
         render();
     })

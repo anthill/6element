@@ -27,12 +27,12 @@ interface ApplicationProps{
     mapBoxToken: string,
     mapId,
     mapCenter,
-    recyclingCenters: RecyclingCenter[],
+    recyclingCenterMap: Map (RCId => RecyclingCenter),
     getRecyclingCenterDetails: (RCId) => Promise<AffluenceHistory[]>
 }
 
 interface ApplicationState{
-    selectedRecyclingCenter: RecyclingCenter
+    selectedID: RecyclingCenter Id
 }
 */
 
@@ -40,13 +40,13 @@ module.exports = React.createClass({
 
     getInitialState: function(){
         return {
-            selectedRecyclingCenter: this.props.selectedRecyclingCenter
+            selectedID: this.props.selectedID
         };
     },
     
     componentWillReceiveProps: function(newProps){
         this.setState({
-            selectedRecyclingCenter: newProps.selectedRecyclingCenter
+            selectedID: newProps.selectedID
         });
     },
 
@@ -56,7 +56,7 @@ module.exports = React.createClass({
         var state = this.state;
         
         var panel = new Panel({
-            recyclingCenter: state.selectedRecyclingCenter
+            recyclingCenter: props.recyclingCenterMap ? props.recyclingCenterMap.get(state.selectedID) : undefined
         });
 
         // build Map
@@ -64,13 +64,20 @@ module.exports = React.createClass({
             mapBoxToken: props.mapBoxToken,
             mapId: props.mapId,
             mapCenter: props.mapCenter,
-            recyclingCenters: props.recyclingCenters,
-            selectedRecyclingCenter: state.selectedRecyclingCenter,
-            onRecylcingCenterSelected: function(rc){
+            recyclingCenterMap: props.recyclingCenterMap,
+            selectedID: state.selectedID,
+            onRecyclingCenterSelected: function(rc){
                 if(rc.details){
-                    self.setState({
-                        selectedRecyclingCenter: rc
-                    });    
+
+                    if (self.state.selectedID === rc.id){
+                        self.setState({
+                            selectedID: undefined
+                        }); 
+                    } else {
+                        self.setState({
+                            selectedID: rc.id
+                        });    
+                    }
                 }
                 else{
                     props.getRecyclingCenterDetails(rc);

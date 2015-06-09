@@ -47,7 +47,7 @@ function generateSensors(recyclingCenterIds){
         return database.Sensors.create({
             name: 'sensor '+i,
             installed_at: rcId,
-            phone_number: "xxx"
+            phone_number: "xxx"+i
         });
     }));
 }

@@ -10,9 +10,9 @@ interface MapComponent Props{
     mapBoxToken: string,
     mapId: string,
     mapCenter: [lat, lon],
-    recyclingCenters : RecyclingCenter[],
-    selectedRecyclingCenter: RecyclingCenter
-    onRecylcingCenterSelected(rc): void
+    recyclingCenterMap : Map (RCId => RecyclingCenter),
+    selectedID: RecyclingCenter ID
+    onRecyclingCenterSelected(rc): void
 }
 
 interface MapComponent State{
@@ -60,7 +60,7 @@ module.exports = React.createClass({
         var props = this.props;
 
         // check if recyclingCenter is selected, and define selectedClass
-        var isSelected = this.props.selectedRecyclingCenter === recyclingCenter.id;
+        var isSelected = this.props.selectedID === recyclingCenter.id;
         var classes = [
             'recyclingCenter',
             isSelected ? 'selected' : ''
@@ -82,33 +82,29 @@ module.exports = React.createClass({
         // add click event on marker
         marker.on('click', function(){
             console.log('click', recyclingCenter.name);
-            props.onRecylcingCenterSelected(recyclingCenter);
+            props.onRecyclingCenterSelected(recyclingCenter);
         });
 
         return marker;
     },
 
-    /*createRecyclingCenterName: function(recyclingCenter, zoom){
+    createRecyclingCenterName: function(recyclingCenter, zoom){
 
         var props = this.props;
 
         // check if recyclingCenter is selected, and define selectedClass
-        var isSelected = this.props.selectedRecyclingCenter === recyclingCenter.id;
-        var isDisplayed = zoom > 14;
-        var selectedClass = isSelected ? ' selected' : '';
-        var displayedClass = isDisplayed? ' displayed' : '';
+        var isSelected = this.props.selectedID === recyclingCenter.id;
 
-        var className = 'recyclingCenterName' + selectedClass + displayedClass;
+        var selectedClass = isSelected ? ' selected' : '';
+        var className = 'recyclingCenterName' + selectedClass;
 
         var position = L.latLng(Number(recyclingCenter.lat), Number(recyclingCenter.lon));
-
-        var value = props.recyclingCenterEntriesMap.get(recyclingCenter.id);
 
         // this is dirty, but i'm dirty anyway so it don't matter dude
         var myIcon = L.divIcon({
             className: className,
-            iconSize: [300, 10],
-            iconAnchor: [-12, 8],
+            iconSize: ['auto', 'auto'],
+            iconAnchor: [-12, 15],
             html: recyclingCenter.name
         });
 
@@ -122,41 +118,11 @@ module.exports = React.createClass({
 
         // add click event on marker
         marker.on('click', function(){
-            props.onRecyclingCenterClick(RecyclingCenter.id);
+            props.onRecyclingCenterSelected(recyclingCenter);
         });
 
         return marker;
     },
-
-    createLine: function(line){
-        var props = this.props;
-
-        //console.log('CREATE LINE:', line.id, line.recyclingCenter);
-
-        var route = [];
-        line.recyclingCenters.forEach(function(id){
-            if (props.recyclingCenters.has(id)){
-                var currentRecyclingCenter = props.recyclingCenters.get(id);
-                var position = L.latLng(currentRecyclingCenter.lat, currentRecyclingCenter.lon);
-                route.push(position);
-            } else {
-                console.log("Missing recyclingCenter to build line");
-            }
-            
-        });
-
-        var polyline = L.polyline(route, {
-            className: 'line',
-            color: line.color,
-            opacity: 1
-        });
-
-        polyline.on('click', function(){
-            console.log(line.id);
-        })
-
-        return polyline;
-    },*/
 
     render: function() {
         var self = this;
@@ -165,30 +131,43 @@ module.exports = React.createClass({
 
         if(map){
             // remove all markers to avoid superposition
-            if (this.allMarkers)
-                map.removeLayer(this.allMarkers);
+            if (this.recyclingCenterLayer)
+                map.removeLayer(this.recyclingCenterLayer);
+            if (this.nameLayer)
+                map.removeLayer(this.nameLayer);
 
             var zoom = map.getZoom();
 
-            var size = Math.max(2, 2*(zoom-7));
+            // var size = Math.max(2, 2*(zoom-7));
+            var size = 7;
 
             // create recyclingCenter markers
             var recyclingCenterMarkers = [];
+            var nameMarkers = [];
 
-            if(props.recyclingCenters){
-                props.recyclingCenters.forEach(function(recyclingCenter){
+            if(props.recyclingCenterMap){
+                props.recyclingCenterMap.forEach(function(recyclingCenter){
+                    if (zoom > 11) {
+                        size = 10;
+                        var name = self.createRecyclingCenterName(recyclingCenter, zoom);
+                        nameMarkers.push(name); 
+                    }   
+
                     var marker = self.createRecyclingCenterMarker(recyclingCenter, size);
-
-                    recyclingCenterMarkers.push(marker);    
+                    recyclingCenterMarkers.push(marker);
                 });
 
                 //console.log("recyclingCenterMarkers", recyclingCenterMarkers);
 
-                this.allMarkers = L.layerGroup(
-                    recyclingCenterMarkers
-                );
+                this.recyclingCenterLayer = L.layerGroup(recyclingCenterMarkers);
+                this.nameLayer = L.layerGroup(nameMarkers);
                 
-                this.allMarkers.addTo(map);
+                this.recyclingCenterLayer.addTo(map);
+                this.nameLayer.addTo(map);
+
+                this.recyclingCenterLayer.getLayers().forEach(function(marker){
+                    marker.bringToFront();
+                });
             }
             
         }

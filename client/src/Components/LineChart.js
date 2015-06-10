@@ -87,9 +87,7 @@ var LineChart = React.createClass({
                     scaleShowVerticalLines: false,
                     pointHitDetectionRadius: 4,
                     pointDot: false
-                },
-                width: 350,
-                height: 200
+                }
             })
             /*,
             sumLegend*/

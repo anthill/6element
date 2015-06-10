@@ -12,7 +12,8 @@ interface MapComponent Props{
     mapCenter: [lat, lon],
     recyclingCenterMap : Map (RCId => RecyclingCenter),
     selectedID: RecyclingCenter ID
-    onRecyclingCenterSelected(rc): void
+    onRecyclingCenterSelected(rc): void,
+    updatingID: int
 }
 
 interface MapComponent State{
@@ -60,15 +61,18 @@ module.exports = React.createClass({
         var props = this.props;
 
         // check if recyclingCenter is selected, and define selectedClass
-        var isSelected = this.props.selectedID === recyclingCenter.id;
+        var isSelected = props.selectedRCMap.has(recyclingCenter.id);
+        var isUpdating = props.updatingID === recyclingCenter.id;
+
         var classes = [
             'recyclingCenter',
-            isSelected ? 'selected' : ''
+            isSelected ? 'selected' : '',
+            isUpdating ? 'updating' : ''
         ];
 
         var position = L.latLng(Number(recyclingCenter.lat), Number(recyclingCenter.lon));
 
-        // create Leaflet marker
+        // create Leaflet markers
         var marker = L.circleMarker(
             position,
             {
@@ -92,17 +96,21 @@ module.exports = React.createClass({
 
         var props = this.props;
 
-        // check if recyclingCenter is selected, and define selectedClass
-        var isSelected = this.props.selectedID === recyclingCenter.id;
+        // check if recyclingCenter is selected, and define selectedClas
+        var isSelected = props.selectedRCMap.has(recyclingCenter.id);
+        var isUpdating = props.updatingID === recyclingCenter.id;
 
-        var selectedClass = isSelected ? ' selected' : '';
-        var className = 'recyclingCenterName' + selectedClass;
+        var classes = [
+            'recyclingCenterName',
+            isSelected ? 'selected' : '',
+            isUpdating ? 'updating' : ''
+        ];
 
         var position = L.latLng(Number(recyclingCenter.lat), Number(recyclingCenter.lon));
 
         // this is dirty, but i'm dirty anyway so it don't matter dude
         var myIcon = L.divIcon({
-            className: className,
+            className: classes.join(' '),
             iconSize: ['auto', 'auto'],
             iconAnchor: [-12, 15],
             html: recyclingCenter.name
@@ -154,10 +162,9 @@ module.exports = React.createClass({
                     }   
 
                     var marker = self.createRecyclingCenterMarker(recyclingCenter, size);
+
                     recyclingCenterMarkers.push(marker);
                 });
-
-                //console.log("recyclingCenterMarkers", recyclingCenterMarkers);
 
                 this.recyclingCenterLayer = L.layerGroup(recyclingCenterMarkers);
                 this.nameLayer = L.layerGroup(nameMarkers);

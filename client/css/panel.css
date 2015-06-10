@@ -1,35 +1,54 @@
 #panel {
-	position: fixed;
-	top: 0;
-	right: 0;
-	background-color: white;
+	position: fixed; bottom: -47vh; right: 0; left: 0;
 
-	width: 25vw;
-	height: 100%;
+	background-color: white; opacity: 0.7;
+	height: 50vh;
     
-    overflow-x: scroll;
+    z-index: 10;
+    transition: bottom .5s ease-in-out;
+}
 
+#panel.open {
+	bottom: 0;
+	transition: bottom .5s ease-in-out;
+
+	overflow-x: scroll;
+}
+
+#close-button {
+	display: block; position: absolute; top: 5px; right: 5px; width: 14px; height: 14px;
+	border-radius: 50%;
+	background-color: green;
+	cursor: pointer;
+}	
+
+#panel.open #close-button{
+	background-color: red;
+}
+
+#panel h1 {
+	width: 100%; margin: 0;
+	font-size: 1.3em; text-align: center;
+}
+
+#panel h2 {
+	display: inline-block; margin: .4em 1em;
+	font-size: 1em;
+}
+
+#detail {
+	height: 40%;
 }
 
 .line-chart{
-	position: absolute;
-	right: 0.3em;
+	position: absolute; width: 90%; margin: 0 1em;
+	/*right: 0.3em;*/
 	margin-top: 1em;
 	margin-right: 0px;
 }
 
-.bar-chart{
-	margin: 10px;
-}
-
-.radar-chart{
-	margin: 30px 10px;
-}
-
-
-#cal-heatmap{
-	width: 80%;
-	margin: 2em auto;
+.line-chart canvas {
+	width: 100%; height: 100px;
 }
 
 #recyclingCenter-name {
@@ -42,40 +61,6 @@
 	display: inline;
 	margin: 0 0.5em;
 	font-size: 1em;
-}
-
-#current-date {
-	text-align: center;
-	margin-top: 1em;
-	font-size: 0.8em;
-}
-
-.legend{
-	width: 100%;
-	font-size: 0.7em;
-}
-
-.legend div{
-	width: 50%;
-	display: inline-block;
-	text-align: center;
-}
-
-.obs{
-	color: black;
-}
-
-.pred{
-	color: rgb(220,50,50);
-}
-
-.metrics {
-	width: 70%;
-	margin: 0 auto;
-	margin-top: 1em;
-	margin-bottom: 3em;
-	font-size: 0.8em;
-	text-align: center;
 }
 
 /* LOGO */

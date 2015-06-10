@@ -105,6 +105,7 @@ app.post('/twilio', function(req, res) {
                                 'measurement_date': message.date
                             };
                             socketMessage = messageContent;
+                            console.log("installed_at", sensor.installed_at);
                             socketMessage['installed_at'] = sensor.installed_at;
 
                             // persist message in database
@@ -118,12 +119,13 @@ app.post('/twilio', function(req, res) {
 
                             // SOCKET IO
                             if (socket){
+                                console.log("emitting", socketMessage)
                                 socket.emit('data', socketMessage);
                             }
 
                         })
                         .catch(function(id){
-                            console.log("Storage FAILURE: " + contents[0]);
+                            console.log("Storage FAILURE: " + id);
                             res.set('Content-Type', 'text/xml');
                             res.send(xml({"Response":""}));
                         });

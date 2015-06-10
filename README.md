@@ -40,9 +40,7 @@ npm run watch
 
 In a new console
 
-````
-npm run start-db-container
-npm run sql-generate
+```
 npm start
 ````
 

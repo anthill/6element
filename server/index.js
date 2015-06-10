@@ -3,12 +3,15 @@
 require('es6-shim');
 require('better-log').install();
 
+var fs = require('fs');
+
 var hardCodedSensors = require("./hardCodedSensors.js");
 var decoder = require('6sense/js/codec/decodeFromSMS.js');
 
 var path = require('path');
 var express = require('express');
 var app = express();
+var http = require('http');
 var compression = require('compression');
 var bodyParser = require('body-parser');
 var xml = require('xml');
@@ -19,7 +22,6 @@ var errlog = function(str){
     }
 }
  
-var fs = require('fs');
 
 var PORT = 4000;
 
@@ -34,9 +36,20 @@ function rand(n){
 
 dropAllTables()
     .then(createTables)
-    //.then(fillDBWithFakeData)
+    // .then(fillDBWithFakeData)
     .then(hardCodedSensors)
     .catch(errlog('drop and create'));
+
+var server = http.Server(app);
+var io = require('socket.io')(server);
+
+io.set('origins', '*:*');
+
+var socket = false;
+
+io.on('connection', function(_socket) {
+    socket = _socket;
+});
 
 
 app.use(compression());
@@ -44,12 +57,14 @@ app.use(bodyParser.urlencoded());
 app.use(bodyParser.json());
 
 app.use("/css/leaflet.css", express.static(path.join(__dirname, '../node_modules/leaflet/dist/leaflet.css')));
+app.use("/socket.io.js", express.static(path.join(__dirname, '../node_modules/socket.io/node_modules/socket.io-client/socket.io.js')));
 app.use("/css", express.static(path.join(__dirname, '../client/css')));
 app.use("/images", express.static(path.join(__dirname, '../client/images')));
 
 app.get('/', function(req, res){
     res.sendFile(path.join(__dirname, '../client/index.html'));
 });
+
 app.get('/browserify-bundle.js', function(req, res){
     res.sendFile(path.join(__dirname, '../client/browserify-bundle.js'));
 });
@@ -99,11 +114,27 @@ app.post('/twilio', function(req, res) {
                                 res.set('Content-Type', 'text/xml');
                                 res.send(xml({"Response":""}));
                             });
-                        })
-                }
-        });
 
+                        }))
+                        .then(function(msg){
+                            console.log("Storage SUCCESS");
+
+                            // SOCKET IO
+                            if (socket)
+                                socket.emit('data', msg);
+
+                            res.json("OK");
+                        })
+                        .catch(function(msg){
+                            console.log("Storage FAILURE: " + msg);
+                            res.json("FAIL");
+                        });
+                    });
+            }
+        });    
 });
+
+
 
 app.get('/recycling-center/:rcId', function(req, res){
     var rcId = Number(req.params.rcId);
@@ -115,10 +146,23 @@ app.get('/recycling-center/:rcId', function(req, res){
         .catch(errlog('/recycling-center/'+req.params.rcId));
 });
 
+// io.on('connection', function(socket) {
+//     console.log('Socket io Connexion');
 
-app.listen(PORT, function () {
+//     setInterval(function(){
+//         console.log('emitting', Math.floor(Math.random() * 28));
+//         socket.emit('data', {
+//             sensor_id: Math.floor(Math.random() * 28),
+//             signal_strengths: [10, 10, 10],
+//             measurement_date: new Date()
+//         });
+//     }, 2000);
+// });
+
+server.listen(PORT, function () {
     console.log('Server running on', [
         'http://localhost:',
         PORT
     ].join(''));
 });
+

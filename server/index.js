@@ -105,11 +105,11 @@ app.post('/twilio', function(req, res) {
                                 'measurement_date': message.date
                             };
                             socketMessage = messageContent;
-                            console.log("installed_at", sensor.installed_at);
-                            socketMessage['installed_at'] = sensor.installed_at;
 
                             // persist message in database
-                            return database.SensorMeasurements.create(messageContent);
+                            var persitP = database.SensorMeasurements.create(messageContent);
+                            socketMessage['installed_at'] = sensor.installed_at;
+                            return persitP;
 
                         }))
                         .then(function(id){
@@ -119,7 +119,6 @@ app.post('/twilio', function(req, res) {
 
                             // SOCKET IO
                             if (socket){
-                                console.log("emitting", socketMessage)
                                 socket.emit('data', socketMessage);
                             }
 

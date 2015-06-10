@@ -110,8 +110,14 @@ app.post('/twilio', function(req, res) {
                             res.send(xml({"Response":""}));
 
                             // SOCKET IO
-                            if (socket)
-                                socket.emit('data', msg);
+                            if (socket){
+                                var d = {
+                                    'sensor_id': sensor.id,
+                                    'signal_strengths': message.signal_strengths,
+                                    'measurement_date': message.date
+                                }
+                                socket.emit('data', d);
+                            }
 
                         })
                         .catch(function(msg){

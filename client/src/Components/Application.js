@@ -28,25 +28,25 @@ interface ApplicationProps{
     mapId,
     mapCenter,
     recyclingCenterMap: Map (RCId => RecyclingCenter),
-    getRecyclingCenterDetails: (RCId) => Promise<AffluenceHistory[]>
+    getRecyclingCenterDetails: (RCId) => Promise<AffluenceHistory[]>,
+    updatingID: int
 }
 
 interface ApplicationState{
-    selectedID: RecyclingCenter Id
+    selectedRCMap: Map ( id => RecyclingCenter )
 }
 */
 
 module.exports = React.createClass({
 
     getInitialState: function(){
-        return {
-            selectedID: this.props.selectedID
-        };
+        return {};
     },
     
     componentWillReceiveProps: function(newProps){
+
         this.setState({
-            selectedID: newProps.selectedID
+            selectedRCMap: newProps.selectedRCMap
         });
     },
 
@@ -54,10 +54,14 @@ module.exports = React.createClass({
         var self = this;
         var props = this.props;
         var state = this.state;
+
+        console.log('APP', state.selectedRCMap);
         
         var panel = new Panel({
-            recyclingCenter: props.recyclingCenterMap ? props.recyclingCenterMap.get(state.selectedID) : undefined
+            recyclingCenterMap: state.selectedRCMap,
         });
+
+
 
         // build Map
         var map = new MapComponent({
@@ -65,24 +69,30 @@ module.exports = React.createClass({
             mapId: props.mapId,
             mapCenter: props.mapCenter,
             recyclingCenterMap: props.recyclingCenterMap,
-            selectedID: state.selectedID,
+            selectedRCMap: state.selectedRCMap,
+            updatingID: props.updatingID,
             onRecyclingCenterSelected: function(rc){
                 if(rc.details){
-
-                    if (self.state.selectedID === rc.id){
+                    console.log('1');
+                    if (state.selectedRCMap && state.selectedRCMap.has(rc.id)){
+                        state.selectedRCMap.delete(rc.id);
+                        console.log('2');
                         self.setState({
-                            selectedID: undefined
+                            selectedRCMap: state.selectedRCMap
                         }); 
                     } else {
+                        console.log('3');
+                        state.selectedRCMap.set(rc.id, rc);
+
                         self.setState({
-                            selectedID: rc.id
-                        });    
+                            selectedRCMap: state.selectedRCMap
+                        });
                     }
                 }
                 else{
-                    props.getRecyclingCenterDetails(rc);
+                    console.log('6');
+                    props.getRecyclingCenterDetails(rc); 
                 }
-                
             }
         });
 

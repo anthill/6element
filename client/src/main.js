@@ -1,8 +1,11 @@
 'use strict';
 
 var React = require('react');
+
 var serverAPI = require('./serverAPI.js');
 var makeMap = require('./utils.js').makeMap;
+
+var io = require('socket.io-client');
 
 var Application = React.createFactory(require('./Components/Application.js'));
 
@@ -18,7 +21,8 @@ var topLevelStore = {
     mapId: mapbox.mapId,
     mapCenter: BORDEAUX_COORDS,
     recyclingCenterMap: undefined,
-    selectedID: undefined,
+    selectedRCMap: new Map(),
+    updatingID: undefined,
     getRecyclingCenterDetails: function(rc){
         serverAPI.getRecyclingCenterDetails(rc.id)
             .then(function(details){
@@ -30,7 +34,7 @@ var topLevelStore = {
                 })
             
                 rc.details = details;
-                topLevelStore.selectedID = rc.id;
+                topLevelStore.selectedRCMap.set(rc.id, rc);
                 render();
             })
             .catch(errlog);
@@ -54,3 +58,40 @@ serverAPI.getRecyclingCenters()
         render();
     })
     .catch(errlog);
+
+// var socket = io('http://192.168.59.103:4000/');
+var socket = io('https://6element.ants.builders/');
+
+socket.on('data', function (data) {
+
+    // GET DATA
+    var id = data.sensor_id;
+
+
+    var value = data.signal_strengths.length;
+    var date = data.measurement_date;
+    
+    // GET RECYCLING CENTER
+    var rc = topLevelStore.recyclingCenterMap.get(id);
+    console.log('rc', rc);
+    
+    rc.max = Math.max(rc.max, value);
+    rc.latest = value;
+
+    if (rc.details)
+    // UPDATE CURVE
+        rc.details.push({
+            measurement_date: date,
+            measurement: value
+        });
+    
+    // ANIMATE
+    topLevelStore.updatingID = id;
+    render();
+
+    setTimeout(function(){
+        topLevelStore.updatingID = undefined;
+        render();
+    }, 200);
+
+});

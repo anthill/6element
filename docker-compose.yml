@@ -1,6 +1,6 @@
 6element:
   build: .
-  command: nodemon server/index.js
+  command: forever server/index.js
   links:
    - "db:postgres"
   ports:

@@ -115,7 +115,7 @@ app.post('/twilio', function(req, res) {
                                 res.send(xml({"Response":""}));
                             });
 
-                        }))
+                        })
                         .then(function(msg){
                             console.log("Storage SUCCESS");
 

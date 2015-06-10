@@ -65,7 +65,7 @@ var socket = io('https://6element.ants.builders/');
 socket.on('data', function (data) {
 
     // GET DATA
-    var id = data.sensor_id;
+    var id = data.installed_at;
 
 
     var value = data.signal_strengths.length;

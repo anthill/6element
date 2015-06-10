@@ -36,8 +36,8 @@ function rand(n){
 
 dropAllTables()
     .then(createTables)
-    .then(fillDBWithFakeData)
-    //.then(hardCodedSensors)
+    // .then(fillDBWithFakeData)
+    .then(hardCodedSensors)
     .catch(errlog('drop and create'));
 
 var server = http.Server(app);
@@ -96,32 +96,29 @@ app.post('/twilio', function(req, res) {
 
                         Promise.all(decodedMsg.map(function(message){
 
-                            // persist message in database
-                            return database.SensorMeasurements.create({
+                            var messageContent = {
                                 'sensor_id': sensor.id,
                                 'signal_strengths': message.signal_strengths,
                                 'measurement_date': message.date
-                            });
+                            };
+
+                            // persist message in database
+                            return Promise.all([database.SensorMeasurements.create(messageContent), messageContent]);
 
                         }))
-                        .then(function(msg){
+                        .then(function(contents){
                             console.log("Storage SUCCESS");
                             res.set('Content-Type', 'text/xml');
                             res.send(xml({"Response":""}));
 
                             // SOCKET IO
                             if (socket){
-                                var d = {
-                                    'sensor_id': sensor.id,
-                                    'signal_strengths': message.signal_strengths,
-                                    'measurement_date': message.date
-                                }
-                                socket.emit('data', d);
+                                socket.emit('data', contents[1]);
                             }
 
                         })
-                        .catch(function(msg){
-                            console.log("Storage FAILURE: " + msg);
+                        .catch(function(contents){
+                            console.log("Storage FAILURE: " + contents[0]);
                             res.set('Content-Type', 'text/xml');
                             res.send(xml({"Response":""}));
                         });

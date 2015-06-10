@@ -5,6 +5,8 @@ sensor/vision/data/*
 *.dat
 *.vec
 *.pyc
+*.pdf
+*.doc
 
 client/browserify-bundle.js
 

@@ -79,6 +79,9 @@ app.get('/live-affluence', function(req, res){
     
 });
 
+
+var socketMessage;
+
 // endpoint receiving the sms from twilio
 app.post('/twilio', function(req, res) {
 
@@ -101,23 +104,25 @@ app.post('/twilio', function(req, res) {
                                 'signal_strengths': message.signal_strengths,
                                 'measurement_date': message.date
                             };
+                            socketMessage = messageContent;
 
                             // persist message in database
-                            return Promise.all([database.SensorMeasurements.create(messageContent), messageContent]);
+                            return database.SensorMeasurements.create(messageContent);
 
                         }))
-                        .then(function(contents){
+                        .then(function(id){
                             console.log("Storage SUCCESS");
                             res.set('Content-Type', 'text/xml');
                             res.send(xml({"Response":""}));
 
                             // SOCKET IO
                             if (socket){
-                                socket.emit('data', contents[1]);
+                                console.log("emitting", socketMessage)
+                                socket.emit('data', socketMessage);
                             }
 
                         })
-                        .catch(function(contents){
+                        .catch(function(id){
                             console.log("Storage FAILURE: " + contents[0]);
                             res.set('Content-Type', 'text/xml');
                             res.send(xml({"Response":""}));

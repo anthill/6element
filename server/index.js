@@ -105,7 +105,7 @@ app.post('/twilio', function(req, res) {
                                 'measurement_date': message.date
                             };
                             socketMessage = messageContent;
-                            messageContent['installed_at'] = sensor.installed_at;
+                            socketMessage['installed_at'] = sensor.installed_at;
 
                             // persist message in database
                             return database.SensorMeasurements.create(messageContent);

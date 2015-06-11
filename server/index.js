@@ -85,7 +85,7 @@ var socketMessage;
 // endpoint receiving the sms from twilio
 app.post('/twilio', function(req, res) {
 
-    console.log("Received sms");
+    console.log("Received sms from ", req.body.From, req.body.Body );
 
     // find sensor id by phone number
     database.Sensors.findByPhoneNumber(req.body.From)

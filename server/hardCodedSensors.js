@@ -8,10 +8,10 @@ var database = require('../database');
 module.exports = function(){
     return Promise.all([
         database.RecyclingCenters.create({
-            name: "Le Node",
+            name: "Le CNAM",
             // random location around Bordeaux
-            lat: 44.840207,
-            lon: -0.570517
+            lat: 48.866696, 
+            lon: 2.355694
         }),
         database.RecyclingCenters.create({
             name: "Le Cheverus",
@@ -26,10 +26,10 @@ module.exports = function(){
             lon: -0.578130
         }),
         database.RecyclingCenters.create({
-            name: "Ponpon",
+            name: "Gaité Lyrique",
             // random location around Bordeaux
-            lat: 44.845449, 
-            lon: -0.577541
+            lat: 48.866461,
+            lon: 2.353322 
         }),
         database.RecyclingCenters.create({
             name: "Région Aquitaine",

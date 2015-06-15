@@ -46,7 +46,7 @@ The **rush hour** of Ustom's RC are at 10 am and 3 pm [D's I]
   
 In summer, bin are usually full and **people must come back at home with trashes** : *"It would be great to have the information in live"* [d's I]
 
-Bins are under-sized (*sous-dimensionné?*)
+Bins are under-sized (*sous-dimensionnées?*)
 
 Summer increases the number of each trashes, not only green ones
 

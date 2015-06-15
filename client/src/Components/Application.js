@@ -27,26 +27,26 @@ interface ApplicationProps{
     mapBoxToken: string,
     mapId,
     mapCenter,
-    recyclingCenters: RecyclingCenter[],
-    getRecyclingCenterDetails: (RCId) => Promise<AffluenceHistory[]>
+    recyclingCenterMap: Map (RCId => RecyclingCenter),
+    getRecyclingCenterDetails: (RCId) => Promise<AffluenceHistory[]>,
+    updatingID: int
 }
 
 interface ApplicationState{
-    selectedRecyclingCenter: RecyclingCenter
+    selectedRCMap: Map ( id => RecyclingCenter )
 }
 */
 
 module.exports = React.createClass({
 
     getInitialState: function(){
-        return {
-            selectedRecyclingCenter: this.props.selectedRecyclingCenter
-        };
+        return {};
     },
     
     componentWillReceiveProps: function(newProps){
+
         this.setState({
-            selectedRecyclingCenter: newProps.selectedRecyclingCenter
+            selectedRCMap: newProps.selectedRCMap
         });
     },
 
@@ -54,28 +54,45 @@ module.exports = React.createClass({
         var self = this;
         var props = this.props;
         var state = this.state;
+
+        console.log('APP', state.selectedRCMap);
         
         var panel = new Panel({
-            recyclingCenter: state.selectedRecyclingCenter
+            recyclingCenterMap: state.selectedRCMap,
         });
+
+
 
         // build Map
         var map = new MapComponent({
             mapBoxToken: props.mapBoxToken,
             mapId: props.mapId,
             mapCenter: props.mapCenter,
-            recyclingCenters: props.recyclingCenters,
-            selectedRecyclingCenter: state.selectedRecyclingCenter,
-            onRecylcingCenterSelected: function(rc){
+            recyclingCenterMap: props.recyclingCenterMap,
+            selectedRCMap: state.selectedRCMap,
+            updatingID: props.updatingID,
+            onRecyclingCenterSelected: function(rc){
                 if(rc.details){
-                    self.setState({
-                        selectedRecyclingCenter: rc
-                    });    
+                    console.log('1');
+                    if (state.selectedRCMap && state.selectedRCMap.has(rc.id)){
+                        state.selectedRCMap.delete(rc.id);
+                        console.log('2');
+                        self.setState({
+                            selectedRCMap: state.selectedRCMap
+                        }); 
+                    } else {
+                        console.log('3');
+                        state.selectedRCMap.set(rc.id, rc);
+
+                        self.setState({
+                            selectedRCMap: state.selectedRCMap
+                        });
+                    }
                 }
                 else{
-                    props.getRecyclingCenterDetails(rc);
+                    console.log('6');
+                    props.getRecyclingCenterDetails(rc); 
                 }
-                
             }
         });
 

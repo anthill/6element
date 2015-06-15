@@ -1,32 +1,19 @@
 'use strict';
 
 var React = require('react');
-var LineChart = React.createFactory(require('./LineChart.js'));
+var Detail = React.createFactory(require('./Detail.js'));
 
 
 /*
 
 interface PanelProps{
-    recyclingCenter: RecyclingCenter
+    recyclingCenterMap: Map ( id => RecyclingCenter )
 }
 interface PanelState{
 
 }
 
 */
-
-function dateLabel(d){
-    var dateobj = new Date(d);
-
-    var minutes = dateobj.getMinutes();
-
-    return [
-        dateobj.getHours(),
-        'h',
-        minutes <= 9 ? '0'+minutes : minutes
-    ].join('');
-}
-
 
 var Panel = React.createClass({
 
@@ -40,26 +27,39 @@ var Panel = React.createClass({
         var state = this.state;
 
         console.log('panel props', props);
-                
-        return React.DOM.div({id: 'panel'}, [
-            React.DOM.h1({}, '6element - affluence déchèteries en direct'),
-            
-            props.recyclingCenter ?
-                React.DOM.h2({}, props.recyclingCenter.name) :
-                undefined,
-            
-            props.recyclingCenter ?
-                LineChart({
-                    labels: props.recyclingCenter.details.map(function(d){
-                        return dateLabel(d.measurement_date);
-                    }),
-                    observed: props.recyclingCenter.details.map(function(d){
-                        return d.measurement;
-                    }),
-                    metrics: {}
-                }) :
-                undefined
-        ]);
+
+        var classes = '';
+
+        var details = [];
+
+        var closeButton = React.DOM.div({
+            id: "close-button",
+            onClick: function(){
+                document.getElementById('panel').classList.toggle('open');
+            }
+        });
+
+        if (props.recyclingCenterMap){
+            if (props.recyclingCenterMap.size > 0)
+                classes = 'open';
+
+            props.recyclingCenterMap.forEach(function (rc){
+                details.push(new Detail({
+                    recyclingCenter: rc
+                }));
+            });
+        }
+        
+        return React.DOM.div({
+                id: 'panel',
+                className: classes
+            },
+            [
+                React.DOM.h1({}, 'Affluence en direct'),
+                closeButton,
+                details
+            ]
+        );
     }
 });
 

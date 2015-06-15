@@ -68,25 +68,3 @@ li {
     display: table-cell;
     vertical-align: top;
 }
-
-#spinner{
-    background-color: white;
-    opacity: 0.9;
-    width: 100vw;
-    height: 100vh;
-    position: absolute;
-    top: 0;
-    left: 0;
-    transition: opacity 1s;
-}
-
-#waiting{
-    position: absolute;
-    bottom: 35%;
-    width: 100%;
-    size: 3em;
-
-    text-align: center;
-}
-
-

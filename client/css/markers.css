@@ -8,23 +8,35 @@
     stroke-width: 1;
 }
 
+.halo{
+	stroke-width: 0; stroke-opacity: 0; stroke: hsl(155, 100%, 0%);
+	fill: black; fill-opacity: 0;
+	transition: fill-opacity 2s;
+}
+
+.halo.updating{
+	stroke-width: 3; stroke-opacity: 1; stroke: red;
+}
+
 .recyclingCenter.selected{
 	stroke: hsl(0, 100%, 100%);
 	stroke-width: 2;
 }
 
-.recyclingCenterName.displayed{
-	display: block;
+.recyclingCenter.updating {
+	stroke-width: 3; stroke-opacity: 1; stroke: red;
 }
 
 .recyclingCenterName{
-	display: none;
-	color: white;
+	display: block; padding: 5px; background-color: rgba(0,0,0, 0.5); white-space: nowrap; border-radius: 5px;
+	color: 	#DDD;
+}
+
+.recyclingCenterName.updating{
+	color: red;
 }
 
 .recyclingCenterName.selected{
 	text-decoration: underline;
 }
 
-.line{
-}

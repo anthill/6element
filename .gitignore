@@ -7,6 +7,7 @@ sensor/vision/data/*
 *.pyc
 *.pdf
 *.doc
+*.doc#
 
 client/browserify-bundle.js
 

@@ -8,7 +8,11 @@
   environment:
    - VIRTUAL_HOST=6element.ants.builders 
    - VIRTUAL_PORT=4000
+  volumes:
+   - .:/6element
 db:
   image: postgres:9.4
   environment:
    - POSTGRES_PASSWORD=password
+  ports:
+   - "5432:5432"

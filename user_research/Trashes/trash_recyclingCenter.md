@@ -1,9 +1,9 @@
 # General information about trashes
 
 The main trashes which are collected in RC are [D's I]:
-1. green trashes
-2. bulkies (chair, toys, ...)
-3. wood
+1) green trashes
+2) bulkies (chair, toys, ...)
+3) wood
 
 ![Trashes in RC](RCTrashes.png)
 
@@ -20,7 +20,7 @@ There are **2 storage center** , where they bury trashes, in Gironde.
 ![Trashes in Gironde](trashes_Gironde.jpg)
 
 There are **3 different ways to throw out trashes** [LV's I]:
-* Door to door/"Porte à porte" (**PAP**) : wast trucks
+* Door to door/"Porte à porte" (**PAP**) : waste trucks
 * "Point d'apport volontaire" (**PAV**): sorting point (*=borne de tri*). There are also cities which don't pick unrecycling trashes but place some public recycling bins (*in order to have less unrecycling trashes?*)
 * Recycling centers
 
@@ -34,19 +34,19 @@ There are **3 different ways to throw out trashes** [LV's I]:
 (It is not the same organization/distribution in the entire country [LV's I])
 
 Ustom carries on **recycling centers and trashes' collection** [Delphine's Interview]: 
-* In order to sort their trashes, it has been 2 years that Ustom make **people pay for household waste** depending on their weight. People have thrown out less recycling trashes inside non-recycling bins since that decision. 
-* There are **12,000 tones of household** trashes in 2014 against **14,000 tones of recycling** trashes whearas household used to be superior before the motivational taxe
+* In order to sort their trashes, it has been 2 years that Ustom makes **people pay for household waste** depending on their weight. People have thrown out less recycling trashes inside non-recycling bins since that decision. 
+* There are **12,000 tones of household** trashes in 2014 against **14,000 tones of recycling** trashes whearas household used to be superior before the motivational tax
     
 The **rush hour** of Ustom's RC are at 10 am and 3 pm [D's I]
 
 **Time spend in RC** [D's I]:
  * Users spend around **5-6 min inside** the RC
  * During rush hours, people are **waiting aroud 15 minutes** at the entry 
-  * *Personal consideration : Perfect to place an ad about 6element* :+1: 
+  * *Personal consideration : Perfect to place an ad about 6element*
   
 In summer, bin are usually full and **people must come back at home with trashes** : *"It would be great to have the information in live"* [d's I]
 
-Bins are under-sized (*sous-dimensionnées?*)
+Bins are undersized
 
 Summer increases the number of each trashes, not only green ones
 
@@ -88,7 +88,7 @@ Recycling centers mastered by Ustom guest particular and professional users [D's
 
 ![Professional](professional.png)
 
-unctual users: punctual events such as a move or spring clean. [doc LV]
+Punctual users: punctual events such as a move or spring clean. [doc LV]
  
 Bigger the place we live in is, more trashes we can accumulate before throwing out everything at the same time. People living in tiny places can't keep any trash and have to throw them out immediately. [doc LV]
  * *How do they solve this problem?* 

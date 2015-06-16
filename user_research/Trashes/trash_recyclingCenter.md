@@ -5,7 +5,7 @@ The main trashes which are collected in RC are [D's I]:
 2) bulkies (chair, toys, ...)
 3) wood
 
-![Trashes in RC](RCTrashes.png)
+![Trashes in RC](../Pictures/RCTrashes.png)
 
 We can talk about trashes in three different ways:
 * Collect  (CUB)
@@ -17,7 +17,7 @@ There are **2 storage center** , where they bury trashes, in Gironde.
 
 **Machines which are not broken** are not re-used and are thrown out (in Gironde). Only Ustom keep them (they sort them by themselves) and store them in a **"recyclerie" ( != recycling center)** (same concept as Emmaüs). It is located in Pessac sur Dordogne. [LV's I]
 
-![Trashes in Gironde](trashes_Gironde.jpg)
+![Trashes in Gironde](../Pictures/trashes_Gironde.jpg)
 
 There are **3 different ways to throw out trashes** [LV's I]:
 * Door to door/"Porte à porte" (**PAP**) : waste trucks
@@ -26,7 +26,7 @@ There are **3 different ways to throw out trashes** [LV's I]:
 
 **Bulky systems** (*=encombrants*) are not included in this organization because it doesn't always depend on cities. Trashes from bulky system have the same destiny if they are collected by the collectivity. Otherwise, they are usually not recycled but directly burned or burried. [LV's I]
 
-![Bulky](bulky.png)
+![Bulky](../Pictures/bulky.png)
 
 **Compost** is currently not collected separately from the others trashes.  [LV's I]
 * *Personal consideration : That's too bad,  Idea of a new project about compost collection?*
@@ -86,7 +86,7 @@ Recycling centers mastered by Ustom guest particular and professional users [D's
 * can be farmers (green trashes), workmen (plaster, ...) , entrepreneurs (cardboard, paper, polyester ...) [D's I]
 * A lot of public recycling centers are not made for professionals who are supposed to use **private professional recycling centers**. There are **5-6** in this kind in Gironde. Some local authority accept them in recycling centers but *try* to make them pay. [LV's I]
 
-![Professional](professional.png)
+![Professional](../Pictures/professional.png)
 
 Punctual users: punctual events such as a move or spring clean. [doc LV]
  

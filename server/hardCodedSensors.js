@@ -8,34 +8,40 @@ var database = require('../database');
 module.exports = function(){
     return Promise.all([
         database.RecyclingCenters.create({
-            name: "Le CNAM",
+            name: "Saint-Mariens",
             // random location around Bordeaux
-            lat: 48.866696, 
-            lon: 2.355694
+            lat: 44.944505, 
+            lon: -0.235283
         }),
         database.RecyclingCenters.create({
-            name: "Le Cheverus",
+            name: "Saint-Denis de Pile",
             // random location around Bordeaux
-            lat: 44.837883, 
-            lon: -0.575538
+            lat: 44.998070, 
+            lon: -0.157079
         }),
         database.RecyclingCenters.create({
-            name: "The North Face",
+            name: "Libourne-Ballastière",
             // random location around Bordeaux
-            lat: 44.839720, 
-            lon: -0.578130
+            lat: 44.906571,
+            lon: -0.215062
         }),
         database.RecyclingCenters.create({
-            name: "Gaité Lyrique",
+            name: "Libourne-Epinette",
             // random location around Bordeaux
-            lat: 48.866461,
-            lon: 2.353322 
+            lat: 44.906571,
+            lon: -0.215062
         }),
         database.RecyclingCenters.create({
-            name: "Région Aquitaine",
+            name: "Vérac",
             // random location around Bordeaux
-            lat: 44.843099,
-            lon: -0.571126
+            lat: 44.997404,
+            lon: -0.358290
+        }),
+        database.RecyclingCenters.create({
+            name: "Saint-Gervais",
+            // random location around Bordeaux
+            lat: 45.010882983,
+            lon: -0.4692538 
         })
     ])
     .then(function(rcIds){

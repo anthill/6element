@@ -160,6 +160,8 @@
 				"marker-color": "#CC0000",
 				"name": "Saint-Denis-de-Pile",
 				"owner":"SMICVAL",
+				"address": "8 Rte de la Pinière, 33910",
+				"phone": "05 57 84 74 01",
 				"equiped":"",
 				"own_equipement":"yes"
 			},
@@ -171,6 +173,8 @@
 				"marker-color": "#CC0000",
 				"name": "La Roche-Chalais",
 				"owner":"SMICVAL",
+				"address": "ZI La fonsèche, 24490",
+				"phone": "05 53 90 63 34",
 				"equiped":"",
 				"own_equipement":"yes"
 			},
@@ -182,6 +186,8 @@
 				"marker-color": "#CC0000",
 				"name": "Saint-Seurin-sur-l'Isle",
 				"owner":"SMICVAL",
+				"address": "La brande, 33660",
+				"phone": "05 57 49 66 08",
 				"equiped":"",
 				"own_equipement":"no"
 			},
@@ -193,6 +199,8 @@
 				"marker-color": "#CC0000",
 				"name": "Libourne-Epinette",
 				"owner":"SMICVAL",
+				"address": "193 Avenue de l’Epinette, 33500",
+				"phone": "05 57 25 11 64",
 				"equiped":"",
 				"own_equipement":"no"
 			},
@@ -204,6 +212,8 @@
 				"marker-color": "#CC0000",
 				"name": "Libourne-Ballastière",
 				"owner":"SMICVAL",
+				"address": "ZI de la Ballastière, Rue de l’Industrie, 33500",
+				"phone": "05 57 51 63 71",
 				"equiped":"",
 				"own_equipement":"no"
 			},
@@ -215,8 +225,10 @@
 				"marker-color": "#CC0000",
 				"name": "Coutras",
 				"owner":"SMICVAL",
+				"address": "ZI d’Eygreteau, 33230",
+				"phone": "05 57 49 38 10",
 				"equiped":"",
-				"own_equipement":"no"
+				"own_equipement":"yes"
 			},
 			"geometry": {"type": "Point", "coordinates": [-0.101169,45.036296]}
 		},
@@ -226,6 +238,8 @@
 				"marker-color": "#CC0000",
 				"name": "Saint-Aubin-de-Blaye",
 				"owner":"SMICVAL",
+				"address": "Moxenne, 33820",
+				"phone": "05 57 32 70 09",
 				"equiped":"",
 				"own_equipement":"yes"
 			},
@@ -237,6 +251,8 @@
 				"marker-color": "#CC0000",
 				"name": "Vayres",
 				"owner":"SMICVAL",
+				"address": "Bouleguet, 33870",
+				"phone": "05 57 84 96 20"
 				"equiped":"",
 				"own_equipement":"no"
 			},
@@ -248,6 +264,8 @@
 				"marker-color": "#CC0000",
 				"name": "Vérac",
 				"owner":"SMICVAL",
+				"address": "Teychères, 33240",
+				"phone": "05 57 84 35 67",
 				"equiped":"",
 				"own_equipement":"no"
 			},
@@ -358,6 +376,8 @@
 				"marker-color": "#CC0000",
 				"name": "Saint-Paul",
 				"owner":"SMICVAL",
+				"address": "Fourneton, 33390",
+				"phone": "05 57 42 81 51",
 				"equiped":"",
 				"own_equipement":"yes"
 			},
@@ -380,6 +400,8 @@
 				"marker-color": "#CC0000",
 				"name": "Saint-Mariens",
 				"owner":"SMICVAL",
+				"address": "2 bis Tessonneau, 33620",
+				"phone": "05 57 68 52 36",
 				"equiped":"",
 				"own_equipement":"yes"
 			},
@@ -446,6 +468,8 @@
 				"marker-color": "#CC0000",
 				"name": "Saint-Gervais",
 				"owner":"SMICAL",
+				"address": "Rte du Port neuf, 33240",
+				"phone": "05 57 43 65 50",
 				"equiped":"",
 				"own_equipement":"yes"
 			},
@@ -456,7 +480,7 @@
 			"properties": {
 				"marker-color": "#CC0000",
 				"name": "Saint-aubin-de-Blaye",
-				"owner":"",
+				"owner":"SMICVAL",
 				"equiped":"",
 				"own_equipement":"yes"
 			},

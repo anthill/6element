@@ -39,17 +39,40 @@ Ustom carries on **recycling centers and trashes' collection** [Delphine's Inter
     
 The **rush hour** of Ustom's RC are at 10 am and 3 pm [D's I]
 
-**Time spend in RC** [D's I]:
+**Time spent in RC** [D's I]:
  * Users spend around **5-6 min inside** the RC
  * During rush hours, people are **waiting aroud 15 minutes** at the entry 
   * *Personal consideration : Perfect to place an ad about 6element*
   
 In summer, bin are usually full and **people must come back at home with trashes** : *"It would be great to have the information in live"* [d's I]
 
-Bins are undersized
+Bins are undersized [USTOM]
 
-Summer increases the number of each trashes, not only green ones
+Summer increases the number of each trashes, **not only green ones**
 
+When a **bin is almost full after compacting**, RC's agent must call SMICVAL to empty it. They never change a bin which is not full [SMICVAL agent]
+
+A **trash compactor visit** the RC several times a day for **cardboard, green trashes, wood and bulky** (dechets enfouis/tout-venant/encombrant): at St Mariens and St Denis de Pile, the compactor comes **3 times a day**. Agents don't have to call it, it uses to regularly aroud 9 ,11:30am and 3:30pm [St Mariens]
+
+The **bin truck** arrives usually betwen 2 and 4 hours [St Mariens]
+
+**Bin truck** needs around 20 minutes to change a bin. During that space of time, users cannot throw out garbages.
+
+**Queuing** would be belittled if people were **sorting their trashes before coming in RC**.
+
+St Mariens and St Denis de Pile are equiped with card detector but not Libourne's RCs and Verac, which are smaller [SMICVAL obs]
+
+The crowd is discontinuous, **prime time** are Satudray, Monday morning and Friday afternoon [St Denis, Libourne (both) and Verac]
+
+It doesn't often append that people have to come back at home with trashes because bins are full.
+
+At St Denis de Pile, on Saturday, people sometimes **wait** untill one hour to throw out trashes.
+
+There are around **2 parking places per bin** [SMICVAL  obs]
+
+Bins' categories are not always well-indicated and people are lost, they need the agent to find where they have to throw out their trashes [SMICVAL obs ]
+
+In places where there are a not a lot of Emmaüs, people must throw a lot of things that could have a **second life** [SMICVAL and specifically Libourne B]
 
 
 # Users
@@ -69,11 +92,25 @@ There are a lot of **retired person** coming and almost **every day** to have **
 
 Users come between **1 and 5 times a year** in RC [D's T]
 
-The user which is the most representative is **family's father coming after spring-clean**
+The user which is the most representative is **family's father coming after spring-clean** [D's I]
 
 There are a lot of **farmers**, wine-makers, ... in Aquitaine so they represent a big part of users [Delphine's interview]
 
 **Urbans** don't come in recycling center, they throw out their trashes on the street. [V's I]
+
+St Denis de Pile and St Mariens receive a LOT of retired persone, who come several times a week to throw out a little but around Libourne and Verac, users are more varied. 
+
+Young people around 30 come mostly because of move or house work, 40's because of spring cleaning and gardening and old person because of gardening [SMICVAL]
+
+Gardners come several times a week in summer period [SMICVAL]
+
+A lot of persons don't know where can they leave their clothes (Relais, etc. )
+
+People are embarassed to throw out things that could be reused.
+
+There are also a lot of persons asking for recovering stuff.
+
+*Can we reach camera recording?*
 
 Recycling centers mastered by Ustom guest particular and professional users [D's I]
 * *Visit* :For 100 visitors, there are around **70 particulars for 30 professionals**
@@ -86,6 +123,11 @@ Recycling centers mastered by Ustom guest particular and professional users [D's
 * can be farmers (green trashes), workmen (plaster, ...) , entrepreneurs (cardboard, paper, polyester ...) [D's I]
 * A lot of public recycling centers are not made for professionals who are supposed to use **private professional recycling centers**. There are **5-6** in this kind in Gironde. Some local authority accept them in recycling centers but *try* to make them pay. [LV's I]
 
+
+Only St Denis de Pile is authorized to receive professionals : these one must paye and are limited [SMICVAL]
+
+The **town concils** are also users. 
+
 ![Professional](../Pictures/professional.png)
 
 Punctual users: punctual events such as a move or spring clean. [doc LV]
@@ -95,7 +137,11 @@ Bigger the place we live in is, more trashes we can accumulate before throwing o
  
 Gardening period is from March to November [internet]
 
-People (specifically women and old persons) needing help to discharge their trashes should not come during rush hours
+People (specifically women and old persons) needing help to discharge their trashes should not come during rush hours [USTOM]
+
+Agents are not allowed to help users [SMICVAL]
+
+
 
 # Problems
 

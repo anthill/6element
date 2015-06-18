@@ -85,7 +85,7 @@ Example for a given recycling center:
 
 People leaving in detached house with garden are the **main users** of recycling center [Vitry's interview]
 
-Ustom's RC are base in country area so there mainly country persons[D's I]
+Ustom's RC are based in country area so there mainly country persons[D's I]
 
 There are a lot of **retired person** coming and almost **every day** to have **social interaction**: they usually throw out some bottles. These persons represent a little percentage but they come around **200 times a year** [D's I]
 **Retired person** represent more than **50%** of RC's users [D's I]

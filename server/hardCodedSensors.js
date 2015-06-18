@@ -9,37 +9,31 @@ module.exports = function(){
     return Promise.all([
         database.RecyclingCenters.create({
             name: "Saint-Mariens",
-            // random location around Bordeaux
-            lat: 44.944505, 
-            lon: -0.235283
+            lat: 45.114175375,
+            lon: -0.389916104
         }),
         database.RecyclingCenters.create({
             name: "Saint-Denis de Pile",
-            // random location around Bordeaux
             lat: 44.998070, 
             lon: -0.157079
         }),
         database.RecyclingCenters.create({
-            name: "Libourne-Ballastière",
-            // random location around Bordeaux
+            name: "Libourne-Epinette",
             lat: 44.906571,
             lon: -0.215062
         }),
         database.RecyclingCenters.create({
-            name: "Libourne-Epinette",
-            // random location around Bordeaux
-            lat: 44.906571,
-            lon: -0.215062
+            name: "Libourne-Ballastière",
+            lat: 44.944505,
+            lon: -0.235283
         }),
         database.RecyclingCenters.create({
             name: "Vérac",
-            // random location around Bordeaux
             lat: 44.997404,
             lon: -0.358290
         }),
         database.RecyclingCenters.create({
             name: "Saint-Gervais",
-            // random location around Bordeaux
             lat: 45.010882983,
             lon: -0.4692538 
         })

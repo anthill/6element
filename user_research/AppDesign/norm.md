@@ -1,32 +1,60 @@
-![step](../Pictures/design_app.jpg)
-from [blocnote.iergo](http://blocnotes.iergo.fr/concevoir/concevoir-une-apps-pour-mobile/)
-
-guideLine:
+# A few tips to design an ap
+## Look
+GuideLine depending on OS:
 * [iOs](https://developer.apple.com/library/ios/documentation/UserExperience/Conceptual/MobileHIG/index.html)
 * [Android](http://developer.android.com/design/index.html)
 * [WindowsPhone](http://msdn.microsoft.com/en-us/library/windows/apps/hh465424.aspx) *(lol)*
 
-Typo : no Serif is better. But Georgia is fine. [JDN]
+*Typo* : no Serif is better. But Georgia is fine. [JDN]
 
-Color : Number max of colors : 5/7 [JDN]
+*Color* : Number max of colors : 5/7 [JDN]
 
-Contrast : Clear font, dark typo [JDN]
+*Contrast* : Clear font, dark typo [JDN]
 
-Font : no pictures even transparent, plain [JDN]
+*Font* : no pictures even transparent, plain [JDN]
 
-Vocabulary : clear, user friendly [JDN]
+*Font sizes* :  in relative terms — not as an absolute number of pixels.
 
-Pictogram : prefer them than text [JDN] but let a legend [Opquast]
+*Vocabulary* : clear, user friendly [JDN]
 
-Waiting : indicate with progression bar or picto [JDN]
+*Pictogram* : prefer them than text [JDN] but let a legend [Opquast]
 
-Feedback on what the user is doing: always [JDN]
+=> [Icon library](http://www.flaticon.com/free-icons/library_525)
 
-Minimize keyboard input [Roxane]
+*Waiting* : indicate with progression bar or picto [JDN]
 
-Button size & location: too small/close occures failures. Never put two opposite (in action) buttons together [Normal Nielsen] / interactions fields [opquast]
+Minimize keyboard input
 
-Usability is defined by 5 quality components:  [NN]
+*Button size & location* : too small/close occures failures. Never put two opposite (in action) buttons together [Normal Nielsen] / interactions fields [opquast]
+
+Don't change *link color*: blue and/or underlined
+
+*Keyboard* : think how will it look like with keyboard [[developper]](http://www.developer.com/ws/10-key-design-tips-for-great-mobile-apps.html)
+
+### Disability
+
+Think about **visually impaired** person like daltonien : the information is not only transmitted by color.
+
+[Color test for disability](http://www.daltonize.org/)
+
+## Content
+![step](../Pictures/design_app.jpg)
+from [blocnote.iergo](http://blocnotes.iergo.fr/concevoir/concevoir-une-apps-pour-mobile/)
+
+The app needs at least one organization to **contact** [qualité web]
+
+If everything is not reachable from homepage, we need an **app plan** reachable from anywhere *(footer)* [qualité web]
+
+We can reach **homepage** from everywhere *(header)*
+
+Use **users knowledge** , it will be more intuitive
+
+Users should reach their goal in max **3 clics**
+
+The human "empan" (work memory) is 7 (+-2) => We should not have more than 7 menus in order to remember them all 
+
+## Usability, utility and useful
+**Usability** is defined by 5 quality components:  [NN]
 
 * Learnability: How easy is it for users to accomplish basic tasks the first time they encounter the design?
 * Efficiency: Once users have learned the design, how quickly can they perform tasks?
@@ -35,36 +63,14 @@ Usability is defined by 5 quality components:  [NN]
 * Satisfaction: How pleasant is it to use the design?
 
 
-Definition of Utility = whether it provides the features you need.
-Definition of Usability = how easy & pleasant these features are to use.
-Definition of Useful = usability + utility.
-    
-Don't change link color: blue and underlined 
+Definition of **Utility** = whether it provides the features you need.
 
-specify font sizes in relative terms — not as an absolute number of pixels.
+Definition of **Usability** = how easy & pleasant these features are to use.
 
-Think about visually impaired person like daltonien : the information is not only transmitted by color.
-
-The app needs at least one organization to contact [qualité web]
-
-If everything is not reachable from homepage, we need an app plan in footer [qualité web]
-
-We can reach homepage from everywhere
-
-Use users knowledge , it will be more intuitive
-
-We should reach our goal in max 3 clics
-
-7 +- 2 Empan No more that 7 menus titles to remember them all (work memory)
-
-Keyboard : think how will it look like with keyboard [developper](http://www.developer.com/ws/10-key-design-tips-for-great-mobile-apps.html)
+Definition of **Useful = usability + utility**.
+     
 
 
-
-##Tools
-Icon library [here](http://www.flaticon.com/free-icons/library_525)
-
-[Color test](http://www.daltonize.org/)
 
 
 

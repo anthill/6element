@@ -1,8 +1,11 @@
 # General information about trashes
 
 The main trashes which are collected in RC are [D's I]:
+
 1) green trashes
+
 2) bulkies (chair, toys, ...)
+
 3) wood
 
 ![Trashes in RC](../Pictures/RCTrashes.png)
@@ -10,12 +13,14 @@ The main trashes which are collected in RC are [D's I]:
 We can talk about trashes in three different ways:
 * Collect  (CUB)
 * Treatment (CUB)
-* Planning (Department) :  They carry on **reducing and promote remaining trashes**. To do that, they elaborate a 12 years action plan, which has a prospective aim and consistent with the European project. L Vitry works on that, for instance by organizing workshops, making indicator, ... 
+* Planning (Department) :  *They work on **reducing and promote remaining trashes**. To do that, they elaborate a 12-years action plan, which has a prospective aim and which is consistent with the European project. L Vitry works on that, for instance by organizing workshops, making indicator, ... *
 
-There are **83 recycling centers** in Gironde
-There are **2 storage center** , where they bury trashes, in Gironde.
+Gironde:
+* **83 recycling centers** 
+* **2 storage center**  *(where they bury trashes)*
 
 **Machines which are not broken** are not re-used and are thrown out (in Gironde). Only Ustom keep them (they sort them by themselves) and store them in a **"recyclerie" ( != recycling center)** (same concept as Emmaüs). It is located in Pessac sur Dordogne. [LV's I]
+Smicval's agent are not allowed to keep/give anything.
 
 ![Trashes in Gironde](../Pictures/trashes_Gironde.jpg)
 
@@ -24,18 +29,17 @@ There are **3 different ways to throw out trashes** [LV's I]:
 * "Point d'apport volontaire" (**PAV**): sorting point (*=borne de tri*). There are also cities which don't pick unrecycling trashes but place some public recycling bins (*in order to have less unrecycling trashes?*)
 * Recycling centers
 
-**Bulky systems** (*=encombrants*) are not included in this organization because it doesn't always depend on cities. Trashes from bulky system have the same destiny if they are collected by the collectivity. Otherwise, they are usually not recycled but directly burned or burried. [LV's I]
+**"Encombrants" collection** is not included in this organization because it doesn't always depend on cities. Trashes from bulky system have the same destiny if they are collected by the collectivity. Otherwise, they are usually not recycled but directly burned or burried. [LV's I]
 
+This schema is about trashes collected in **bulky bins in RC**:
 ![Bulky](../Pictures/bulky.png)
 
-**Compost** is currently not collected separately from the others trashes.  [LV's I]
+**Compost** is currently not collected appart from the others trashes.  [LV's I]
 * *Personal consideration : That's too bad,  Idea of a new project about compost collection?*
 
-(It is not the same organization/distribution in the entire country [LV's I])
-
-Ustom carries on **recycling centers and trashes' collection** [Delphine's Interview]: 
+Ustom deals with **recycling centers and trashes' collection** [Delphine's Interview]: 
 * In order to sort their trashes, it has been 2 years that Ustom makes **people pay for household waste** depending on their weight. People have thrown out less recycling trashes inside non-recycling bins since that decision. 
-* There are **12,000 tones of household** trashes in 2014 against **14,000 tones of recycling** trashes whearas household used to be superior before the motivational tax
+* There are **12,000 tones of household trashes** in 2014 against **14,000 tones of recyclable trashes** *(whearas household used to be superior before the motivational tax)*
     
 The **rush hour** of Ustom's RC are at 10 am and 3 pm [D's I]
 
@@ -44,19 +48,19 @@ The **rush hour** of Ustom's RC are at 10 am and 3 pm [D's I]
  * During rush hours, people are **waiting aroud 15 minutes** at the entry 
   * *Personal consideration : Perfect to place an ad about 6element*
   
-In summer, bin are usually full and **people must come back at home with trashes** : *"It would be great to have the information in live"* [d's I]
+In summer, bins are usually full and **people must come back at home with trashes** : *"It would be great to have the information in live"* [d's I]
 
 Bins are undersized [USTOM]
 
 Summer increases the number of each trashes, **not only green ones**
 
-When a **bin is almost full after compacting**, RC's agent must call SMICVAL to empty it. They never change a bin which is not full [SMICVAL agent]
+When a **bin is almost full after compacting**, RC's agent must call SMICVAL to empty it. They are not allowed to change a bin which is not full and compacted [SMICVAL agent]
 
-A **trash compactor visit** the RC several times a day for **cardboard, green trashes, wood and bulky** (dechets enfouis/tout-venant/encombrant): at St Mariens and St Denis de Pile, the compactor comes **3 times a day**. Agents don't have to call it, it uses to regularly aroud 9 ,11:30am and 3:30pm [St Mariens]
+A **trash compactor** visits the RC several times a day for **cardboard, green trashes, wood and bulky** (dechets enfouis/tout-venant/encombrant): at St Mariens and St Denis de Pile, the compactor comes **3 times a day**. It uses to come regularly aroud 9 ,11:30am and 3:30pm [St Mariens]
 
-The **bin truck** arrives usually betwen 2 and 4 hours [St Mariens]
-
-**Bin truck** needs around 20 minutes to change a bin. During that space of time, users cannot throw out garbages.
+**Bin truck** :
+* arrives usually after 2/4 hours [St Mariens]
+* needs around 20 minutes to change a bin. During that space of time, users cannot throw out garbages.
 
 **Queuing** would be belittled if people were **sorting their trashes before coming in RC**.
 

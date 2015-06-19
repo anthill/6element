@@ -28,8 +28,8 @@ House:
 
 **Context**
 
-Jeanne works every morning in the garden since she is retired. Morning is the better moment to carry on her flowers because of the whether but also she likes to visit her friend, babysit her daughter's child or go shopping. Her husband is not retired yet but she never bored and always have to do something or help somebody. She likes her garden clean and do not want to store garbages. Her daughter recently discovered 6element and adviced her and show her the website
+Jeanne works every morning in the garden since she is retired. Morning is the better moment to take care of her flowers because of the whether but also because she likes to visit her friends, babysit her daughter's child or go shopping. Her husband is not retired yet but she never bored and always have something to do. She likes her garden to be clean and do not want to store garbages or grass. Her daughter recently discovered 6element and adviced her and show her the website
 
 **Motivation**
 
-She never goes on it because she knows how her usual RC works, affluence and does not have a lot of things to throw out so she know she will come back at home with nothing.
+She never consults it because she knows how and when her usual RC works.

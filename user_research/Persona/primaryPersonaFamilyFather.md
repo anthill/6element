@@ -6,7 +6,7 @@
 ![father](../Pictures/primaryPersona.jpeg)
 
 By Daniel varon forero (Own work) [CC BY-SA 3.0 (http://creativecommons.org/licenses/by-sa/3.0)], via Wikimedia Commons
-## " I use to go to the same RC for years now but I always forget opening time. Checking that bins are not full is also comforting because I hate wasting my time! "
+## " I use to go to the same RC for years now but I always forget opening time. Checking that waiting is not to long is also comforting because I hate wasting my time! "
 
 
 **Personality**
@@ -18,13 +18,13 @@ By Daniel varon forero (Own work) [CC BY-SA 3.0 (http://creativecommons.org/lice
 **Equipment**
 
 Digital : 
-* Computer : he has a camputer at home serving all the family mostly in order to work
-* Tablet : he has a tablet serving all the family, they use it to read the news, play or for others punctual needs. They use to use it in front of the TV for tasks they don't have to focus
-* Smartphone : he has is own smartphone but have not a lot of apps. 
+* Family computer, used to work
+* Family tablet, used to read the news, play or for others punctual needs. They use to use it in front of the TV for tasks they don't have to focus
+* Personal smartphone without a lot of apps. 
 
 Car : 
-* Family car (7 seats)
-* Normal car (5 seats, 3 doors)
+* Family car (7 seats) with a large boot
+* Normal car (5 seats) with a tiny boot
 
 House: 
 * There is an attic (under roof)
@@ -33,19 +33,19 @@ House:
 
 **Context**
 
-Stéphane and his family use to clean completly the house twice a year : once in March when spring is coming and once at the last week of August just before the children go back in school. They like to do it once at all all together, so they usually do it on Sunday.
+Stéphane and his family use to clean completly the house twice a year : once in March when spring is coming and once in the last week of August just before the children go back to school. They like to do it once at all, all together, so they usually do it on Sunday.
 It is the occasion to sort their **clothes** and stuff because his wife hates to keep useless stuff. 
-During the rest of the year, if they have **bulkies** to throw out, they store them in the garage or in the garden untill the biannual cleanning because they don't want to go there just for one thing.
+During the rest of the year, if they have **bulkies** to throw out, they store them in the garage or in the garden untill the biannual cleanning because they don't want to go to RC just for one piece.
 The biggest part of the work is in the garage which is messy. Indeed, he has to throw out **painting pot, scraps** (*chutes*), and **brocken material**.
 He cut the grass every two weeks from march to november but let the cut grass in the garden.
 
-Stéphane uses to go to **the same recycling center** untill they move in this house bacause it is not far away from the place he works. Because he does not go there a lot, he always have to check opening time. He has a card where it is writen he search on the internet because it is costless than looking for the card. It is simple because his recycling center is already load.
+Stéphane has used to go to **the same recycling center** for his moving because it is not far away from the place he works. He does not go there a lot, so he always has to check opening times. He has a card where it is written but he searchs on the internet because it is costless than looking for the card. It is very quick and simple because his recycling center is already load.
 
-He doesn't want to store his trashes to long but the RC is closed on Monday so he decides to go there on Tuesday after work, at 5pm. He can see in the opening time page that he can be advice of the best moment to go on the RC and see that **5pm is the rush hour unlike 2 pm, which is more calm**. He can go at this time because the office is closed untill 2:30pm.
+He doesn't want to store his trashes too long but the RC is closed on  Sunday and Monday so he decides to go there on Tuesday after work, at 5pm. He can see in the RC's page below opening times that he can be advised about the best moment to go on the RC and see that **5pm is the rush hour unlike 2 pm, which is more calm**. He can go at this time because the office is closed untill 2:30pm.
 
 **Motivation**
 * He can have basics informations very simply
 * When he search a RC, a map is more relevant than an list
-* His working schedule and RC's opening time don't match well so he can't permit him to go to the RC and come back with his trashes
+* His working schedule and RC's opening times don't match well so he can't permit him to go to the RC and come back with his trashes
 
 

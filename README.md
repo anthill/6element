@@ -6,10 +6,17 @@
 
 ### Pushing in production
 
+First stop and clean:
+
 ```
-COMPOSE_FILE=compose-prod.yml
-docker-compose build
-docker-compose up --no-deps -d
+docker-compose -f compose-prod.yml stop
+docker-compose -f compose-prod.yml rm
+```
+
+then you only need to:
+
+```
+docker-compose -f compose-prod.yml up --no-deps -d
 ```
 
 #### Getting started

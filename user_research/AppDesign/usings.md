@@ -27,13 +27,13 @@
  * Depending on place research
  * Depending on trash research
  * Depending on opening time (OT) research
-* Geting general and static informations about RC
+* Getting general and static informations about RC
 * Knowing crowd
  * Right now
  * Displaced
  * Depending on trashes
 * Finding what kind of trash I have and where can I throw it out
-* Indicate that I have smth working yet 
+* [relevant ? ]Indicate that I have smth working yet 
 * Consulting what people don't want anymore
 * Consulting what people are looking for
-* Pictures : carefull!!
+* Pictures : need moderators

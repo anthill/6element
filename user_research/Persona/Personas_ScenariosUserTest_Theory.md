@@ -69,7 +69,7 @@ A good use scenario does a number of things:
 * Can be sketchy, as long as it provokes ideas and discussion. 
 
 ## Scenarios and personas
-Scenarios can be constructed around personas, but the personas come first. To write an appropriate scenario with a personna, it is important to know : 
+Scenarios can be constructed around personas, but the personas come first. To write an appropriate scenario with a persona, it is important to know : 
 * What does the persona hope to accomplish by visiting the website,  
 * What characteristics of the persona might help or hinder his or her site interaction?
 
@@ -202,9 +202,9 @@ For example:
 To know how to write the report, refers [usability](www.usability.gov/how-to-and-tools/methods/reporting-usability-test-results.html)
 
 # Conclusion
-Now we've learned about personas, scenarios and using test theory, we can think more practically about the app. To be sure the app we develop is well designed and adapted to the users we first have to know **who** are they. Personas are a powerful tool to represent them. The next step is defining in which context our app will be used. That what the scenarios are usef for. Then, development can start. When the prototypes will be done, using tests will be made to ensure the app is used in the way we thought. Usings tests have to be made after each improvement and helps actually to improve.
+Now we've learned about personas, scenarios and using test theory, we can think more practically about the app. To be sure the app we develop is well-designed and adapted to the users we first have to know **who** are they. Personas are a powerful tool to represent them. The next step is defining in which context our app will be used. That what the scenarios are usef for. Then, development can start. When prototypes will be done, using tests will be made to ensure the app is used in the way we thought. Usings tests have to be made after each improvement and helps actually to improve.
 
-Now we know how an app should be designed, we can start practice ! 
+Now we know how an app should be designed, we can start practice !
 
 
 

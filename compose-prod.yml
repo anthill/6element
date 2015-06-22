@@ -1,6 +1,6 @@
 6element:
   build: .
-  command: forever server/index.js
+  command: bash -c "npm install && npm run build && node server/index.js"
   links:
    - "db:postgres"
   ports:
@@ -10,7 +10,7 @@
    - VIRTUAL_PORT=4000
    - SOCKETIO_SERVER=https://6element.ants.builders/
   volumes:
-   - .:/6element
+   - /home/shared/6element:/6element
   restart: always
 db:
   image: postgres:9.4

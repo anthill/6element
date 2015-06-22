@@ -1,5 +1,5 @@
-# Personas
-
+We have to learn about personas, scenarios and using tests theory in order to think more practically about the app. To be sure the app we develop is well-designed and adapted to the users, we first have to know **who** are they. Personas are a powerful tool to represent them. The next step is defining **in which context** our app will be used. That what the scenarios are usef for. Then, development can start. When prototypes will be done, using tests will be made to ensure the app is used in the way we thought. Usings tests have to be made after each improvement and helps actually to improve. 
+# 1. Personas
 ## Definition
 The purpose of personas is to create reliable and realistic representations of key audience segments for reference. These representations should be based on qualitative and some quantitative user research and web analytics. 
 
@@ -8,7 +8,7 @@ They are not 'agents' or 'actors' in a script, they are people.
 ## Different kinds of persona
 
 ### Primary Persona
-Primary persona is the main target of the product, from the most important group of users, the kind of person we must satisfy in priority.
+Primary persona is the main target of the product, from the most important group of users, the kind of person we must satisfy in priority. Only one.
 
 ### Secondary Persona
 Secondary persona are less important. Their demand must be satisfied but not disturbing primary's
@@ -47,15 +47,15 @@ For any given project, creating **only three or four personas** is best. The goa
 
 [Learn more...] (http://www.usability.gov/how-to-and-tools/methods/personas.html)
 
-# Scenarios (Task-Based)
-Scenarios will be used here to elaborate using tests. There are different kind of scenarios but we will focus on task-based scenarios.
+# 2. Scenarios
+Scenarios are used not only to build persona (how would they use the app) but only to elaborate using tests (task-based scenatios in order to observe how will they reach the goal submitted). 
 
 ## Definition
 Scenarios are stories. They consist of a setting, or situation state, one or more actors with
 personal motivations, knowledge, and capabilities, and various tools and objects that the
 actors encounter and manipulate. **The scenario describes a sequence of actions and events
 that lead to an outcome**. These actions and events are related in a **usage context** that
-includes the goals, plans, and reactions of the people taking part in the episode.
+includes goals, plans, and reactions of the people taking part in the episode.
 Include in a user test, it lets users show you **how they would use the site to accomplish that goal**.
 **Example to test employee's section on a company website/app** : You are traveling to Seattle for your job next week and you want to check on the amount you can be reimbursed for meals and other expenses.
 
@@ -69,7 +69,7 @@ A good use scenario does a number of things:
 * Can be sketchy, as long as it provokes ideas and discussion. 
 
 ## Scenarios and personas
-Scenarios can be constructed around personas, but the personas come first. To write an appropriate scenario with a personna, it is important to know : 
+Scenarios can be constructed around personas, but the personas come first. To write an appropriate scenario with a persona, it is important to know : 
 * What does the persona hope to accomplish by visiting the website,  
 * What characteristics of the persona might help or hinder his or her site interaction?
 
@@ -109,7 +109,7 @@ During a usability test, mimic the real world as much as possible. Recruit repre
 **We will use the previous scenarios to build the user tests**
 [Learn more about scenarios] (http://www.usability.gov/how-to-and-tools/methods/scenarios.html)
 
-# User test
+# 3. User test
 User tests allow to watch how people use an application. It must be made with prototypes to ensure that the product is well designed for users.
 It refers to evaluating a product or service by testing it with representative users. Typically, during a test, participants will try to complete typical tasks while observers watch, listen and takes notes.  
 To run an effective usability test, steps are : 
@@ -202,9 +202,9 @@ For example:
 To know how to write the report, refers [usability](www.usability.gov/how-to-and-tools/methods/reporting-usability-test-results.html)
 
 # Conclusion
-Now we've learned about personas, scenarios and using test theory, we can think more practically about the app. To be sure the app we develop is well designed and adapted to the users we first have to know **who** are they. Personas are a powerful tool to represent them. The next step is defining in which context our app will be used. That what the scenarios are usef for. Then, development can start. When the prototypes will be done, using tests will be made to ensure the app is used in the way we thought. Usings tests have to be made after each improvement and helps actually to improve.
 
-Now we know how an app should be designed, we can start practice ! 
+
+Now we know how an app should be designed, we can start practice !
 
 
 

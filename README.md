@@ -16,6 +16,7 @@ docker-compose -f compose-prod.yml rm
 then you only need to:
 
 ```
+docker-compose -f compose-prod.yml build --no-cache
 docker-compose -f compose-prod.yml up --no-deps -d
 ```
 

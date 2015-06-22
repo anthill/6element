@@ -4,7 +4,13 @@
 [Learn more](http://ants.builders/pages/6element.html)
 
 
-### Contributing
+### Pushing in production
+
+```
+COMPOSE_FILE=compose-prod.yml
+docker-compose build
+docker-compose up --no-deps -d
+```
 
 #### Getting started
 
@@ -18,7 +24,6 @@ and [docker](https://docs.docker.com/installation/ubuntulinux/#installing-docker
 git clone git@github.com:anthill/6element.git
 cd 6element
 npm install
-docker pull postgres:9.4
 ````
 
 Then, you must copy create the missing file

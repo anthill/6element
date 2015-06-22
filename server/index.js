@@ -6,7 +6,7 @@ require('better-log').install();
 var fs = require('fs');
 
 var hardCodedSensors = require("./hardCodedSensors.js");
-var decoder = require('6sense/js/codec/decodeFromSMS.js');
+var decoder = require('6sense/src/codec/encodeForSMS.js');
 
 var path = require('path');
 var express = require('express');

@@ -26,7 +26,7 @@ var DEBUG = process.env.DEBUG ? process.env.DEBUG : false;
 
 var debug = function() {
     if (DEBUG) {
-        console.log("DEBUG from quipu:");
+        console.log("DEBUG from 6element server:");
         console.log.apply(console, arguments);
         console.log("==================");
     };
@@ -130,12 +130,15 @@ app.post('/twilio', function(req, res) {
 
                     })
                     .catch(function(id){
-                        console.log("Storage FAILURE: " + id);
+                        console.log("Storage FAILURE: ", id);
                         res.set('Content-Type', 'text/xml');
                         res.send(xml({"Response":""}));
                     });
                 });
-        });    
+        })
+        .catch(function(error){
+            console.log("Error in findByPhoneNumber: ", error);
+        });   
 });
 
 

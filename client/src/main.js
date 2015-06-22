@@ -59,8 +59,7 @@ serverAPI.getRecyclingCenters()
     })
     .catch(errlog);
 
-// var socket = io('http://192.168.59.103:4000/');
-var socket = io('https://6element.ants.builders/');
+var socket = io(process.env.SOCKETIO_SERVER);
 
 socket.on('data', function (data) {
 

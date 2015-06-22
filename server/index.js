@@ -90,47 +90,46 @@ app.post('/twilio', function(req, res) {
     // find sensor id by phone number
     database.Sensors.findByPhoneNumber(req.body.From)
         .then(function(sensor){
-            if (req.body.Body !== undefined){
-                // decode message
-                decoder(req.body.Body)
-                    .then(function(decodedMsg){
+            var body = req.body.Body;
+            // decode message
+            "decoder"(body)
+                .then(function(decodedMsg){
 
-                        // [{"date":"2015-05-20T13:48:00.000Z","signal_strengths":[]},{"date":"2015-05-20T13:49:00.000Z","signal_strengths":[]},{"date":"2015-05-20T13:50:00.000Z","signal_strengths":[]},{"date":"2015-05-20T13:51:00.000Z","signal_strengths":[]},{"date":"2015-05-20T13:52:00.000Z","signal_strengths":[]}]
+                    // [{"date":"2015-05-20T13:48:00.000Z","signal_strengths":[]},{"date":"2015-05-20T13:49:00.000Z","signal_strengths":[]},{"date":"2015-05-20T13:50:00.000Z","signal_strengths":[]},{"date":"2015-05-20T13:51:00.000Z","signal_strengths":[]},{"date":"2015-05-20T13:52:00.000Z","signal_strengths":[]}]
 
-                        Promise.all(decodedMsg.map(function(message){
+                    Promise.all(decodedMsg.map(function(message){
 
-                            var messageContent = {
-                                'sensor_id': sensor.id,
-                                'signal_strengths': message.signal_strengths,
-                                'measurement_date': message.date
-                            };
-                            socketMessage = Object.assign({}, messageContent);
-                            socketMessage['installed_at'] = sensor.installed_at;
+                        var messageContent = {
+                            'sensor_id': sensor.id,
+                            'signal_strengths': message.signal_strengths,
+                            'measurement_date': message.date
+                        };
+                        socketMessage = Object.assign({}, messageContent);
+                        socketMessage['installed_at'] = sensor.installed_at;
 
-                            // persist message in database
-                            var persitP = database.SensorMeasurements.create(messageContent);
+                        // persist message in database
+                        var persitP = database.SensorMeasurements.create(messageContent);
 
-                            return persitP;
+                        return persitP;
 
-                        }))
-                        .then(function(id){
-                            console.log("Storage SUCCESS");
-                            res.set('Content-Type', 'text/xml');
-                            res.send(xml({"Response":""}));
+                    }))
+                    .then(function(id){
+                        console.log("Storage SUCCESS");
+                        res.set('Content-Type', 'text/xml');
+                        res.send(xml({"Response":""}));
 
-                            // SOCKET IO
-                            if (socket){
-                                socket.emit('data', socketMessage);
-                            }
+                        // SOCKET IO
+                        if (socket){
+                            socket.emit('data', socketMessage);
+                        }
 
-                        })
-                        .catch(function(id){
-                            console.log("Storage FAILURE: " + id);
-                            res.set('Content-Type', 'text/xml');
-                            res.send(xml({"Response":""}));
-                        });
+                    })
+                    .catch(function(id){
+                        console.log("Storage FAILURE: " + id);
+                        res.set('Content-Type', 'text/xml');
+                        res.send(xml({"Response":""}));
                     });
-            }
+                });
         });    
 });
 

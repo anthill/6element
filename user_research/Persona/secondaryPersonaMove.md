@@ -6,7 +6,7 @@
 ![manWorking](../Pictures/secondaryPersonaWorking.jpg)
 
 By David Fine (This image is from the FEMA Photo Library.) [Public domain], via Wikimedia Commons
-## " It is verry embarrassing to realize once you're in a RC that she can't collect your old WC and you have to come back with it"
+## " It is very embarrassing to realize once you're in a RC that she can't collect your old WC and you have to come back with it"
 
 
 **Personality**

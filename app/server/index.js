@@ -38,8 +38,8 @@ function rand(n){
 
 dropAllTables()
     .then(createTables)
-    // .then(fillDBWithFakeData)
-    .then(hardCodedSensors)
+    .then(fillDBWithFakeData)
+    // .then(hardCodedSensors)
     .catch(debug('drop and create'));
 
 var server = http.Server(app);
@@ -67,8 +67,8 @@ app.get('/', function(req, res){
     res.sendFile(path.join(__dirname, '../client/index.html'));
 });
 
-app.get('/browserify-bundle.js', function(req, res){
-    res.sendFile(path.join(__dirname, '../client/browserify-bundle.js'));
+app.get('/client_app.js', function(req, res){
+    res.sendFile(path.join(__dirname, '../client_app.js'));
 });
 
 

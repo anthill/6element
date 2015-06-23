@@ -38,8 +38,8 @@ function browserifyShare(){
 
 function bundleShare(b) {
   b.bundle()
-   .pipe(source('browserify-bundle.js'))
-   .pipe(gulp.dest('./client/'))
+   .pipe(source('client_app.js'))
+   .pipe(gulp.dest('.'))
    .on('error', function (err) {
       console.log(err.message);
    });
@@ -48,6 +48,7 @@ function bundleShare(b) {
 gulp.task('dev', ['servedev', 'watchify'], function(){
    livereload.listen(1234);
    gulp.watch("./client/src/*", ["watchify"], function(e){
+      console.log('Changed: ', e);
       livereload.changed(e.path);
    });
 });

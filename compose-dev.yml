@@ -1,6 +1,6 @@
 6element:
   build: .
-  command: forever server/index.js
+  command: nodemon server/index.js
   links:
    - "db:postgres"
   ports:
@@ -14,5 +14,7 @@ db:
   image: postgres:9.4
   environment:
    - POSTGRES_PASSWORD=password
+  volumes:
+   - /data/backup/6element:/6element
   ports:
    - "5432:5432"

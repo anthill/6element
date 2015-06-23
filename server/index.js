@@ -6,7 +6,7 @@ require('better-log').install();
 var fs = require('fs');
 
 var hardCodedSensors = require("./hardCodedSensors.js");
-var decoder = require('6sense/js/codec/decodeFromSMS.js');
+var decoder = require('6sense/src/codec/decodeFromSMS.js');
 
 var path = require('path');
 var express = require('express');
@@ -16,19 +16,21 @@ var compression = require('compression');
 var bodyParser = require('body-parser');
 var xml = require('xml');
 
-var errlog = function(str){
-    return function(err){
-        console.error(str, err.stack);
-    }
-}
- 
-
-var PORT = 4000;
-
 var database = require('../database');
 var dropAllTables = require('../database/management/dropAllTables');
 var createTables = require('../database/management/createTables');
 var fillDBWithFakeData = require('./fillDBWithFakeData.js');
+
+var PORT = 4000;
+var DEBUG = process.env.DEBUG ? process.env.DEBUG : false;
+
+var debug = function() {
+    if (DEBUG) {
+        console.log("DEBUG from 6element server:");
+        console.log.apply(console, arguments);
+        console.log("==================");
+    };
+}
 
 function rand(n){
     return Math.floor(n*Math.random());
@@ -38,7 +40,7 @@ dropAllTables()
     .then(createTables)
     // .then(fillDBWithFakeData)
     .then(hardCodedSensors)
-    .catch(errlog('drop and create'));
+    .catch(debug('drop and create'));
 
 var server = http.Server(app);
 var io = require('socket.io')(server);
@@ -75,7 +77,7 @@ app.get('/live-affluence', function(req, res){
         .then(function(data){
             res.send(data);
         })
-        .catch(errlog('/live-affluence'));
+        .catch(debug('/live-affluence'));
     
 });
 
@@ -85,15 +87,19 @@ var socketMessage;
 // endpoint receiving the sms from twilio
 app.post('/twilio', function(req, res) {
 
-    console.log("Received sms from ", req.body.From, req.body.Body );
+    debug("Received sms from ", req.body.From, req.body.Body );
 
     // find sensor id by phone number
     database.Sensors.findByPhoneNumber(req.body.From)
         .then(function(sensor){
-            if (req.body.Body !== undefined){
+            if (sensor){
+                debug("Found corresponding sensor: ", sensor);
+                var body = req.body.Body;
                 // decode message
-                decoder(req.body.Body)
+                decoder(body)
                     .then(function(decodedMsg){
+
+                        console.log("decoded msg ", decodedMsg);
 
                         // [{"date":"2015-05-20T13:48:00.000Z","signal_strengths":[]},{"date":"2015-05-20T13:49:00.000Z","signal_strengths":[]},{"date":"2015-05-20T13:50:00.000Z","signal_strengths":[]},{"date":"2015-05-20T13:51:00.000Z","signal_strengths":[]},{"date":"2015-05-20T13:52:00.000Z","signal_strengths":[]}]
 
@@ -104,6 +110,7 @@ app.post('/twilio', function(req, res) {
                                 'signal_strengths': message.signal_strengths,
                                 'measurement_date': message.date
                             };
+                            console.log("decoded msg ", decodedMsg);
                             socketMessage = Object.assign({}, messageContent);
                             socketMessage['installed_at'] = sensor.installed_at;
 
@@ -114,7 +121,7 @@ app.post('/twilio', function(req, res) {
 
                         }))
                         .then(function(id){
-                            console.log("Storage SUCCESS");
+                            debug("Storage SUCCESS");
                             res.set('Content-Type', 'text/xml');
                             res.send(xml({"Response":""}));
 
@@ -122,16 +129,23 @@ app.post('/twilio', function(req, res) {
                             if (socket){
                                 socket.emit('data', socketMessage);
                             }
-
                         })
                         .catch(function(id){
-                            console.log("Storage FAILURE: " + id);
+                            console.log("Storage FAILURE: ", id);
                             res.set('Content-Type', 'text/xml');
                             res.send(xml({"Response":""}));
                         });
+                    })
+                    .catch(function(error){
+                        console.log("Error in decoding: ", error);
                     });
+            } else {
+                console.log("No sensor corresponding to this number.");
             }
-        });    
+        })
+        .catch(function(error){
+            console.log("Error in findByPhoneNumber: ", error);
+        });   
 });
 
 
@@ -143,7 +157,7 @@ app.get('/recycling-center/:rcId', function(req, res){
         .then(function(data){
             res.send(data);
         })
-        .catch(errlog('/recycling-center/'+req.params.rcId));
+        .catch(debug('/recycling-center/'+req.params.rcId));
 });
 
 // io.on('connection', function(socket) {

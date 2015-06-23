@@ -1,6 +1,5 @@
 6element:
   build: .
-  command: nodemon server/index.js
   links:
    - "db:postgres"
   ports:
@@ -8,8 +7,9 @@
   environment:
    - VIRTUAL_HOST=6element.ants.builders 
    - VIRTUAL_PORT=4000
+   - SOCKETIO_SERVER=http://$(boot2docker ip)/
   volumes:
-   - .:/6element
+   - app:/6element/app
 db:
   image: postgres:9.4
   environment:

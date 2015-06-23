@@ -38,8 +38,8 @@ function rand(n){
 
 dropAllTables()
     .then(createTables)
-    // .then(fillDBWithFakeData)
-    .then(hardCodedSensors)
+    .then(fillDBWithFakeData)
+    // .then(hardCodedSensors)
     .catch(debug('drop and create'));
 
 var server = http.Server(app);
@@ -58,8 +58,8 @@ app.use(compression());
 app.use(bodyParser.urlencoded());
 app.use(bodyParser.json());
 
-app.use("/css/leaflet.css", express.static(path.join(__dirname, '../node_modules/leaflet/dist/leaflet.css')));
-app.use("/socket.io.js", express.static(path.join(__dirname, '../node_modules/socket.io/node_modules/socket.io-client/socket.io.js')));
+app.use("/css/leaflet.css", express.static(path.join(__dirname, '../../node_modules/leaflet/dist/leaflet.css')));
+app.use("/socket.io.js", express.static(path.join(__dirname, '../../node_modules/socket.io/node_modules/socket.io-client/socket.io.js')));
 app.use("/css", express.static(path.join(__dirname, '../client/css')));
 app.use("/images", express.static(path.join(__dirname, '../client/images')));
 

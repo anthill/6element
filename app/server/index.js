@@ -160,18 +160,20 @@ app.get('/recycling-center/:rcId', function(req, res){
         .catch(debug('/recycling-center/'+req.params.rcId));
 });
 
-// io.on('connection', function(socket) {
-//     console.log('Socket io Connexion');
+io.on('connection', function(socket) {
+    console.log('Socket io Connexion');
 
-//     setInterval(function(){
-//         console.log('emitting', Math.floor(Math.random() * 28));
-//         socket.emit('data', {
-//             sensor_id: Math.floor(Math.random() * 28),
-//             signal_strengths: [10, 10, 10],
-//             measurement_date: new Date()
-//         });
-//     }, 2000);
-// });
+    setInterval(function(){
+        var id = Math.floor(Math.random() * 28);
+        console.log('emitting', id);
+        socket.emit('data', {
+            sensor_id: Math.floor(Math.random() * 28),
+            signal_strengths: [10, 10, 10],
+            measurement_date: new Date(),
+            installed_at: id
+        });
+    }, 2000);
+});
 
 server.listen(PORT, function () {
     console.log('Server running on', [

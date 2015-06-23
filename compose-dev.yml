@@ -4,6 +4,7 @@
    - "db:postgres"
   ports:
    - "4000:4000"
+   - "35729:35729"
   environment:
    - VIRTUAL_HOST=6element.ants.builders 
    - VIRTUAL_PORT=4000

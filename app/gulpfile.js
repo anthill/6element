@@ -9,16 +9,14 @@ var watchify = require('watchify');
 
 
 gulp.task('nodemon', function () {
-   nodemon({
-      script: 'server/index.js'
-      , ext: 'js html'
-      , env: { 'NODE_ENV': 'development' }
-   })
+   nodemon({script: 'server/index.js', ext: 'js json html', legacyWatch: true });
 });
+
 
 gulp.task('watchify', function(){
    browserifyShare();
 });
+
 
 function browserifyShare(){
    var b = browserify({
@@ -38,7 +36,17 @@ function browserifyShare(){
 function bundleShare(b) {
   b.bundle()
    .pipe(source('browserify-bundle.js'))
-   .pipe(gulp.dest('./client/'));
+   .pipe(gulp.dest('./client/'))
+   .pipe(livereload())
+   .on('error', function (err) {
+      console.log(err.message);
+   });
 }
 
-gulp.task('default', ['nodemon', 'watchify']);
+
+
+gulp.task('default', ['nodemon', 'watchify'], function(){
+   livereload.listen();
+   gulp.watch("./server/index.js", ["nodemon"]);
+   gulp.watch("./client/src/*", ["watchify"]);
+});

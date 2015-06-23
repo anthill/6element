@@ -3,6 +3,13 @@
 6element is a open innovation project of waste optimisation.
 [Learn more](http://ants.builders/pages/6element.html)
 
+### Running in dev mode
+
+To have automotic reload of the server and rebuild of the frontend use:
+```
+docker-compose -f compose-dev.yml build
+docker-compose -f compose-dev.yml up
+```
 
 ### Pushing in production
 

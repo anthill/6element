@@ -38,8 +38,8 @@ function rand(n){
 
 dropAllTables()
     .then(createTables)
-    .then(fillDBWithFakeData)
-    // .then(hardCodedSensors)
+    // .then(fillDBWithFakeData)
+    .then(hardCodedSensors)
     .catch(debug('drop and create'));
 
 var server = http.Server(app);

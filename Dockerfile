@@ -8,5 +8,3 @@ WORKDIR /6element
 
 ADD app/package.json /6element/package.json
 RUN npm install
-
-CMD ["npm", "start"]

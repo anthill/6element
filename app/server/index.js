@@ -58,8 +58,8 @@ app.use(compression());
 app.use(bodyParser.urlencoded());
 app.use(bodyParser.json());
 
-app.use("/css/leaflet.css", express.static(path.join(__dirname, '../node_modules/leaflet/dist/leaflet.css')));
-app.use("/socket.io.js", express.static(path.join(__dirname, '../node_modules/socket.io/node_modules/socket.io-client/socket.io.js')));
+app.use("/css/leaflet.css", express.static(path.join(__dirname, '../../node_modules/leaflet/dist/leaflet.css')));
+app.use("/socket.io.js", express.static(path.join(__dirname, '../../node_modules/socket.io/node_modules/socket.io-client/socket.io.js')));
 app.use("/css", express.static(path.join(__dirname, '../client/css')));
 app.use("/images", express.static(path.join(__dirname, '../client/images')));
 
@@ -164,11 +164,13 @@ app.get('/recycling-center/:rcId', function(req, res){
 //     console.log('Socket io Connexion');
 
 //     setInterval(function(){
-//         console.log('emitting', Math.floor(Math.random() * 28));
+//         var id = Math.floor(Math.random() * 28);
+//         console.log('emitting', id);
 //         socket.emit('data', {
 //             sensor_id: Math.floor(Math.random() * 28),
 //             signal_strengths: [10, 10, 10],
-//             measurement_date: new Date()
+//             measurement_date: new Date(),
+//             installed_at: id
 //         });
 //     }, 2000);
 // });

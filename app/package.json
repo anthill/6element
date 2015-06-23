@@ -4,11 +4,11 @@
   "description": "Reducing waste with sensors and an app",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "gulp dev --gulpfile app/gulpfile.js ",
+    "prod": "gulp prod --gulpfile app/gulpfile.js ",
     "sql-generate": "node-sql-generate --dsn postgres://postgres:password@$(POSTGRES_PORT_5432_TCP_ADDR):$(POSTGRES_PORT_5432_TCP_PORT)/postgres > ./database/management/declarations.js",
-    "watch": "watchify client/src/main.js -o client/browserify-bundle.js -d -v",
-    "build": "browserify client/src/main.js -o client/browserify-bundle.js -d",
-    "start": "docker-compose up",
+    "watch": "watchify app/client/src/main.js -o app/client/browserify-bundle.js -d -v",
+    "build": "browserify app/client/src/main.js -o app/client/browserify-bundle.js -d",
     "lint": "eslint ./"
   },
   "repository": {
@@ -51,6 +51,11 @@
   },
   "devDependencies": {
     "eslint": "^0.21.0",
+    "gulp": "~3.8.8",
+    "gulp-express": "^0.3.5",
+    "gulp-livereload": "~2.1.1",
+    "gulp-plumber": "~0.6.6",
+    "vinyl-source-stream": "^1.1.0",
     "watchify": "^3.2.1"
   }
 }

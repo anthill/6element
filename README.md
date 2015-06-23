@@ -4,7 +4,21 @@
 [Learn more](http://ants.builders/pages/6element.html)
 
 
-### Contributing
+### Pushing in production
+
+First stop and clean:
+
+```
+docker-compose -f compose-prod.yml stop
+docker-compose -f compose-prod.yml rm
+```
+
+then you only need to:
+
+```
+docker-compose -f compose-prod.yml build --no-cache
+docker-compose -f compose-prod.yml up --no-deps -d
+```
 
 #### Getting started
 
@@ -18,7 +32,6 @@ and [docker](https://docs.docker.com/installation/ubuntulinux/#installing-docker
 git clone git@github.com:anthill/6element.git
 cd 6element
 npm install
-docker pull postgres:9.4
 ````
 
 Then, you must copy create the missing file

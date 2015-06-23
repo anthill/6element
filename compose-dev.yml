@@ -16,7 +16,5 @@ db:
   image: postgres:9.4
   environment:
    - POSTGRES_PASSWORD=password
-  volumes:
-   - /data/backup/6element:/6element
   ports:
    - "5432:5432"

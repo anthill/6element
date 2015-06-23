@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="utf-8">
+
+        <meta name='viewport' content='initial-scale=1' />
+        <link href="css/normalize.css" rel="stylesheet">
+        <link href="css/default.css" rel="stylesheet">
+        <link href="css/style.css" rel="stylesheet">
+
+        <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+
+        <script defer src="app.js"></script>
+
+        <title> Ants - 6element App - Sketch </title>
+
+        <script data-polyfill>
+            if (!String.prototype.startsWith) {
+                Object.defineProperty(String.prototype, 'startsWith', {
+                    enumerable: false,
+                    configurable: false,
+                    writable: false,
+                    value: function (searchString, position) {
+                        position = position || 0;
+                        return this.lastIndexOf(searchString, position) === position;
+                    }
+                });
+            }
+        </script>
+        <script data-polyfill>
+            // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/assign#Polyfill
+            if (!Object.assign) {
+                Object.defineProperty(Object, 'assign', {
+                    enumerable: false,
+                    configurable: true,
+                    writable: true,
+                    value: function (target, firstSource) {
+                        'use strict';
+                        if (target === undefined || target === null) {
+                            throw new TypeError('Cannot convert first argument to object');
+                        }
+
+                        var to = Object(target);
+                        for (var i = 1; i < arguments.length; i++) {
+                            var nextSource = arguments[i];
+                            if (nextSource === undefined || nextSource === null) {
+                                continue;
+                            }
+
+                            var keysArray = Object.keys(Object(nextSource));
+                            for (var nextIndex = 0, len = keysArray.length; nextIndex < len; nextIndex++) {
+                                var nextKey = keysArray[nextIndex];
+                                var desc = Object.getOwnPropertyDescriptor(nextSource, nextKey);
+                                if (desc !== undefined && desc.enumerable) {
+                                    to[nextKey] = nextSource[nextKey];
+                                }
+                            }
+                        }
+                        return to;
+                    }
+                });
+            }
+        </script>
+
+    </head>
+
+    <body>
+
+    </body>
+
+</html>

@@ -1,0 +1,760 @@
+/*
+// 1. boîte
+
+// 2. bordures
+
+// 3. arrière-plan
+
+// 4. texte
+
+// 5. transformations
+
+// 6. transitions
+
+// 7. le reste
+*/
+@font-face {
+  font-family: 'RemingtonNoiseless';
+  src: url('../fonts/Remington-Noiseless-webfont.eot'); /* IE9 Compat Modes */
+  src: url('../fonts/Remington-Noiseless-webfont.eot?#iefix') format('embedded-opentype'),
+       url('../fonts/Remington-Noiseless-webfont.woff2') format('woff2'),
+       url('../fonts/Remington-Noiseless-webfont.woff') format('woff'),
+       url('../fonts/Remington-Noiseless-webfont.ttf')  format('truetype'),
+       url('../fonts/Remington-Noiseless-webfont.svg#svgFontName') format('svg');
+}
+
+
+body {
+	font-family: 'Raleway';
+}
+
+body.noscroll {
+	overflow: hidden;
+}
+
+body > header {
+	position: fixed; top: 0; width: 100%; height: 10vh; z-index: 2;
+	box-shadow: 0px 1px 10px 0px rgba(0,0,0,1);
+	background-color: white;
+}
+
+body > header span {
+	color: #005BAE;
+}
+
+body > header div{
+	display: -webkit-flex; -webkit-flex-direction: column; -webkit-justify-content: center;
+	display: flex; flex-direction: column; justify-content:center; position: absolute; top: 0; bottom:0; left: 0; margin: 0; margin-left: .6rem;
+}
+
+body > header h1{
+	margin: 0;
+	font-family: 'RemingtonNoiseless', 'Raleway'; font-size: 2em; line-height: .8em;
+}
+
+body > header em{
+	display: block;
+	font-size: 0.6em; font-style: normal;
+	font-weight: lighter; text-align: center;
+}
+
+body > header img {
+	position: fixed; top: 2vh; bottom: 2vh; right: .6rem; height: 6vh;
+	color: black; font-size: 2rem;
+	cursor: pointer;
+	transition: transform .5s ease-in-out;
+}
+	
+
+body > header img:hover{
+	-webkit-tranform: rotate(360deg);
+	transform: rotate(360deg);
+}
+
+body > header img.active {
+	-webkit-transform: scale(0.7);
+	transform: scale(0.7);
+}
+
+body > header h2{
+	margin: 0; margin-top: 1.5em; width: 100%; position: absolute; bottom: .5rem;
+	font-size: 1em; font-weight: normal; text-align: center;
+}
+
+nav {
+	position: fixed; right: 0; top: -15em; z-index: 1;
+	font-size: 0.9em; text-align: right;
+	background-color: rgba(255, 255, 255, 0.9);
+	transition: top 0.5s ease-in-out;
+}
+
+nav.active{
+	top: 10vh;
+}
+
+nav a {
+	display: block; padding: .7em 1em;
+	color: black; text-decoration: none;
+}
+
+img.super{
+	position: absolute; top:-.5em; right: 0; width: 3em;
+}
+
+h3 {
+	font-family: 'RemingtonNoiseless', 'Raleway'; font-weight: normal;
+}
+
+h4{
+	margin: 1em 0;
+	font-size: 0.8em; font-weight: normal;
+}
+
+strong{
+	font-weight: lighter;
+	color: #005BAE;
+}
+
+main > section > header {
+	display: -webkit-flex; -webkit-flex-direction: column; -webkit-justify-content: center;
+	display: flex; flex-direction: column; justify-content: center; width: 30%;
+}
+
+main > section > header h2{
+	display: none;
+	font-size: 3em; font-weight: lighter;
+}
+
+section div {
+	/*margin: 0 auto;*/
+	text-align: justify;
+}
+
+ul {
+	margin: 0; padding: 0;
+}
+
+a {
+	color: #005BAE; text-decoration: none;
+	cursor: pointer;
+}
+
+aside a {
+	color: black;
+}
+
+input{
+	position: absolute; top: 0; left: 0;
+	opacity: 0;
+}
+
+.tab:hover{
+	background-color: #111;
+	color: #EEE;
+}
+
+.tab.active {
+	color: #005BAE;
+}
+
+.right{
+	text-align: right; color: #CCC;
+}
+
+section[id='spirit'], section[id='home'], section[id='team']  {
+	background-color: rgba(255, 255, 255, 0.8);
+}
+
+main {
+	opacity: 1;
+	transition: opacity .5s ease-in-out;
+}
+
+main.hidden {
+	opacity: 0;
+}
+
+section[id='colony'].over {
+	z-index: 0;
+}
+
+section[class="page"] {
+	position: relative; min-height: 90vh; padding-top: 10vh;
+	font-size: 1em;
+}
+
+section[class="page"] p {
+	font-size: .8em; text-align: justify;
+}
+
+section[class="page"] h3 {
+	margin: .5em 0;
+	font-size: 1em;
+}
+
+section[id="home"]{
+	display: block;
+}
+
+section[id="home"] .column{
+	width: 90%; padding: 0 5%;
+}
+
+section[id="home"] strong {
+	color: black; font-weight: bold;
+}
+
+section[id="home"] h2 {
+	width: 100%; display: block; position: absolute; top: -2em; margin: 0 auto;
+	font-size: 2em; font-weight: lighter; text-align: center;
+}
+
+section[id="home"] h2 strong {
+	font-weight: lighter; 
+}
+
+section[id="home"] a {
+	color: #005BAE;
+}
+
+section[id="home"] a:hover {
+	text-decoration: underline;
+}
+
+section[id="home"] > div > div {
+	width: 50%; margin: 0 auto;
+}
+
+div[id="logo"] {
+	display: inline-block; width: 100%; position: relative;
+}
+
+section[id="home"] > div p{
+	display: none; width: 33%; margin: 0; /*position: absolute; top: 0; bottom: 0;*/
+	font-size: 0.75em; text-align: justify; vertical-align: top;
+}
+
+section[id="home"] > div img{
+	width: 100%;
+}
+
+section[id="home"] > div span{
+	font-weight: bold;
+}
+
+[id="wiki-credits"]{
+	display: none; width: 100%; position: absolute; bottom: 0; right: 0; margin-bottom: .5em;
+	font-size: 0.7em; text-align: right;
+}
+
+section[id="about"] > div {
+	position: absolute; top: 0; bottom: 0; left: 0; right: 0;
+	background-color: rgba(0, 0, 0, 0.3);
+}
+
+section[id="about"]{
+	position: relative; padding-top: 10vh;
+	background-image: url("../images/crowd.jpg"); background-size: cover;
+}
+
+section[id="about"] p {
+	margin: .5em auto; width: 90%;
+	text-align: center;
+}
+
+section[id="about"] h2 {
+	display: block; margin-top: 1rem;
+	font-size: 1.5em; font-weight: normal; text-align: center; text-shadow: 0 0 10px white;
+}
+
+section[id="about"] strong {
+	color: white; font-weight: normal; text-shadow: 0 0 10px #005BAE;
+}
+
+section[id="about"] aside{
+	position: absolute; bottom: .6em; right: .6em;
+	color: rgba(255,255,255,0.8); font-size: .5rem; text-align: center; text-shadow: 0 0 5px black;
+}
+
+.column{
+	display: -webkit-flex; -webkit-flex-direction: column; -webkit-justify-content: center;
+	display: flex; flex-direction: column; justify-content: center; position: relative; min-height: 90vh; width: 80%; padding: 0 10%;
+}
+
+section[id="about"] .column{
+	justify-content: center;
+}
+
+.row{
+	display: -webkit-flex; -webkit-flex-direction: column; -webkit-justify-content: center;
+	display: flex; flex-direction: column; justify-content: center; margin: 0;
+}
+
+section[id="spirit"] p{
+	display: none; margin: 0;
+}
+
+section[id="spirit"] .summary{
+	display: block;
+}
+
+section[id="projects"]{
+	color: #CCC;
+	background-color: #111;
+}
+
+section[id="projects"] section{
+	margin-bottom: 1em;
+}
+
+section[id="projects"] section a > header {
+	position: relative;
+}
+
+section[id="projects"] h3 {
+	border-bottom: solid 1px #005BAE;
+}
+
+section[id="projects"] section a > img {
+	display: block; height: 7em; width: 7em; border-radius: 50%; margin: 0 auto;
+}
+
+section[id="projects"] p{
+	display: none; margin: 0;
+}
+
+section[id="projects"] a {
+	color: #CCC;
+}
+
+section[id="team"] ul {
+	margin: 0 auto; 
+	list-style: none;
+}
+
+section[id="team"] i {
+	margin: 0 .3rem;
+}
+
+section[id="team"] li {
+	position: relative; margin: .2em 0;
+}
+
+section[id="team"] ul header {
+	display: inline-block; position: relative; margin-left: 4em;
+}
+
+section[id="team"] aside{
+	display: -webkit-flex; -webkit-flex-direction: column; -webkit-justify-content: center; position: absolute;
+	display: flex; flex-direction: column; justify-content: center; position: absolute; right: 0; top: 0; margin: 1em 0;
+}
+
+section[id="team"] p {
+	display: block; height: 0; margin: 0; z-index: -2;
+	overflow: hidden; text-overflow: ellipsis;
+	transition: height .5s ease-in-out;
+}
+
+section[id="team"] h3 {
+	margin: 1em 0;
+}
+
+[id|="display"]:checked ~ p { /* Check my handsome teacher there -> http://twikito.com/ */
+	height: 11em;
+}
+
+section[id="team"] li header::before{
+	position: absolute; width: 3em; height: 3em; left: -4em; border-radius: 50%;
+	content: '';
+	background-size: cover;
+}
+
+[id="alex"] header::before {
+	background-image: url('https://avatars.githubusercontent.com/u/371303?'); 
+}
+
+[id="davidB"] header::before {
+	background-image: url('https://avatars.githubusercontent.com/u/165829?'); 
+}
+
+[id="davidS"] header::before {
+	background-image: url('https://avatars.githubusercontent.com/u/7767926?'); 
+}
+
+[id="romain"] header::before {
+	background-image: url('https://avatars2.githubusercontent.com/u/8417814?'); 
+}
+
+[id="armand"] header::before {
+	background-image: url('https://avatars1.githubusercontent.com/u/8374843?'); 
+}
+
+[id="fabien"] header::before {
+	background-image: url('https://avatars3.githubusercontent.com/u/7871295?'); 
+}
+
+section[id='contact']{
+	background-color: #111;
+}
+
+section[id='contact'] .row {
+	justify-content: space-around;
+	margin: .5em;
+	text-align: center;
+}
+
+section[id='contact'] .row > * {
+	margin: .5em 0;
+}
+
+.front, .back {
+	text-align: center;
+}
+
+.back{
+	position: absolute;
+}
+
+section[id='contact'] .row > *:hover i::before{
+	color: #005BAE;
+}
+
+section[id='contact'] i[class^='flaticon']{
+	color: #EEE; font-size: 5em;
+}
+
+section[id='contact'] i[class^='icon']{
+	color: #EEE; font-size: 5em;
+}
+
+/*section[id='contact'] .test{
+	display: -webkit-flex; -webkit-flex-direction: column; -webkit-justify-content: center;
+	display: flex; flex-direction: column; justify-content: center; position: absolute; margin: 0 auto;
+}*/
+
+div[id="town"] {
+	border-radius: 10px;
+	background-image: url("../images/localisation.png"); background-size: cover; background-position: center center;
+}
+
+div[id="town"] > div {
+	height: 100%; padding: 1em .5em;
+	border-radius: 10px;
+	text-align: right;
+	background-color: rgba(255, 255, 255, 0.6);
+}
+
+div[id="town"] > div a{
+	/*display: block;*/
+	color: black; font-size: 1.3em; 
+}
+
+div[id="town"] > div a:hover{
+	color: #005BAE; text-decoration: underline;
+}
+
+div[id="town"] > div a:first-child{
+	margin: .2em 0;
+	font-size: 2em; font-weight: bold;
+}
+
+div[id="town"] > div p{
+	margin: 0;
+	text-align: right;
+}
+
+div[id="mail"]{
+	display: flex; flex-direction: column; justify-content: space-around;
+	color: #CCC; font-size: 1.5em; text-align: center;
+}
+
+div[id="mail"] a {
+	color: #CCC;
+}
+
+div[id="mail"] a:hover {
+	color: #005BAE; text-decoration: underline;
+}
+
+footer {
+	font-size: 0.5rem; text-align: center; padding: 1em;
+	background-color: white; opacity: 1;
+}
+
+footer p {
+	margin: 0;
+}
+
+@media only screen and (min-width: 660px){
+
+	main > section > header h2 {
+		display: block;
+	}
+
+	section[id="about"] .column {
+		width: 100%; font-size: .9em;
+	}
+
+	section[id="about"] header {
+		width: 100%;
+	}
+
+	img.super{
+		top: 0;
+	}
+
+	.column{
+		padding: 0;
+	}
+
+	.row{
+		-webkit-flex-direction: row; -webkit-justify-content: space-around;
+		flex-direction: row; justify-content: space-around;
+	}
+
+	.row section{
+		width: 40%; /*margin: 0 5%;*/
+	}
+
+	h4 {
+		font-size: .9em;
+	}
+
+	section[class="page"] p {
+		font-size: .9em;
+	}
+
+	body > header h1{
+		font-size: 3em;
+	}
+
+	body > header em{
+		font-size: .9em;
+	}
+
+	body > header h2{
+		font-size: 1.5em;
+	}
+
+	nav {
+		top: -24em;
+	}
+
+	nav a {
+		font-size: 1.5em;
+	}
+
+	section[class='page'] {
+		display: -webkit-flex; -webkit-flex-direction: row;
+		display: flex; flex-direction: row; padding: 1rem; padding-top: 10vh; padding-bottom: 0;
+		font-size: .9em;
+	}
+
+	section[class='page'] h3{
+		font-size: 2em;
+	}
+
+	section[id="home"] > div p{
+		display: inline-block;
+	}
+
+	section[id="home"] > div > div {
+		width: auto; margin: 0;
+	}
+
+	section[id="home"] h2 {
+		width: auto; position: absolute; top: auto; bottom: 0; left: -4em;
+		font-size: 5em; font-weight: lighter;
+	}
+
+	div [id="logo"]{
+		width: 30%;
+	}
+
+	[id="wiki-credits"]{
+		display: inline-block;
+	}
+
+	section[id="about"]{
+		font-size: 2em;
+	}
+
+	section[id="about"] p {
+		width: 70%; margin: 2em auto;
+	}
+
+	section[id="spirit"] p{
+		display: block;
+	}
+
+	section[id="spirit"] h3{
+		font-size: 2em;
+	}
+
+	section[id="projects"] section a > img {
+		width: 100%; height: auto; border-radius: 10px; margin: 1rem auto;
+	}
+
+	section[id="projects"] p{
+		display: block;
+	}
+
+	section[id="projects"] .column{
+		padding-left: 1rem;
+	}
+
+	section[id="projects"] .row{
+		-webkit-flex-direction: row;
+		flex-direction: row;
+	}
+
+	section[id="team"] .column {
+		width: 50%; margin-left: 15%;
+	}
+	
+	section[id="team"] li header::before{
+		width: 6em; height: 6em; left: -8em; border-radius: 10px;
+	}
+
+	section[id="team"] aside i{
+		font-size: 2em;
+	}
+
+	section[id="team"] aside{
+		margin: 2em 0;
+	}
+
+	[id|="display"]:checked ~ p { /* Check my handsome teacher there -> http://twikito.com/ */
+		height: 6em;
+	}
+
+	section[id="team"] ul header {
+		margin-left: 0em;
+	}
+
+	section[id='contact'] i[class^='icon']{
+		font-size: 9em;
+	}
+
+	section[id='contact'] i[class^='flaticon']{
+		font-size: 9em;
+	}
+
+	section[id='contact'] .column {
+		width: 90%; margin: 0 auto;
+	}
+
+	section[id='contact'] .row{
+		-webkit-flex-direction: row; -webkit-justify-content: center;
+		position: relative; flex-direction: row; justify-content: center; width: 100%; margin: 3em 0;
+		
+	}
+
+	section[id='contact'] .row > *{
+		width: 40%; 
+	}
+
+	section[id='contact'] aside {
+		font-size: 1.6em;
+	}
+
+	footer {
+		font-size: 0.7rem; text-align: center;
+	}
+
+}
+
+@media only screen and (min-width: 1200px) {
+
+	section[id="home"]{
+		display: block;
+	}
+
+	body > header {
+		height: 8vh;
+	}
+
+	body > header h2 {
+		display: none;
+	}
+
+	body > header img {
+		top: 1vh;
+		cursor: pointer;
+	}
+
+	section[class="page"] p {
+		font-size: .9em; line-height: 1.3em;
+	}
+
+	nav {
+		height: 8vh; width: 85%; margin:0 auto; left:0; right: 0; top: 0; z-index:2;
+		background-color: transparent;
+	}
+
+	nav a {
+		display: inline-block; height: 4vh; margin: 0; padding: 0 1em; padding-top: 4vh; 
+		font-size: 1.2em; vertical-align: bottom;
+	}
+
+	nav.active{
+		top: 0vh;
+	}
+
+	div [id="logo"]{
+		width: 20%;
+	}
+
+	section[id="about"] p {
+		font-size: .7em;
+	}
+
+	section[id="projects"] a {
+		color: #777;
+	}
+
+	section[id="projects"] strong {
+		color: #BBB;
+	}
+
+	section[id="projects"] h3 {
+		color: #777; border-bottom: solid 1px #BBB;
+	}
+
+	section[id="projects"] a:hover {
+		color: #CCC;
+	}
+
+	section[id="projects"] a:hover strong {
+		color: #005BAE;
+	}
+
+	section[id="projects"] a:hover h3 {
+		color: #CCC; border-bottom: solid 1px #005BAE;
+	}
+
+	section[id="team"] .column {
+		width: 45%;
+	}
+
+	section[id="team"] p {
+		margin-bottom: 1.2rem;
+	}
+
+	section[id="team"] p {
+		height: auto;
+		font-size: .8em;
+	}
+
+	[id|="display"]:checked ~ p { /* Check my handsome teacher there -> http://twikito.com/ */
+		height: auto;
+	}
+
+	section[id="team"] h3 {
+		margin: 0; margin-bottom: .5rem;
+	}
+
+	section[id="team"] aside {
+		margin: 0;
+	}
+}

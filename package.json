@@ -1,0 +1,29 @@
+{
+  "name": "6elementApp",
+  "version": "0.0.0",
+  "description": "First sketches of the 6element App",
+  "main": "app.js",
+  "scripts": {
+    "watch": "watchify src/main.js -o app.js -d -v",
+    "build": "browserify src/main.js -o app.js -d",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/anthill/6elementApp.git"
+  },
+  "author": "ants <contact@ants.builders> (http://ants.builders/)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/anthill/6elementApp/issues"
+  },
+  "homepage": "https://github.com/anthill/6elementApp",
+  "dependencies": {
+    "browserify": "^10.2.4",
+    "react": "^0.13.3"
+  },
+  "devDependencies": {
+    "eslint": "^0.21.0",
+    "watchify": "^3.2.1"
+  }
+}

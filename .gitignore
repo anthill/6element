@@ -11,6 +11,6 @@ sensor/vision/data/*
 
 client/browserify-bundle.js
 
-*-credentials.json
+PRIVATE.json
 
 npm-debug.log

@@ -20,6 +20,7 @@ var database = require('../database');
 var dropAllTables = require('../database/management/dropAllTables');
 var createTables = require('../database/management/createTables');
 var fillDBWithFakeData = require('./fillDBWithFakeData.js');
+var sendSMS = require('./sendSMS.js');
 
 var PORT = 4000;
 var DEBUG = process.env.DEBUG ? process.env.DEBUG : false;
@@ -94,51 +95,62 @@ app.post('/twilio', function(req, res) {
         .then(function(sensor){
             if (sensor){
                 debug("Found corresponding sensor: ", sensor);
-                var body = req.body.Body;
-                // decode message
-                decoder(body)
-                    .then(function(decodedMsg){
+                var body = req.body.Body.substr(1);
+                // case of an encoded message
+                if (req.body.Body[0] === "1") {
+                    decoder(body)
+                        .then(function(decodedMsg){
 
-                        console.log("decoded msg ", decodedMsg);
-
-                        // [{"date":"2015-05-20T13:48:00.000Z","signal_strengths":[]},{"date":"2015-05-20T13:49:00.000Z","signal_strengths":[]},{"date":"2015-05-20T13:50:00.000Z","signal_strengths":[]},{"date":"2015-05-20T13:51:00.000Z","signal_strengths":[]},{"date":"2015-05-20T13:52:00.000Z","signal_strengths":[]}]
-
-                        Promise.all(decodedMsg.map(function(message){
-
-                            var messageContent = {
-                                'sensor_id': sensor.id,
-                                'signal_strengths': message.signal_strengths,
-                                'measurement_date': message.date
-                            };
                             console.log("decoded msg ", decodedMsg);
-                            socketMessage = Object.assign({}, messageContent);
-                            socketMessage['installed_at'] = sensor.installed_at;
 
-                            // persist message in database
-                            var persitP = database.SensorMeasurements.create(messageContent);
+                            // [{"date":"2015-05-20T13:48:00.000Z","signal_strengths":[]},{"date":"2015-05-20T13:49:00.000Z","signal_strengths":[]},{"date":"2015-05-20T13:50:00.000Z","signal_strengths":[]},{"date":"2015-05-20T13:51:00.000Z","signal_strengths":[]},{"date":"2015-05-20T13:52:00.000Z","signal_strengths":[]}]
 
-                            return persitP;
+                            Promise.all(decodedMsg.map(function(message){
 
-                        }))
-                        .then(function(id){
-                            debug("Storage SUCCESS");
-                            res.set('Content-Type', 'text/xml');
-                            res.send(xml({"Response":""}));
+                                var messageContent = {
+                                    'sensor_id': sensor.id,
+                                    'signal_strengths': message.signal_strengths,
+                                    'measurement_date': message.date
+                                };
+                                console.log("decoded msg ", decodedMsg);
+                                socketMessage = Object.assign({}, messageContent);
+                                socketMessage['installed_at'] = sensor.installed_at;
 
-                            // SOCKET IO
-                            if (socket){
-                                socket.emit('data', socketMessage);
-                            }
+                                // persist message in database
+                                var persitP = database.SensorMeasurements.create(messageContent);
+
+                                return persitP;
+
+                            }))
+                            .then(function(id){
+                                debug("Storage SUCCESS");
+                                res.set('Content-Type', 'text/xml');
+                                res.send(xml({"Response":""}));
+
+                                // SOCKET IO
+                                if (socket){
+                                    socket.emit('data', socketMessage);
+                                }
+                            })
+                            .catch(function(id){
+                                console.log("Storage FAILURE: ", id);
+                                res.set('Content-Type', 'text/xml');
+                                res.send(xml({"Response":""}));
+                            });
                         })
-                        .catch(function(id){
-                            console.log("Storage FAILURE: ", id);
-                            res.set('Content-Type', 'text/xml');
-                            res.send(xml({"Response":""}));
+                        .catch(function(error){
+                            console.log("Error in decoding: ", error);
                         });
-                    })
-                    .catch(function(error){
-                        console.log("Error in decoding: ", error);
-                    });
+                    // case of clear message
+                    } else {
+                        switch(body) {
+                            case "init":
+                                debug("Received init");
+                                var date = new Date();
+                                sendSMS(date.toISOString(), req.body.From);
+                                break;
+                        }
+                    }
             } else {
                 console.log("No sensor corresponding to this number.");
             }

@@ -8,6 +8,7 @@ sensor/vision/data/*
 *.pdf
 *.doc
 *.doc#
+*_app.js
 
 browserify-bundle.js
 

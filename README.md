@@ -5,7 +5,7 @@
 
 ### Running in dev mode
 
-To have automotic reload of the server and rebuild of the frontend use:
+To have automatic reload of the server and rebuild of the frontend use:
 ```
 docker-compose -f compose-dev.yml build
 docker-compose -f compose-dev.yml up

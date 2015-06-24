@@ -181,7 +181,7 @@ module.exports = React.createClass({
 
         var logo = React.DOM.img({
             id: 'logomap',
-            src: '/images/Logo_marge.png'}
+            src: '/Map/images/Logo_marge.png'}
         );
 
         /*var colorLegend = ColorSwatches({

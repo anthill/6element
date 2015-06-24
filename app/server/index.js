@@ -147,7 +147,7 @@ app.post('/twilio', function(req, res) {
                             case "init":
                                 debug("Received init");
                                 var date = new Date();
-                                sendSMS(date.toISOString(), req.body.From);
+                                sendSMS("date:" + date.toISOString(), req.body.From);
                                 break;
                         }
                     }

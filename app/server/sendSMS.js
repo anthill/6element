@@ -13,11 +13,8 @@ module.exports = function(body, destination){
 
     }, function(err, responseData) {
 
-        if (!err) {
-            console.log("ERROR sending with twilio");
-            console.log(responseData.from);
-            console.log(responseData.body);
+        if (err)
+            console.log("ERROR sending with twilio: ", err);
 
-        }
     });
 }

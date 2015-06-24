@@ -142,7 +142,7 @@ app.post('/twilio', function(req, res) {
                             console.log("Error in decoding: ", error);
                         });
                     // case of clear message
-                    } else {
+                    } else if (req.body.Body[0] === "0")  {
                         switch(body) {
                             case "init":
                                 debug("Received init");
@@ -150,6 +150,8 @@ app.post('/twilio', function(req, res) {
                                 sendSMS("date:" + date.toISOString(), req.body.From);
                                 break;
                         }
+                    } else {
+                        console.log("Error: message has not type character");
                     }
             } else {
                 console.log("No sensor corresponding to this number.");

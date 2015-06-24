@@ -8,52 +8,62 @@ var source = require("vinyl-source-stream");
 var watchify = require('watchify');
 
 gulp.task('servedev', function () {
-    server.run(['./server/index.js']);
-    gulp.watch(['./server/*.js'], [server.run]);
+	server.run(['./server/index.js']);
+	gulp.watch(['./server/*.js'], [server.run]);
 });
 
 gulp.task('serveprod', function () {
-    server.run(['./server/index.js']);
+	server.run(['./server/index.js']);
 });
 
-gulp.task('watchify', function(){
-   browserifyShare();
+gulp.task('watchifyAdmin', function(){
+	browserifyShare('Admin');
+});
+
+gulp.task('watchifyMap', function(){
+	browserifyShare('Map');
 });
 
 
-function browserifyShare(){
-   var b = browserify({
-      cache: {},
-      packageCache: {},
-      fullPaths: true
-   });
-   b = watchify(b);
-   b.on('update', function(){
-      bundleShare(b);
-   });
-  
-   b.add('./client/src/main.js');
-   bundleShare(b);
+function browserifyShare(app){
+	var b = browserify({
+		cache: {},
+		packageCache: {},
+		fullPaths: true
+	});
+	b = watchify(b);
+	b.on('update', function(){
+		bundleShare(b);
+	});
+	
+	b.add('./clients/' + app + '/src/main.js');
+	bundleShare(b, app);
 }
 
-function bundleShare(b) {
-  b.bundle()
-   .pipe(source('browserify-bundle.js'))
-   .pipe(gulp.dest('./client/'))
-   .on('error', function (err) {
-      console.log(err.message);
-   });
+function bundleShare(b, name) {
+	b.bundle()
+	.pipe(source('./clients/' + name + '_app.js'))
+	.pipe(gulp.dest('.'))
+	.on('error', function (err) {
+		console.log(err.message);
+	});
 }
 
-gulp.task('dev', ['servedev', 'watchify'], function(){
-   livereload.listen(1234);
-   gulp.watch("./client/src/*", ["watchify"], function(e){
-      livereload.changed(e.path);
-   });
+gulp.task('dev', ['servedev', 'watchifyAdmin', 'watchifyMap'], function(){
+	livereload.listen(1234);
+	gulp.watch("./clients/Map/*", ["watchifyMap"], function(e){
+		console.log('Changed: ', e); // can't find any log with this => where is it ?
+		livereload.changed(e.path); // this doesn't work for now
+	});
+	gulp.watch("./clients/Admin/*", ["watchifyAdmin"], function(e){
+		console.log('Changed: ', e); // can't find any log with this => where is it ?
+		livereload.changed(e.path); // this doesn't work for now
+	});
 });
 
-gulp.task('prod', ['serveprod', 'watchify']);
+gulp.task('prod', ['serveprod', 'watchifyAdmin', 'watchifyMap']);
 
-gulp.task('default', ['servedev', 'watchify'], function(){
-   gulp.watch("./client/src/*", ["watchify"]);
+gulp.task('default', ['servedev', 'watchifyAdmin', 'watchifyMap'], function(){
+	gulp.watch("./clients/Map/*", ['watchifyMap']);
+	gulp.watch("./clients/Admin/*", ["watchifyAdmin"]);
 });

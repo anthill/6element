@@ -9,7 +9,6 @@ var io = require('socket.io-client');
 
 var Application = React.createFactory(require('./Components/Application.js'));
 
-
 var errlog = console.error.bind(console);
 
 var PRIVATE = require('../../PRIVATE.json');

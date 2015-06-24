@@ -1,4 +1,4 @@
-(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({"/6element/app/client/src/Components/Application.js":[function(require,module,exports){
+(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({"/6element/app/clients/Map/src/Components/Application.js":[function(require,module,exports){
 'use strict';
 
 var React = require('react');
@@ -105,7 +105,7 @@ module.exports = React.createClass({
     }
 });
 
-},{"./MapComponent.js":"/6element/app/client/src/Components/MapComponent.js","./Panel.js":"/6element/app/client/src/Components/Panel.js","react":"/6element/node_modules/react/react.js"}],"/6element/app/client/src/Components/Detail.js":[function(require,module,exports){
+},{"./MapComponent.js":"/6element/app/clients/Map/src/Components/MapComponent.js","./Panel.js":"/6element/app/clients/Map/src/Components/Panel.js","react":"/6element/node_modules/react/react.js"}],"/6element/app/clients/Map/src/Components/Detail.js":[function(require,module,exports){
 'use strict';
 
 var React = require('react');
@@ -168,7 +168,7 @@ var Detail = React.createClass({
 
 module.exports = Detail;
 
-},{"./LineChart.js":"/6element/app/client/src/Components/LineChart.js","react":"/6element/node_modules/react/react.js"}],"/6element/app/client/src/Components/LineChart.js":[function(require,module,exports){
+},{"./LineChart.js":"/6element/app/clients/Map/src/Components/LineChart.js","react":"/6element/node_modules/react/react.js"}],"/6element/app/clients/Map/src/Components/LineChart.js":[function(require,module,exports){
 'use strict';
 
 var React = require("react");
@@ -272,7 +272,7 @@ var LineChart = React.createClass({
 
 module.exports = LineChart;
 
-},{"react":"/6element/node_modules/react/react.js","react-chartjs":"/6element/node_modules/react-chartjs/index.js"}],"/6element/app/client/src/Components/MapComponent.js":[function(require,module,exports){
+},{"react":"/6element/node_modules/react/react.js","react-chartjs":"/6element/node_modules/react-chartjs/index.js"}],"/6element/app/clients/Map/src/Components/MapComponent.js":[function(require,module,exports){
 'use strict';
 
 var React = require('react');
@@ -456,7 +456,7 @@ module.exports = React.createClass({
 
         var logo = React.DOM.img({
             id: 'logomap',
-            src: '/images/Logo_marge.png'}
+            src: '/Map/images/Logo_marge.png'}
         );
 
         /*var colorLegend = ColorSwatches({
@@ -475,7 +475,7 @@ module.exports = React.createClass({
 
 });
 
-},{"../getColor":"/6element/app/client/src/getColor.js","leaflet":"/6element/node_modules/leaflet/dist/leaflet-src.js","react":"/6element/node_modules/react/react.js"}],"/6element/app/client/src/Components/Panel.js":[function(require,module,exports){
+},{"../getColor":"/6element/app/clients/Map/src/getColor.js","leaflet":"/6element/node_modules/leaflet/dist/leaflet-src.js","react":"/6element/node_modules/react/react.js"}],"/6element/app/clients/Map/src/Components/Panel.js":[function(require,module,exports){
 'use strict';
 
 var React = require('react');
@@ -543,7 +543,7 @@ var Panel = React.createClass({
 
 module.exports = Panel;
 
-},{"./Detail.js":"/6element/app/client/src/Components/Detail.js","react":"/6element/node_modules/react/react.js"}],"/6element/app/client/src/getColor.js":[function(require,module,exports){
+},{"./Detail.js":"/6element/app/clients/Map/src/Components/Detail.js","react":"/6element/node_modules/react/react.js"}],"/6element/app/clients/Map/src/getColor.js":[function(require,module,exports){
 'use strict';
 
 // done with http://gka.github.io/palettes/#colors=NavajoWhite,SandyBrown,OrangeRed,DarkRed|steps=7|bez=1|coL=0
@@ -578,7 +578,7 @@ module.exports = function getColor(v, max, min) {
     return colorScale[ Math.round((v - min) * (nbColors - 1)/(max - min)) ];
 };
 
-},{}],"/6element/app/client/src/main.js":[function(require,module,exports){
+},{}],"/6element/app/clients/Map/src/main.js":[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -590,8 +590,6 @@ var makeMap = require('./utils.js').makeMap;
 var io = require('socket.io-client');
 
 var Application = React.createFactory(require('./Components/Application.js'));
-
-//FEFEFEF
 
 var errlog = console.error.bind(console);
 
@@ -679,12 +677,12 @@ socket.on('data', function (data) {
 });
 
 }).call(this,require('_process'))
-},{"./Components/Application.js":"/6element/app/client/src/Components/Application.js","./mapbox-credentials.json":"/6element/app/client/src/mapbox-credentials.json","./serverAPI.js":"/6element/app/client/src/serverAPI.js","./utils.js":"/6element/app/client/src/utils.js","_process":"/6element/node_modules/browserify/node_modules/process/browser.js","react":"/6element/node_modules/react/react.js","socket.io-client":"/6element/node_modules/socket.io-client/index.js"}],"/6element/app/client/src/mapbox-credentials.json":[function(require,module,exports){
+},{"./Components/Application.js":"/6element/app/clients/Map/src/Components/Application.js","./mapbox-credentials.json":"/6element/app/clients/Map/src/mapbox-credentials.json","./serverAPI.js":"/6element/app/clients/Map/src/serverAPI.js","./utils.js":"/6element/app/clients/Map/src/utils.js","_process":"/6element/node_modules/browserify/node_modules/process/browser.js","react":"/6element/node_modules/react/react.js","socket.io-client":"/6element/node_modules/socket.io-client/index.js"}],"/6element/app/clients/Map/src/mapbox-credentials.json":[function(require,module,exports){
 module.exports={
     "token": "pk.eyJ1IjoiYW50aGlsbCIsImEiOiJUR0FoRGdJIn0.ZygA4KxIt8hJ1LAvPPMHwQ",
     "mapId": "anthill.e8d69669"
 }
-},{}],"/6element/app/client/src/serverAPI.js":[function(require,module,exports){
+},{}],"/6element/app/clients/Map/src/serverAPI.js":[function(require,module,exports){
 "use strict";
 
 function sendReq(method, url, data){
@@ -724,7 +722,7 @@ module.exports = {
     }
 };
 
-},{}],"/6element/app/client/src/utils.js":[function(require,module,exports){
+},{}],"/6element/app/clients/Map/src/utils.js":[function(require,module,exports){
 module.exports = {
 
 	makeMap: function(object){
@@ -38859,4 +38857,4 @@ function toArray(list, index) {
     return array
 }
 
-},{}]},{},["/6element/app/client/src/main.js"]);
+},{}]},{},["/6element/app/clients/Map/src/main.js"]);

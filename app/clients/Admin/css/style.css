@@ -1,0 +1,8 @@
+.tabs{
+	display: block;
+	cursor: pointer;
+}
+
+.tabs .selected{
+	font-weight: bold;
+}

@@ -58,19 +58,27 @@ app.use(compression());
 app.use(bodyParser.urlencoded());
 app.use(bodyParser.json());
 
-app.use("/css/leaflet.css", express.static(path.join(__dirname, '../../node_modules/leaflet/dist/leaflet.css')));
+app.use("/leaflet.css", express.static(path.join(__dirname, '../../node_modules/leaflet/dist/leaflet.css')));
 app.use("/socket.io.js", express.static(path.join(__dirname, '../../node_modules/socket.io/node_modules/socket.io-client/socket.io.js')));
-app.use("/css", express.static(path.join(__dirname, '../client/css')));
-app.use("/images", express.static(path.join(__dirname, '../client/images')));
+app.use("/Map", express.static(path.join(__dirname, '../clients/Map')));
+app.use("/Admin", express.static(path.join(__dirname, '../clients/Admin')));
+app.use("/_common", express.static(path.join(__dirname, '../clients/_common')));
 
 app.get('/', function(req, res){
-    res.sendFile(path.join(__dirname, '../client/index.html'));
+    res.sendFile(path.join(__dirname, '../clients/Map/index.html'));
 });
 
-app.get('/client_app.js', function(req, res){
-    res.sendFile(path.join(__dirname, '../client_app.js'));
+app.get('/Admin', function(req, res){
+    res.sendFile(path.join(__dirname, '../clients/Admin/index.html'));
 });
 
+app.get('/Map_app.js', function(req, res){
+    res.sendFile(path.join(__dirname, '../clients/Map_app.js'));
+});
+
+app.get('/Admin_app.js', function(req, res){
+    res.sendFile(path.join(__dirname, '../clients/Admin_app.js'));
+});
 
 app.get('/live-affluence', function(req, res){
     database.complexQueries.currentRecyclingCenterAffluences()

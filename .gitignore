@@ -9,7 +9,7 @@ sensor/vision/data/*
 *.doc
 *.doc#
 
-client/browserify-bundle.js
+browserify-bundle.js
 
 PRIVATE.json
 

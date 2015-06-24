@@ -64,5 +64,6 @@ gulp.task('dev', ['servedev', 'watchifyAdmin', 'watchifyMap'], function(){
 gulp.task('prod', ['serveprod', 'watchifyAdmin', 'watchifyMap']);
 
 gulp.task('default', ['servedev', 'watchifyAdmin', 'watchifyMap'], function(){
-	gulp.watch("./clients/*", ["watchifyAdmin", 'watchifyMap']);
+	gulp.watch("./clients/Map/*", ['watchifyMap']);
+	gulp.watch("./clients/Admin/*", ["watchifyAdmin"]);
 });

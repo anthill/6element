@@ -16,3 +16,7 @@
 .ant li div {
 	display: inline-block; margin: 0 1em;
 }
+
+.ant ul ul {
+	margin-left: 1em;
+}

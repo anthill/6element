@@ -168,6 +168,15 @@ app.get('/recycling-center/:rcId', function(req, res){
         .catch(debug('/recycling-center/'+req.params.rcId));
 });
 
+app.get('/sensors', function(req, res){
+    database.complexQueries.getAllSensors()
+        .then(function(data){
+            console.log('sensors data', data);
+            res.send(data);
+        })
+        .catch(debug('/sensors'));
+});
+
 // io.on('connection', function(socket) {
 //     console.log('Socket io Connexion');
 

@@ -47,20 +47,26 @@ var Ant = React.createClass({
                     React.DOM.div({}, props.ant.coords)
                 ),
                 React.DOM.li({}, 
-                    React.DOM.div({}, 'Signal'),
-                    React.DOM.div({}, props.ant.signal)
-                ),
-                React.DOM.li({}, 
-                    React.DOM.div({}, 'Registration'),
-                    React.DOM.div({}, props.ant.registration)
-                ),
-                React.DOM.li({}, 
                     React.DOM.div({}, 'Quipu Status'),
-                    React.DOM.div({}, props.ant.quipuStatus)
-                ),
-                React.DOM.li({}, 
-                    React.DOM.div({}, 'ip'),
-                    React.DOM.div({}, props.ant.ip)
+                    React.DOM.div({}, props.ant.quipuStatus),
+                    React.DOM.ul({},
+                        React.DOM.li({}, 
+                            React.DOM.div({}, 'Phone Number'),
+                            React.DOM.div({}, props.ant.phone)
+                        ),
+                        React.DOM.li({}, 
+                            React.DOM.div({}, 'Signal'),
+                            React.DOM.div({}, props.ant.signal)
+                        ),
+                        React.DOM.li({}, 
+                            React.DOM.div({}, 'Registration'),
+                            React.DOM.div({}, props.ant.registration)
+                        ),
+                        React.DOM.li({}, 
+                            React.DOM.div({}, 'ip'),
+                            React.DOM.div({}, props.ant.ip)
+                        )
+                    )
                 ),
                 React.DOM.li({}, 
                     React.DOM.div({}, '6sense Status'),

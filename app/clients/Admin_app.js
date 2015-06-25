@@ -48,20 +48,26 @@ var Ant = React.createClass({
                     React.DOM.div({}, props.ant.coords)
                 ),
                 React.DOM.li({}, 
-                    React.DOM.div({}, 'Signal'),
-                    React.DOM.div({}, props.ant.signal)
-                ),
-                React.DOM.li({}, 
-                    React.DOM.div({}, 'Registration'),
-                    React.DOM.div({}, props.ant.registration)
-                ),
-                React.DOM.li({}, 
                     React.DOM.div({}, 'Quipu Status'),
-                    React.DOM.div({}, props.ant.quipuStatus)
-                ),
-                React.DOM.li({}, 
-                    React.DOM.div({}, 'ip'),
-                    React.DOM.div({}, props.ant.ip)
+                    React.DOM.div({}, props.ant.quipuStatus),
+                    React.DOM.ul({},
+                        React.DOM.li({}, 
+                            React.DOM.div({}, 'Phone Number'),
+                            React.DOM.div({}, props.ant.phone)
+                        ),
+                        React.DOM.li({}, 
+                            React.DOM.div({}, 'Signal'),
+                            React.DOM.div({}, props.ant.signal)
+                        ),
+                        React.DOM.li({}, 
+                            React.DOM.div({}, 'Registration'),
+                            React.DOM.div({}, props.ant.registration)
+                        ),
+                        React.DOM.li({}, 
+                            React.DOM.div({}, 'ip'),
+                            React.DOM.div({}, props.ant.ip)
+                        )
+                    )
                 ),
                 React.DOM.li({}, 
                     React.DOM.div({}, '6sense Status'),
@@ -145,6 +151,7 @@ var ant1 = {
         lat: 48.38232,
         long: -0.45623
     },
+    phone: '99999999',
     ip: '192.111.112.23',
     signal: 12,
     registration: 2,
@@ -160,6 +167,7 @@ var ant2 = {
         lat: 48.38632,
         long: -0.45123
     },
+    phone: '99999999',
     ip: '192.111.112.22',
     signal: 14,
     registration: 3,
@@ -174,14 +182,23 @@ module.exports = [ant1, ant2];
 var React = require('react');
 var Application = React.createFactory(require('./Components/Application.js'));
 var makeMap = require('../../_common/src/makeMap.js');
+var serverAPI = require('../../_common/src/serverAPI.js');
+
+var errlog = console.error.bind(console);
 
 var fakeAnts = require('./fakeAnts.js');
+
+var ants = serverAPI.getAllSensors()
+    .then(function(sensors){
+        console.log('sensors', sensors);
+    })
+    .catch(errlog);
 
 // Initial rendering dsds
 React.render(new Application({
 	ants: fakeAnts
 }), document.body);
-},{"../../_common/src/makeMap.js":"/6element/app/clients/_common/src/makeMap.js","./Components/Application.js":"/6element/app/clients/Admin/src/Components/Application.js","./fakeAnts.js":"/6element/app/clients/Admin/src/fakeAnts.js","react":"/6element/node_modules/react/react.js"}],"/6element/app/clients/_common/src/makeMap.js":[function(require,module,exports){
+},{"../../_common/src/makeMap.js":"/6element/app/clients/_common/src/makeMap.js","../../_common/src/serverAPI.js":"/6element/app/clients/_common/src/serverAPI.js","./Components/Application.js":"/6element/app/clients/Admin/src/Components/Application.js","./fakeAnts.js":"/6element/app/clients/Admin/src/fakeAnts.js","react":"/6element/node_modules/react/react.js"}],"/6element/app/clients/_common/src/makeMap.js":[function(require,module,exports){
 'use strict';
 
 function makeMap(object, key){
@@ -198,6 +215,49 @@ function makeMap(object, key){
 }
 
 module.exports = makeMap;
+
+},{}],"/6element/app/clients/_common/src/serverAPI.js":[function(require,module,exports){
+"use strict";
+
+function sendReq(method, url, data){
+    return new Promise(function(resolve, reject){
+        var xhr = new XMLHttpRequest();
+
+        xhr.open(method, url);
+        if(data !== undefined && typeof data !== 'string' && !(data instanceof FormData))
+            xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+
+        xhr.responseType = 'json';
+
+        xhr.addEventListener('load', function(){
+            if(xhr.status < 400)
+                resolve(xhr.response);
+            else{
+                reject(new Error('HTTP error ' + xhr.status + ' ' + xhr.responseText));
+            }
+
+        });
+
+        xhr.addEventListener('error', reject);
+
+        if(data === undefined || typeof data === 'string' || data instanceof FormData)
+            xhr.send(data);
+        else
+            xhr.send(JSON.stringify(data));
+    });
+}
+
+module.exports = {
+    getRecyclingCenters: function(){
+        return sendReq('GET', '/live-affluence');
+    },
+    getRecyclingCenterDetails: function(rcId){
+        return sendReq('GET', '/recycling-center/'+rcId);
+    },
+    getAllSensors: function(){
+        return sendReq('GET', '/sensors');
+    }
+};
 
 },{}],"/6element/node_modules/browserify/node_modules/process/browser.js":[function(require,module,exports){
 // shim for using process in browser

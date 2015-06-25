@@ -12,6 +12,7 @@ var ant1 = {
         lat: 48.38232,
         long: -0.45623
     },
+    phone: '99999999',
     ip: '192.111.112.23',
     signal: 12,
     registration: 2,
@@ -27,6 +28,7 @@ var ant2 = {
         lat: 48.38632,
         long: -0.45123
     },
+    phone: '99999999',
     ip: '192.111.112.22',
     signal: 14,
     registration: 3,

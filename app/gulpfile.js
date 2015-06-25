@@ -9,7 +9,6 @@ var watchify = require('watchify');
 
 gulp.task('servedev', function () {
     server.run(['./server/index.js']);
-    gulp.watch(['./server/*.js'], [server.run]);
 });
 
 gulp.task('serveprod', function () {
@@ -26,6 +25,11 @@ gulp.task('buildMap', function(){
 
 gulp.task('watch', function() {
     console.log('Watching');
+    var serverWatcher = gulp.watch('./server/**', function(){
+        server.stop();
+        gulp.run('servedev');
+    });
+
     var adminWatcher = gulp.watch('./clients/Admin/src/**', ['buildAdmin']);
     var mapWatcher = gulp.watch('./clients/Map/src/**', ['buildMap']);
 

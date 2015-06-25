@@ -135,26 +135,6 @@ module.exports = {
                 });
             })
 
-        },
-
-        getAllSensors: function(){
-            return databaseP.then(function(db){
-
-                var query = sensor
-                    .select("*")
-                    .from(sensor)
-                    .where()
-                    .toQuery();
-
-                console.log('getAllsensors query', query);
-                
-                return new Promise(function (resolve, reject) {
-                    db.query(query, function (err, result) {
-                        if (err) reject(err);
-                        else resolve(result.rows);
-                    });
-                });
-            })
         }
     }
 };

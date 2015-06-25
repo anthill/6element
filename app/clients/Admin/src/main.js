@@ -12,10 +12,10 @@ var fakeAnts = require('./fakeAnts.js');
 var ants = serverAPI.getAllSensors()
     .then(function(sensors){
         console.log('sensors', sensors);
+        // Initial rendering
+		React.render(new Application({
+			ants: sensors
+		}), document.body);
     })
     .catch(errlog);
 
-// Initial rendering dsds
-React.render(new Application({
-	ants: fakeAnts
-}), document.body);

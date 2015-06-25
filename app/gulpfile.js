@@ -49,10 +49,10 @@ function browserifyShare(app){
         packageCache: {},
         fullPaths: true
     });
-    b = watchify(b);
-    b.on('update', function(){
-        bundleShare(b);
-    });
+    // b = watchify(b);
+    // b.on('update', function(){
+    //     bundleShare(b);
+    // });
     
     b.add('./clients/' + app + '/src/main.js');
     bundleShare(b, app);

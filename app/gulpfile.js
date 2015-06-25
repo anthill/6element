@@ -7,12 +7,7 @@ var browserify = require('browserify');
 var source = require("vinyl-source-stream");
 var watchify = require('watchify');
 
-gulp.task('servedev', function () {
-    server.run(['./server/index.js']);
-    gulp.watch(['./server/*.js'], [server.run]);
-});
-
-gulp.task('serveprod', function () {
+gulp.task('serve', function () {
     server.run(['./server/index.js']);
 });
 
@@ -26,6 +21,11 @@ gulp.task('buildMap', function(){
 
 gulp.task('watch', function() {
     console.log('Watching');
+    var serverWatcher = gulp.watch('./server/**', function(){
+        server.stop();
+        gulp.run('serve');
+    });
+
     var adminWatcher = gulp.watch('./clients/Admin/src/**', ['buildAdmin']);
     var mapWatcher = gulp.watch('./clients/Map/src/**', ['buildMap']);
 
@@ -67,10 +67,11 @@ function bundleShare(b, name) {
     });
 }
 
-gulp.task('dev', ['servedev', 'buildAdmin', 'buildMap', 'watch'], function(){
-    // livereload.listen(1234);
+gulp.task('dev', ['serve', 'buildAdmin', 'buildMap', 'watch'], function(){
+    console.log('Starting dev environnement');
 });
 
-gulp.task('prod', ['serveprod', 'buildAdmin', 'buildMap']);
+gulp.task('prod', ['serve', 'buildAdmin', 'buildMap']);
 
-gulp.task('default', ['servedev', 'buildAdmin', 'buildMap', 'watch']);
+gulp.task('default', ['serve', 'buildAdmin', 'buildMap', 'watch']);
+

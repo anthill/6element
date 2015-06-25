@@ -41,17 +41,16 @@ cd 6element
 npm install
 ````
 
-Then, you must copy create the missing file
+Then, you must copy/create the missing file `PRIVATE.json` situated in the `app` folfer containing:
 
 ````
-cp client/src/mapbox-credentials.json.example client/src/mapbox-credentials.json
+{
+    "twiliossi": "...",
+    "twiliopwd": "...",
+    "mapbox_token": "...",
+    "mapId": "..."
+}
 ````
-
-Sign up to [mapbox](https://www.mapbox.com/)
-
-Copy your default API access token and paste it in `/client/srcmapbox-creadentials.json` 
-
-Create a new map (or use the default one) and copy its map ID and paste it in the same file.
 
 
 ````

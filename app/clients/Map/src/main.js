@@ -11,13 +11,13 @@ var Application = React.createFactory(require('./Components/Application.js'));
 
 var errlog = console.error.bind(console);
 
-var mapbox = require('./mapbox-credentials.json');
+var PRIVATE = require('../../../PRIVATE.json');
 
 var BORDEAUX_COORDS = [44.84, -0.57];
 
 var topLevelStore = {
-    mapBoxToken: mapbox.token,
-    mapId: mapbox.mapId,
+    mapBoxToken: PRIVATE.mapbox_token,
+    mapId: PRIVATE.map_id,
     mapCenter: BORDEAUX_COORDS,
     recyclingCenterMap: undefined,
     selectedRCMap: new Map(),

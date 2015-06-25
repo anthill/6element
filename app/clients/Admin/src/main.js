@@ -6,7 +6,7 @@ var makeMap = require('../../_common/src/makeMap.js');
 
 var fakeAnts = require('./fakeAnts.js');
 
-console.log('fakeAnts', fakeAnts);
-
-// Initial rendering
-React.render(new Application, document.body);
+// Initial rendering dsds
+React.render(new Application({
+	ants: fakeAnts
+}), document.body);

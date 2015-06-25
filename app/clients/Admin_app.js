@@ -1,10 +1,86 @@
-(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({"/6element/app/clients/Admin/src/Components/Application.js":[function(require,module,exports){
+(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({"/6element/app/clients/Admin/src/Components/Ant.js":[function(require,module,exports){
 'use strict';
 
 var React = require('react');
-var Tabs = React.createFactory(require('./Tabs.js'));
-var TabContent = React.createFactory(require('./TabContent.js'));
 
+/*
+
+interface AntProps{
+    ant: {
+        id: int,
+        name: string,
+        latLng: {
+            lat: float,
+            long: float
+        },
+        ip: string,
+        signal: int,
+        registration: int,
+        quipuStatus: string,
+        6senseStatus: string
+    }
+}
+interface AppState{
+}
+
+*/
+
+var Ant = React.createClass({
+    displayName: 'Ant',
+
+    render: function() {
+        var self = this;
+        var props = this.props;
+        var state = this.state;
+
+        // console.log('APP props', props);
+        // console.log('APP state', state);
+
+        return React.DOM.div({className: 'ant'},
+            React.DOM.h1({}, props.ant.name),
+            React.DOM.ul({},
+                React.DOM.li({}, 
+                    React.DOM.div({}, 'Lieu'),
+                    React.DOM.div({}, props.ant.place)
+                ),
+                React.DOM.li({}, 
+                    React.DOM.div({}, 'Coords'),
+                    React.DOM.div({}, props.ant.coords)
+                ),
+                React.DOM.li({}, 
+                    React.DOM.div({}, 'Signal'),
+                    React.DOM.div({}, props.ant.signal)
+                ),
+                React.DOM.li({}, 
+                    React.DOM.div({}, 'Registration'),
+                    React.DOM.div({}, props.ant.registration)
+                ),
+                React.DOM.li({}, 
+                    React.DOM.div({}, 'Quipu Status'),
+                    React.DOM.div({}, props.ant.quipuStatus)
+                ),
+                React.DOM.li({}, 
+                    React.DOM.div({}, 'ip'),
+                    React.DOM.div({}, props.ant.ip)
+                ),
+                React.DOM.li({}, 
+                    React.DOM.div({}, '6sense Status'),
+                    React.DOM.div({}, props.ant.senseStatus)
+                )
+            )
+        );
+    }
+});
+
+module.exports = Ant;
+
+},{"react":"/6element/node_modules/react/react.js"}],"/6element/app/clients/Admin/src/Components/Application.js":[function(require,module,exports){
+'use strict';
+
+var React = require('react');
+// var Tabs = React.createFactory(require('./Tabs.js'));
+// var TabContent = React.createFactory(require('./TabContent.js'));
+var Ant = React.createFactory(require('./Ant.js'));
 
 /*
 
@@ -32,12 +108,6 @@ interface AppState{
 var App = React.createClass({
     displayName: 'App',
 
-    getInitialState: function(){
-        return {
-            selectedTab: 0
-        };
-    },
-
     render: function() {
         var self = this;
         var props = this.props;
@@ -46,143 +116,72 @@ var App = React.createClass({
         // console.log('APP props', props);
         // console.log('APP state', state);
 
-        var tabs = new Tabs({
-            tabNames: ['Tab1', 'Tab2'],
-            selectedTab: state.selectedTab,
-            onTabChange: function(index){
-                self.setState(Object.assign(self.state, {
-                    selectedTab: index
-                }));
-            }
-        });
+        var myAnts = [];
 
-        var tabContent = new TabContent({
-            selectedTab : state.selectedTab,
+        props.ants.forEach(function(ant){
+            myAnts.push(new Ant({ant: ant}));
         });
-
+        
         return React.DOM.div({id: 'myApp'},
-            tabs,
-            tabContent
+            myAnts
         );
     }
 });
 
 module.exports = App;
 
-},{"./TabContent.js":"/6element/app/clients/Admin/src/Components/TabContent.js","./Tabs.js":"/6element/app/clients/Admin/src/Components/Tabs.js","react":"/6element/node_modules/react/react.js"}],"/6element/app/clients/Admin/src/Components/TabContent.js":[function(require,module,exports){
-'use strict';
-
-var React = require('react');
-
-/*
-interface Tab Props{
-    selectedTab : integer
-}
-interface Tab State{
-}
-*/
-
-
-var TabContent = React.createClass({
-	displayName: 'TabContent',
-
-    render: function() {
-
-        var text = this.props.selectedTab === 0 ? 'Je suis dans la partie 1' : 'Je suis dans la partie 2';
-
-        return React.DOM.div({}, text);
-    }
-});
-
-
-module.exports = TabContent;
-},{"react":"/6element/node_modules/react/react.js"}],"/6element/app/clients/Admin/src/Components/Tabs.js":[function(require,module,exports){
-'use strict';
-
-var React = require('react');
-
-/*
-interface Tabs Props{
-    tabNames: String[],
-    selectedTab : integer,
-    onTabChange: (newTabIndex: number) => void
-}
-interface Tabs State{
-}
-*/
-
-
-var Tabs = React.createClass({
-    displayName: 'Tabs',
-
-    render: function() {
-
-        var self = this;
-        var state = this.state;
-        var props = this.props;
-
-        // console.log('TABS props', props);
-
-        var tabList = props.tabNames.map(function(tabName, index){
-            var style = '';
-
-            if (props.selectedTab === index){
-                style = 'selected';
-            }
-
-            return React.DOM.li({
-                className : style,
-                onClick: function(){
-                    console.log('index', index);
-                    props.onTabChange(index);
-                }
-            }, tabName);
-        });
-
-        
-
-        return React.DOM.ul({className : "tabs"}, 
-            tabList
-        );
-    }
-});
-
-module.exports = Tabs;
-},{"react":"/6element/node_modules/react/react.js"}],"/6element/app/clients/Admin/src/fakeAnts.js":[function(require,module,exports){
+},{"./Ant.js":"/6element/app/clients/Admin/src/Components/Ant.js","react":"/6element/node_modules/react/react.js"}],"/6element/app/clients/Admin/src/fakeAnts.js":[function(require,module,exports){
 'use strict';
 
 require('es6-shim');
-var makeMap = require('../../_common/src/makeMap.js');
+
 
 
 var ant1 = {
-	id: 0,
-	name: 'ant1'
+    id: 0,
+    name: 'ant1',
+    place: 'St Mariens',
+    latLng: {
+        lat: 48.38232,
+        long: -0.45623
+    },
+    ip: '192.111.112.23',
+    signal: 12,
+    registration: 2,
+    quipuStatus: '3G_connected',
+    senseStatus: 'sleeping'
 };
 
 var ant2 = {
-	id: 1,
-	name: 'ant2'
+    id: 1,
+    name: 'ant2',
+    place: 'St Denis',
+    latLng: {
+        lat: 48.38632,
+        long: -0.45123
+    },
+    ip: '192.111.112.22',
+    signal: 14,
+    registration: 3,
+    quipuStatus: 'initialized',
+    senseStatus: 'recording'
 };
 
-
-var myMap = makeMap([ant1, ant2], 'id');
-
-
-module.exports = myMap;
-},{"../../_common/src/makeMap.js":"/6element/app/clients/_common/src/makeMap.js","es6-shim":"/6element/node_modules/es6-shim/es6-shim.js"}],"/6element/app/clients/Admin/src/main.js":[function(require,module,exports){
+module.exports = [ant1, ant2];
+},{"es6-shim":"/6element/node_modules/es6-shim/es6-shim.js"}],"/6element/app/clients/Admin/src/main.js":[function(require,module,exports){
 'use strict';
 
 var React = require('react');
 var Application = React.createFactory(require('./Components/Application.js'));
+var makeMap = require('../../_common/src/makeMap.js');
 
 var fakeAnts = require('./fakeAnts.js');
 
-console.log('fakeAnts', fakeAnts);
-
-// Initial rendering
-React.render(new Application, document.body);
-},{"./Components/Application.js":"/6element/app/clients/Admin/src/Components/Application.js","./fakeAnts.js":"/6element/app/clients/Admin/src/fakeAnts.js","react":"/6element/node_modules/react/react.js"}],"/6element/app/clients/_common/src/makeMap.js":[function(require,module,exports){
+// Initial rendering dsds
+React.render(new Application({
+	ants: fakeAnts
+}), document.body);
+},{"../../_common/src/makeMap.js":"/6element/app/clients/_common/src/makeMap.js","./Components/Application.js":"/6element/app/clients/Admin/src/Components/Application.js","./fakeAnts.js":"/6element/app/clients/Admin/src/fakeAnts.js","react":"/6element/node_modules/react/react.js"}],"/6element/app/clients/_common/src/makeMap.js":[function(require,module,exports){
 'use strict';
 
 function makeMap(object, key){

@@ -1,8 +1,18 @@
-.tabs{
-	display: block;
-	cursor: pointer;
+/*
+// 1. boîte
+// 2. bordures
+// 3. arrière-plan
+// 4. texte
+// 5. transformations
+// 6. transitions
+// 7. le reste
+*/
+
+.ant{
+	display: inline-block; margin: 1em; padding: .5em;
+	border: 1px solid black; border-radius: 5px;
 }
 
-.tabs .selected{
-	font-weight: bold;
+.ant li div {
+	display: inline-block; margin: 0 1em;
 }

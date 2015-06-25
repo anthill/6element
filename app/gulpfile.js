@@ -16,12 +16,18 @@ gulp.task('serveprod', function () {
 	server.run(['./server/index.js']);
 });
 
-gulp.task('watchifyAdmin', function(){
+gulp.task('buildAdmin', function(){
 	browserifyShare('Admin');
 });
 
-gulp.task('watchifyMap', function(){
+gulp.task('buildMap', function(){
 	browserifyShare('Map');
+});
+
+gulp.task('watch', function() {
+	console.log('Watching');
+  	gulp.watch('./clients/Admin/src/**', ['buildAdmin']);
+  	gulp.watch('./clients/Map/src/**', ['buildMap']);
 });
 
 
@@ -49,21 +55,8 @@ function bundleShare(b, name) {
 	});
 }
 
-gulp.task('dev', ['servedev', 'watchifyAdmin', 'watchifyMap'], function(){
-	livereload.listen(1234);
-	gulp.watch("./clients/Map/*", ["watchifyMap"], function(e){
-		console.log('Changed: ', e); // can't find any log with this => where is it ?
-		livereload.changed(e.path); // this doesn't work for now
-	});
-	gulp.watch("./clients/Admin/*", ["watchifyAdmin"], function(e){
-		console.log('Changed: ', e); // can't find any log with this => where is it ?
-		livereload.changed(e.path); // this doesn't work for now
-	});
-});
+gulp.task('dev', ['servedev', 'buildAdmin', 'buildMap', 'watch']);
 
-gulp.task('prod', ['serveprod', 'watchifyAdmin', 'watchifyMap']);
+gulp.task('prod', ['serveprod', 'buildAdmin', 'buildMap']);
 
-gulp.task('default', ['servedev', 'watchifyAdmin', 'watchifyMap'], function(){
-	gulp.watch("./clients/Map/*", ['watchifyMap']);
-	gulp.watch("./clients/Admin/*", ["watchifyAdmin"]);
-});
+gulp.task('default', ['servedev', 'buildAdmin', 'buildMap', 'watch']);

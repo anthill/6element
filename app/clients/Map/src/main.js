@@ -11,7 +11,7 @@ var Application = React.createFactory(require('./Components/Application.js'));
 
 var errlog = console.error.bind(console);
 
-var PRIVATE = require('../../PRIVATE.json');
+var PRIVATE = require('../../../PRIVATE.json');
 
 var BORDEAUX_COORDS = [44.84, -0.57];
 

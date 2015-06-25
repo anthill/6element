@@ -5,7 +5,7 @@ var server = require('gulp-express');
 // var livereload = require('gulp-livereload');
 var browserify = require('browserify');
 var source = require("vinyl-source-stream");
-var watchify = require('watchify');
+// var watchify = require('watchify');
 
 gulp.task('serve', function () {
     server.run(['./server/index.js']);
@@ -49,10 +49,10 @@ function browserifyShare(app){
         packageCache: {},
         fullPaths: true
     });
-    b = watchify(b);
-    b.on('update', function(){
-        bundleShare(b);
-    });
+    // b = watchify(b);
+    // b.on('update', function(){
+    //     bundleShare(b);
+    // });
     
     b.add('./clients/' + app + '/src/main.js');
     bundleShare(b, app);

@@ -1,14 +1,11 @@
 'use strict';
 
 var React = require('react');
-var RCs = React.createFactory(require('./RCs.js'));
-var RcContent = React.createFactory(require('./RcContent.js'));
-
 
 /*
 
 interface AppProps{
-    rcs: []
+    rcFake: {}
 }
 interface AppState{
     selectedRC: int
@@ -19,42 +16,41 @@ interface AppState{
 var App = React.createClass({
     displayName: 'App',
 
-    getInitialState: function(){
+    /*getInitialState: function(){
         return {
-            selectedRC: 0
+            selectedRC: undefined
         };
-    },
-
+    },*/
+    
     render: function() {
         var self = this;
         var props = this.props;
-        //props.rcs = ma liste
         var state = this.state;
 
         // console.log('APP props', props);
         // console.log('APP state', state);
-        
-        var rcNames = props.rcs.map(function(rc){
-            return rc.name;
-        });
 
-        var rcList = new RCs({
-            rcNames: rcNames,
-            selectedRC: state.selectedRC,
-            onRCChange: function(index){
-                self.setState(Object.assign(self.state, {
-                    selectedRC: index
-                }));
-            }
-        });
         
-        var rcContent = new RcContent({
+        /*var rcContent = new RcContent({
             selectedRC : props.rcs[state.selectedRC]
-        });
+        });*/
+        var lis = [];
+        
+        for(var field in props.rcFake)
+        {
+            var li = React.DOM.li({}, 
+                React.DOM.div({}, field),
+                React.DOM.div({}, props.rcFake[field])
+            );
+            
+            console.log('li', li);
+            
+            lis.push(li);
+        }
         
         return React.DOM.div({id: 'myApp'},
-            rcList,
-            rcContent
+            React.DOM.h1({}, props.rcFake.name),
+            React.DOM.div({}, lis)
         )
     }
 });

@@ -1,8 +1,13 @@
 .rcs{
-	display: block;
+	display: inline-block;
 	cursor: pointer;
 }
 
 .rcs .selected{
 	font-weight: bold;
+}
+
+.rcContent{
+    display: inline-block;
+    vertical-align: top;
 }

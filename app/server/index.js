@@ -98,6 +98,10 @@ app.post('/twilio', function(req, res) {
 
     debug("Received sms from ", req.body.From, req.body.Body );
 
+    // filter messages beginning with 0 (plain text) or 1 (decoding needed)
+    // plain text msgs are to be stored in Sensor DB
+    // coded msgs are to be stored in SensorMeasuremtn DB
+
     // find sensor id by phone number
     database.Sensors.findByPhoneNumber(req.body.From)
         .then(function(sensor){
@@ -149,18 +153,47 @@ app.post('/twilio', function(req, res) {
                         .catch(function(error){
                             console.log("Error in decoding: ", error);
                         });
-                    // case of clear message
-                    } else if (req.body.Body[0] === "0")  {
-                        switch(body) {
-                            case "init":
-                                debug("Received init");
-                                var date = new Date();
-                                sendSMS("date:" + date.toISOString(), req.body.From);
-                                break;
-                        }
-                    } else {
-                        console.log("Error: message has not type character");
+                // case of clear message
+                } else if (req.body.Body[0] === "0")  {
+                    var header = body.shift();
+                    switch(header) {
+                        case "init":
+                            debug("Received init");
+                            var date = new Date();
+                            sendSMS("date:" + date.toISOString(), req.body.From);
+                            break;
+                        case "status":
+
+                            /* status infos expected:
+                                qst: quipu status
+                                sst: 6sense status
+                                sig: signal strength => maybe should be in measurement messages
+                            */
+
+                            debug("Received" + sensor.name + "status");
+                            var toPersistInfos = body.map(function(item){
+                                var infos = item.split();
+                                console.log('infos', infos[0], infos[1]);
+                                return infos;
+                            });
+
+                            // store toPersistInfos in DB
+                            var persistP = dataBase.Sensors.update(sensor.id, toPersistInfos);
+                            persistP.then(function(){
+                                debug("Storage SUCCESS");
+                                res.set('Content-Type', 'text/xml');
+                                res.send(xml({"Response":""}));
+                            })
+                            .catch(function(id){
+                                console.log("Storage FAILURE: ", id);
+                                res.set('Content-Type', 'text/xml');
+                                res.send(xml({"Response":""}));
+                            });
+
                     }
+                } else {
+                    console.log("Error: message has not type character");
+                }
             } else {
                 console.log("No sensor corresponding to this number.");
             }

@@ -4,7 +4,7 @@ var React = require('react');
 
 /*
 interface Rcs Props{
-    selectedRc : integer
+    selectedRC : RC
 }
 interface Rcs State{
 }
@@ -15,10 +15,10 @@ var RcContent = React.createClass({
 	displayName: 'RcContent',
 
     render: function() {
-
-        var text = this.props.selectedRc === 0 ? 'Je suis dans la première déchetterie' : 'Je suis dans une autre';
-
-        return React.DOM.div({}, text);
+        
+        console.log('RCCONTENT', this.props.selectedRC);
+        
+        return React.DOM.div({}, this.props.selectedRC.coords);
     }
 });
 

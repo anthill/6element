@@ -27,7 +27,7 @@ var RCs = React.createClass({
         var rcList = props.rcNames.map(function(name, index){
             var style = '';
 
-            if (props.selectedRc === index){
+            if (props.selectedRC === index){
                 style = 'selected';
             }
 

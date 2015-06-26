@@ -2,6 +2,7 @@
 
 var React = require('react');
 var RCs = React.createFactory(require('./RCs.js'));
+var RcContent = React.createFactory(require('./RcContent.js'));
 
 
 /*
@@ -37,7 +38,7 @@ var App = React.createClass({
             return rc.name;
         });
 
-        var rcs = new RCs({
+        var rcList = new RCs({
             rcNames: rcNames,
             selectedRC: state.selectedRC,
             onRCChange: function(index){
@@ -46,10 +47,15 @@ var App = React.createClass({
                 }));
             }
         });
-
+        
+        var rcContent = new RcContent({
+            selectedRC : props.rcs[state.selectedRC]
+        });
+        
         return React.DOM.div({id: 'myApp'},
-            rcs
-        );
+            rcList,
+            rcContent
+        )
     }
 });
 

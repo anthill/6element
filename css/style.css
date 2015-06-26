@@ -1,8 +1,8 @@
-.tabs{
+.rcs{
 	display: block;
 	cursor: pointer;
 }
 
-.tabs .selected{
+.rcs .selected{
 	font-weight: bold;
 }

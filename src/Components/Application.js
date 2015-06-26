@@ -1,16 +1,16 @@
 'use strict';
 
 var React = require('react');
-var Tabs = React.createFactory(require('./Tabs.js'));
+var RCs = React.createFactory(require('./RCs.js'));
 
 
 /*
 
 interface AppProps{
-
+    rcs: []
 }
 interface AppState{
-    selectedTab: int
+    selectedRC: int
 }
 
 */
@@ -20,30 +20,35 @@ var App = React.createClass({
 
     getInitialState: function(){
         return {
-            selectedTab: 0
+            selectedRC: 0
         };
     },
 
     render: function() {
         var self = this;
         var props = this.props;
+        //props.rcs = ma liste
         var state = this.state;
 
         // console.log('APP props', props);
         // console.log('APP state', state);
+        
+        var rcNames = props.rcs.map(function(rc){
+            return rc.name;
+        });
 
-        var tabs = new Tabs({
-            tabNames: ['Tab1', 'Tab2'],
-            selectedTab: state.selectedTab,
-            onTabChange: function(index){
+        var rcs = new RCs({
+            rcNames: rcNames,
+            selectedRC: state.selectedRC,
+            onRCChange: function(index){
                 self.setState(Object.assign(self.state, {
-                    selectedTab: index
+                    selectedRC: index
                 }));
             }
         });
 
         return React.DOM.div({id: 'myApp'},
-            tabs
+            rcs
         );
     }
 });

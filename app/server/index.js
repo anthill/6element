@@ -259,9 +259,12 @@ io.on('connection', function(socket) {
         var id = Math.floor(Math.random() * 28);
         console.log('emitting', id);
         socket.emit('status', {
-            quipu_status: 'Sleeping'
+            sensorId: id,
+            socketMessage: {
+                quipu_status: 'sleeping'
+            }
         });
-    }, 2000);
+    }, 5000);
 });
 
 

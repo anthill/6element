@@ -8,5 +8,8 @@ module.exports = {
     },
     getRecyclingCenterDetails: function(rcId){
         return sendReq('GET', '/recycling-center/'+rcId);
+    },
+    getAllSensors: function(){
+        return sendReq('GET', '/sensors');
     }
 };

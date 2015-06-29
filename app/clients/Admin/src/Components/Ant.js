@@ -35,6 +35,8 @@ var Ant = React.createClass({
         // console.log('APP props', props);
         // console.log('APP state', state);
 
+        var status = props.ant.quipu_status !== 'NULL' ? 'sleeping' : '';
+
 
         return React.DOM.div({className: 'ant'},
             React.DOM.h1({}, props.ant.name),
@@ -62,49 +64,13 @@ var Ant = React.createClass({
                 React.DOM.li({}, 
                     React.DOM.div({}, 'Phone'),
                     React.DOM.div({}, props.ant.phone_number)
+                ),
+                React.DOM.li({},
+                    React.DOM.div({}, 'Quipu Status'),
+                    React.DOM.div({className: status}, props.ant.quipu_status)
                 )
             )
         );
-
-        /*return React.DOM.div({className: 'ant'},
-            React.DOM.h1({}, props.ant.name),
-            React.DOM.ul({},
-                React.DOM.li({}, 
-                    React.DOM.div({}, 'Lieu'),
-                    React.DOM.div({}, props.ant.place)
-                ),
-                React.DOM.li({}, 
-                    React.DOM.div({}, 'Coords'),
-                    React.DOM.div({}, props.ant.coords)
-                ),
-                React.DOM.li({}, 
-                    React.DOM.div({}, 'Quipu Status'),
-                    React.DOM.div({}, props.ant.quipuStatus),
-                    React.DOM.ul({},
-                        React.DOM.li({}, 
-                            React.DOM.div({}, 'Phone Number'),
-                            React.DOM.div({}, props.ant.phone)
-                        ),
-                        React.DOM.li({}, 
-                            React.DOM.div({}, 'Signal'),
-                            React.DOM.div({}, props.ant.signal)
-                        ),
-                        React.DOM.li({}, 
-                            React.DOM.div({}, 'Registration'),
-                            React.DOM.div({}, props.ant.registration)
-                        ),
-                        React.DOM.li({}, 
-                            React.DOM.div({}, 'ip'),
-                            React.DOM.div({}, props.ant.ip)
-                        )
-                    )
-                ),
-                React.DOM.li({}, 
-                    React.DOM.div({}, '6sense Status'),
-                    React.DOM.div({}, props.ant.senseStatus)
-                )
-            )
-        );*/
     }
 });
 

@@ -47,11 +47,11 @@ function generateSensors(recyclingCenterIds){
         return database.Sensors.create({
             name: 'sensor '+i,
             installed_at: rcId,
-            phone_number: "xxx"+i,
-            quipu_status: 'NULL',
-            sense_status: 'NULL',
-            latest_input: 'NULL',
-            latest_output: 'NULL'
+            phone_number: "xxx"+i
+            // quipu_status: 'NULL',
+            // sense_status: 'NULL',
+            // latest_input: 'NULL',
+            // latest_output: 'NULL'
         });
     }));
 }

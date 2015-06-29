@@ -2,7 +2,7 @@
 
 var React = require('react');
 
-var serverAPI = require('../../_common/serverAPI.js');
+var serverAPI = require('../../_common/js/serverAPI.js');
 var makeMap = require('./utils.js').makeMap;
 
 var io = require('socket.io-client');
@@ -58,7 +58,7 @@ serverAPI.getRecyclingCenters()
     })
     .catch(errlog);
 
-var socket = io(process.env.SOCKETIO_SERVER);
+var socket = io();
 
 socket.on('data', function (data) {
 

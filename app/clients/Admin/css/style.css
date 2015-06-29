@@ -20,3 +20,7 @@
 .ant ul ul {
 	margin-left: 1em;
 }
+
+.ant .sleeping {
+	color: blue;
+}

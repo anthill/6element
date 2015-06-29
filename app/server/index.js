@@ -94,7 +94,7 @@ app.get('/live-affluence', function(req, res){
 });
 
 
-var socketMessage;
+var socketMessage; 
 
 // endpoint receiving the sms from twilio
 app.post('/twilio', function(req, res) {

@@ -26,11 +26,13 @@ var sendSMS = require('./sendSMS.js');
 var PORT = 4000;
 var DEBUG = process.env.DEBUG ? process.env.DEBUG : false;
 
-var debug = function() {
-    if (DEBUG) {
-        console.log("DEBUG from 6element server:");
-        console.log.apply(console, arguments);
-        console.log("==================");
+var debug = function(msg) {
+    return function(){
+        if (DEBUG) {
+            console.log("DEBUG from 6element server:");
+            console.log.apply(console, [msg].concat(Array.from(arguments)));
+            console.log("==================");
+        }
     };
 }
 
@@ -241,17 +243,27 @@ app.get('/recycling-center/:rcId', function(req, res){
         .catch(debug('/recycling-center/'+req.params.rcId));
 });
 
+app.get('/sensors', function(req, res){
+    database.Sensors.getAllSensors()
+        .then(function(data){
+            // console.log('sensors data', data);
+            res.send(data);
+        })
+        .catch(debug('/sensors'));
+});
+
 io.on('connection', function(socket) {
     console.log('Socket io Connexion');
 
     setInterval(function(){
         var id = Math.floor(Math.random() * 28);
         console.log('emitting', id);
-        socket.emit('data', {
+        socket.emit('status', {
             quipu_status: 'Sleeping'
         });
     }, 2000);
 });
+
 
 server.listen(PORT, function () {
     console.log('Server running on', [

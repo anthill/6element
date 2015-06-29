@@ -50,6 +50,7 @@ module.exports = {
             });
         })        
     },
+    
     update: function(sensor, delta) {
         return databaseP.then(function (db) {
             
@@ -59,13 +60,32 @@ module.exports = {
                 .toQuery();
 
             //console.log('sensors findByPhoneNumber query', query);
-
             return new Promise(function (resolve, reject) {
                 db.query(query, function (err, result) {
                     if (err) reject(err);
                     else resolve(result.rows[0]);
                 });
             });
-        })        
+        });
+    },
+
+    getAllSensors: function() {
+        return databaseP.then(function (db) {
+            
+            var query = sensors
+                .select("*")
+                .from(sensors)
+                .toQuery();
+
+            // console.log('sensors query', query);
+            return new Promise(function (resolve, reject) {
+                db.query(query, function (err, result) {
+                    if (err) reject(err);
+
+                    else resolve(result.rows);
+                });
+            });
+        });        
     }
+
 };

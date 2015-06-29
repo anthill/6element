@@ -1,14 +1,26 @@
 'use strict';
 
 var React = require('react');
-var Tabs = React.createFactory(require('./Tabs.js'));
-var TabContent = React.createFactory(require('./TabContent.js'));
-
+// var Tabs = React.createFactory(require('./Tabs.js'));
+// var TabContent = React.createFactory(require('./TabContent.js'));
+var Ant = React.createFactory(require('./Ant.js'));
 
 /*
 
 interface AppProps{
-
+    ants: Map (id => ant{
+        id: int,
+        name: strint,
+        latLng: {
+            lat: float,
+            long: float
+        },
+        ip: string,
+        signal: int,
+        registration: int,
+        quipuStatus: string,
+        6senseStatus: string
+    });
 }
 interface AppState{
     selectedTab: int
@@ -19,12 +31,6 @@ interface AppState{
 var App = React.createClass({
     displayName: 'App',
 
-    getInitialState: function(){
-        return {
-            selectedTab: 0
-        };
-    },
-
     render: function() {
         var self = this;
         var props = this.props;
@@ -33,23 +39,14 @@ var App = React.createClass({
         // console.log('APP props', props);
         // console.log('APP state', state);
 
-        var tabs = new Tabs({
-            tabNames: ['Tab1', 'Tab2'],
-            selectedTab: state.selectedTab,
-            onTabChange: function(index){
-                self.setState(Object.assign(self.state, {
-                    selectedTab: index
-                }));
-            }
-        });
+        var myAnts = [];
 
-        var tabContent = new TabContent({
-            selectedTab : state.selectedTab,
+        props.ants.forEach(function(ant){
+            myAnts.push(new Ant({ant: ant}));
         });
-
+        
         return React.DOM.div({id: 'myApp'},
-            tabs,
-            tabContent
+            myAnts
         );
     }
 });

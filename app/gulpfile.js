@@ -74,3 +74,4 @@ gulp.task('dev', ['serve', 'buildAdmin', 'buildMap', 'watch'], function(){
 gulp.task('prod', ['serve', 'buildAdmin', 'buildMap']);
 
 gulp.task('default', ['serve', 'buildAdmin', 'buildMap', 'watch']);
+

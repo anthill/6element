@@ -2,7 +2,7 @@
 
 var React = require('react');
 
-var serverAPI = require('./serverAPI.js');
+var serverAPI = require('../../_common/serverAPI.js');
 var makeMap = require('./utils.js').makeMap;
 
 var io = require('socket.io-client');
@@ -52,7 +52,7 @@ serverAPI.getRecyclingCenters()
     .then(function(recyclingCenters){
         console.log('recyclingCenters', recyclingCenters);
     
-        topLevelStore.recyclingCenterMap = makeMap(recyclingCenters);
+        topLevelStore.recyclingCenterMap = makeMap(recyclingCenters, 'id');
     
         render();
     })

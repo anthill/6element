@@ -1,11 +1,11 @@
 module.exports = {
 
-	makeMap: function(object){
+	makeMap: function(object, desiredKey){
 		var myMap = new Map();
 
-		for (var field in object){
-		    myMap.set(object[field].id, object[field]);
-		}
+		object.keys().forEach(function(key){
+			myMap.set(object[key][desiredKey], object[key]);
+		});
 
 		return myMap;
 	}

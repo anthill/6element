@@ -6,6 +6,12 @@ var databaseP = require('../management/databaseClientP');
 
 var sensors = require('../management/declarations.js').sensors;
 
+var QUIPU_STATUSES = {
+    OK: 'ok',
+    BLA: 'bla'
+}
+
+
 module.exports = {
     create: function (data) {
         return databaseP.then(function (db) {
@@ -32,6 +38,24 @@ module.exports = {
                 .select("*")
                 .from(sensors)
                 .where(sensors.phone_number.equals(phoneNumber))
+                .toQuery();
+
+            //console.log('sensors findByPhoneNumber query', query);
+
+            return new Promise(function (resolve, reject) {
+                db.query(query, function (err, result) {
+                    if (err) reject(err);
+                    else resolve(result.rows[0]);
+                });
+            });
+        })        
+    },
+    update: function(sensor, delta) {
+        return databaseP.then(function (db) {
+            
+            var query = sensors
+                .update(delta)
+                .where(sensors.id.equals(sensor.id))
                 .toQuery();
 
             //console.log('sensors findByPhoneNumber query', query);

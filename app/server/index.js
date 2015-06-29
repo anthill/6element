@@ -96,7 +96,8 @@ app.get('/live-affluence', function(req, res){
 // endpoint receiving the sms from twilio
 app.post('/twilio', function(req, res) {
 
-    debug("Received sms from ", req.body.From, req.body.Body);
+    // debug("Received sms from ", req.body.From, req.body.Body);
+    console.log("Received sms from ", req.body.From, req.body.Body);
 
     // filter messages beginning with 0 (plain text) or 1 (decoding needed)
     // plain text msgs are to be stored in Sensor DB
@@ -113,7 +114,7 @@ app.post('/twilio', function(req, res) {
                 // case of an encoded message
 
                 switch (header){
-                    case 0:
+                    case '0':
                         // var received = JSON.parse(body.replace('(', '{').replace(')', '}'));
 
                         // debug('Received ' + sensor.name + ' info: ' + received.info.command + ' ' + received.info.result);
@@ -147,7 +148,7 @@ app.post('/twilio', function(req, res) {
 
                         break;
 
-                    case 1:
+                    case '1':
                         decoder(body)
                             .then(function(decodedMsg){
 
@@ -191,13 +192,14 @@ app.post('/twilio', function(req, res) {
                             });
                         break;
 
-                    case 2:
+                    case '2':
                         quipuParser.decode(body)
                             .then(function(sensorStatus){
-                                return database.Sensors.update(sensor, sensorStatus)
-                                    .then(function(id){
+                                return database.Sensors.update(sensor, {quipu_status: sensorStatus.quipu_status})
+                                    .then(function(){
+                                        console.log('id', sensor.id);
                                         return {
-                                            sensorId: id,
+                                            sensorId: sensor.id,
                                             socketMessage: sensorStatus
                                         };
                                     });
@@ -252,20 +254,20 @@ app.get('/sensors', function(req, res){
         .catch(debug('/sensors'));
 });
 
-io.on('connection', function(socket) {
-    console.log('Socket io Connexion');
+// io.on('connection', function(socket) {
+//     console.log('Socket io Connexion');
 
-    setInterval(function(){
-        var id = Math.floor(Math.random() * 28);
-        console.log('emitting', id);
-        socket.emit('status', {
-            sensorId: id,
-            socketMessage: {
-                quipu_status: 'sleeping'
-            }
-        });
-    }, 5000);
-});
+//     setInterval(function(){
+//         var id = Math.floor(Math.random() * 28);
+//         console.log('emitting', id);
+//         socket.emit('status', {
+//             sensorId: id,
+//             socketMessage: {
+//                 quipu_status: 'sleeping'
+//             }
+//         });
+//     }, 2000);
+// });
 
 
 server.listen(PORT, function () {

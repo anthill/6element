@@ -26,32 +26,55 @@ serverAPI.getAllSensors()
     .then(function(sensors){
         console.log('sensors', makeMap(sensors, 'id'));
         topLevelStore.ants = makeMap(sensors, 'id');
+
+        console.log('topLevelStore', topLevelStore.ants);
         // Initial rendering
 		render();
+
+		socket.on('status', function (msg) {
+
+		    // GET DATA
+		    var id = msg.sensorId;
+		    var status = msg.socketMessage;
+		    console.log('Hello', status, id);
+
+		    var updatingAnt = topLevelStore.ants.get(id);
+		    updatingAnt.quipu_status = status;
+		    
+		    topLevelStore.ants.set(id, updatingAnt);
+		    console.log('ant', updatingAnt);
+
+		    // ANIMATE
+		    topLevelStore.updatingID = id;
+		    render();
+
+		    setTimeout(function(){
+		        topLevelStore.updatingID = undefined;
+		        render();
+		    }, 200);
+
+		});
     })
     .catch(errlog);
 
+var quipu = require('quipu/parser.js');
+var sendReq = require('../../_common/js/sendReq.js');
 
-socket.on('status', function (msg) {
+setTimeout(function(){
 
-    // GET DATA
-    var id = msg.sensorId;
-    var status = msg.socketMessage;
-    console.log('Hello', status, id);
+	quipu.encode({quipu_status: 'initialized'})
+	.then(function(msg){
+		var toSend = {
+			From: 'xxx1',
+			Body: '2' + msg
+		};
 
-    var updatingAnt = topLevelStore.ants.get(id);
-    updatingAnt.quipu_status = 'sleeping';
+		console.log('Sending', toSend);
+		sendReq('POST', '/twilio', toSend);
+	})
+	.catch(function(err){
+		console.log(err);
+	});
 
-    topLevelStore.ants.set(id, updatingAnt);
-    // console.log('ant', ant);
+}, 5000);
 
-    // ANIMATE
-    topLevelStore.updatingID = id;
-    render();
-
-    setTimeout(function(){
-        topLevelStore.updatingID = undefined;
-        render();
-    }, 200);
-
-});

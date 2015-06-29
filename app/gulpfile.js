@@ -1,4 +1,4 @@
-"use strict;"
+"use strict";
 
 var gulp = require('gulp');
 var server = require('gulp-express');
@@ -74,3 +74,8 @@ gulp.task('dev', ['serve', 'buildAdmin', 'buildMap', 'watch'], function(){
 gulp.task('prod', ['serve', 'buildAdmin', 'buildMap']);
 
 gulp.task('default', ['serve', 'buildAdmin', 'buildMap', 'watch']);
+
+process.on('uncaughtException', function(e){
+    console.error('uncaught', e, e.stack);
+    process.kill();
+})

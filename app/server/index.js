@@ -25,12 +25,16 @@ var sendSMS = require('./sendSMS.js');
 var PORT = 4000;
 var DEBUG = process.env.DEBUG ? process.env.DEBUG : false;
 
-var debug = function() {
-    if (DEBUG) {
-        console.log("DEBUG from 6element server:");
-        console.log.apply(console, arguments);
-        console.log("==================");
-    };
+function debug() {
+    var args = Array.from(arguments);
+    
+    return function(){
+        if (DEBUG) {
+            console.log("DEBUG from 6element server:");
+            console.log.apply(console, args.concat(arguments));
+            console.log("==================");
+        };
+    }
 }
 
 function rand(n){
@@ -56,7 +60,6 @@ io.on('connection', function(_socket) {
 
 
 app.use(compression());
-app.use(bodyParser.urlencoded());
 app.use(bodyParser.json());
 
 app.use("/leaflet.css", express.static(path.join(__dirname, '../../node_modules/leaflet/dist/leaflet.css')));
@@ -204,3 +207,8 @@ server.listen(PORT, function () {
     ].join(''));
 });
 
+
+process.on('uncaughtException', function(e){
+    console.error('uncaught', e, e.stack);
+    process.kill();
+})

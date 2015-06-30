@@ -1,16 +1,16 @@
 'use strict';
 
 var React = require('react');
-var Application = React.createFactory(require('./Components/Application.js'));
-var makeMap = require('../../_common/js/makeMap.js');
-var serverAPI = require('../../_common/js/serverAPI.js');
 var io = require('socket.io-client');
 
-var errlog = console.error.bind(console);
-
-var fakeAnts = require('./fakeAnts.js');
+var Application = React.createFactory(require('./Components/Application.js'));
+var makeMap = require('../../_common/js/makeMap.js');
+var resetUpdate = require('../../_common/js/resetUpdate.js');
+var serverAPI = require('../../_common/js/serverAPI.js');
 
 var socket = io();
+
+var errlog = console.error.bind(console);
 
 var topLevelStore = {
 	ants: undefined
@@ -18,12 +18,6 @@ var topLevelStore = {
 
 function render(){
     React.render(new Application(topLevelStore), document.body);
-}
-
-function resetUpdate(map){
-	map.forEach(function(element){
-		element.isUpdating = false;
-	});
 }
 
 serverAPI.getAllSensors()
@@ -67,33 +61,33 @@ socket.on('status', function (msg) {
 
 
 
-var quipu = require('quipu/parser.js');
-var sendReq = require('../../_common/js/sendReq.js');
+// var quipu = require('quipu/parser.js');
+// var sendReq = require('../../_common/js/sendReq.js');
 
-setInterval(function(){
+// setInterval(function(){
 
-	var id = Math.floor(Math.random() * 28);
+// 	var id = Math.floor(Math.random() * 28);
 
-	quipu.encode({
-		info: {
-			command: 'connect3G',
-			result: 'OK'
-		},
-		quipu: '3G_connected',
-		sense: 'recording'
-	})
-	.then(function(msg){
-		var toSend = {
-			From: 'xxx' + id,
-			Body: '2' + msg
-		};
+// 	quipu.encode({
+// 		info: {
+// 			command: 'connect3G',
+// 			result: 'OK'
+// 		},
+// 		quipu: '3G_connected',
+// 		sense: 'recording'
+// 	})
+// 	.then(function(msg){
+// 		var toSend = {
+// 			From: 'xxx' + id,
+// 			Body: '2' + msg
+// 		};
 
-		console.log('Sending', toSend);
-		sendReq('POST', '/twilio', toSend);
-	})
-	.catch(function(err){
-		console.log(err);
-	});
+// 		console.log('Sending', toSend);
+// 		sendReq('POST', '/twilio', toSend);
+// 	})
+// 	.catch(function(err){
+// 		console.log(err);
+// 	});
 
-}, 3000);
+// }, 3000);
 

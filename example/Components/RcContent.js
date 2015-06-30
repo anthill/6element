@@ -42,8 +42,7 @@ var RcContent = React.createClass({
             
         return React.DOM.div({className: 'rcContent'}, 
             React.DOM.h1({}, 'Informations'), 
-            React.DOM.ul({},
-                lis
+            React.DOM.ul({},lis
             )
         );       
     }

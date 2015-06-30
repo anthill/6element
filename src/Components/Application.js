@@ -91,15 +91,47 @@ var App = React.createClass({
         };  // sort bins unavaiable / avaiable
         
         var wasteList;
-        for (var waste in props.rcFake.wastes)
-        {
-            props.rcFake.wastes[waste]["status"] === "unavaiable" ? 
-                wasteList.unavaiable.push(props.rcFake.wastes[waste]["type"]) :
-                wasteList.avaiable.push(props.rcFake.wastes[waste]["type"]);                                       
+        
+        for (var waste in props.rcFake.wastes) {
+            if (props.rcFake.wastes[waste]["status"] === "unavaiable") { 
+                wastes.unavaiable.push(props.rcFake.wastes[waste]["type"]);
+            }
+            else {
+                wastes.avaiable.push(props.rcFake.wastes[waste]["type"]);   
+            }
         }
-         var wasteList = React.DOM.div({}, wastes.map(function(waste){
-                                                      return  React.DOM.div({}, [waste[type] + " : "]);
-         };
+        
+        var lis =[];
+        var lisAlert = [] ;
+        
+        for (var status in wastes){    
+            for (var index in wastes[status]){
+                var li = React.DOM.li({},
+                    React.DOM.div({}, wastes[status][index]),
+                    React.DOM.div({}, status)
+                );
+                                      
+                if (status === "unavaiable") {
+                    var liAlert = React.DOM.li({},
+                    React.DOM.div({}, wastes[status][index])); 
+                                        
+                    lisAlert.push(liAlert); 
+                }
+                
+                 
+                lis.push(li);
+                                                 
+            }
+        }
+        
+        var wasteList = React.DOM.div({},
+                                      React.DOM.h2({}, "Déchets"),
+                                      React.DOM.ul({}, lis)
+                            );
+        var alert = React.DOM.div({},
+                                 React.DOM.h2({}, "Alerte"),
+                                 React.DOM.ul({}, lisAlert)
+                                 );
             
         //============================================================================================
         
@@ -110,8 +142,10 @@ var App = React.createClass({
         // ALL
         return React.DOM.div({id: 'myApp'},
                             header,
-                            wastes.unavaiable ? alert : undefined,
-                            schedule 
+                            wastes["unavaiable"] ? alert : undefined,
+                            schedule,
+                            wasteList
+                             
                             );
     }
 });

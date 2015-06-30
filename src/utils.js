@@ -1,5 +1,7 @@
 'use strict';
 
+var React = require('react');
+
 function formatHour(hour){
     //has to be a string and length=4
     return hour.slice(0,2) + ":" + hour.slice(2,4);
@@ -19,7 +21,8 @@ function formatDay(day){
     return display;
 }
 
+
 module.exports = {
     formatHour: formatHour,
-    formatDay: formatDay
+    formatDay: formatDay,
 };

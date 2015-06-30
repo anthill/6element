@@ -3,6 +3,10 @@
 var React = require('react');
 var formatHour = require('../utils.js').formatHour;
 var formatDay = require('../utils.js').formatDay;
+var levelCalc = require('../utils.js').levelCalc;
+var isItOpen = require('../utils.js').isItOpen;
+
+var crowdMoment = require('../utils.js').crowdMoment;
 
 /*
 
@@ -10,7 +14,6 @@ interface AppProps{
     rcFake: {}
 }
 interface AppState{
-    selectedRC: int
 }
 
 */
@@ -19,8 +22,6 @@ var App = React.createClass({
     displayName: 'App',
 
     /*getInitialState: function(){
-        return {
-            selectedRC: undefined
         };
     },*/
     
@@ -31,11 +32,20 @@ var App = React.createClass({
 
         // console.log('APP props', props);
         // console.log('APP state', state);
-
         
-        /*var rcContent = new RcContent({
-            selectedRC : props.rcs[state.selectedRC]
-        });*/
+        //DATE
+        var now = new Date ();
+        var week = ['lundi', 'mardi', 'mercredi', 'jeudi' , 'vendredi', 'samedi', 'dimanche' ];
+        var months = [ "janvier", "février", "mars", "avril", "mai", "juin",
+                          "juillet", "août", "septembre", "octobre", "novembre", "décembre"];
+        var dayName = week[now.getDay()];
+        var dayNum = now.getDate();
+        var monthName = months[now.getMonth()];
+        var hour = now.getHours();
+        var min = now.getMinutes();
+        var hourmin= parseInt((hour.toString() + min.toString()));
+        
+
         //=========================================================================================
         
         //HEADER
@@ -55,7 +65,9 @@ var App = React.createClass({
         //Has to be the same opening hour every openDay
         //Only work if closing days are monday and/or sunday
         
-        var open = props.rcFake["open"] ? "ouvert" : "fermé" ;
+        var open = isItOpen([dayName,hourmin], props.rcFake.schedule) ? "ouvert": "fermé" ;
+        
+        //var open = props.rcFake["open"] ? "ouvert" : "fermé" ; 
         var openDay = [];
         var timetable = "";//for the moment, consider that timetable is the same every openDay. 
         var firstDay="";
@@ -80,7 +92,13 @@ var App = React.createClass({
         //============================================================================================
         
         // CROWD
-        
+        var len = props.rcFake.crowd.length;
+        console.log('today', now.toISOString());
+        var waitingLevelNow = open? levelCalc( props.rcFake.maxSize, crowdMoment(now, props.rcFake.crowd)) : undefined;
+        console.log('waitingLevelNow', waitingLevelNow);
+        var crowd = React.DOM.div({}, 
+                                  React.DOM.h2({}, "Attente"),
+                                  React.DOM.div({}, waitingLevelNow));
         //============================================================================================
         
         // WASTE
@@ -135,9 +153,11 @@ var App = React.createClass({
             
         //============================================================================================
         
-        // LOCALIATION
+        // LOCALISATION
         
-        //============================================================================================
+        
+        
+        //############################################################################################
         
         // ALL
         return React.DOM.div({id: 'myApp'},

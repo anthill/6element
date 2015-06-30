@@ -22,7 +22,6 @@ function render(){
 
 serverAPI.getAllSensors()
     .then(function(sensors){
-        console.log('sensors', makeMap(sensors, 'id'));
         topLevelStore.ants = makeMap(sensors, 'id');
         resetUpdate(topLevelStore.ants);
 
@@ -37,7 +36,6 @@ socket.on('status', function (msg) {
     // GET DATA
     var id = msg.sensorId;
     var status = msg.socketMessage;
-    console.log('Hello', status, id);
 
     resetUpdate(topLevelStore.ants);
 

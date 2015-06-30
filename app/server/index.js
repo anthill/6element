@@ -70,6 +70,14 @@ app.get('/', function(req, res){
 });
 
 app.get('/Admin', function(req, res){
+    // send sms to sensors to ask them their status
+    database.Sensors.getAllSensors()
+        .then(function(data){
+            data.forEach(function(sensor){
+                sendSMS("status", sensor["phone_number"]);
+            });
+        })
+        .catch(debug('/sensors'));
     res.sendFile(path.join(__dirname, '../clients/Admin/index.html'));
 });
 

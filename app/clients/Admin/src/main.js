@@ -7,7 +7,6 @@ var Application = React.createFactory(require('./Components/Application.js'));
 var makeMap = require('../../_common/js/makeMap.js');
 var resetUpdate = require('../../_common/js/resetUpdate.js');
 var serverAPI = require('../../_common/js/serverAPI.js');
-var sendSMS = require('../../../server/sendSMS.js');
 
 var socket = io();
 
@@ -23,9 +22,6 @@ function render(){
 
 serverAPI.getAllSensors()
     .then(function(sensors){
-        sensors.forEach(function(sensor){
-            sendSMS("status", sensor["phone_number"]); // sensor.phone_number doesn't work for strange reason
-        });
         topLevelStore.ants = makeMap(sensors, 'id');
         resetUpdate(topLevelStore.ants);
 

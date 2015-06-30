@@ -8,7 +8,6 @@
   environment:
    - VIRTUAL_HOST=6element.ants.builders 
    - VIRTUAL_PORT=4000
-   - SOCKETIO_SERVER=https://6element.ants.builders/
   volumes:
    - app:/6element/app
   restart: always

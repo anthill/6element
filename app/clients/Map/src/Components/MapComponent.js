@@ -11,9 +11,9 @@ interface MapComponent Props{
     mapId: string,
     mapCenter: [lat, lon],
     recyclingCenterMap : Map (RCId => RecyclingCenter),
-    selectedID: RecyclingCenter ID
+    selectedRCMap: Map (RCId => selected RC ID),
     onRecyclingCenterSelected(rc): void,
-    updatingID: int
+    updatingIDs: int
 }
 
 interface MapComponent State{
@@ -62,7 +62,7 @@ module.exports = React.createClass({
 
         // check if recyclingCenter is selected, and define selectedClass
         var isSelected = props.selectedRCMap.has(recyclingCenter.id);
-        var isUpdating = props.updatingID === recyclingCenter.id;
+        var isUpdating = props.updatingIDs.indexOf(recyclingCenter.id) !== -1;
 
         var classes = [
             'recyclingCenter',
@@ -98,7 +98,7 @@ module.exports = React.createClass({
 
         // check if recyclingCenter is selected, and define selectedClas
         var isSelected = props.selectedRCMap.has(recyclingCenter.id);
-        var isUpdating = props.updatingID === recyclingCenter.id;
+        var isUpdating = props.updatingIDs.indexOf(recyclingCenter.id) !== -1;
 
         var classes = [
             'recyclingCenterName',

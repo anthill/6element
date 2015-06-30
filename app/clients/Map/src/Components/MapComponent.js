@@ -11,9 +11,9 @@ interface MapComponent Props{
     mapId: string,
     mapCenter: [lat, lon],
     recyclingCenterMap : Map (RCId => RecyclingCenter),
-    selectedID: RecyclingCenter ID
+    selectedRCMap: Map (RCId => selected RC ID),
     onRecyclingCenterSelected(rc): void,
-    updatingID: int
+    updatingIDs: int
 }
 
 interface MapComponent State{

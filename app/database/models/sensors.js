@@ -6,12 +6,6 @@ var databaseP = require('../management/databaseClientP');
 
 var sensors = require('../management/declarations.js').sensors;
 
-var QUIPU_STATUSES = {
-    OK: 'ok',
-    BLA: 'bla'
-}
-
-
 module.exports = {
     create: function (data) {
         return databaseP.then(function (db) {

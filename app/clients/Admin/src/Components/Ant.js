@@ -15,6 +15,7 @@ interface AntProps{
             long: float
         },
         quipu_status: string,
+        signalStrength: int,
         sense_status: string,
         latest_input: string,
         latest_output: string
@@ -72,7 +73,8 @@ var Ant = React.createClass({
                 ),
                 React.DOM.li({className: 'quipu'},
                     React.DOM.div({}, 'Quipu Status'),
-                    React.DOM.div({}, props.ant.quipu_status)
+                    React.DOM.div({}, props.ant.quipu_status),
+                    React.DOM.div({}, props.ant.signal)
                 ),
                 React.DOM.li({className: '6sense'},
                     React.DOM.div({}, '6sense Status'),

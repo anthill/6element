@@ -93,12 +93,7 @@ app.get('/live-affluence', function(req, res){
 // endpoint receiving the sms from twilio
 app.post('/twilio', function(req, res) {
 
-    // debug("Received sms from ", req.body.From, req.body.Body);
-    console.log("Received sms from ", req.body.From, req.body.Body);
-
-    // filter messages beginning with 0 (plain text) or 1 (decoding needed)
-    // plain text msgs are to be stored in Sensor DB
-    // coded msgs are to be stored in SensorMeasuremtn DB
+    debug("Received sms from ", req.body.From, req.body.Body);
 
     // find sensor id by phone number
     database.Sensors.findByPhoneNumber(req.body.From)
@@ -108,11 +103,12 @@ app.post('/twilio', function(req, res) {
 
                 var header = req.body.Body[0];
                 var body = req.body.Body.substr(1);
-                // case of an encoded message
+                
 
                 switch (header){
+                    
+                    // clear message
                     case '0':
-                        //TBD
                         debug('Received clear message');
                         switch(body) {
                             case "init":
@@ -123,11 +119,12 @@ app.post('/twilio', function(req, res) {
                         }
                         break;
 
+                    // 6sense encoded message
                     case '1':
                         decoder(body)
                             .then(function(decodedMsg){
 
-                                console.log("decoded msg ", decodedMsg);
+                                debug("decoded msg ", decodedMsg);
 
                                 // [{"date":"2015-05-20T13:48:00.000Z","signal_strengths":[]},{"date":"2015-05-20T13:49:00.000Z","signal_strengths":[]},{"date":"2015-05-20T13:50:00.000Z","signal_strengths":[]},{"date":"2015-05-20T13:51:00.000Z","signal_strengths":[]},{"date":"2015-05-20T13:52:00.000Z","signal_strengths":[]}]
                                 Promise.all(decodedMsg.map(function(message){
@@ -135,8 +132,9 @@ app.post('/twilio', function(req, res) {
                                         'sensor_id': sensor.id,
                                         'signal_strengths': message.signal_strengths,
                                         'measurement_date': message.date
+                                        // 'quipu_signal_strength': message.quipu.signalStrength
                                     };
-                                    console.log("decoded msg ", decodedMsg);
+                                    debug("decoded msg ", message);
                                     var socketMessage = Object.assign({}, messageContent);
                                     socketMessage['installed_at'] = sensor.installed_at;
 
@@ -167,38 +165,40 @@ app.post('/twilio', function(req, res) {
                             });
                         break;
 
+                    // regular encoded message
                     case '2':
                         quipuParser.decode(body)
-                            .then(function(sensorStatus){
-                                return database.Sensors.update(sensor, {
-                                    latest_input: sensorStatus.info.command,
-                                    latest_output: sensorStatus.info.result,
-                                    quipu_status: sensorStatus.quipu,
-                                    sense_status: sensorStatus.sense
-                                })
-                                    .then(function(){
-                                        console.log('id', sensor.id);
-                                        return {
-                                            sensorId: sensor.id,
-                                            socketMessage: sensorStatus
-                                        };
-                                    });
+                        .then(function(sensorStatus){
+                            return database.Sensors.update(sensor, {
+                                latest_input: sensorStatus.info.command,
+                                latest_output: sensorStatus.info.result,
+                                quipu_status: sensorStatus.quipu.state,
+                                sense_status: sensorStatus.sense
                             })
-                            .then(function(result){
-                                debug("Storage SUCCESS");
-                                res.set('Content-Type', 'text/xml');
-                                res.send(xml({"Response":""}));
+                            .then(function(){
+                                debug('id', sensor.id);
 
-                                // SOCKET IO
-                                if (socket)
-                                    socket.emit('status', result);
-                                
-                            })
-                            .catch(function(error){
-                                console.log("Storage FAILURE: ", error);
-                                res.set('Content-Type', 'text/xml');
-                                res.send(xml({"Response":""}));
+                                return {
+                                    sensorId: sensor.id,
+                                    socketMessage: sensorStatus
+                                };
                             });
+                        })
+                        .then(function(result){
+                            debug("Storage SUCCESS");
+                            res.set('Content-Type', 'text/xml');
+                            res.send(xml({"Response":""}));
+
+                            // SOCKET IO
+                            if (socket)
+                                socket.emit('status', result);
+                            
+                        })
+                        .catch(function(error){
+                            console.log("Storage FAILURE: ", error);
+                            res.set('Content-Type', 'text/xml');
+                            res.send(xml({"Response":""}));
+                        });
                         break;
 
                     default:

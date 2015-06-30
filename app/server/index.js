@@ -26,13 +26,10 @@ var sendSMS = require('./sendSMS.js');
 var PORT = 4000;
 var DEBUG = process.env.DEBUG ? process.env.DEBUG : false;
 
-var debug = function(msg) {
-    return function(){
-        if (DEBUG) {
-            console.log("DEBUG from 6element server:");
-            console.log.apply(console, [msg].concat(Array.from(arguments)));
-            console.log("==================");
-        }
+var debug = function() {
+    if (DEBUG) {
+        [].unshift.call(arguments, "[DEBUG 6element] ");
+        console.log.apply(console, arguments);
     };
 }
 
@@ -116,7 +113,14 @@ app.post('/twilio', function(req, res) {
                 switch (header){
                     case '0':
                         //TBD
-                        console.log('Received clear message');
+                        debug('Received clear message');
+                        switch(body) {
+                            case "init":
+                                debug("Received init");
+                                var date = new Date();
+                                sendSMS("date:" + date.toISOString(), req.body.From);
+                                break;
+                        }
                         break;
 
                     case '1':
@@ -224,7 +228,7 @@ app.get('/recycling-center/:rcId', function(req, res){
 app.get('/sensors', function(req, res){
     database.Sensors.getAllSensors()
         .then(function(data){
-            // console.log('sensors data', data);
+            debug('sensors data', data);
             res.send(data);
         })
         .catch(debug('/sensors'));

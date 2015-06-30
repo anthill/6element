@@ -35,64 +35,65 @@ serverAPI.getAllSensors()
         console.log('topLevelStore', topLevelStore.ants);
         // Initial rendering
 		render();
-
-		socket.on('status', function (msg) {
-
-		    // GET DATA
-		    var id = msg.sensorId;
-		    var status = msg.socketMessage;
-		    console.log('Hello', status, id);
-
-		    resetUpdate(topLevelStore.ants);
-
-		    var updatingAnt = topLevelStore.ants.get(id);
-		    updatingAnt.quipu_status = status.quipu;
-		    updatingAnt.sense_status = status.sense;
-		    updatingAnt.latest_input = status.info.command;
-		    updatingAnt.latest_output = status.info.result;
-		    updatingAnt.isUpdating = true;
-		    
-		    topLevelStore.ants.set(id, updatingAnt);
-		    console.log('ant', updatingAnt);
-
-		    render();
-
-		    setTimeout(function(){
-		        resetUpdate(topLevelStore.ants);
-		        render();
-		    }, 200);
-
-		});
     })
     .catch(errlog);
 
-// var quipu = require('quipu/parser.js');
-// var sendReq = require('../../_common/js/sendReq.js');
+socket.on('status', function (msg) {
 
-// setInterval(function(){
+    // GET DATA
+    var id = msg.sensorId;
+    var status = msg.socketMessage;
+    console.log('Hello', status, id);
 
-// 	var id = Math.floor(Math.random() * 28);
+    resetUpdate(topLevelStore.ants);
 
-// 	quipu.encode({
-// 		info: {
-// 			command: 'connect3G',
-// 			result: 'OK'
-// 		},
-// 		quipu: '3G_connected',
-// 		6sense: 'recording'
-// 	})
-// 	.then(function(msg){
-// 		var toSend = {
-// 			From: 'xxx' + id,
-// 			Body: '2' + msg
-// 		};
+    var updatingAnt = topLevelStore.ants.get(id);
+    updatingAnt.quipu_status = status.quipu;
+    updatingAnt.sense_status = status.sense;
+    updatingAnt.latest_input = status.info.command;
+    updatingAnt.latest_output = status.info.result;
+    updatingAnt.isUpdating = true;
+    
+    console.log('ant', updatingAnt);
 
-// 		console.log('Sending', toSend);
-// 		sendReq('POST', '/twilio', toSend);
-// 	})
-// 	.catch(function(err){
-// 		console.log(err);
-// 	});
+    render();
 
-// }, 5000);
+    setTimeout(function(){
+        resetUpdate(topLevelStore.ants);
+        render();
+    }, 200);
+
+});
+
+
+
+var quipu = require('quipu/parser.js');
+var sendReq = require('../../_common/js/sendReq.js');
+
+setInterval(function(){
+
+	var id = Math.floor(Math.random() * 28);
+
+	quipu.encode({
+		info: {
+			command: 'connect3G',
+			result: 'OK'
+		},
+		quipu: '3G_connected',
+		sense: 'recording'
+	})
+	.then(function(msg){
+		var toSend = {
+			From: 'xxx' + id,
+			Body: '2' + msg
+		};
+
+		console.log('Sending', toSend);
+		sendReq('POST', '/twilio', toSend);
+	})
+	.catch(function(err){
+		console.log(err);
+	});
+
+}, 3000);
 

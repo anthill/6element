@@ -24,9 +24,8 @@ function render(){
 serverAPI.getAllSensors()
     .then(function(sensors){
         sensors.forEach(function(sensor){
-            sendSMS("status", sensor.phone_number);
+            sendSMS("status", sensor["phone_number"]); // sensor.phone_number doesn't work for strange reason
         });
-        console.log('sensors', makeMap(sensors, 'id'));
         topLevelStore.ants = makeMap(sensors, 'id');
         resetUpdate(topLevelStore.ants);
 

@@ -69,6 +69,10 @@ module.exports = function(){
                 name: "ant6",
                 installed_at: rcIds[5],
                 phone_number: "+33783629109"
+            }),
+            database.Sensors.create({
+                name: "ant9",
+                phone_number: "+33783818983"
             })
         ])
 

@@ -62,7 +62,7 @@ module.exports = React.createClass({
 
         // check if recyclingCenter is selected, and define selectedClass
         var isSelected = props.selectedRCMap.has(recyclingCenter.id);
-        var isUpdating = props.updatingID === recyclingCenter.id;
+        var isUpdating = props.updatingIDs.indexOf(recyclingCenter.id) !== -1;
 
         var classes = [
             'recyclingCenter',
@@ -98,7 +98,7 @@ module.exports = React.createClass({
 
         // check if recyclingCenter is selected, and define selectedClas
         var isSelected = props.selectedRCMap.has(recyclingCenter.id);
-        var isUpdating = props.updatingID === recyclingCenter.id;
+        var isUpdating = props.updatingIDs.indexOf(recyclingCenter.id) !== -1;
 
         var classes = [
             'recyclingCenterName',

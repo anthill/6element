@@ -1,13 +1,12 @@
 'use strict';
 
 var React = require('react');
-
-var serverAPI = require('../../_common/js/serverAPI.js');
-var makeMap = require('./utils.js').makeMap;
-
 var io = require('socket.io-client');
 
 var Application = React.createFactory(require('./Components/Application.js'));
+
+var serverAPI = require('../../_common/js/serverAPI.js');
+var makeMap = require('../../_common/js/makeMap.js');
 
 var errlog = console.error.bind(console);
 
@@ -21,7 +20,7 @@ var topLevelStore = {
     mapCenter: BORDEAUX_COORDS,
     recyclingCenterMap: undefined,
     selectedRCMap: new Map(),
-    updatingID: undefined,
+    updatingIDs: [],
     getRecyclingCenterDetails: function(rc){
         serverAPI.getRecyclingCenterDetails(rc.id)
             .then(function(details){
@@ -53,42 +52,42 @@ serverAPI.getRecyclingCenters()
         console.log('recyclingCenters', recyclingCenters);
     
         topLevelStore.recyclingCenterMap = makeMap(recyclingCenters, 'id');
-    
         render();
     })
     .catch(errlog);
 
 var socket = io();
 
-socket.on('data', function (data) {
+socket.on('data', function (results) {
 
-    // GET DATA
-    var id = data.installed_at;
+    results.forEach(function(result){
+        // GET DATA
+        var id = result.installed_at;
 
+        var value = result.signal_strengths.length;
+        var date = result.measurement_date;
+        
+        // GET RECYCLING CENTER
+        var rc = topLevelStore.recyclingCenterMap.get(id);
+        console.log('rc', rc);
+        
+        rc.max = Math.max(rc.max, value);
+        rc.latest = value;
 
-    var value = data.signal_strengths.length;
-    var date = data.measurement_date;
-    
-    // GET RECYCLING CENTER
-    var rc = topLevelStore.recyclingCenterMap.get(id);
-    console.log('rc', rc);
-    
-    rc.max = Math.max(rc.max, value);
-    rc.latest = value;
+        if (rc.details)
+        // UPDATE CURVE
+            rc.details.push({
+                measurement_date: date,
+                measurement: value
+            });
 
-    if (rc.details)
-    // UPDATE CURVE
-        rc.details.push({
-            measurement_date: date,
-            measurement: value
-        });
-    
-    // ANIMATE
-    topLevelStore.updatingID = id;
+        topLevelStore.updatingIDs.push(id);
+    })
+
     render();
 
     setTimeout(function(){
-        topLevelStore.updatingID = undefined;
+        topLevelStore.updatingIDs = [];
         render();
     }, 200);
 

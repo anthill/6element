@@ -126,40 +126,40 @@ app.post('/twilio', function(req, res) {
                                 console.log("decoded msg ", decodedMsg);
 
                                 // [{"date":"2015-05-20T13:48:00.000Z","signal_strengths":[]},{"date":"2015-05-20T13:49:00.000Z","signal_strengths":[]},{"date":"2015-05-20T13:50:00.000Z","signal_strengths":[]},{"date":"2015-05-20T13:51:00.000Z","signal_strengths":[]},{"date":"2015-05-20T13:52:00.000Z","signal_strengths":[]}]
-
-                                var messageContent = {
-                                    'sensor_id': sensor.id,
-                                    'signal_strengths': message.signal_strengths,
-                                    'measurement_date': message.date
-                                };
-                                console.log("decoded msg ", decodedMsg);
-                                var socketMessage = Object.assign({}, messageContent);
-                                socketMessage['installed_at'] = sensor.installed_at;
-
-                                // persist message in database
-
-                                return database.SensorMeasurements.create(messageContent).then(function(id){
-                                    return {
-                                        sensorMeasurementId: id,
-                                        socketMessage: socketMessage
+                                Promise.all(decodedMsg.map(function(message){
+                                    var messageContent = {
+                                        'sensor_id': sensor.id,
+                                        'signal_strengths': message.signal_strengths,
+                                        'measurement_date': message.date
                                     };
+                                    console.log("decoded msg ", decodedMsg);
+                                    var socketMessage = Object.assign({}, messageContent);
+                                    socketMessage['installed_at'] = sensor.installed_at;
+
+                                    // persist message in database
+
+                                    return database.SensorMeasurements.create(messageContent).then(function(id){
+                                        return {
+                                            sensorMeasurementId: id,
+                                            socketMessage: socketMessage
+                                        };
+                                    });                                    
+                                }))
+                                .then(function(results){
+                                    debug("Storage SUCCESS");
+                                    res.set('Content-Type', 'text/xml');
+                                    res.send(xml({"Response":""}));
+
+                                    // SOCKET IO
+                                    if (socket)
+                                        socket.emit('data', results);
+                                    
+                                })
+                                .catch(function(error){
+                                    console.log("Storage FAILURE: ", error);
+                                    res.set('Content-Type', 'text/xml');
+                                    res.send(xml({"Response":""}));
                                 });
-
-                            })
-                            .then(function(result){
-                                debug("Storage SUCCESS");
-                                res.set('Content-Type', 'text/xml');
-                                res.send(xml({"Response":""}));
-
-                                // SOCKET IO
-                                if (socket)
-                                    socket.emit('data', result.socketMessage);
-                                
-                            })
-                            .catch(function(error){
-                                console.log("Storage FAILURE: ", error);
-                                res.set('Content-Type', 'text/xml');
-                                res.send(xml({"Response":""}));
                             });
                         break;
 

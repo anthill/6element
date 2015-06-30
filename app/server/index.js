@@ -4,6 +4,7 @@ require('es6-shim');
 require('better-log').install();
 
 var fs = require('fs');
+var quipuParser = require('quipu/parser.js');
 
 var hardCodedSensors = require("./hardCodedSensors.js");
 var decoder = require('6sense/src/codec/decodeFromSMS.js');
@@ -25,11 +26,13 @@ var sendSMS = require('./sendSMS.js');
 var PORT = 4000;
 var DEBUG = process.env.DEBUG ? process.env.DEBUG : false;
 
-var debug = function() {
-    if (DEBUG) {
-        console.log("DEBUG from 6element server:");
-        console.log.apply(console, arguments);
-        console.log("==================");
+var debug = function(msg) {
+    return function(){
+        if (DEBUG) {
+            console.log("DEBUG from 6element server:");
+            console.log.apply(console, [msg].concat(Array.from(arguments)));
+            console.log("==================");
+        }
     };
 }
 
@@ -90,77 +93,113 @@ app.get('/live-affluence', function(req, res){
     
 });
 
-
-var socketMessage;
-
 // endpoint receiving the sms from twilio
 app.post('/twilio', function(req, res) {
 
-    debug("Received sms from ", req.body.From, req.body.Body );
+    // debug("Received sms from ", req.body.From, req.body.Body);
+    console.log("Received sms from ", req.body.From, req.body.Body);
+
+    // filter messages beginning with 0 (plain text) or 1 (decoding needed)
+    // plain text msgs are to be stored in Sensor DB
+    // coded msgs are to be stored in SensorMeasuremtn DB
 
     // find sensor id by phone number
     database.Sensors.findByPhoneNumber(req.body.From)
         .then(function(sensor){
             if (sensor){
                 debug("Found corresponding sensor: ", sensor);
+
+                var header = req.body.Body[0];
                 var body = req.body.Body.substr(1);
                 // case of an encoded message
-                if (req.body.Body[0] === "1") {
-                    decoder(body)
-                        .then(function(decodedMsg){
 
-                            console.log("decoded msg ", decodedMsg);
+                switch (header){
+                    case '0':
+                        //TBD
+                        console.log('Received clear message');
+                        break;
 
-                            // [{"date":"2015-05-20T13:48:00.000Z","signal_strengths":[]},{"date":"2015-05-20T13:49:00.000Z","signal_strengths":[]},{"date":"2015-05-20T13:50:00.000Z","signal_strengths":[]},{"date":"2015-05-20T13:51:00.000Z","signal_strengths":[]},{"date":"2015-05-20T13:52:00.000Z","signal_strengths":[]}]
+                    case '1':
+                        decoder(body)
+                            .then(function(decodedMsg){
 
-                            Promise.all(decodedMsg.map(function(message){
-
-                                var messageContent = {
-                                    'sensor_id': sensor.id,
-                                    'signal_strengths': message.signal_strengths,
-                                    'measurement_date': message.date
-                                };
                                 console.log("decoded msg ", decodedMsg);
-                                socketMessage = Object.assign({}, messageContent);
-                                socketMessage['installed_at'] = sensor.installed_at;
 
-                                // persist message in database
-                                var persitP = database.SensorMeasurements.create(messageContent);
+                                // [{"date":"2015-05-20T13:48:00.000Z","signal_strengths":[]},{"date":"2015-05-20T13:49:00.000Z","signal_strengths":[]},{"date":"2015-05-20T13:50:00.000Z","signal_strengths":[]},{"date":"2015-05-20T13:51:00.000Z","signal_strengths":[]},{"date":"2015-05-20T13:52:00.000Z","signal_strengths":[]}]
+                                Promise.all(decodedMsg.map(function(message){
+                                    var messageContent = {
+                                        'sensor_id': sensor.id,
+                                        'signal_strengths': message.signal_strengths,
+                                        'measurement_date': message.date
+                                    };
+                                    console.log("decoded msg ", decodedMsg);
+                                    var socketMessage = Object.assign({}, messageContent);
+                                    socketMessage['installed_at'] = sensor.installed_at;
 
-                                return persitP;
+                                    // persist message in database
 
-                            }))
-                            .then(function(id){
+                                    return database.SensorMeasurements.create(messageContent).then(function(id){
+                                        return {
+                                            sensorMeasurementId: id,
+                                            socketMessage: socketMessage
+                                        };
+                                    });                                    
+                                }))
+                                .then(function(results){
+                                    debug("Storage SUCCESS");
+                                    res.set('Content-Type', 'text/xml');
+                                    res.send(xml({"Response":""}));
+
+                                    // SOCKET IO
+                                    if (socket)
+                                        socket.emit('data', results);
+                                    
+                                })
+                                .catch(function(error){
+                                    console.log("Storage FAILURE: ", error);
+                                    res.set('Content-Type', 'text/xml');
+                                    res.send(xml({"Response":""}));
+                                });
+                            });
+                        break;
+
+                    case '2':
+                        quipuParser.decode(body)
+                            .then(function(sensorStatus){
+                                return database.Sensors.update(sensor, {
+                                    latest_input: sensorStatus.info.command,
+                                    latest_output: sensorStatus.info.result,
+                                    quipu_status: sensorStatus.quipu,
+                                    sense_status: sensorStatus.sense
+                                })
+                                    .then(function(){
+                                        console.log('id', sensor.id);
+                                        return {
+                                            sensorId: sensor.id,
+                                            socketMessage: sensorStatus
+                                        };
+                                    });
+                            })
+                            .then(function(result){
                                 debug("Storage SUCCESS");
                                 res.set('Content-Type', 'text/xml');
                                 res.send(xml({"Response":""}));
 
                                 // SOCKET IO
-                                if (socket){
-                                    socket.emit('data', socketMessage);
-                                }
+                                if (socket)
+                                    socket.emit('status', result);
+                                
                             })
-                            .catch(function(id){
-                                console.log("Storage FAILURE: ", id);
+                            .catch(function(error){
+                                console.log("Storage FAILURE: ", error);
                                 res.set('Content-Type', 'text/xml');
                                 res.send(xml({"Response":""}));
                             });
-                        })
-                        .catch(function(error){
-                            console.log("Error in decoding: ", error);
-                        });
-                    // case of clear message
-                    } else if (req.body.Body[0] === "0")  {
-                        switch(body) {
-                            case "init":
-                                debug("Received init");
-                                var date = new Date();
-                                sendSMS("date:" + date.toISOString(), req.body.From);
-                                break;
-                        }
-                    } else {
-                        console.log("Error: message has not type character");
-                    }
+                        break;
+
+                    default:
+                        console.log('Error: message has not type character');
+                }
             } else {
                 console.log("No sensor corresponding to this number.");
             }
@@ -182,20 +221,30 @@ app.get('/recycling-center/:rcId', function(req, res){
         .catch(debug('/recycling-center/'+req.params.rcId));
 });
 
+app.get('/sensors', function(req, res){
+    database.Sensors.getAllSensors()
+        .then(function(data){
+            // console.log('sensors data', data);
+            res.send(data);
+        })
+        .catch(debug('/sensors'));
+});
+
 // io.on('connection', function(socket) {
 //     console.log('Socket io Connexion');
 
 //     setInterval(function(){
 //         var id = Math.floor(Math.random() * 28);
 //         console.log('emitting', id);
-//         socket.emit('data', {
-//             sensor_id: Math.floor(Math.random() * 28),
-//             signal_strengths: [10, 10, 10],
-//             measurement_date: new Date(),
-//             installed_at: id
+//         socket.emit('status', {
+//             sensorId: id,
+//             socketMessage: {
+//                 quipu_status: 'sleeping'
+//             }
 //         });
 //     }, 2000);
 // });
+
 
 server.listen(PORT, function () {
     console.log('Server running on', [

@@ -1,6 +1,6 @@
 "use strict";
 
-function sendReq(method, url, data){
+module.exports = function (method, url, data){
     return new Promise(function(resolve, reject){
         var xhr = new XMLHttpRequest();
 
@@ -26,13 +26,4 @@ function sendReq(method, url, data){
         else
             xhr.send(JSON.stringify(data));
     });
-}
-
-module.exports = {
-    getRecyclingCenters: function(){
-        return sendReq('GET', '/live-affluence');
-    },
-    getRecyclingCenterDetails: function(rcId){
-        return sendReq('GET', '/recycling-center/'+rcId);
-    }
 };

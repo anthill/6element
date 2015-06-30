@@ -1,11 +1,11 @@
-"use strict;"
+"use strict";
 
 var gulp = require('gulp');
 var server = require('gulp-express');
 // var livereload = require('gulp-livereload');
 var browserify = require('browserify');
 var source = require("vinyl-source-stream");
-var watchify = require('watchify');
+// var watchify = require('watchify');
 
 gulp.task('serve', function () {
     server.run(['./server/index.js']);
@@ -49,10 +49,10 @@ function browserifyShare(app){
         packageCache: {},
         fullPaths: true
     });
-    b = watchify(b);
-    b.on('update', function(){
-        bundleShare(b);
-    });
+    // b = watchify(b);
+    // b.on('update', function(){
+    //     bundleShare(b);
+    // });
     
     b.add('./clients/' + app + '/src/main.js');
     bundleShare(b, app);
@@ -74,3 +74,4 @@ gulp.task('dev', ['serve', 'buildAdmin', 'buildMap', 'watch'], function(){
 gulp.task('prod', ['serve', 'buildAdmin', 'buildMap']);
 
 gulp.task('default', ['serve', 'buildAdmin', 'buildMap', 'watch']);
+

@@ -29,7 +29,7 @@ interface ApplicationProps{
     mapCenter,
     recyclingCenterMap: Map (RCId => RecyclingCenter),
     getRecyclingCenterDetails: (RCId) => Promise<AffluenceHistory[]>,
-    updatingID: int
+    updatingIDs: [int]
 }
 
 interface ApplicationState{
@@ -70,7 +70,7 @@ module.exports = React.createClass({
             mapCenter: props.mapCenter,
             recyclingCenterMap: props.recyclingCenterMap,
             selectedRCMap: state.selectedRCMap,
-            updatingID: props.updatingID,
+            updatingIDs: props.updatingIDs,
             onRecyclingCenterSelected: function(rc){
                 if(rc.details){
                     console.log('1');

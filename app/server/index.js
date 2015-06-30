@@ -170,7 +170,7 @@ app.post('/twilio', function(req, res) {
                                     latest_input: sensorStatus.info.command,
                                     latest_output: sensorStatus.info.result,
                                     quipu_status: sensorStatus.quipu,
-                                    sense_status: sensorStatus['6sense'] // problem: we shouldn't use number as first character for identifiers
+                                    sense_status: sensorStatus.sense
                                 })
                                     .then(function(){
                                         console.log('id', sensor.id);

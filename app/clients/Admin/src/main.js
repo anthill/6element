@@ -74,12 +74,12 @@ serverAPI.getAllSensors()
 // 	var id = Math.floor(Math.random() * 28);
 
 // 	quipu.encode({
-// 		"info": {
+// 		info: {
 // 			command: 'connect3G',
 // 			result: 'OK'
 // 		},
-// 		"quipu": '3G_connected',
-// 		"6sense": 'recording'
+// 		quipu: '3G_connected',
+// 		6sense: 'recording'
 // 	})
 // 	.then(function(msg){
 // 		var toSend = {

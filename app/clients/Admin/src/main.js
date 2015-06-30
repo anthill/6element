@@ -13,19 +13,24 @@ var fakeAnts = require('./fakeAnts.js');
 var socket = io();
 
 var topLevelStore = {
-	ants: undefined,
-	updatingID: undefined
+	ants: undefined
 };
 
 function render(){
     React.render(new Application(topLevelStore), document.body);
 }
 
+function resetUpdate(map){
+	map.forEach(function(element){
+		element.isUpdating = false;
+	});
+}
 
 serverAPI.getAllSensors()
     .then(function(sensors){
         console.log('sensors', makeMap(sensors, 'id'));
         topLevelStore.ants = makeMap(sensors, 'id');
+        resetUpdate(topLevelStore.ants);
 
         console.log('topLevelStore', topLevelStore.ants);
         // Initial rendering
@@ -38,18 +43,22 @@ serverAPI.getAllSensors()
 		    var status = msg.socketMessage;
 		    console.log('Hello', status, id);
 
+		    resetUpdate(topLevelStore.ants);
+
 		    var updatingAnt = topLevelStore.ants.get(id);
-		    updatingAnt.quipu_status = status;
+		    updatingAnt.quipu_status = status.quipu;
+		    updatingAnt.sense_status = status.sense;
+		    updatingAnt.latest_input = status.info.command;
+		    updatingAnt.latest_output = status.info.result;
+		    updatingAnt.isUpdating = true;
 		    
 		    topLevelStore.ants.set(id, updatingAnt);
 		    console.log('ant', updatingAnt);
 
-		    // ANIMATE
-		    topLevelStore.updatingID = id;
 		    render();
 
 		    setTimeout(function(){
-		        topLevelStore.updatingID = undefined;
+		        resetUpdate(topLevelStore.ants);
 		        render();
 		    }, 200);
 
@@ -57,24 +66,33 @@ serverAPI.getAllSensors()
     })
     .catch(errlog);
 
-var quipu = require('quipu/parser.js');
-var sendReq = require('../../_common/js/sendReq.js');
+// var quipu = require('quipu/parser.js');
+// var sendReq = require('../../_common/js/sendReq.js');
 
-setTimeout(function(){
+// setInterval(function(){
 
-	quipu.encode({quipu_status: 'initialized'})
-	.then(function(msg){
-		var toSend = {
-			From: 'xxx1',
-			Body: '2' + msg
-		};
+// 	var id = Math.floor(Math.random() * 28);
 
-		console.log('Sending', toSend);
-		sendReq('POST', '/twilio', toSend);
-	})
-	.catch(function(err){
-		console.log(err);
-	});
+// 	quipu.encode({
+// 		"info": {
+// 			command: 'connect3G',
+// 			result: 'OK'
+// 		},
+// 		"quipu": '3G_connected',
+// 		"6sense": 'recording'
+// 	})
+// 	.then(function(msg){
+// 		var toSend = {
+// 			From: 'xxx' + id,
+// 			Body: '2' + msg
+// 		};
 
-}, 5000);
+// 		console.log('Sending', toSend);
+// 		sendReq('POST', '/twilio', toSend);
+// 	})
+// 	.catch(function(err){
+// 		console.log(err);
+// 	});
+
+// }, 5000);
 

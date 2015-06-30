@@ -115,37 +115,8 @@ app.post('/twilio', function(req, res) {
 
                 switch (header){
                     case '0':
-                        // var received = JSON.parse(body.replace('(', '{').replace(')', '}'));
-
-                        // debug('Received ' + sensor.name + ' info: ' + received.info.command + ' ' + received.info.result);
-
-                        // // send datetime if initialization OK
-                        // if (received.info.command === 'initialization'){
-                        //     if (received.info.result === 'OK'){
-                        //         var date = new Date();
-                        //         sendSMS("date:" + date.toISOString(), req.body.From);
-                        //     });
-                        // }
-
-                        // // create infos to persist
-                        // var toPersistInfos = {
-                        //     quipu: received.quipu,
-                        //     6sense: received.6sense
-                        // };
-
-                        // // store toPersistInfos in DB
-                        // var persistP = dataBase.Sensors.update(sensor.id, toPersistInfos);
-                        // persistP.then(function(){
-                        //     debug("Storage SUCCESS");
-                        //     res.set('Content-Type', 'text/xml');
-                        //     res.send(xml({"Response":""}));
-                        // })
-                        // .catch(function(id){
-                        //     console.log("Storage FAILURE: ", id);
-                        //     res.set('Content-Type', 'text/xml');
-                        //     res.send(xml({"Response":""}));
-                        // });
-
+                        //TBD
+                        console.log('Received clear message');
                         break;
 
                     case '1':
@@ -195,7 +166,12 @@ app.post('/twilio', function(req, res) {
                     case '2':
                         quipuParser.decode(body)
                             .then(function(sensorStatus){
-                                return database.Sensors.update(sensor, {quipu_status: sensorStatus.quipu_status})
+                                return database.Sensors.update(sensor, {
+                                    latest_input: sensorStatus.info.command,
+                                    latest_output: sensorStatus.info.result,
+                                    quipu_status: sensorStatus.quipu,
+                                    sense_status: sensorStatus['6sense'] // problem: we shouldn't use number as first character for identifiers
+                                })
                                     .then(function(){
                                         console.log('id', sensor.id);
                                         return {

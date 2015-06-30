@@ -11,6 +11,7 @@
 .ant{
 	display: inline-block; margin: 1em; padding: .5em;
 	border: 1px solid black; border-radius: 5px;
+	background-color: white;
 }
 
 .ant li div {
@@ -21,6 +22,39 @@
 	margin-left: 1em;
 }
 
-.ant .sleeping {
+.ant.updating {
+	background-color: red;
+	transition: background-color 1s;
+}
+
+/* quipu status */
+
+.ant.uninitialized .quipu {
+	color: orange;
+}
+
+.ant.initialized .quipu {
+	color: black;
+}
+
+.ant.3Gconnected .quipu {
+	color: green;
+}
+
+.ant.tunnelling .quipu {
 	color: blue;
+}
+
+/* 6sense status */
+
+.ant.sleeping .6sense {
+	color: #DDD;
+}
+
+.ant.monitoring .6sense {
+	color: #888;
+}
+
+.ant.recording .6sense {
+	color: black;
 }

@@ -8,15 +8,16 @@ interface AntProps{
     ant: {
         id: int,
         name: string,
+        phone_number: string,
+        installed_at: string,
         latLng: {
             lat: float,
             long: float
         },
-        ip: string,
-        signal: int,
-        registration: int,
-        quipuStatus: string,
-        6senseStatus: string
+        quipu_status: string,
+        sense_status: string,
+        latest_input: string,
+        latest_output: string
     }
 }
 interface AppState{
@@ -34,11 +35,15 @@ var Ant = React.createClass({
 
         // console.log('APP props', props);
         // console.log('APP state', state);
+        var classes = [
+            'ant',
+            // isSelected ? 'selected' : '',
+            props.ant.isUpdating ? 'updating' : '',
+            props.ant.quipu_status,
+            props.ant.sense_status
+        ];
 
-        var status = props.ant.quipu_status !== 'NULL' ? 'sleeping' : '';
-
-
-        return React.DOM.div({className: 'ant'},
+        return React.DOM.div({className: classes.join(' ')},
             React.DOM.h1({}, props.ant.name),
             React.DOM.ul({},
                 React.DOM.li({}, 
@@ -65,9 +70,18 @@ var Ant = React.createClass({
                     React.DOM.div({}, 'Phone'),
                     React.DOM.div({}, props.ant.phone_number)
                 ),
-                React.DOM.li({},
+                React.DOM.li({className: 'quipu'},
                     React.DOM.div({}, 'Quipu Status'),
-                    React.DOM.div({className: status}, props.ant.quipu_status)
+                    React.DOM.div({}, props.ant.quipu_status)
+                ),
+                React.DOM.li({className: '6sense'},
+                    React.DOM.div({}, '6sense Status'),
+                    React.DOM.div({}, props.ant.sense_status)
+                ),
+                React.DOM.li({className: 'command'},
+                    React.DOM.div({}, 'Latest Command'),
+                    React.DOM.div({}, props.ant.latest_input),
+                    React.DOM.div({}, props.ant.latest_output)
                 )
             )
         );

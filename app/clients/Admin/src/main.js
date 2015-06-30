@@ -21,15 +21,26 @@ function render(){
 }
 
 serverAPI.getAllSensors()
-    .then(function(sensors){
-        topLevelStore.ants = makeMap(sensors, 'id');
-        resetUpdate(topLevelStore.ants);
+.then(function(sensors){
+    topLevelStore.ants = makeMap(sensors, 'id');
+    resetUpdate(topLevelStore.ants);
 
-        console.log('topLevelStore', topLevelStore.ants);
-        // Initial rendering
-		render();
-    })
-    .catch(errlog);
+    console.log('topLevelStore', topLevelStore.ants);
+    // Initial rendering
+	render();
+})
+.catch(errlog);
+
+
+// socket.on('data', function (msg){
+//     var id = msg.socketMessage.sensor_id;
+//     var signal = msg.socketMessage.quipu.signal;
+
+//     var updatingAnt = topLevelStore.ants.get(id);
+//     updatingAnt.signal = signal;
+
+//     render();
+// });
 
 socket.on('status', function (msg) {
 
@@ -40,13 +51,14 @@ socket.on('status', function (msg) {
     resetUpdate(topLevelStore.ants);
 
     var updatingAnt = topLevelStore.ants.get(id);
-    updatingAnt.quipu_status = status.quipu;
+    updatingAnt.quipu_status = status.quipu.state;
+    updatingAnt.signal = status.quipu.signal;
     updatingAnt.sense_status = status.sense;
     updatingAnt.latest_input = status.info.command;
     updatingAnt.latest_output = status.info.result;
     updatingAnt.isUpdating = true;
     
-    console.log('ant', updatingAnt);
+    // console.log('ant', updatingAnt);
 
     render();
 

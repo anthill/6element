@@ -7,6 +7,7 @@ var Application = React.createFactory(require('./Components/Application.js'));
 var makeMap = require('../../_common/js/makeMap.js');
 var resetUpdate = require('../../_common/js/resetUpdate.js');
 var serverAPI = require('../../_common/js/serverAPI.js');
+var sendSMS = require('../../../server/sendSMS.js');
 
 var socket = io();
 
@@ -22,6 +23,10 @@ function render(){
 
 serverAPI.getAllSensors()
     .then(function(sensors){
+        debug("sending sms to get fresh status");
+        sensors.forEach(function(sensor){
+            sendSMS("status", sensor.phone_number);
+        });
         console.log('sensors', makeMap(sensors, 'id'));
         topLevelStore.ants = makeMap(sensors, 'id');
         resetUpdate(topLevelStore.ants);
@@ -37,7 +42,6 @@ socket.on('status', function (msg) {
     // GET DATA
     var id = msg.sensorId;
     var status = msg.socketMessage;
-    console.log('Hello', status, id);
 
     resetUpdate(topLevelStore.ants);
 

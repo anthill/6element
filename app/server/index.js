@@ -41,7 +41,9 @@ dropAllTables()
     .then(createTables)
     // .then(fillDBWithFakeData)
     .then(hardCodedSensors)
-    .catch(debug('drop and create'));
+    .catch(function(error){
+            console.log("error in drop and create: ", error);
+        });
 
 var server = http.Server(app);
 var io = require('socket.io')(server);
@@ -78,6 +80,16 @@ app.get('/Map_app.js', function(req, res){
 });
 
 app.get('/Admin_app.js', function(req, res){
+    // send sms to sensors to ask them their status
+    database.Sensors.getAllSensors()
+        .then(function(sensors){
+            sensors.forEach(function(sensor){
+                sendSMS("status", sensor.phone_number);
+            });
+        })
+        .catch(function(error){
+            console.log("error in sending status sms ", error);
+        });
     res.sendFile(path.join(__dirname, '../clients/Admin_app.js'));
 });
 
@@ -86,7 +98,9 @@ app.get('/live-affluence', function(req, res){
         .then(function(data){
             res.send(data);
         })
-        .catch(debug('/live-affluence'));
+        .catch(function(error){
+            console.log("error in /live-affluence: ", error);
+        });
     
 });
 
@@ -222,16 +236,19 @@ app.get('/recycling-center/:rcId', function(req, res){
         .then(function(data){
             res.send(data);
         })
-        .catch(debug('/recycling-center/'+req.params.rcId));
+        .catch(function(error){
+            console.log("error in /recycling-center/'+req.params.rcId: ", error);
+        });
 });
 
 app.get('/sensors', function(req, res){
     database.Sensors.getAllSensors()
         .then(function(data){
-            debug('sensors data', data);
             res.send(data);
         })
-        .catch(debug('/sensors'));
+        .catch(function(error){
+            console.log("error in /sensors: ", error);
+        });
 });
 
 // io.on('connection', function(socket) {

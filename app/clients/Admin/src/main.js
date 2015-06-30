@@ -47,7 +47,6 @@ socket.on('status', function (msg) {
     // GET DATA
     var id = msg.sensorId;
     var status = msg.socketMessage;
-    // console.log('Hello', status, id);
 
     resetUpdate(topLevelStore.ants);
 

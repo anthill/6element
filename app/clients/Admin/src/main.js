@@ -23,7 +23,6 @@ function render(){
 
 serverAPI.getAllSensors()
     .then(function(sensors){
-        debug("sending sms to get fresh status");
         sensors.forEach(function(sensor){
             sendSMS("status", sensor.phone_number);
         });

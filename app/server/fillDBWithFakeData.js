@@ -48,7 +48,7 @@ function generateSensors(recyclingCenterIds){
             name: 'sensor '+i,
             installed_at: rcId,
             phone_number: "xxx"+i,
-            quipu_status: 'uninitialized',
+            quipu_status: 'uninitialized'
             // sense_status: 'NULL',
             // latest_input: 'NULL',
             // latest_output: 'NULL'

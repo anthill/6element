@@ -71,6 +71,8 @@ socket.on('status', function (msg) {
 
 
 
+// // USE TO SIMULATE A STATUS SENDING TO SERVER FROM SENSOR
+
 // var quipu = require('quipu/parser.js');
 // var sendReq = require('../../_common/js/sendReq.js');
 

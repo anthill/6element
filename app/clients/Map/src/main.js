@@ -62,14 +62,16 @@ socket.on('data', function (results) {
 
     results.forEach(function(result){
         // GET DATA
-        var id = result.installed_at;
+        var id = result.measurement.installed_at;
 
-        var value = result.signal_strengths.length;
-        var date = result.measurement_date;
+        var value = result.measurement.signal_strengths.length;
+        var date = result.measurement.measurement_date;
+
+        // console.log('results', value);
         
         // GET RECYCLING CENTER
         var rc = topLevelStore.recyclingCenterMap.get(id);
-        console.log('rc', rc);
+        // console.log('rc', rc);
         
         rc.max = Math.max(rc.max, value);
         rc.latest = value;

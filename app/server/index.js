@@ -157,7 +157,7 @@ app.post('/twilio', function(req, res) {
                                     return database.SensorMeasurements.create(messageContent).then(function(id){
                                         return {
                                             sensorMeasurementId: id,
-                                            socketMessage: socketMessage
+                                            measurement: socketMessage
                                         };
                                     });                                    
                                 }))
@@ -244,6 +244,7 @@ app.get('/recycling-center/:rcId', function(req, res){
 app.get('/sensors', function(req, res){
     database.Sensors.getAllSensors()
         .then(function(data){
+            debug('All sensors', data);
             res.send(data);
         })
         .catch(function(error){
@@ -273,4 +274,46 @@ server.listen(PORT, function () {
         PORT
     ].join(''));
 });
+
+
+// // USE TO SIMULATE A MEASUREMENT SENDING TO SERVER FROM SENSOR
+
+// var encodeForSMS = require('6sense/src/codec/encodeForSMS.js');
+// var request = require('request');
+
+// setInterval(function(){
+
+//     var now = new Date().toISOString();
+
+//     var result = {
+//         date: now,
+//         signal_strengths: new Array(23, 12, 53)
+//     };
+
+//     console.log('new measure', result.signal_strengths.length);
+
+//     encodeForSMS([result]).then(function(sms){
+
+//         var toSend = {
+//             From: '+33781095259', // this is sensor 1
+//             Body: '1' + sms
+//         };
+        
+//         request.post({
+//             rejectUnauthorized: false,
+//             url: 'http://192.168.59.103:4000/twilio',
+//             headers: {
+//                'Content-Type': 'application/json'
+//             },
+//             body: JSON.stringify(toSend)
+//         }, function(error, response, body){
+//             if(error) {
+//                console.log("ERROR:", error);
+//             } else {
+//                debug(response.statusCode, body);
+//             }
+//         });
+//     });
+
+// }, 2000);
 

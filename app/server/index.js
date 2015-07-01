@@ -183,7 +183,7 @@ app.post('/twilio', function(req, res) {
                     case '2':
                         quipuParser.decode(body)
                         .then(function(sensorStatus){
-                            return database.Sensors.update(sensor, {
+                            return database.Sensors.update(sensor.id, {
                                 latest_input: sensorStatus.info.command,
                                 latest_output: sensorStatus.info.result,
                                 quipu_status: sensorStatus.quipu.state,

@@ -26,12 +26,12 @@ module.exports = {
         })
     },
 
-    update: function(rc, delta) {
+    update: function(id, delta) {
         return databaseP.then(function (db) {
             
             var query = recyclingCenters
                 .update(delta)
-                .where(recyclingCenters.id.equals(rc.id))
+                .where(recyclingCenters.id.equals(id))
                 .toQuery();
 
             //console.log('sensors findByPhoneNumber query', query);

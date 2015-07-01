@@ -24,5 +24,26 @@ module.exports = {
                 });
             });
         })
+    },
+
+    update: function(rc, delta) {
+        return databaseP.then(function (db) {
+            
+            var query = recyclingCenters
+                .update(delta)
+                .where(recyclingCenters.id.equals(rc.id))
+                .toQuery();
+
+            //console.log('sensors findByPhoneNumber query', query);
+            return new Promise(function (resolve, reject) {
+                db.query(query, function (err, result) {
+                    if (err) reject(err);
+                    else resolve(result.rows[0]);
+                });
+            });
+        })
+        .catch(function(err){
+            console.log('ERROR in update', err);
+        });        
     }
 };

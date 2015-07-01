@@ -22,6 +22,7 @@ function render(){
 
 serverAPI.getAllSensors()
 .then(function(sensors){
+
     topLevelStore.ants = makeMap(sensors, 'id');
     resetUpdate(topLevelStore.ants);
 
@@ -32,6 +33,7 @@ serverAPI.getAllSensors()
 .catch(errlog);
 
 
+// THIS WILL BE NEEDED WHEN QUIPU SIGNAL IS INCORPORATED INTO DATA MSGS
 // socket.on('data', function (msg){
 //     var id = msg.socketMessage.sensor_id;
 //     var signal = msg.socketMessage.quipu.signal;

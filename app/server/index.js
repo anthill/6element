@@ -81,7 +81,7 @@ app.get('/Map_app.js', function(req, res){
 
 app.get('/Admin_app.js', function(req, res){
     // send sms to sensors to ask them their status
-    database.Sensors.getAllSensors()
+    database.Sensors.getAllSensorsInfo()
         .then(function(sensors){
             sensors.forEach(function(sensor){
                 sendSMS("status", sensor.phone_number);
@@ -242,7 +242,7 @@ app.get('/recycling-center/:rcId', function(req, res){
 });
 
 app.get('/sensors', function(req, res){
-    database.Sensors.getAllSensors()
+    database.Sensors.getAllSensorsInfo()
         .then(function(data){
             debug('All sensors', data);
             res.send(data);

@@ -9,20 +9,31 @@ var moment = require('moment');
 function isItOpen(now, schedule){
     //now is an array [dayName, string hhmm]
     //schedule the object given in main.js
+    var nowDay = now[0];
+    var nowTime = now[1];
     
-    
-    for (var day in schedule){
-        if (now[0] === schedule[day][0] && //good day
-                ((schedule[day][1]["end"] && //don't close for lunch
-                    ((now[1] > parseInt(schedule[day][1]["start"]) && now[1] < parseInt(schedule[day][1]["end"])) ||
-                    (now[1] > parseInt(schedule[day][2]["start"]) && now[1] < parseInt(schedule[day][2]["end"]))) ) ||
-                (schedule[day][1]["end"] === undefined &&
-                    (now[1] > parseInt(schedule[day][1]["start"] && now[1] < parseInt(schedule[day][2]["end"]))))))
+    schedule.forEach(function(day){ 
+        var scheduleDay = day[0]
+        var morning = day[1];
+        var afternoon = day[2];
+        
+        isBetweenHours 
+        
+        var isClosed = (now > closedTime) ;
+        
+        if (isClosed && isTuesday && isHolidays)
+        
+        if (nowDay === scheduleDay && //good day
+                ((morning.end && //don't close for lunch
+                    ((nowTime > parseInt(morning.end) && nowTime < parseInt(morning.end)) ||
+                    (nowTime > parseInt(afternoon.start) && nowTime < parseInt(afternoon.start))) ) ||
+                (!morning.end &&
+                    (nowTime > parseInt(morning.srart && now[1] < parseInt(afternoon.start))))))
         {
             return true;
         } 
-    }
     return false;
+    })
 }
 
 
@@ -49,25 +60,30 @@ function formatDay(day){
 //==============================================================================================================================
 // CROWD CALCULATION
 
-function crowdMoment(now, crowd){
-    var crowdNow;
-    for (var gap in crowd){
-        if (now.toISOString()>=crowd[gap]["date"] && (crowd[gap+1] && now.toISOString()<crowd[gap+1]["date"])){
-            crowdNow = crowd[gap]["mesure"];
-        }
-    }
-    
-    return crowdNow;
+function crowdMoment(moment, measures){
+    var crowdMoment;
+
+    measures.forEach(function(measure, index){
+        var inf = Date.parse(measure.date);
+        var sup = measures[index+1] ? Date.parse(measures[index+1].date) : undefined;
+        
+        if (moment >= inf && moment < sup)
+            crowdMoment = measure.value;
+    });
+
+    return crowdMoment;
 }
-function levelCalc(maxSize, crowdMoment) {
+
+
+function levelCalc(maxSize, crowdMoment){
     //Mesure how important the crowd is
     //Depends only on crowd for the moment
     var ratio = parseFloat((crowdMoment / maxSize).toFixed(2)) ;
     var level;
-    if (ratio>0.50){ level = "<5mn"; }
-    else if(ratio <=0.70) { level = "<15mn"; }
-    else {level = ">15mn";}
-            
+    if (ratio<=0.50){ level = 0; }
+    else if(ratio <=0.75) { level = 1; }
+    else {level = 2;}
+           
     return level;
 }
     
@@ -79,17 +95,6 @@ function findActual(month, date, hourmin, crowd){
     
 }
 
-/*function generateTable(schedule){
-    var now= new Date();
-    var day = now.getDay();
-    var beginingHour = parseInt(schedule[day][1]["start"])/100;
-    var beginingMin = parseInt(schedule[day][1]["start"])%100;
-    var endingHour = parseInt(schedule[day][2]["end"])/100;
-    var endingMin = parseInt(schedule[day][1]["end"])%100;
-    
-    var date = moment(year : now.getFullYear(), month : now.getMonth() , day : now.getDate(),
-                    hour : beginingHour, minute : beginingMin);
-    */
 
 //##############################################################################################################################
 // EXPORT
@@ -97,7 +102,7 @@ function findActual(month, date, hourmin, crowd){
 module.exports = {
     formatHour: formatHour,
     formatDay: formatDay,
-    levelCal : levelCalc,
+    levelCalc : levelCalc,
     isItOpen : isItOpen,
     crowdMoment : crowdMoment
 };

@@ -1,6 +1,8 @@
 'use strict';
 
 var React = require('react');
+var Levels = React.createFactory(require('./Levels.js'));
+
 var formatHour = require('../utils.js').formatHour;
 var formatDay = require('../utils.js').formatDay;
 var levelCalc = require('../utils.js').levelCalc;
@@ -38,7 +40,7 @@ var App = React.createClass({
         var week = ['lundi', 'mardi', 'mercredi', 'jeudi' , 'vendredi', 'samedi', 'dimanche' ];
         var months = [ "janvier", "février", "mars", "avril", "mai", "juin",
                           "juillet", "août", "septembre", "octobre", "novembre", "décembre"];
-        var dayName = week[now.getDay()];
+        var dayName = week[now.getDay()-1];
         var dayNum = now.getDate();
         var monthName = months[now.getMonth()];
         var hour = now.getHours();
@@ -67,7 +69,6 @@ var App = React.createClass({
         
         var open = isItOpen([dayName,hourmin], props.rcFake.schedule) ? "ouvert": "fermé" ;
         
-        //var open = props.rcFake["open"] ? "ouvert" : "fermé" ; 
         var openDay = [];
         var timetable = "";//for the moment, consider that timetable is the same every openDay. 
         var firstDay="";
@@ -93,12 +94,17 @@ var App = React.createClass({
         
         // CROWD
         var len = props.rcFake.crowd.length;
-        console.log('today', now.toISOString());
-        var waitingLevelNow = open? levelCalc( props.rcFake.maxSize, crowdMoment(now, props.rcFake.crowd)) : undefined;
-        console.log('waitingLevelNow', waitingLevelNow);
+        var waitingLevelNow = open? levelCalc(props.rcFake.maxSize, crowdMoment(Date.parse(now), props.rcFake.crowd)) : undefined;
         var crowd = React.DOM.div({}, 
-                                  React.DOM.h2({}, "Attente"),
-                                  React.DOM.div({}, waitingLevelNow));
+            React.DOM.h2({}, "Attente"),
+            React.DOM.div({}, waitingLevelNow),
+            levels
+        );
+        var levels = new Levels({
+            crowd: props.rcFake.crowd,
+            maxSize: props.rcFake.maxSize
+        });
+        
         //============================================================================================
         
         // WASTE
@@ -164,8 +170,9 @@ var App = React.createClass({
                             header,
                             wastes["unavaiable"] ? alert : undefined,
                             schedule,
-                            wasteList
-                             
+                            crowd,
+                            wasteList,
+                            levels
                             );
     }
 });

@@ -11,3 +11,18 @@
     display: inline-block;
     vertical-align: top;
 }
+
+.level{
+    display: inline-block;
+    width : 10px;
+    height: 10px;
+}
+.green{
+    background-color: green;
+}
+.orange{
+    background-color: orange;
+}
+.red{
+    background-color: red;
+}

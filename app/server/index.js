@@ -252,6 +252,22 @@ app.get('/sensors', function(req, res){
         });
 });
 
+app.post('/updateRC', function(req, res){
+    var rcId = Number(req.params.rcId);
+    
+    database.RecyclingCenters.update(rcId, {
+        name: req.params.name,
+        lat: req.params.lat,
+        lon: req.params.lon
+    })
+    .then(function(data){
+        res.send(data);
+    })
+    .catch(function(error){
+        console.log("error in /recycling-center/'+req.params.rcId: ", error);
+    });
+});
+
 // io.on('connection', function(socket) {
 //     console.log('Socket io Connexion');
 

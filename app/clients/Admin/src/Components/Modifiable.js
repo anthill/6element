@@ -5,7 +5,11 @@ var React = require('react');
 /*
 
 interface ModifiableProps{
-    text: string or int or float
+    text: string or int or float,
+    onChange: function(),
+    rcID: int,
+    dbTable: string,
+    dbField: string
 }
 interface ModifiableState{
     inputMode: boolean
@@ -42,10 +46,13 @@ var Modifiable = React.createClass({
                     ((event.charCode) ? event.charCode : 
                         ((event.keyCode) ? event.keyCode : 0));
 
-        console.log('key', key);
-
         if (key === 13 || key === 27){
             console.log('Enter or escape');
+
+            var newValue = this.getDOMNode().value;
+            console.log('newValue', newValue);
+
+            props.onChange(props.dbTable, props.rcID, {props.dbField: newValue});
 
             this.setState({
                 inputMode: false

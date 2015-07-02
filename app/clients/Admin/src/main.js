@@ -12,13 +12,18 @@ var socket = io();
 
 var errlog = console.error.bind(console);
 
-var topLevelStore = {
-	ants: undefined
-};
-
 function render(){
     React.render(new Application(topLevelStore), document.body);
 }
+
+function updateDB(table, id, fields){
+    // send request to server according to the desired table
+}
+
+var topLevelStore = {
+    ants: undefined,
+    onChange: updateDB
+};
 
 serverAPI.getAllSensors()
 .then(function(sensors){
@@ -31,7 +36,6 @@ serverAPI.getAllSensors()
 	render();
 })
 .catch(errlog);
-
 
 // THIS WILL BE NEEDED WHEN QUIPU SIGNAL IS INCORPORATED INTO DATA MSGS
 // socket.on('data', function (msg){

@@ -20,7 +20,8 @@ interface AntProps{
         sense_status: string,
         latest_input: string,
         latest_output: string
-    }
+    },
+    onChange: function()
 }
 interface AppState{
 }
@@ -54,7 +55,13 @@ var Ant = React.createClass({
                 ),
                 React.DOM.li({}, 
                     React.DOM.div({}, 'Installed at'),
-                    new Modifiable({text: props.ant.rcName}),
+                    new Modifiable({
+                        text: props.ant.rcName,
+                        onChange: props.onChange,
+                        rcID: props.ant.installed_at,
+                        dbTable: 'rc',
+                        dbField: 'name' 
+                    }),
                     React.DOM.div({}, props.ant.installed_at)
                 ),
                 React.DOM.li({}, 

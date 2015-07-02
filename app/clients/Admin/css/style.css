@@ -14,7 +14,7 @@
 	background-color: white;
 }
 
-.ant li div {
+.ant li * {
 	display: inline-block; margin: 0 1em;
 }
 
@@ -25,6 +25,22 @@
 .ant.updating {
 	background-color: red;
 	transition: background-color 1s;
+}
+
+.modifiable {
+	cursor: pointer;
+	transition: all 0.30s ease-in-out;
+}
+
+.modifiable.clicked{
+	padding: 0;
+	border: none; outline: 1px solid rgba(81, 203, 238, 1);
+	box-shadow: 0 0 5px rgba(81, 203, 238, 1);
+	cursor: default;
+}
+
+.modifiable:focus{
+	outline-offset: 0;
 }
 
 /* quipu status */

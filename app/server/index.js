@@ -244,7 +244,7 @@ app.get('/recycling-center/:rcId', function(req, res){
 app.get('/sensors', function(req, res){
     database.Sensors.getAllSensorsInfo()
         .then(function(data){
-            debug('All sensors', data);
+            // debug('All sensors', data);
             res.send(data);
         })
         .catch(function(error){

@@ -5,10 +5,15 @@ var React = require('react');
 var moment = require('moment');
 //==============================================================================================================================
 // HOUR / DATE FUNCTIONS
-
-function isItOpen(now, schedule){
+function isItOpenOn(day){
+    return (day[1].start ? day[1].start : false); 
+}
+function isItOpenNow(now, schedule){
     //now is an array [dayName, string hhmm]
     //schedule the object given in main.js
+    
+    var open = false;
+    
     var nowDay = now[0];
     var nowTime = now[1];
     
@@ -17,23 +22,18 @@ function isItOpen(now, schedule){
         var morning = day[1];
         var afternoon = day[2];
         
-        isBetweenHours 
+        var closeForLunch = morning.end; 
+        var isClosedEvening = nowTime < parseInt(morning.start) && nowTime > parseInt(afternoon.start);
+        var isClosedLunch = nowTime > parseInt(morning.end) && nowTime < parseInt(afternoon.start);
         
-        var isClosed = (now > closedTime) ;
-        
-        if (isClosed && isTuesday && isHolidays)
-        
-        if (nowDay === scheduleDay && //good day
-                ((morning.end && //don't close for lunch
-                    ((nowTime > parseInt(morning.end) && nowTime < parseInt(morning.end)) ||
-                    (nowTime > parseInt(afternoon.start) && nowTime < parseInt(afternoon.start))) ) ||
-                (!morning.end &&
-                    (nowTime > parseInt(morning.srart && now[1] < parseInt(afternoon.start))))))
-        {
-            return true;
-        } 
-    return false;
-    })
+        if (nowDay === scheduleDay && 
+                ((closeForLunch && !isClosedEvening && !isClosedLunch) ||
+                (!closeForLunch && !isClosedEvening)))
+            open = true; 
+        });
+    
+    
+    return open;
 }
 
 
@@ -61,15 +61,18 @@ function formatDay(day){
 // CROWD CALCULATION
 
 function crowdMoment(moment, measures){
-    var crowdMoment;
+    var crowdMoment = {};
 
     measures.forEach(function(measure, index){
         var inf = Date.parse(measure.date);
         var sup = measures[index+1] ? Date.parse(measures[index+1].date) : undefined;
         
         if (moment >= inf && moment < sup)
-            crowdMoment = measure.value;
+            crowdMoment = {date : measure.date,
+                           value : measure.value
+                          };
     });
+    
 
     return crowdMoment;
 }
@@ -79,8 +82,8 @@ function levelCalc(maxSize, crowdMoment){
     //Mesure how important the crowd is
     //Depends only on crowd for the moment
     var ratio = parseFloat((crowdMoment / maxSize).toFixed(2)) ;
-    var level;
-    if (ratio<=0.50){ level = 0; }
+    var level = [];
+    if (ratio<=0.50){ level = 0 ; }
     else if(ratio <=0.75) { level = 1; }
     else {level = 2;}
            
@@ -103,6 +106,7 @@ module.exports = {
     formatHour: formatHour,
     formatDay: formatDay,
     levelCalc : levelCalc,
-    isItOpen : isItOpen,
+    isItOpenNow : isItOpenNow,
+    isItOpenOn : isItOpenOn,
     crowdMoment : crowdMoment
 };

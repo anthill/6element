@@ -6,8 +6,8 @@ var Levels = React.createFactory(require('./Levels.js'));
 var formatHour = require('../utils.js').formatHour;
 var formatDay = require('../utils.js').formatDay;
 var levelCalc = require('../utils.js').levelCalc;
-var isItOpen = require('../utils.js').isItOpen;
-
+var isItOpenNow = require('../utils.js').isItOpenNow;
+var isItOpenOn = require('../utils.js').isItOpenOn;
 var crowdMoment = require('../utils.js').crowdMoment;
 
 /*
@@ -67,24 +67,26 @@ var App = React.createClass({
         //Has to be the same opening hour every openDay
         //Only work if closing days are monday and/or sunday
         
-        var open = isItOpen([dayName,hourmin], props.rcFake.schedule) ? "ouvert": "fermé" ;
+        var open = isItOpenNow([dayName,hourmin], props.rcFake.schedule);
         
-        var openDay = [];
+        //var openDay = [];
         var timetable = "";//for the moment, consider that timetable is the same every openDay. 
-        var firstDay="";
         
-        for ( var dayIndex in props.rcFake.schedule)
-        {
-            if (props.rcFake.schedule[dayIndex][1]["start"]) //if a day has an opening hour, then the RC is opened on that day
-            {   
-                openDay.push(props.rcFake.schedule[dayIndex]); 
-            }
-        }
+        var openDay = props.rcFake.schedule.filter(function(day){
+
+            return (isItOpenOn(day));
+                        
+        });
+        
+        var openMessage;
+    
+        open ?  openMessage = React.DOM.div({className : 'greenText'}, "Ouvert"):
+                openMessage = React.DOM.div({className : 'redText'}, "Fermé");
         
         timetable = formatDay(openDay[0]);
         var schedule = React.DOM.div({}, [
                                      React.DOM.h2({}, "Horaires"),
-                                     React.DOM.div({}, open),
+                                     openMessage,
                                      React.DOM.div({}, openDay[0][0] + " - " + openDay[openDay.length - 1][0]), 
                                      //don't consider that RC could close for lunch
                                      React.DOM.div({}, timetable)
@@ -93,17 +95,41 @@ var App = React.createClass({
         //============================================================================================
         
         // CROWD
-        var len = props.rcFake.crowd.length;
-        var waitingLevelNow = open? levelCalc(props.rcFake.maxSize, crowdMoment(Date.parse(now), props.rcFake.crowd)) : undefined;
+        var len = props.rcFake.crowd.length;/*
+        var crowdMoment = crowdMoment(Date.parse(now), props.rcFake.crowd);*/
+        var waitingLevelNow = open? levelCalc(props.rcFake.maxSize, crowdMoment(Date.parse(now), props.rcFake.crowd).value) : undefined;
+        
+        var waitingMessages = [["green","<5mn"], ["yellow","5mn<*<15mn"],["orange", ">15mn"]];
+             
+        var legendColor = waitingMessages.map(function(level){
+            return React.DOM.div({className : 'inline'},
+                React.DOM.div({className : 'inline colorBlock '+level[0]+ 'Font'}),
+                React.DOM.div({className : 'inline '+level[0]+ 'Text'}, level[1]))
+        });
+        
+        var legendNow = React.DOM.div({className : 'inline'},
+            React.DOM.div({className : 'inline colorBlock border'}),
+            React.DOM.div({className : 'inline'}, 'maintenant'));
+        
+        var legend= React.DOM.div({className : 'inline'}, 
+            legendColor, 
+            legendNow);
+                                                    
+        
+        var crowdPrediction = new Levels({
+            crowd: props.rcFake.crowd,
+            maxSize: props.rcFake.maxSize,
+            waitingMessages : waitingMessages,
+            now : now
+        });
+        
         var crowd = React.DOM.div({}, 
             React.DOM.h2({}, "Attente"),
-            React.DOM.div({}, waitingLevelNow),
-            levels
+            open ? React.DOM.div({className : waitingMessages[waitingLevelNow][0]+'Text'}, waitingMessages[waitingLevelNow][1]) : undefined,
+            React.DOM.div({}, legend),
+            crowdPrediction
         );
-        var levels = new Levels({
-            crowd: props.rcFake.crowd,
-            maxSize: props.rcFake.maxSize
-        });
+  
         
         //============================================================================================
         
@@ -116,18 +142,19 @@ var App = React.createClass({
         
         var wasteList;
         
-        for (var waste in props.rcFake.wastes) {
-            if (props.rcFake.wastes[waste]["status"] === "unavaiable") { 
-                wastes.unavaiable.push(props.rcFake.wastes[waste]["type"]);
+        props.rcFake.wastes.forEach(function(waste){
+            if (waste.status==="unavaiable") { 
+                wastes.unavaiable.push(waste.type);
             }
             else {
-                wastes.avaiable.push(props.rcFake.wastes[waste]["type"]);   
+                wastes.avaiable.push(waste.type);   
             }
-        }
+        });
         
-        var lis =[];
+        var lis = [];
+        
         var lisAlert = [] ;
-        
+                                           
         for (var status in wastes){    
             for (var index in wastes[status]){
                 var li = React.DOM.li({},
@@ -149,19 +176,26 @@ var App = React.createClass({
         }
         
         var wasteList = React.DOM.div({},
-                                      React.DOM.h2({}, "Déchets"),
-                                      React.DOM.ul({}, lis)
-                            );
+            React.DOM.h2({}, "Déchets"),
+            React.DOM.ul({}, lis)
+            );
+        
         var alert = React.DOM.div({},
-                                 React.DOM.h2({}, "Alerte"),
-                                 React.DOM.ul({}, lisAlert)
-                                 );
+            React.DOM.h2({}, "Alerte"),
+            React.DOM.ul({}, lisAlert)
+            );
             
         //============================================================================================
         
         // LOCALISATION
         
-        
+        var localisation = React.DOM.div({},
+            React.DOM.div({}, "adresse : ", props.rcFake.address),
+            React.DOM.div({}, 
+                          "latitude : ", props.rcFake.coords.lat,
+                          "longitude: ", props.rcFake.coords.long),
+            React.DOM.div({}, "téléphone : ", props.rcFake.phone)
+        );
         
         //############################################################################################
         
@@ -172,7 +206,7 @@ var App = React.createClass({
                             schedule,
                             crowd,
                             wasteList,
-                            levels
+                            localisation
                             );
     }
 });

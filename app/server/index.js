@@ -80,16 +80,16 @@ app.get('/Map_app.js', function(req, res){
 });
 
 app.get('/Admin_app.js', function(req, res){
-    // send sms to sensors to ask them their status
-    database.Sensors.getAllSensorsInfo()
-        .then(function(sensors){
-            sensors.forEach(function(sensor){
-                sendSMS("status", sensor.phone_number);
-            });
-        })
-        .catch(function(error){
-            console.log("error in sending status sms ", error);
-        });
+    // // send sms to sensors to ask them their status
+    // database.Sensors.getAllSensorsInfo()
+    //     .then(function(sensors){
+    //         sensors.forEach(function(sensor){
+    //             sendSMS("status", sensor.phone_number);
+    //         });
+    //     })
+    //     .catch(function(error){
+    //         console.log("error in sending status sms ", error);
+    //     });
     res.sendFile(path.join(__dirname, '../clients/Admin_app.js'));
 });
 

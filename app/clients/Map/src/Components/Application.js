@@ -54,8 +54,6 @@ module.exports = React.createClass({
         var self = this;
         var props = this.props;
         var state = this.state;
-
-        console.log('APP', state.selectedRCMap);
         
         var panel = new Panel({
             recyclingCenterMap: state.selectedRCMap,

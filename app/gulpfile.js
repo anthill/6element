@@ -21,7 +21,7 @@ gulp.task('buildMap', function(){
 
 gulp.task('watch', function() {
     console.log('Watching');
-    var serverWatcher = gulp.watch('./server/**', function(){
+    var serverWatcher = gulp.watch(['./server/**', './database/**'], function(){
         server.stop();
         gulp.run('serve');
     });

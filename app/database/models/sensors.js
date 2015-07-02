@@ -5,6 +5,7 @@ sql.setDialect('postgres');
 var databaseP = require('../management/databaseClientP');
 
 var sensors = require('../management/declarations.js').sensors;
+var recyclingCenters = require('../management/declarations.js').recycling_centers;
 
 module.exports = {
     create: function (data) {
@@ -24,6 +25,9 @@ module.exports = {
                 });
             });
         })
+        .catch(function(err){
+            console.log('ERROR in create', err);
+        });  
     },
     findByPhoneNumber: function(phoneNumber) {
         return databaseP.then(function (db) {
@@ -42,7 +46,10 @@ module.exports = {
                     else resolve(result.rows[0]);
                 });
             });
-        })        
+        })
+        .catch(function(err){
+            console.log('ERROR in findByPhoneNumber', err);
+        });          
     },
     
     update: function(sensor, delta) {
@@ -60,18 +67,29 @@ module.exports = {
                     else resolve(result.rows[0]);
                 });
             });
-        });
+        })
+        .catch(function(err){
+            console.log('ERROR in update', err);
+        });        
     },
 
-    getAllSensors: function() {
+    getAllSensorsInfo: function() {
         return databaseP.then(function (db) {
             
             var query = sensors
-                .select("*")
-                .from(sensors)
+                .select(
+                    sensors.star(),
+                    recyclingCenters.name.as('rcName'),
+                    recyclingCenters.lat,
+                    recyclingCenters.lon
+                )
+                .from(
+                    sensors
+                    .join(recyclingCenters)
+                    .on(sensors.installed_at.equals(recyclingCenters.id))
+                )
                 .toQuery();
 
-            // console.log('sensors query', query);
             return new Promise(function (resolve, reject) {
                 db.query(query, function (err, result) {
                     if (err) reject(err);
@@ -79,6 +97,9 @@ module.exports = {
                     else resolve(result.rows);
                 });
             });
+        })
+        .catch(function(err){
+            console.log('ERROR in getAllSensorsInfo', err);
         });        
     }
 

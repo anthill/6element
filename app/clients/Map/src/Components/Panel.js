@@ -26,7 +26,7 @@ var Panel = React.createClass({
         var props = this.props;
         var state = this.state;
 
-        console.log('panel props', props);
+        // console.log('PANEL props', props);
 
         var classes = '';
 

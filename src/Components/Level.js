@@ -9,7 +9,7 @@ var Level = React.createFactory(require('./Level.js'));
 
 interface LevelProps{
     date: string
-    waiting: integer between 0 and 2 (include)
+    waiting: [color, message]
     
 }
 interface LevelState{
@@ -26,6 +26,7 @@ var Level = React.createClass({
         var props = this.props;
         var state = this.state;
         
+        var displayHour ;
               
         var classes = [
             'inline ',
@@ -34,12 +35,15 @@ var Level = React.createClass({
             'Font '
         ];
         
-        if (props.gapNow) classes.push('border')
+        if (props.gapNow) classes.push('border ')
+        if (props.oClock)
+            displayHour = React.DOM.div({}, props.oClock);
         
         // console.log('APP props', props);
         // console.log('APP state', state);
         
-        return React.DOM.div({className: classes.join('')});
+        return React.DOM.div({className: classes.join('')}/*,
+                            if (displayHour) displayHour;*/);
     }
 });
 

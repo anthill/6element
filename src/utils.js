@@ -89,14 +89,9 @@ function levelCalc(maxSize, crowdMoment){
            
     return level;
 }
-    
-function createLine(now, crowd, maxSize){
-    
-}
 
-function findActual(month, date, hourmin, crowd){
-    
-}
+
+
 
 
 //##############################################################################################################################

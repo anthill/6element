@@ -10,6 +10,8 @@ var isItOpenNow = require('../utils.js').isItOpenNow;
 var isItOpenOn = require('../utils.js').isItOpenOn;
 var crowdMoment = require('../utils.js').crowdMoment;
 
+
+
 /*
 
 interface AppProps{
@@ -47,13 +49,14 @@ var App = React.createClass({
         var min = now.getMinutes();
         var hourmin= parseInt((hour.toString() + min.toString()));
         
+        
 
         //=========================================================================================
         
         //HEADER
         
-        var name = props.rcFake["name"];
-        var fav = props.rcFake["favourite"] ? "*" : "";
+        var name = props.rcFake.name;
+        var fav = props.rcFake.favourite ? "*" : "";
                           
         var header = React.DOM.h1({}, 
                             React.DOM.div({}, fav),
@@ -180,7 +183,7 @@ var App = React.createClass({
             React.DOM.ul({}, lis)
             );
         
-        var alert = React.DOM.div({},
+        var alert = React.DOM.div({className : 'redText'},
             React.DOM.h2({}, "Alerte"),
             React.DOM.ul({}, lisAlert)
             );

@@ -28,22 +28,27 @@ var Levels = React.createClass({
         var self = this;
         var props = this.props;
         var state = this.state;
-
+        
         // console.log('APP props', props);
         // console.log('APP state', state);                   
 
         var myLevels = props.crowd.map(function(gap){
             var waiting = props.waitingMessages[levelCalc(props.maxSize, gap.value)];
             var gapNow = false;
+            var oClock = false; 
             if ((crowdMoment(Date.parse(props.now), props.crowd).date) === gap.date) 
                 gapNow = true ;
+            if (Date.parse(gap.date).getMinutes()===0)
+                oClock = Date.parse(gap.date).getHours();
             
             return new Level({
                 date: gap.date,
                 waiting: waiting,
-                gapNow : gapNow
+                gapNow : gapNow,
+                oClock : oClock
             }); 
-        });        
+        });   
+        
         return React.DOM.div({className: 'inline'},
             myLevels
         );

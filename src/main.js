@@ -28,51 +28,35 @@ var rcFake = {
     
     open: true,
     
-    schedule: [
-        [
-            //"monday", 
-            "lundi",
+    // opened intervall in UTC
+    schedule: {
+        //monday
+        0:  [
             {start: "0900", end: "1200"},
             {start: "1400", end: "1800"}
         ],
-        [
-            //"tuesday",
-            "mardi",
+        // tuesday
+        1:  [
             {start: "0900", end: "1200"},
             {start: "1400", end: "1800"}
         ],
-        [
-            //"wednesday",
-            "mercredi",
+        2 : [
             {start: "0900", end: "1200"},
             {start: "1400", end: "1800"}
         ],
-        [
-            //"thursday",
-            "jeudi",
+        3: [
             {start: "0900", end: "1200"},
             {start: "1400", end: "1800"}
         ],
-        [
-            //"friday",
-            "vendredi",
+        4 : [
             {start: "0900", end: "1200"},
             {start: "1400", end: "1800"}
         ],
-        [
-            //"saturday",
-            "samedi",
+        5 : [
             {start: "0900", end: "1200"},
             {start: "1400", end: "1800"}
-        ],
-        [
-            //"sunday",
-            "dimanche",
-            {start: undefined, end: undefined},
-            {start: undefined, end: undefined}
         ]
-     ],
-    
+    },  
     
     maxSize : 23,   
     

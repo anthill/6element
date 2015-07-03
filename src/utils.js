@@ -36,6 +36,28 @@ function isItOpenNow(now, schedule){
     return open;
 }
 
+function isItOpenNow(datetimeObject, schedule){
+
+    
+    // check if there is an entry on this day
+    var day = datetimeObject.getDay();
+    if (!schedule.has(day)
+        return false;
+
+    // check if there is an interval containing this hour 
+    schedule[day].forEach(function(interval){
+        // compute minutes since midnight
+        var start = parseInt(interval.start.slice(2)) * 60 + parseInt(interval.start.slice(2,4));
+        var end = parseInt(interval.end.slice(2)) * 60 + parseInt(interval.end.slice(2,4));
+        var current = datetimeObject.getUTCHours() * 60 + datetimeObject.getMinutes();
+        if (current > start && current < end)
+            return true;
+
+    });
+    return false;
+    
+}
+
 
 
 function formatHour(hour){

@@ -37,7 +37,7 @@ var App = React.createClass({
         // console.log('APP props', props);
         // console.log('APP state', state);
         
-        //DATE
+        // 
         var now = new Date ();
         var week = ['lundi', 'mardi', 'mercredi', 'jeudi' , 'vendredi', 'samedi', 'dimanche' ];
         var months = [ "janvier", "février", "mars", "avril", "mai", "juin",
@@ -47,7 +47,7 @@ var App = React.createClass({
         var monthName = months[now.getMonth()];
         var hour = now.getHours();
         var min = now.getMinutes();
-        var hourmin= parseInt((hour.toString() + min.toString()));
+        var hourmin = parseInt((hour.toString() + min.toString()));
         
         
 

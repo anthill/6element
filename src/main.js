@@ -273,6 +273,9 @@ var rcFake = {
     
     
     wastes: 
+    //type never change
+    //status does
+    
     [
         {
             type: "green waste",

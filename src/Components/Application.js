@@ -7,9 +7,8 @@ var formatHour = require('../utils.js').formatHour;
 var formatDay = require('../utils.js').formatDay;
 var levelCalc = require('../utils.js').levelCalc;
 var isItOpenNow = require('../utils.js').isItOpenNow;
-var isItOpenOn = require('../utils.js').isItOpenOn;
 var crowdMoment = require('../utils.js').crowdMoment;
-
+var displaySchedule = require('../utils.js').displaySchedule;
 
 
 /*
@@ -67,30 +66,26 @@ var App = React.createClass({
         
         // SCHEDULE
         
-        //Has to be the same opening hour every openDay
+        //Has to be the same opening hour every day
         //Only work if closing days are monday and/or sunday
         
-        var open = isItOpenNow([dayName,hourmin], props.rcFake.schedule);
+        var open = isItOpenNow(now, props.rcFake.schedule);
         
-        //var openDay = [];
-        var timetable = "";//for the moment, consider that timetable is the same every openDay. 
-        
-        var openDay = props.rcFake.schedule.filter(function(day){
-
-            return (isItOpenOn(day));
-                        
-        });
+        var timetable = "";//for the moment, consider that timetable is the same every day. 
         
         var openMessage;
+        
+        var openDayMessage = displaySchedule(week,props.rcFake.schedule);     
+        
     
         open ?  openMessage = React.DOM.div({className : 'greenText'}, "Ouvert"):
                 openMessage = React.DOM.div({className : 'redText'}, "Fermé");
         
-        timetable = formatDay(openDay[0]);
+        timetable = formatDay(props.rcFake.schedule[0]);
         var schedule = React.DOM.div({}, [
                                      React.DOM.h2({}, "Horaires"),
                                      openMessage,
-                                     React.DOM.div({}, openDay[0][0] + " - " + openDay[openDay.length - 1][0]), 
+                                     React.DOM.div({}, openDayMessage), 
                                      //don't consider that RC could close for lunch
                                      React.DOM.div({}, timetable)
                                      ]);

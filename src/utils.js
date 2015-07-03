@@ -5,10 +5,8 @@ var React = require('react');
 var moment = require('moment');
 //==============================================================================================================================
 // HOUR / DATE FUNCTIONS
-function isItOpenOn(day){
-    return (day[1].start ? day[1].start : false); 
-}
-function isItOpenNow(now, schedule){
+
+/*function isItOpenNow(now, schedule){
     //now is an array [dayName, string hhmm]
     //schedule the object given in main.js
     
@@ -34,14 +32,14 @@ function isItOpenNow(now, schedule){
     
     
     return open;
-}
+}*/
 
 function isItOpenNow(datetimeObject, schedule){
 
     
     // check if there is an entry on this day
     var day = datetimeObject.getDay();
-    if (!schedule.has(day)
+    if (!schedule.hasOwnProperty(day))
         return false;
 
     // check if there is an interval containing this hour 
@@ -58,24 +56,73 @@ function isItOpenNow(datetimeObject, schedule){
     
 }
 
+function displaySchedule(week, schedule){
+    var breakDay = true;
+    var days = "";
+    
+    week.forEach(function(day, index){
+        if (Object.keys(schedule).hasOwnProperty(index)){            
+            if (breakDay) {
+                days += day + " - ";
+            }
+            console.log('schedule[index] === schedule[index+1]', sameHours(index, index+1)
+            if (Object.keys(schedule).hasOwnProperty(index+1) && sameHours(index, index+1)){
+                breakDay = false;
+            }
+            
+            else {
+                days += day + " : " + formatDay(schedule[index]) + "\n";
+                breakDay = true;
+            }
+        }
+        else
+            days += day + " : fermé \n";     
+        
+    })
+                
+    console.log('days', days);
+    return days;
+        
+}
 
-
+function sameHours(d1,d2){
+    if ((d1.length === d2.length)) 
+        return false;
+    else{
+        d1.forEach(function(session){
+            if (session.start !== session.start ||
+                !session.end !== session.end)
+                return false;
+        });
+    }
+                   
+        
+}
+        /*(0:  [
+            {start: "0900", end: "1200"},
+            {start: "1400", end: "1800"}
+        ],
+        // tuesday
+        1:  [
+            {start: "0900", end: "1200"},
+            {start: "1400", end: "1800"}
+        ],*/
 function formatHour(hour){
     //has to be a string and length=4
     return hour.slice(0,2) + ":" + hour.slice(2,4);
 }
 
 
-function formatDay(day){
-    //Has to be a list composed of 2 similar objects 
+function formatDay(scheduleDay){
+    //Each day in schedule Has to be a list composed with similar objects  {start : , end : }
     // If RC doesn't close for lunch the closing time is still in day[2]["end"]. day[1]["end"] and day[2]["start"] are undefined
-    var display = formatHour(day[1]["start"]) + " - ";
-    if ( formatHour(day[1]["end"]) )
+    var display = formatHour(scheduleDay[0].start) + " - ";
+    if ( formatHour(scheduleDay[0].end) )
     {
-                display+= formatHour(day[1]["end"])  + " / " +
-                formatHour(day[2]["start"])  + " - " ;
+                display+= formatHour(scheduleDay[0].end)  + " / " +
+                formatHour(scheduleDay[1].start)  + " - " ;
     }
-    display+=formatHour(day[2]["end"]) + ".";
+    display+=formatHour(scheduleDay[1].end) + ".";
     return display;
 }
 
@@ -124,6 +171,6 @@ module.exports = {
     formatDay: formatDay,
     levelCalc : levelCalc,
     isItOpenNow : isItOpenNow,
-    isItOpenOn : isItOpenOn,
-    crowdMoment : crowdMoment
+    crowdMoment : crowdMoment,
+    displaySchedule : displaySchedule
 };

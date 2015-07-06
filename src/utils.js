@@ -61,12 +61,13 @@ function displaySchedule(week, schedule){
     var days = "";
     
     week.forEach(function(day, index){
-        if (Object.keys(schedule).hasOwnProperty(index)){            
+        if (Object.keys(schedule).hasOwnProperty(index))
+        {            
             if (breakDay) {
                 days += day + " - ";
             }
-            console.log('schedule[index] === schedule[index+1]', sameHours(index, index+1)
-            if (Object.keys(schedule).hasOwnProperty(index+1) && sameHours(index, index+1)){
+                                    
+            if (Object.keys(schedule).hasOwnProperty(index+1) && sameHours(schedule[index], schedule[index+1])){
                 breakDay = false;
             }
             
@@ -76,26 +77,31 @@ function displaySchedule(week, schedule){
             }
         }
         else
-            days += day + " : fermé \n";     
-        
-    })
+            days += day + " : fermé \n";    
                 
-    console.log('days', days);
+    });
+    
+    console.log(days);
     return days;
         
 }
 
-function sameHours(d1,d2){
-    if ((d1.length === d2.length)) 
+function sameHours(d1,d2){/*
+    console.log('d1.length',d1,  d1.length);
+    console.log('d2.length',d2,  d2.length);*/
+    if (d1.length !== d2.length) 
         return false;
-    else{
-        d1.forEach(function(session){
-            if (session.start !== session.start ||
-                !session.end !== session.end)
+    
+    else{/*
+        console.log('koukou');*/
+        d1.forEach(function(session, index){/*
+            console.log('session', session);*/
+            if (session.start !== d2[index].start ||
+                !session.end !== d2[index].end)
                 return false;
         });
     }
-                   
+    return true;
         
 }
         /*(0:  [

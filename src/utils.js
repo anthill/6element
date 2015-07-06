@@ -6,7 +6,7 @@ var moment = require('moment');
 //==============================================================================================================================
 // HOUR / DATE FUNCTIONS
 
-/*function isItOpenNow(now, schedule){
+/*function isItOpen(now, schedule){
     //now is an array [dayName, string hhmm]
     //schedule the object given in main.js
     
@@ -34,25 +34,33 @@ var moment = require('moment');
     return open;
 }*/
 
-function isItOpenNow(datetimeObject, schedule){
+function isItOpen(datetimeObject, schedule){
 
     
     // check if there is an entry on this day
-    var day = datetimeObject.getDay();
-    if (!schedule.hasOwnProperty(day))
+    var day = numDay(datetimeObject);
+    var open = false;
+    if (!(schedule.hasOwnProperty(day)))
         return false;
-
+    
     // check if there is an interval containing this hour 
     schedule[day].forEach(function(interval){
         // compute minutes since midnight
-        var start = parseInt(interval.start.slice(2)) * 60 + parseInt(interval.start.slice(2,4));
-        var end = parseInt(interval.end.slice(2)) * 60 + parseInt(interval.end.slice(2,4));
+        var start = parseInt(interval.start.slice(0,2)) * 60 + parseInt(interval.start.slice(2,4));
+        var end = parseInt(interval.end.slice(0,2)) * 60 + parseInt(interval.end.slice(2,4));
         var current = datetimeObject.getUTCHours() * 60 + datetimeObject.getMinutes();
+        
+        /*console.log(interval.start.slice(0,2));
+        console.log('start', start);
+        console.log('end', end);
+        console.log('current', current);*/
+        
         if (current > start && current < end)
-            return true;
+            open =  true;
+            return open;
 
     });
-    return false;
+    return open;
     
 }
 
@@ -61,13 +69,16 @@ function displaySchedule(week, schedule){
     var days = "";
     
     week.forEach(function(day, index){
-        if (Object.keys(schedule).hasOwnProperty(index))
-        {            
+        // Check if it's open today
+        
+        if (schedule.hasOwnProperty(index))
+        {  
             if (breakDay) {
                 days += day + " - ";
             }
-                                    
-            if (Object.keys(schedule).hasOwnProperty(index+1) && sameHours(schedule[index], schedule[index+1])){
+               
+            //Check if it's open tomorrow and if opening hours are the same 
+            if (schedule.hasOwnProperty(index+1) && sameHours(schedule[index], schedule[index+1])){
                 breakDay = false;
             }
             
@@ -77,25 +88,19 @@ function displaySchedule(week, schedule){
             }
         }
         else
-            days += day + " : fermé \n";    
-                
+            days += day + " : fermé \n";                    
     });
     
-    console.log(days);
     return days;
         
 }
 
-function sameHours(d1,d2){/*
-    console.log('d1.length',d1,  d1.length);
-    console.log('d2.length',d2,  d2.length);*/
+function sameHours(d1,d2){
     if (d1.length !== d2.length) 
         return false;
     
-    else{/*
-        console.log('koukou');*/
-        d1.forEach(function(session, index){/*
-            console.log('session', session);*/
+    else{
+        d1.forEach(function(session, index){
             if (session.start !== d2[index].start ||
                 !session.end !== d2[index].end)
                 return false;
@@ -104,15 +109,13 @@ function sameHours(d1,d2){/*
     return true;
         
 }
-        /*(0:  [
-            {start: "0900", end: "1200"},
-            {start: "1400", end: "1800"}
-        ],
-        // tuesday
-        1:  [
-            {start: "0900", end: "1200"},
-            {start: "1400", end: "1800"}
-        ],*/
+function numDay(datetimeObject){
+    var numDay = datetimeObject.getDay()-1;
+    if (numDay === -1)
+        numDay = 6;
+    return numDay;
+}
+    
 function formatHour(hour){
     //has to be a string and length=4
     return hour.slice(0,2) + ":" + hour.slice(2,4);
@@ -135,12 +138,13 @@ function formatDay(scheduleDay){
 //==============================================================================================================================
 // CROWD CALCULATION
 
-function crowdMoment(moment, measures){
+function crowdMoment(moment, measures, schedule){
     var crowdMoment = {};
 
     measures.forEach(function(measure, index){
-        var inf = Date.parse(measure.date);
-        var sup = measures[index+1] ? Date.parse(measures[index+1].date) : undefined;
+        var inf = new Date(measure.date);
+        //check if it's theorically and practically open 
+        var sup = (isItOpen(moment, schedule) && measures[index+1]) ? new Date(measures[index+1].date) : undefined;
         
         if (moment >= inf && moment < sup)
             crowdMoment = {date : measure.date,
@@ -176,7 +180,8 @@ module.exports = {
     formatHour: formatHour,
     formatDay: formatDay,
     levelCalc : levelCalc,
-    isItOpenNow : isItOpenNow,
+    isItOpen : isItOpen,
     crowdMoment : crowdMoment,
-    displaySchedule : displaySchedule
+    displaySchedule : displaySchedule,
+    numDay : numDay
 };

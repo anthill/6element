@@ -6,9 +6,10 @@ var Levels = React.createFactory(require('./Levels.js'));
 var formatHour = require('../utils.js').formatHour;
 var formatDay = require('../utils.js').formatDay;
 var levelCalc = require('../utils.js').levelCalc;
-var isItOpenNow = require('../utils.js').isItOpenNow;
+var isItOpen = require('../utils.js').isItOpen;
 var crowdMoment = require('../utils.js').crowdMoment;
 var displaySchedule = require('../utils.js').displaySchedule;
+var numDay = require('../utils.js').numDay;
 
 
 /*
@@ -38,11 +39,11 @@ var App = React.createClass({
         
         // 
         var now = new Date ();
-        var week = ['lundi', 'mardi', 'mercredi', 'jeudi' , 'vendredi', 'samedi', 'dimanche' ];
+        var week = ['lundi', 'mardi', 'mercredi', 'jeudi' , 'vendredi', 'samedi' , 'dimanche'];
         var months = [ "janvier", "février", "mars", "avril", "mai", "juin",
                           "juillet", "août", "septembre", "octobre", "novembre", "décembre"];
-        var dayName = week[now.getDay()-1];
-        var dayNum = now.getDate();
+        var dayNum = numDay(now);
+        var dayName = week[dayNum];
         var monthName = months[now.getMonth()];
         var hour = now.getHours();
         var min = now.getMinutes();
@@ -65,14 +66,9 @@ var App = React.createClass({
         
         
         // SCHEDULE
-        
-        //Has to be the same opening hour every day
-        //Only work if closing days are monday and/or sunday
-        
-        var open = isItOpenNow(now, props.rcFake.schedule);
-        
-        var timetable = "";//for the moment, consider that timetable is the same every day. 
-        
+                
+        var open = isItOpen(now, props.rcFake.schedule);
+                
         var openMessage;
         
         var openDayMessage = displaySchedule(week,props.rcFake.schedule);     
@@ -81,21 +77,17 @@ var App = React.createClass({
         open ?  openMessage = React.DOM.div({className : 'greenText'}, "Ouvert"):
                 openMessage = React.DOM.div({className : 'redText'}, "Fermé");
         
-        timetable = formatDay(props.rcFake.schedule[0]);
         var schedule = React.DOM.div({}, [
                                      React.DOM.h2({}, "Horaires"),
                                      openMessage,
                                      React.DOM.div({}, openDayMessage), 
-                                     //don't consider that RC could close for lunch
-                                     React.DOM.div({}, timetable)
                                      ]);
         
         //============================================================================================
         
         // CROWD
-        var len = props.rcFake.crowd.length;/*
-        var crowdMoment = crowdMoment(Date.parse(now), props.rcFake.crowd);*/
-        var waitingLevelNow = open? levelCalc(props.rcFake.maxSize, crowdMoment(Date.parse(now), props.rcFake.crowd).value) : undefined;
+        var len = props.rcFake.crowd.length;
+        var waitingLevelNow = open? levelCalc(props.rcFake.maxSize, crowdMoment(now, props.rcFake.crowd, props.rcFake.schedule).value) : undefined;
         
         var waitingMessages = [["green","<5mn"], ["yellow","5mn<*<15mn"],["orange", ">15mn"]];
              
@@ -118,7 +110,8 @@ var App = React.createClass({
             crowd: props.rcFake.crowd,
             maxSize: props.rcFake.maxSize,
             waitingMessages : waitingMessages,
-            now : now
+            now : now,
+            schedule : props.rcFake.schedule
         });
         
         var crowd = React.DOM.div({}, 

@@ -6,40 +6,13 @@ var moment = require('moment');
 //==============================================================================================================================
 // HOUR / DATE FUNCTIONS
 
-/*function isItOpen(now, schedule){
-    //now is an array [dayName, string hhmm]
-    //schedule the object given in main.js
-    
-    var open = false;
-    
-    var nowDay = now[0];
-    var nowTime = now[1];
-    
-    schedule.forEach(function(day){ 
-        var scheduleDay = day[0]
-        var morning = day[1];
-        var afternoon = day[2];
-        
-        var closeForLunch = morning.end; 
-        var isClosedEvening = nowTime < parseInt(morning.start) && nowTime > parseInt(afternoon.start);
-        var isClosedLunch = nowTime > parseInt(morning.end) && nowTime < parseInt(afternoon.start);
-        
-        if (nowDay === scheduleDay && 
-                ((closeForLunch && !isClosedEvening && !isClosedLunch) ||
-                (!closeForLunch && !isClosedEvening)))
-            open = true; 
-        });
-    
-    
-    return open;
-}*/
-
 function isItOpen(datetimeObject, schedule){
 
     
     // check if there is an entry on this day
     var day = numDay(datetimeObject);
     var open = false;
+    
     if (!(schedule.hasOwnProperty(day)))
         return false;
     
@@ -50,23 +23,24 @@ function isItOpen(datetimeObject, schedule){
         var end = parseInt(interval.end.slice(0,2)) * 60 + parseInt(interval.end.slice(2,4));
         var current = datetimeObject.getUTCHours() * 60 + datetimeObject.getMinutes();
         
-        /*console.log(interval.start.slice(0,2));
-        console.log('start', start);
-        console.log('end', end);
-        console.log('current', current);*/
-        
-        if (current > start && current < end)
+        if (current > start && current < end) {
             open =  true;
             return open;
+        }
 
     });
-    return open;
-    
+    return open;   
 }
 
+
 function displaySchedule(week, schedule){
+    
     var breakDay = true;
     var days = "";
+    var hours = "";
+    var div ; 
+    var divs = [];
+    
     
     week.forEach(function(day, index){
         // Check if it's open today
@@ -83,19 +57,31 @@ function displaySchedule(week, schedule){
             }
             
             else {
-                days += day + " : " + formatDay(schedule[index]) + "\n";
+                days += day;
+                hours = formatDay(schedule[index])
+                div = React.DOM.div({},
+                    React.DOM.div({}, days, " : " ),
+                    React.DOM.div({}, hours));
+                divs.push(div);
                 breakDay = true;
             }
         }
-        else
-            days += day + " : fermé \n";                    
+        else {
+            days = day;
+            hours = "fermé";
+            div = React.DOM.div({},
+                React.DOM.div({}, days, " : " ),
+                React.DOM.div({}, hours));
+            divs.push(div)
+        }
     });
     
-    return days;
+    return divs;
         
 }
 
 function sameHours(d1,d2){
+    //don't compare each values if both list are not the same length
     if (d1.length !== d2.length) 
         return false;
     
@@ -109,6 +95,7 @@ function sameHours(d1,d2){
     return true;
         
 }
+
 function numDay(datetimeObject){
     var numDay = datetimeObject.getDay()-1;
     if (numDay === -1)
@@ -116,40 +103,45 @@ function numDay(datetimeObject){
     return numDay;
 }
     
-function formatHour(hour){
-    //has to be a string and length=4
-    return hour.slice(0,2) + ":" + hour.slice(2,4);
+function formatHour(hour, now){
+    //has to be a string and length=4 or 3
+    
+    now = new Date();
+    var localHour = (parseInt(hour) - (now.getTimezoneOffset()/60 * 100)).toString();
+    return localHour.slice(0,localHour.length-2) + ":" + localHour.slice(localHour.length-2);
 }
 
 
 function formatDay(scheduleDay){
     //Each day in schedule Has to be a list composed with similar objects  {start : , end : }
-    // If RC doesn't close for lunch the closing time is still in day[2]["end"]. day[1]["end"] and day[2]["start"] are undefined
-    var display = formatHour(scheduleDay[0].start) + " - ";
-    if ( formatHour(scheduleDay[0].end) )
-    {
-                display+= formatHour(scheduleDay[0].end)  + " / " +
-                formatHour(scheduleDay[1].start)  + " - " ;
-    }
-    display+=formatHour(scheduleDay[1].end) + ".";
-    return display;
+    var div = "";
+    var divs = []; 
+    
+    scheduleDay.forEach(function(gap){
+        div = formatHour(gap.start) + " - " + formatHour(gap.end);
+        divs.push(div);
+    });
+
+    return divs;
 }
 
 //==============================================================================================================================
 // CROWD CALCULATION
 
 function crowdMoment(moment, measures, schedule){
-    var crowdMoment = {};
-
-    measures.forEach(function(measure, index){
-        var inf = new Date(measure.date);
+    
+    var crowdMoment = measures.find(function(measure, index){
+        var inf = new Date(measure.date).getTime();
         //check if it's theorically and practically open 
-        var sup = (isItOpen(moment, schedule) && measures[index+1]) ? new Date(measures[index+1].date) : undefined;
         
-        if (moment >= inf && moment < sup)
-            crowdMoment = {date : measure.date,
-                           value : measure.value
-                          };
+        var cond = (isItOpen(moment, schedule) && measures[index+1]);
+        
+        if(!cond)
+            return false;
+        
+        var sup = new Date(measures[index+1].date).getTime();
+        
+        return moment.getTime() >= inf && moment.getTime() < sup;
     });
     
 
@@ -158,19 +150,16 @@ function crowdMoment(moment, measures, schedule){
 
 
 function levelCalc(maxSize, crowdMoment){
-    //Mesure how important the crowd is
-    //Depends only on crowd for the moment
+    
     var ratio = parseFloat((crowdMoment / maxSize).toFixed(2)) ;
     var level = [];
-    if (ratio<=0.50){ level = 0 ; }
+    
+    if (ratio <= 0.50){ level = 0 ; }
     else if(ratio <=0.75) { level = 1; }
     else {level = 2;}
            
     return level;
 }
-
-
-
 
 
 //##############################################################################################################################

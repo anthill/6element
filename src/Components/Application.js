@@ -42,12 +42,15 @@ var App = React.createClass({
         var week = ['lundi', 'mardi', 'mercredi', 'jeudi' , 'vendredi', 'samedi' , 'dimanche'];
         var months = [ "janvier", "février", "mars", "avril", "mai", "juin",
                           "juillet", "août", "septembre", "octobre", "novembre", "décembre"];
-        var dayNum = numDay(now);
-        var dayName = week[dayNum];
+        var dayNumWeek = numDay(now);
+        var dayNumMonth = now.getDate();
+        var dayName = week[dayNumWeek];
         var monthName = months[now.getMonth()];
+        var date = dayName + " " + dayNumMonth + " " +  monthName;
         var hour = now.getHours();
         var min = now.getMinutes();
         var hourmin = parseInt((hour.toString() + min.toString()));
+        
         
         
 
@@ -71,7 +74,8 @@ var App = React.createClass({
                 
         var openMessage;
         
-        var openDayMessage = displaySchedule(week,props.rcFake.schedule);     
+        var openDayMessage = React.DOM.div({},
+            displaySchedule(week,props.rcFake.schedule));     
         
     
         open ?  openMessage = React.DOM.div({className : 'greenText'}, "Ouvert"):
@@ -117,6 +121,7 @@ var App = React.createClass({
         var crowd = React.DOM.div({}, 
             React.DOM.h2({}, "Attente"),
             open ? React.DOM.div({className : waitingMessages[waitingLevelNow][0]+'Text'}, waitingMessages[waitingLevelNow][1]) : undefined,
+            React.DOM.div({}, date),                      
             React.DOM.div({}, legend),
             crowdPrediction
         );

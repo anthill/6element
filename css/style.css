@@ -1,8 +1,52 @@
-.tabs{
-	display: block;
+.rcs{
+	display: inline-block;
 	cursor: pointer;
 }
 
-.tabs .selected{
+.rcs .selected{
 	font-weight: bold;
+}
+
+.rcContent{
+    display: inline-block;
+    vertical-align: top;
+}
+
+.border{
+    border: solid 1px black;
+}
+.colorBlock.border{
+    width: 18px;
+    height : 18px ;
+}
+.inline {
+    display: inline-block;
+}
+.colorBlock{
+    width : 20px;
+    height: 20px;
+}
+.greenFont{
+    background-color: green;
+}
+.yellowFont{
+    background-color: yellow;
+}
+.orangeFont{
+    background-color: orange;
+}
+.redFont{
+    background-color: red;
+}
+.greenText{
+    color: green;
+}
+.yellowText{
+    color:  yellow;
+}
+.orangeText{
+    color: orange;
+}
+.redText{
+    color: red;
 }

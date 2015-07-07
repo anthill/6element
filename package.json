@@ -20,6 +20,7 @@
   "homepage": "https://github.com/anthill/6elementApp",
   "dependencies": {
     "browserify": "^10.2.4",
+    "moment": "^2.10.3",
     "react": "^0.13.3"
   },
   "devDependencies": {

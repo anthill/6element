@@ -15,38 +15,53 @@
 .border{
     border: solid 1px black;
 }
+
 .colorBlock.border{
     width: 18px;
     height : 18px ;
 }
-.inline {
+
+/*dl{
+    display : inline-block;
+}*/
+
+.inline{
     display: inline-block;
 }
+
 .colorBlock{
     width : 20px;
     height: 20px;
 }
+
 .greenFont{
     background-color: green;
 }
+
 .yellowFont{
     background-color: yellow;
 }
+
 .orangeFont{
     background-color: orange;
 }
+
 .redFont{
     background-color: red;
 }
+
 .greenText{
     color: green;
 }
+
 .yellowText{
     color:  yellow;
 }
+
 .orangeText{
     color: orange;
 }
+
 .redText{
     color: red;
 }

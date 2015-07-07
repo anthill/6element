@@ -52,7 +52,8 @@ var Modifiable = React.createClass({
             var newValue = this.getDOMNode().value;
             console.log('newValue', newValue);
 
-            props.onChange(props.dbTable, props.rcID, {props.dbField: newValue});
+            var dbField = props.dbField;
+            props.onChange(props.dbTable, props.rcID, {dbField: newValue});
 
             this.setState({
                 inputMode: false

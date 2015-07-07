@@ -36,13 +36,17 @@ module.exports = function(){
             name: "Saint-Gervais",
             lat: 45.010882983,
             lon: -0.4692538 
+        }),
+        database.RecyclingCenters.create({
+            name: "Coutras",
+            lat: 45.036296,
+            lon: -0.101169
         })
     ])
     .then(function(rcIds){
         return Promise.all([
             database.Sensors.create({
                 name: "ant1",
-                installed_at: rcIds[0],
                 phone_number: "+33781095259"
             }),
             database.Sensors.create({
@@ -57,22 +61,35 @@ module.exports = function(){
             }),
             database.Sensors.create({
                 name: "ant4",
-                installed_at: rcIds[3],
                 phone_number: "+33781899027"
             }),
             database.Sensors.create({
                 name: "ant5",
-                installed_at: rcIds[4],
                 phone_number: "+33783959384"
             }),
             database.Sensors.create({
                 name: "ant6",
-                installed_at: rcIds[5],
+                installed_at: rcIds[4],
                 phone_number: "+33783629109"
+            }),
+            database.Sensors.create({
+                name: "ant7",
+                installed_at: rcIds[6],
+                phone_number: "+33783585494"
+            }),
+            database.Sensors.create({
+                name: "ant8",
+                installed_at: rcIds[3],
+                phone_number: "+33783881878"
             }),
             database.Sensors.create({
                 name: "ant9",
                 phone_number: "+33783818983"
+            }),
+            database.Sensors.create({
+                name: "ant10",
+                installed_at: rcIds[5],
+                phone_number: "+33783699454"
             })
         ])
 

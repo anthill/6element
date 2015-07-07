@@ -37,7 +37,9 @@ var Levels = React.createClass({
             var oClock = false; 
             var gapDate = new Date(gap.date);
             
-            var gapNow = ((crowdMoment(props.now, props.crowd, props.schedule).date) === gap.date);
+            var gapNow = (crowdMoment(props.now, props.crowd, props.schedule)) ? 
+                          (crowdMoment(props.now, props.crowd, props.schedule)).date === gap.date :
+                          false;
             
             if (gapDate.getMinutes()===0)
                 oClock = gapDate.getHours();

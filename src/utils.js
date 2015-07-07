@@ -19,11 +19,11 @@ function isItOpen(datetimeObject, schedule){
     // check if there is an interval containing this hour 
     schedule[day].forEach(function(interval){
         // compute minutes since midnight
-        var start = parseInt(interval.start.slice(0,2)) * 60 + parseInt(interval.start.slice(2,4));
-        var end = parseInt(interval.end.slice(0,2)) * 60 + parseInt(interval.end.slice(2,4));
-        var current = datetimeObject.getUTCHours() * 60 + datetimeObject.getMinutes();
+        var start = getHoursString(interval.start) * 60 + getMinutesString(interval.start);
+        var end = getHoursString(interval.end) * 60 + getMinutesString(interval.end) ;
+        var current = datetimeObject.hours() * 60 + datetimeObject.minutes();
         
-        if (current > start && current < end) {
+        if (current >= start && current <= end) {
             open =  true;
             return open;
         }
@@ -32,6 +32,9 @@ function isItOpen(datetimeObject, schedule){
     return open;   
 }
 
+function getHoursString(timeString) {return parseInt(timeString.slice(0,2));}
+
+function getMinutesString(timeString) {return parseInt(timeString.slice(2,4));}
 
 function displaySchedule(week, schedule){
     
@@ -97,7 +100,7 @@ function sameHours(d1,d2){
 }
 
 function numDay(datetimeObject){
-    var numDay = datetimeObject.getDay()-1;
+    var numDay = datetimeObject.day()-1;
     if (numDay === -1)
         numDay = 6;
     return numDay;
@@ -128,31 +131,21 @@ function formatDay(scheduleDay){
 //==============================================================================================================================
 // CROWD CALCULATION
 
-function crowdMoment(moment, measures, schedule){
+function crowdMoment(datetimeObject, measures){
     
-    var crowdMoment = measures.find(function(measure, index){
-        var inf = new Date(measure.date).getTime();
-        //check if it's theorically and practically open 
-        
-        var cond = (isItOpen(moment, schedule) && measures[index+1]);
-        
-        if(!cond)
-            return false;
-        
-        var sup = new Date(measures[index+1].date).getTime();
-        
-        return moment.getTime() >= inf && moment.getTime() < sup;
-    });
+   
+    //inf bound
+    var minMoment = datetimeObject.minutes();
+    var inf = datetimeObject.minutes(minMoment - minMoment%15);
     
-
-    return crowdMoment;
+    return measures[inf.toISOString()];
 }
 
 
 function levelCalc(maxSize, crowdMoment){
     
     var ratio = parseFloat((crowdMoment / maxSize).toFixed(2)) ;
-    var level = [];
+    var level;
     
     if (ratio <= 0.50){ level = 0 ; }
     else if(ratio <=0.75) { level = 1; }
@@ -172,5 +165,7 @@ module.exports = {
     isItOpen : isItOpen,
     crowdMoment : crowdMoment,
     displaySchedule : displaySchedule,
+    getHoursString : getHoursString,
+    getMinutesString : getMinutesString,
     numDay : numDay
 };

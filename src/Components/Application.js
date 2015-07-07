@@ -1,6 +1,8 @@
 'use strict';
 
 var React = require('react');
+var moment = require('moment');
+
 var Levels = React.createFactory(require('./Levels.js'));
 
 var formatHour = require('../utils.js').formatHour;
@@ -38,17 +40,17 @@ var App = React.createClass({
         // console.log('APP state', state);
         
         // 
-        var now = new Date ();
+        var now = moment.utc();
         var week = ['lundi', 'mardi', 'mercredi', 'jeudi' , 'vendredi', 'samedi' , 'dimanche'];
         var months = [ "janvier", "février", "mars", "avril", "mai", "juin",
                           "juillet", "août", "septembre", "octobre", "novembre", "décembre"];
         var dayNumWeek = numDay(now);
-        var dayNumMonth = now.getDate();
+        var dayNumMonth = now.date();
         var dayName = week[dayNumWeek];
-        var monthName = months[now.getMonth()];
+        var monthName = months[now.month()];
         var date = dayName + " " + dayNumMonth + " " +  monthName;
-        var hour = now.getHours();
-        var min = now.getMinutes();
+        var hour = now.hours();
+        var min = now.minutes();
         var hourmin = parseInt((hour.toString() + min.toString()));
         
         
@@ -97,9 +99,11 @@ var App = React.createClass({
         
         // CROWD
         var len = props.rcFake.crowd.length;
-        var waitingLevelNow = open? levelCalc(props.rcFake.maxSize, crowdMoment(now, props.rcFake.crowd, props.rcFake.schedule).value) : undefined;
+        var waitingLevelNow = open? 
+            levelCalc(props.rcFake.maxSize, crowdMoment(now, props.rcFake.crowd)) : 
+            undefined;
         
-        var waitingMessages = [["green","<5mn"], ["yellow","5mn<*<15mn"],["orange", ">15mn"]];
+        var waitingMessages = [["green","<5mn"], ["yellow","5mn<*<15mn"],["orange", ">15mn"], ["red", "fermé"]];
              
         var legendColor = waitingMessages.map(function(level){
             return React.DOM.dl({className : 'inline'},
@@ -112,8 +116,8 @@ var App = React.createClass({
             React.DOM.dd({className : 'inline'}, 'maintenant'));
         
         var legend= React.DOM.figcaption({className : 'inline'}, 
-            React.DOM.div({}, legendColor), 
-            React.DOM.div({}, legendNow));
+            legendColor, 
+            legendNow);
                                                     
         
         var crowdPrediction = new Levels({
@@ -139,14 +143,15 @@ var App = React.createClass({
         // WASTE
         
         var wastes = {
+            // sort bins unavaiable / avaiable
             unavaiable : [],
             avaiable : []        
-        };  // sort bins unavaiable / avaiable
+        }; 
         
         var wasteList;
         
         props.rcFake.wastes.forEach(function(waste){
-            if (waste.status==="unavaiable") { 
+            if (waste.status === "unavaiable") { 
                 wastes.unavaiable.push(waste.type);
             }
             else {

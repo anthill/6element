@@ -52,12 +52,12 @@ module.exports = {
         });          
     },
     
-    update: function(sensor, delta) {
+    update: function(id, delta) {
         return databaseP.then(function (db) {
             
             var query = sensors
                 .update(delta)
-                .where(sensors.id.equals(sensor.id))
+                .where(sensors.id.equals(id))
                 .toQuery();
 
             //console.log('sensors findByPhoneNumber query', query);

@@ -1,6 +1,7 @@
 'use strict';
 
 var React = require('react');
+var Modifiable = React.createFactory(require('./Modifiable.js'));
 
 /*
 
@@ -19,7 +20,8 @@ interface AntProps{
         sense_status: string,
         latest_input: string,
         latest_output: string
-    }
+    },
+    onChange: function()
 }
 interface AppState{
 }
@@ -52,12 +54,20 @@ var Ant = React.createClass({
                     React.DOM.div({}, props.ant.id)
                 ),
                 React.DOM.li({}, 
-                    React.DOM.div({}, 'Name'),
-                    React.DOM.div({}, props.ant.name)
+                    React.DOM.div({}, 'Installed at'),
+                    new Modifiable({
+                        text: props.ant.rcName,
+                        onChange: props.onChange,
+                        rcID: props.ant.installed_at,
+                        dbTable: 'rc',
+                        dbField: 'name' 
+                    }),
+                    React.DOM.div({}, props.ant.installed_at)
                 ),
                 React.DOM.li({}, 
-                    React.DOM.div({}, 'Installed at'),
-                    React.DOM.div({}, props.ant.installed_at)
+                    React.DOM.div({}, 'Coords'),
+                    React.DOM.div({}, props.ant.lat),
+                    React.DOM.div({}, props.ant.lon)
                 ),
                 React.DOM.li({}, 
                     React.DOM.div({}, 'Created'),

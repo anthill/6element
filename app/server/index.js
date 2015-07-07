@@ -183,7 +183,7 @@ app.post('/twilio', function(req, res) {
                     case '2':
                         quipuParser.decode(body)
                         .then(function(sensorStatus){
-                            return database.Sensors.update(sensor, {
+                            return database.Sensors.update(sensor.id, {
                                 latest_input: sensorStatus.info.command,
                                 latest_output: sensorStatus.info.result,
                                 quipu_status: sensorStatus.quipu.state,
@@ -244,12 +244,28 @@ app.get('/recycling-center/:rcId', function(req, res){
 app.get('/sensors', function(req, res){
     database.Sensors.getAllSensorsInfo()
         .then(function(data){
-            debug('All sensors', data);
+            // debug('All sensors', data);
             res.send(data);
         })
         .catch(function(error){
             console.log("error in /sensors: ", error);
         });
+});
+
+app.post('/updateRC', function(req, res){
+    var rcId = Number(req.params.rcId);
+    
+    database.RecyclingCenters.update(rcId, {
+        name: req.params.name,
+        lat: req.params.lat,
+        lon: req.params.lon
+    })
+    .then(function(data){
+        res.send(data);
+    })
+    .catch(function(error){
+        console.log("error in /recycling-center/'+req.params.rcId: ", error);
+    });
 });
 
 // io.on('connection', function(socket) {

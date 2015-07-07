@@ -20,7 +20,8 @@ interface AppProps{
         registration: int,
         quipuStatus: string,
         6senseStatus: string
-    });
+    }),
+    onChange: function()
 }
 interface AppState{
     selectedTab: int
@@ -45,7 +46,10 @@ var App = React.createClass({
             myAnts.push(new Ant({ant: ant}));
         });
         
-        return React.DOM.div({id: 'myApp'},
+        return React.DOM.div({
+            id: 'myApp',
+            onChange: props.onChange
+        },
             myAnts
         );
     }

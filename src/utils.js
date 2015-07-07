@@ -59,9 +59,9 @@ function displaySchedule(week, schedule){
             else {
                 days += day;
                 hours = formatDay(schedule[index])
-                div = React.DOM.div({},
-                    React.DOM.div({}, days, " : " ),
-                    React.DOM.div({}, hours));
+                div = React.DOM.dl({},
+                    React.DOM.dt({}, days, " : " ),
+                    React.DOM.dd({}, hours));
                 divs.push(div);
                 breakDay = true;
             }
@@ -69,9 +69,9 @@ function displaySchedule(week, schedule){
         else {
             days = day;
             hours = "fermé";
-            div = React.DOM.div({},
-                React.DOM.div({}, days, " : " ),
-                React.DOM.div({}, hours));
+            div = React.DOM.dl({},
+                React.DOM.dt({}, days, " : " ),
+                React.DOM.dd({}, hours));
             divs.push(div)
         }
     });

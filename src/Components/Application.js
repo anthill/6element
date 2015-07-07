@@ -61,12 +61,22 @@ var App = React.createClass({
         var name = props.rcFake.name;
         var fav = props.rcFake.favourite ? "*" : "";
                           
-        var header = React.DOM.h1({}, 
+        var header = React.DOM.header({className : 'inline'}, 
                             React.DOM.div({}, fav),
-                            React.DOM.div({}, name)
+                            React.DOM.h1({}, name)
                         );
         //============================================================================================
         
+        //NAV
+        var sectionTitles = [] ;
+        
+        var nav = React.DOM.nav({},
+            //tous les titres
+            React.DOM.ul({},
+                sectionTitles));
+                         
+        
+        //=============================================================================================
         
         // SCHEDULE
                 
@@ -74,18 +84,14 @@ var App = React.createClass({
                 
         var openMessage;
         
-        var openDayMessage = React.DOM.div({},
-            displaySchedule(week,props.rcFake.schedule));     
+        var openDayMessage = displaySchedule(week,props.rcFake.schedule);   
         
-    
-        open ?  openMessage = React.DOM.div({className : 'greenText'}, "Ouvert"):
-                openMessage = React.DOM.div({className : 'redText'}, "Fermé");
-        
-        var schedule = React.DOM.div({}, [
-                                     React.DOM.h2({}, "Horaires"),
-                                     openMessage,
-                                     React.DOM.div({}, openDayMessage), 
-                                     ]);
+        var schedule = React.DOM.section({}, [
+             React.DOM.h2({}, "Horaires"),
+             open ?  React.DOM.h3({className : 'greenText'}, "Ouvert"):
+                     React.DOM.h3({className : 'redText'}, "Fermé"),
+             React.DOM.dl({}, openDayMessage), 
+             ]);
         
         //============================================================================================
         
@@ -96,18 +102,18 @@ var App = React.createClass({
         var waitingMessages = [["green","<5mn"], ["yellow","5mn<*<15mn"],["orange", ">15mn"]];
              
         var legendColor = waitingMessages.map(function(level){
-            return React.DOM.div({className : 'inline'},
-                React.DOM.div({className : 'inline colorBlock '+level[0]+ 'Font'}),
-                React.DOM.div({className : 'inline '+level[0]+ 'Text'}, level[1]))
+            return React.DOM.dl({className : 'inline'},
+                React.DOM.dt({className : 'inline colorBlock '+level[0]+ 'Font'}),
+                React.DOM.dd({className : 'inline '+level[0]+ 'Text'}, level[1]))
         });
         
-        var legendNow = React.DOM.div({className : 'inline'},
-            React.DOM.div({className : 'inline colorBlock border'}),
-            React.DOM.div({className : 'inline'}, 'maintenant'));
+        var legendNow = React.DOM.dl({className : 'inline'},
+            React.DOM.dt({className : 'inline colorBlock border'}),
+            React.DOM.dd({className : 'inline'}, 'maintenant'));
         
-        var legend= React.DOM.div({className : 'inline'}, 
-            legendColor, 
-            legendNow);
+        var legend= React.DOM.figcaption({className : 'inline'}, 
+            React.DOM.div({}, legendColor), 
+            React.DOM.div({}, legendNow));
                                                     
         
         var crowdPrediction = new Levels({
@@ -118,12 +124,13 @@ var App = React.createClass({
             schedule : props.rcFake.schedule
         });
         
-        var crowd = React.DOM.div({}, 
+        var crowd = React.DOM.section({}, 
             React.DOM.h2({}, "Attente"),
-            open ? React.DOM.div({className : waitingMessages[waitingLevelNow][0]+'Text'}, waitingMessages[waitingLevelNow][1]) : undefined,
-            React.DOM.div({}, date),                      
-            React.DOM.div({}, legend),
-            crowdPrediction
+            open ? React.DOM.h3({className : waitingMessages[waitingLevelNow][0]+'Text'}, waitingMessages[waitingLevelNow][1]) : undefined,
+            React.DOM.h4({}, date),
+            React.DOM.figure({},
+                legend,
+                React.DOM.div({}, crowdPrediction))
         );
   
         
@@ -154,9 +161,9 @@ var App = React.createClass({
         for (var status in wastes){    
             for (var index in wastes[status]){
                 var li = React.DOM.li({},
-                    React.DOM.div({}, wastes[status][index]),
-                    React.DOM.div({}, status)
-                );
+                    React.DOM.dl({},
+                        React.DOM.dt({}, wastes[status][index]),
+                        React.DOM.dd({}, status)));
                                       
                 if (status === "unavaiable") {
                     var liAlert = React.DOM.li({},
@@ -171,12 +178,12 @@ var App = React.createClass({
             }
         }
         
-        var wasteList = React.DOM.div({},
+        var wasteList = React.DOM.section({},
             React.DOM.h2({}, "Déchets"),
             React.DOM.ul({}, lis)
             );
         
-        var alert = React.DOM.div({className : 'redText'},
+        var alert = React.DOM.section({className : 'redText'},
             React.DOM.h2({}, "Alerte"),
             React.DOM.ul({}, lisAlert)
             );
@@ -185,12 +192,21 @@ var App = React.createClass({
         
         // LOCALISATION
         
-        var localisation = React.DOM.div({},
-            React.DOM.div({}, "adresse : ", props.rcFake.address),
+        var localisation = React.DOM.section({},
+            React.DOM.h2({}, "Localisation"),
+            React.DOM.dl({}, 
+                React.DOM.dt({}, "adresse : "), 
+                React.DOM.dd({}, props.rcFake.address)),
             React.DOM.div({}, 
-                          "latitude : ", props.rcFake.coords.lat,
-                          "longitude: ", props.rcFake.coords.long),
-            React.DOM.div({}, "téléphone : ", props.rcFake.phone)
+                React.DOM.dl({},
+                    React.DOM.dt({}, "latitude : "),
+                    React.DOM.dd({}, props.rcFake.coords.lat)),
+                React.DOM.dl({},
+                    React.DOM.dt({}, "longitude: "), 
+                    React.DOM.dd({}, props.rcFake.coords.long))),
+            React.DOM.dl({}, 
+                React.DOM.dt({}, "téléphone : "), 
+                React.DOM.dd({}, props.rcFake.phone))
         );
         
         //############################################################################################

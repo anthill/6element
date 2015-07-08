@@ -144,7 +144,8 @@ function infBound(datetimeObject){
     var inf = moment().utc().set({        
         hour : hourMoment,
         minute : minMoment - minMoment%15,
-        second : 0
+        second : 0,
+        millisecond : 0
     });
     return inf.toISOString();
 }

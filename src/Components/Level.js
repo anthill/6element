@@ -37,14 +37,15 @@ var Level = React.createClass({
         
         if (props.gapNow) classes.push('border ')
         
-        displayHour = React.DOM.div({}, props.oClock);
+        //displayHour = React.DOM.div({}, props.oClock);
         
         // console.log('APP props', props);
         // console.log('APP state', state);
         
         return React.DOM.div({className : 'inline'},
             React.DOM.div({className: classes.join('')}),
-            props.oClock ? React.DOM.div({},  displayHour) : undefined );
+            React.DOM.div({className : 'colorBlock'}, props.oClock ));
+            //props.oClock ? displayHour : React.DOM.div({className : 'colorBlock'}));
     }
 });
 

@@ -103,7 +103,7 @@ var App = React.createClass({
             levelCalc(props.rcFake.maxSize, props.rcFake.crowd[infBound(now)]) : 
             undefined;
         
-        var waitingMessages = [["green","<5mn"], ["yellow","5mn<*<15mn"],["orange", ">15mn"], ["red", "fermé"]];
+        var waitingMessages = [["green","<5mn"], ["yellow","5mn<*<15mn"],["orange", ">15mn"], ["black", "fermé"]];
              
         var legendColor = waitingMessages.map(function(level){
             return React.DOM.dl({className : 'inline'},

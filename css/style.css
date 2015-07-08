@@ -1,16 +1,3 @@
-.rcs{
-	display: inline-block;
-	cursor: pointer;
-}
-
-.rcs .selected{
-	font-weight: bold;
-}
-
-.rcContent{
-    display: inline-block;
-    vertical-align: top;
-}
 
 .border{
     border: solid 1px black;
@@ -33,7 +20,9 @@
     width : 20px;
     height: 20px;
 }
-
+.blackFont{
+    background-color: black;
+}
 .greenFont{
     background-color: green;
 }

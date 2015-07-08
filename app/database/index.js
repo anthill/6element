@@ -124,8 +124,6 @@ module.exports = {
                     )
                     .where(sensor.installed_at.equals(rcId))
                     .toQuery();
-
-                console.log('getRecyclingCenterDetails query', query);
                 
                 return new Promise(function (resolve, reject) {
                     db.query(query, function (err, result) {

@@ -9,7 +9,7 @@ var formatHour = require('../utils.js').formatHour;
 var formatDay = require('../utils.js').formatDay;
 var levelCalc = require('../utils.js').levelCalc;
 var isItOpen = require('../utils.js').isItOpen;
-var crowdMoment = require('../utils.js').crowdMoment;
+var infBound = require('../utils.js').infBound;
 var displaySchedule = require('../utils.js').displaySchedule;
 var numDay = require('../utils.js').numDay;
 
@@ -40,7 +40,7 @@ var App = React.createClass({
         // console.log('APP state', state);
         
         // 
-        var now = moment.utc();
+        var now = moment().utc();
         var week = ['lundi', 'mardi', 'mercredi', 'jeudi' , 'vendredi', 'samedi' , 'dimanche'];
         var months = [ "janvier", "février", "mars", "avril", "mai", "juin",
                           "juillet", "août", "septembre", "octobre", "novembre", "décembre"];
@@ -100,7 +100,7 @@ var App = React.createClass({
         // CROWD
         var len = props.rcFake.crowd.length;
         var waitingLevelNow = open? 
-            levelCalc(props.rcFake.maxSize, crowdMoment(now, props.rcFake.crowd)) : 
+            levelCalc(props.rcFake.maxSize, props.rcFake.crowd[infBound(now)]) : 
             undefined;
         
         var waitingMessages = [["green","<5mn"], ["yellow","5mn<*<15mn"],["orange", ">15mn"], ["red", "fermé"]];
@@ -118,8 +118,7 @@ var App = React.createClass({
         var legend= React.DOM.figcaption({className : 'inline'}, 
             legendColor, 
             legendNow);
-                                                    
-        
+                                
         var crowdPrediction = new Levels({
             crowd: props.rcFake.crowd,
             maxSize: props.rcFake.maxSize,
@@ -136,7 +135,6 @@ var App = React.createClass({
                 legend,
                 React.DOM.div({}, crowdPrediction))
         );
-  
         
         //============================================================================================
         

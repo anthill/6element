@@ -7,7 +7,7 @@ var Level = React.createFactory(require('./Level.js'));
 
 var numDay = require('../utils.js').numDay;
 var levelCalc = require('../utils.js').levelCalc;
-var crowdMoment = require('../utils.js').crowdMoment;
+var infBound = require('../utils.js').infBound;
 var getHoursString = require('../utils.js').getHoursString;
 var getMinutesString = require('../utils.js').getMinutesString;
 var isItOpen = require('../utils.js').isItOpen;
@@ -18,7 +18,7 @@ interface LevelsProps{
     crowd: [{},{} ...] 
     maxSize: integer,
     waitingMessages = [string color, string message][]
-    now : Date,
+    now : moment,
     schedule : {}
 }
 interface LevelsState{
@@ -53,10 +53,11 @@ var Levels = React.createClass({
 
             var gapString = gap.toISOString();
             var waiting = isItOpen(gap, props.schedule) ?
-                props.waitingMessages[levelCalc(props.maxSize, crowdMoment(gap, props.crowd))] :
+                props.waitingMessages[levelCalc(props.maxSize, props.crowd[infBound(gap)])] :
                 props.waitingMessages[3];
-            var gapNow = gap === props.now ? gap : false;
-            var oClock = (gap.minutes === 0) ? gap : false;
+            var infB = moment(infBound(props.now));
+            var gapNow = gap.unix() === infB.unix() ? gap : false;
+            var oClock = (gap.minutes() === 0) ? gap.hours() + moment().utcOffset()/60 : false;
 
             var li =  Level({
                 date: gap.date,
@@ -67,27 +68,7 @@ var Levels = React.createClass({
             
             lis.push(li);
         }
-                                           
-        /*var myLevels = props.crowd.map(function(gap){
-            var waiting = props.waitingMessages[levelCalc(props.maxSize, gap.value)];
-            var oClock = false; 
-            var gapDate = new Date(gap.date);
-            
-            var gapNow = (crowdMoment(props.now, props.crowd, props.schedule)) ? 
-                          (crowdMoment(props.now, props.crowd, props.schedule)).date === gap.date :
-                          false;
-            
-            if (gapDate.getMinutes()===0)
-                oClock = gapDate.getHours();
-            
-            return new Level({
-                date: gap.date,
-                waiting: waiting,
-                gapNow : gapNow,
-                oClock : oClock
-            }); 
-        });   */
-        
+
         return React.DOM.div({className: 'inline'},
             lis
         );

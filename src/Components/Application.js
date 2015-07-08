@@ -159,37 +159,40 @@ var App = React.createClass({
         
         var lis = [];
         
-        var lisAlert = [] ;
+        var lisAvaiable = [];
+        
+        var lisUnAvaiable = [] ;
                                            
         Object.keys(wastes).forEach(function(status){
             wastes[status].forEach(function(waste){
-                /*for (var status in wastes){    
-            for (var index in wastes[status]){*/
-                var li = React.DOM.li({},
-                    React.DOM.dl({},
-                        React.DOM.dt({}, waste),
-                        React.DOM.dd({}, status)));
+                
+                var li = React.DOM.dl({},
+                    React.DOM.dt({},
+                        waste,
+                        React.DOM.img({src : props.wastesFile[waste], alt : waste, width : 75})),
+                    React.DOM.dd({}, status));
                                       
                 if (status === "unavaiable") {
-                    var liAlert = React.DOM.li({},
-                    React.DOM.div({}, wastes)); 
-                                        
-                    lisAlert.push(liAlert); 
+                    var liUnAvaiable = React.DOM.li({className : 'redText'}, li);
+                    lisUnAvaiable.push(liUnAvaiable); 
+                }
+                else {
+                    var liAvaiable = React.DOM.li({className : 'greenText'}, li);
+                    lisAvaiable.push(liAvaiable);  
                 }
                 
-                 
-                lis.push(li);                                                 
+                lis.push(React.DOM.li({}, li));
             })
         })
         
         var wasteList = React.DOM.section({},
             React.DOM.h2({}, "Déchets"),
-            React.DOM.ul({}, lis)
+            React.DOM.ul({}, lisUnAvaiable, lisAvaiable)
             );
         
         var alert = React.DOM.section({className : 'redText'},
             React.DOM.h2({}, "Alerte"),
-            React.DOM.ul({}, lisAlert)
+            React.DOM.ul({}, lisUnAvaiable)
             );
             
         //============================================================================================

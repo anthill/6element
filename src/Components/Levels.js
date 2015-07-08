@@ -69,7 +69,7 @@ var Levels = React.createClass({
             lis.push(li);
         }
 
-        return React.DOM.div({className: 'inline'},
+        return React.DOM.div({className: 'parent'},
             lis
         );
     }

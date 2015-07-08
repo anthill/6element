@@ -161,25 +161,26 @@ var App = React.createClass({
         
         var lisAlert = [] ;
                                            
-        for (var status in wastes){    
-            for (var index in wastes[status]){
+        Object.keys(wastes).forEach(function(status){
+            wastes[status].forEach(function(waste){
+                /*for (var status in wastes){    
+            for (var index in wastes[status]){*/
                 var li = React.DOM.li({},
                     React.DOM.dl({},
-                        React.DOM.dt({}, wastes[status][index]),
+                        React.DOM.dt({}, waste),
                         React.DOM.dd({}, status)));
                                       
                 if (status === "unavaiable") {
                     var liAlert = React.DOM.li({},
-                    React.DOM.div({}, wastes[status][index])); 
+                    React.DOM.div({}, wastes)); 
                                         
                     lisAlert.push(liAlert); 
                 }
                 
                  
-                lis.push(li);
-                                                 
-            }
-        }
+                lis.push(li);                                                 
+            })
+        })
         
         var wasteList = React.DOM.section({},
             React.DOM.h2({}, "Déchets"),

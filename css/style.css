@@ -6,14 +6,18 @@
 .colorBlock.border{
     width: 18px;
     height : 18px ;
+    
 }
 
 /*dl{
     display : inline-block;
 }*/
-
+.parent{
+    display: inline-flex;
+    align-content: flex-start;
+}
 .inline{
-    display: inline-block;
+   display: inline-block;
 }
 
 .colorBlock{

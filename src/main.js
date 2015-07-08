@@ -17,7 +17,58 @@ var endingMin = parseInt(schedule[day][1]["end"])%100;
 var date = moment(year : now.getFullYear(), month : now.getMonth() , day : now.getDate(),
                 hour : beginingHour, minute : beginingMin);
     */
+var wastesFile = {
+    "Ameublement" : "../pictures/picto_RC/Cartons.jpg",
+    "Amiante_Ciment" : "../pictures/picto_RC/Cartons.jpg",
+    "Batteries" : "../pictures/picto_RC/Cartons.jpg",
+    "Bois" : "../pictures/picto_RC/Bois.jpg",
+    "Bois_traite" : "../pictures/picto_RC/Cartons.jpg", 
+    "Bouteilles_de_gaz": "../pictures/picto_RC/Cartons.jpg",
+    "Bouteilles_Plastiques" : "../pictures/picto_RC/Cartons.jpg",
+    "Cartons" : "../pictures/picto_RC/Cartons.jpg",
+    "Cartouche_Encre" : "../pictures/picto_RC/Cartons.jpg",
+    "Deblais-gravats" : "../pictures/picto_RC/Cartons.jpg",
+    "Decheterie_Picto_DDS" : "../pictures/picto_RC/Cartons.jpg",
+    "Dechets_d'activites_de_soins_a_risques" : "../pictures/picto_RC/Cartons.jpg",
+    "Dechets_verts" : "../pictures/picto_RC/Dechets_verts.jpg",
+    "DEEE" : "../pictures/picto_RC/Cartons.jpg",
+    "Ecrans" : "../pictures/picto_RC/Cartons.jpg",
+    "Encombrants_1" : "../pictures/picto_RC/Cartons.jpg",
+    "Encombrants_2" : "../pictures/picto_RC/Cartons.jpg",
+    "Extincteurs" : "../pictures/picto_RC/Cartons.jpg",
+    "Films_agricoles_usages" : "../pictures/picto_RC/Cartons.jpg",
+    "Gros_electromenager_0" : "../pictures/picto_RC/Cartons.jpg",
+    "Huiles_de_fritures" : "../pictures/picto_RC/Cartons.jpg",
+    "Huiles_de_Vidange" : "../pictures/picto_RC/Cartons.jpg",
+    "Journaux_et_Revues" : "../pictures/picto_RC/Cartons.jpg",
+    "Lampes" : "../pictures/picto_RC/Cartons.jpg",
+    "Liquides_de_freins" : "../pictures/picto_RC/Cartons.jpg",
+    "Liquides_de_refroidissement" : "../pictures/picto_RC/Cartons.jpg",
+    "LogoDecheterie" : "../pictures/picto_RC/Cartons.jpg",
+    "Medicaments" : "../pictures/picto_RC/Cartons.jpg",
+    "Metaux" : "../pictures/picto_RC/Cartons.jpg",
+    "Mobilier" : "../pictures/picto_RC/Cartons.jpg",
+    "Papiers" : "../pictures/picto_RC/Cartons.jpg",
+    "Papiers_cartons" : "../pictures/picto_RC/Cartons.jpg",
+    "Pelouse" : "../pictures/picto_RC/Cartons.jpg",
+    "Petits_appareils_menagers" : "../pictures/picto_RC/Cartons.jpg",
+    "Piles_Boutons" : "../pictures/picto_RC/Cartons.jpg",
+    "Piles_et_Accumulateurs" : "../pictures/picto_RC/Cartons.jpg",
+    "Plastiques" : "../pictures/picto_RC/Cartons.jpg",
+    "Platre_et_plaques_de_platre" : "../pictures/picto_RC/Cartons.jpg",
+    "Pneumatiques" : "../pictures/picto_RC/Cartons.jpg",
+    "Polystyrene" : "../pictures/picto_RC/Cartons.jpg",
+    "Radiographies" : "../pictures/picto_RC/Cartons.jpg",
+    "Refrigerateurs-Congelateurs" : "../pictures/picto_RC/Cartons.jpg",
+    "Reutilisation_reemploi" : "../pictures/picto_RC/Cartons.jpg",
+    "Tailles" : "../pictures/picto_RC/Cartons.jpg",
+    "Textiles" : "../pictures/picto_RC/Cartons.jpg",
+    "Tout_venant_incinerable" : "../pictures/picto_RC/Cartons.jpg",
+    "Tout_venant_non_incinerable" : "../pictures/picto_RC/Cartons.jpg",
+    "Verres" : "../pictures/picto_RC/Cartons.jpg",
+};
 
+    
 var rcFake = {
     
     //####################################################################################################
@@ -149,15 +200,15 @@ var rcFake = {
     
     [
         {
-            type: "green waste",
+            type: "Dechets_verts",
             status: "unavaiable"
         },
         {
-            type: "wood",
+            type: "Bois",
             status: "avaiable"
         },
         {
-            type: "cardboard",
+            type: "Carton",
             status: "avaiable"
         }
     ],
@@ -167,4 +218,5 @@ var rcFake = {
 // Initial rendering
 React.render(new Application({
     rcFake: rcFake,
+    wastesFile :  wastesFile,
 }), document.body);

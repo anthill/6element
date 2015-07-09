@@ -26,7 +26,7 @@ var Detail = React.createClass({
         var props = this.props;
         var state = this.state;
 
-        console.log('detail props', props);
+        // console.log('detail props', props);
                 
         return React.DOM.div({id: 'detail'}, 
         	React.DOM.h2({}, props.recyclingCenter.name),

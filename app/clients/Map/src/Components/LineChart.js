@@ -52,13 +52,11 @@ var LineChart = React.createClass({
     update: function() {
 
         var props = this.props;
-        console.log('LINECHART props', props);
     
         var data = props.measurements.map(function(x){
             var date = new Date(x.measurement_date);
             return [date, x.measurement];
         });
-        console.log(data)
 
         new Dygraph(
 

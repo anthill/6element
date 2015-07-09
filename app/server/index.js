@@ -37,13 +37,13 @@ function rand(n){
     return Math.floor(n*Math.random());
 }
 
-dropAllTables()
-    .then(createTables)
-    .then(fillDBWithFakeData)
-    // .then(hardCodedSensors)
-    .catch(function(error){
-            console.log("error in drop and create: ", error);
-        });
+// dropAllTables()
+//     .then(createTables)
+//     // .then(fillDBWithFakeData)
+//     .then(hardCodedSensors)
+//     .catch(function(error){
+//             console.log("error in drop and create: ", error);
+//         });
 
 var server = http.Server(app);
 var io = require('socket.io')(server);
@@ -269,21 +269,6 @@ app.post('/updateRC', function(req, res){
     });
 });
 
-// io.on('connection', function(socket) {
-//     console.log('Socket io Connexion');
-
-//     setInterval(function(){
-//         var id = Math.floor(Math.random() * 28);
-//         console.log('emitting', id);
-//         socket.emit('status', {
-//             sensorId: id,
-//             socketMessage: {
-//                 quipu_status: 'sleeping'
-//             }
-//         });
-//     }, 2000);
-// });
-
 
 server.listen(PORT, function () {
     console.log('Server running on', [
@@ -302,9 +287,15 @@ server.listen(PORT, function () {
 
 //     var now = new Date().toISOString();
 
+//     var nbMeasurements = Math.floor(Math.random()*10);
+//     var dummyArray = [];
+//     for (var i = 0; i < nbMeasurements; i++) { 
+//         dummyArray.push(0);
+//     };
+
 //     var result = {
 //         date: now,
-//         signal_strengths: new Array(23, 12, 53)
+//         signal_strengths: dummyArray
 //     };
 
 //     console.log('new measure', result.signal_strengths.length);
@@ -312,7 +303,7 @@ server.listen(PORT, function () {
 //     encodeForSMS([result]).then(function(sms){
 
 //         var toSend = {
-//             From: '+33781095259', // this is sensor 1
+//             From: '+33783609060',
 //             Body: '1' + sms
 //         };
         
@@ -332,5 +323,5 @@ server.listen(PORT, function () {
 //         });
 //     });
 
-// }, 2000);
+// }, 60000);
 

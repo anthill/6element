@@ -20,6 +20,7 @@ interface AppProps{
     rcFake: {}
 }
 interface AppState{
+    fav : bool
 }
 
 */
@@ -27,9 +28,11 @@ interface AppState{
 var App = React.createClass({
     displayName: 'App',
 
-    /*getInitialState: function(){
+    getInitialState: function()
+        return {
+            fav: props.rcFake.favourite;
         };
-    },*/
+    },
     
     render: function() {
         var self = this;
@@ -61,10 +64,11 @@ var App = React.createClass({
         //HEADER
         
         var name = props.rcFake.name;
-        var fav = props.rcFake.favourite ? "*" : "";
                           
         var header = React.DOM.header({className : 'inline'}, 
-                            React.DOM.div({}, fav),
+                            props.rcFake.favourite ? 
+                                      React.DOM.i({className : "fa fa-star fa-3x fav"}) : 
+                                      React.DOM.i({className : "fa fa-star fa-3x"}),
                             React.DOM.h1({}, name)
                         );
         //============================================================================================

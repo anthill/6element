@@ -131,14 +131,23 @@ function formatDay(scheduleDay){
 //==============================================================================================================================
 // CROWD CALCULATION
 
-function crowdMoment(datetimeObject, measures){
+function infBound(datetimeObject){
     
-   
     //inf bound
+    var hourMoment = datetimeObject.hours();
     var minMoment = datetimeObject.minutes();
-    var inf = datetimeObject.minutes(minMoment - minMoment%15);
-    
-    return measures[inf.toISOString()];
+    /*var inf = moment.sets({
+        hour : hourMoment,
+        minute : minMoment - minMoment%15,
+        seconde : 0
+    });*/
+    var inf = moment().utc().set({        
+        hour : hourMoment,
+        minute : minMoment - minMoment%15,
+        second : 0,
+        millisecond : 0
+    });
+    return inf.toISOString();
 }
 
 
@@ -163,7 +172,7 @@ module.exports = {
     formatDay: formatDay,
     levelCalc : levelCalc,
     isItOpen : isItOpen,
-    crowdMoment : crowdMoment,
+    infBound : infBound,
     displaySchedule : displaySchedule,
     getHoursString : getHoursString,
     getMinutesString : getMinutesString,

@@ -1,16 +1,11 @@
-.rcs{
-	display: inline-block;
-	cursor: pointer;
+/*.fa-star{
+    border : solid 1px black;
+}*/
+
+.fa-star.active{
+    color: yellow;
 }
 
-.rcs .selected{
-	font-weight: bold;
-}
-
-.rcContent{
-    display: inline-block;
-    vertical-align: top;
-}
 
 .border{
     border: solid 1px black;
@@ -19,21 +14,27 @@
 .colorBlock.border{
     width: 18px;
     height : 18px ;
+    
 }
 
 /*dl{
     display : inline-block;
 }*/
-
+.parent{
+    display: inline-flex;
+    align-content: flex-start;
+}
 .inline{
-    display: inline-block;
+   display: inline-block;
 }
 
 .colorBlock{
     width : 20px;
     height: 20px;
 }
-
+.blackFont{
+    background-color: black;
+}
 .greenFont{
     background-color: green;
 }

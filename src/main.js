@@ -17,16 +17,63 @@ var endingMin = parseInt(schedule[day][1]["end"])%100;
 var date = moment(year : now.getFullYear(), month : now.getMonth() , day : now.getDate(),
                 hour : beginingHour, minute : beginingMin);
     */
+var wastesFile = {
+    "Ameublement" : "../pictures/picto_RC/Cartons.svg",
+    "Amiante_Ciment" : "../pictures/picto_RC/Cartons.svg",
+    "Batteries" : "../pictures/picto_RC/Cartons.svg",
+    "Bois" : "../pictures/picto_RC/Bois.svg",
+    "Bois_traite" : "../pictures/picto_RC/Cartons.svg", 
+    "Bouteilles_de_gaz": "../pictures/picto_RC/Cartons.svg",
+    "Bouteilles_Plastiques" : "../pictures/picto_RC/Cartons.svg",
+    "Cartons" : "../pictures/picto_RC/Cartons.svg",
+    "Cartouche_Encre" : "../pictures/picto_RC/Cartons.svg",
+    "Deblais-gravats" : "../pictures/picto_RC/Cartons.svg",
+    "Decheterie_Picto_DDS" : "../pictures/picto_RC/Cartons.svg",
+    "Dechets_d'activites_de_soins_a_risques" : "../pictures/picto_RC/Cartons.svg",
+    "Dechets_verts" : "../pictures/picto_RC/Dechets_verts.svg",
+    "DEEE" : "../pictures/picto_RC/Cartons.svg",
+    "Ecrans" : "../pictures/picto_RC/Cartons.svg",
+    "Encombrants_1" : "../pictures/picto_RC/Cartons.svg",
+    "Encombrants_2" : "../pictures/picto_RC/Cartons.svg",
+    "Extincteurs" : "../pictures/picto_RC/Cartons.svg",
+    "Films_agricoles_usages" : "../pictures/picto_RC/Cartons.svg",
+    "Gros_electromenager_0" : "../pictures/picto_RC/Cartons.svg",
+    "Huiles_de_fritures" : "../pictures/picto_RC/Cartons.svg",
+    "Huiles_de_Vidange" : "../pictures/picto_RC/Cartons.svg",
+    "Journaux_et_Revues" : "../pictures/picto_RC/Cartons.svg",
+    "Lampes" : "../pictures/picto_RC/Cartons.svg",
+    "Liquides_de_freins" : "../pictures/picto_RC/Cartons.svg",
+    "Liquides_de_refroidissement" : "../pictures/picto_RC/Cartons.svg",
+    "LogoDecheterie" : "../pictures/picto_RC/Cartons.svg",
+    "Medicaments" : "../pictures/picto_RC/Cartons.svg",
+    "Metaux" : "../pictures/picto_RC/Cartons.svg",
+    "Mobilier" : "../pictures/picto_RC/Cartons.svg",
+    "Papiers" : "../pictures/picto_RC/Cartons.svg",
+    "Papiers_cartons" : "../pictures/picto_RC/Cartons.svg",
+    "Pelouse" : "../pictures/picto_RC/Cartons.svg",
+    "Petits_appareils_menagers" : "../pictures/picto_RC/Cartons.svg",
+    "Piles_Boutons" : "../pictures/picto_RC/Cartons.svg",
+    "Piles_et_Accumulateurs" : "../pictures/picto_RC/Cartons.svg",
+    "Plastiques" : "../pictures/picto_RC/Cartons.svg",
+    "Platre_et_plaques_de_platre" : "../pictures/picto_RC/Cartons.svg",
+    "Pneumatiques" : "../pictures/picto_RC/Cartons.svg",
+    "Polystyrene" : "../pictures/picto_RC/Cartons.svg",
+    "Radiographies" : "../pictures/picto_RC/Cartons.svg",
+    "Refrigerateurs-Congelateurs" : "../pictures/picto_RC/Cartons.svg",
+    "Reutilisation_reemploi" : "../pictures/picto_RC/Cartons.svg",
+    "Tailles" : "../pictures/picto_RC/Cartons.svg",
+    "Textiles" : "../pictures/picto_RC/Cartons.svg",
+    "Tout_venant_incinerable" : "../pictures/picto_RC/Cartons.svg",
+    "Tout_venant_non_incinerable" : "../pictures/picto_RC/Cartons.svg",
+    "Verres" : "../pictures/picto_RC/Cartons.svg",
+};
 
+    
 var rcFake = {
     
     //####################################################################################################
     // NEVER CHANGE
     name: "Verac",
-    
-    favourite: true,
-    
-    open: true,
     
     // opened intervall in UTC
     schedule: {
@@ -83,65 +130,65 @@ var rcFake = {
     crowd: {
         //local + GMT (-2 in France)
         
-        "2015-07-07T07:00:00.000Z" : 15,
+        "2015-07-09T07:00:00.000Z" : 15,
         
-        "2015-07-07T07:15:00.000Z": 10,
+        "2015-07-09T07:15:00.000Z": 10,
         
-        "2015-07-07T07:30:00.000Z" : 5,
+        "2015-07-09T07:30:00.000Z" : 5,
         
-        "2015-07-07T07:45:00.000Z" : 12,
+        "2015-07-09T07:45:00.000Z" : 12,
         
-        "2015-07-07T08:00:00.000Z" : 20 ,
+        "2015-07-09T08:00:00.000Z" : 20 ,
         
-        "2015-07-07T08:15:00.000Z" : 15,
+        "2015-07-09T08:15:00.000Z" : 15,
         
-        "2015-07-07T08:30:00.000Z" : 18,
+        "2015-07-09T08:30:00.000Z" : 18,
         
-        "2015-07-07T08:45:00.000Z" : 25,
+        "2015-07-09T08:45:00.000Z" : 25,
         
-        "2015-07-07T09:00:00.000Z" : 30,
+        "2015-07-09T09:00:00.000Z" : 30,
         
-        "2015-07-07T09:15:00.000Z" : 20,
+        "2015-07-09T09:15:00.000Z" : 20,
         
-        "2015-07-07T09:30:00.000Z" : 16,
+        "2015-07-09T09:30:00.000Z" : 16,
         
-        "2015-07-07T09:45:00.000Z" : 15,
+        "2015-07-09T09:45:00.000Z" : 15,
         
-        "2015-07-07T10:00:00.000Z" : 15,
+        "2015-07-09T10:00:00.000Z" : 15,
         
-        "2015-07-07T12:00:00.000Z" : 14,
+        "2015-07-09T12:00:00.000Z" : 14,
         
-        "2015-07-07T12:15:00.000Z" : 13,
+        "2015-07-09T12:15:00.000Z" : 13,
         
-        "2015-07-07T12:30:00.000Z" : 10,
+        "2015-07-09T12:30:00.000Z" : 10,
         
-        "2015-07-07T12:45:00.000Z" : 8,
+        "2015-07-09T12:45:00.000Z" : 8,
         
-        "2015-07-07T13:00:00.000Z" : 16,
+        "2015-07-09T13:00:00.000Z" : 16,
         
-        "2015-07-07T11:13:00.000Z" : 18,
+        "2015-07-09T11:13:00.000Z" : 18,
         
-        "2015-07-07T13:30:00.000Z" : 15,
+        "2015-07-09T13:30:00.000Z" : 15,
         
-        "2015-07-07T13:45:00.000Z" : 13,
+        "2015-07-09T13:45:00.000Z" : 13,
         
-        "2015-07-07T14:00:00.000Z" : 10,
+        "2015-07-09T14:00:00.000Z" : 10,
         
-        "2015-07-07T14:15:00.000Z" : 19,
+        "2015-07-09T14:15:00.000Z" : 19,
         
-        "2015-07-07T14:30:00.000Z" : 22,
+        "2015-07-09T14:30:00.000Z" : 22,
         
-        "2015-07-07T14:45:00.000Z" : 18,
+        "2015-07-09T14:45:00.000Z" : 18,
         
-        "2015-07-07T15:00:00.000Z" : 15,
+        "2015-07-09T15:00:00.000Z" : 15,
         
-        "2015-07-07T15:15:00.000Z" : 20,
+        "2015-07-09T15:15:00.000Z" : 20,
         
-        "2015-07-07T15:30:00.000Z" : 25,
+        "2015-07-09T15:30:00.000Z" : 25,
         
-        "2015-07-07T15:45:00.000Z" : 15,
+        "2015-07-09T15:45:00.000Z" : 15,
         
-        "2015-07-07T16:00:00.000Z" : 15,
+        "2015-07-09T16:00:00.000Z" : 15,
         
 },
      
@@ -151,22 +198,32 @@ var rcFake = {
     
     [
         {
-            type: "green waste",
+            type: "Dechets_verts",
             status: "unavaiable"
         },
         {
-            type: "wood",
+            type: "Bois",
             status: "avaiable"
         },
         {
-            type: "cardboard",
+            type: "Cartons",
             status: "avaiable"
         }
     ],
 };
 
+var userFake = {
+    
+    favouriteRC : undefined
+}
+
 
 // Initial rendering
 React.render(new Application({
     rcFake: rcFake,
+    wastesFile :  wastesFile,
+    userFake : userFake,
+    onFavChange : function(favourite){
+        userFake.favouriteRC = favourite;
+    }
 }), document.body);

@@ -3,13 +3,14 @@
 var React = require('react');
 var moment = require('moment');
 
+var BooleanFilter = React.createFactory(require('./BooleanFilter.js'));
 var Levels = React.createFactory(require('./Levels.js'));
 
 var formatHour = require('../utils.js').formatHour;
 var formatDay = require('../utils.js').formatDay;
 var levelCalc = require('../utils.js').levelCalc;
 var isItOpen = require('../utils.js').isItOpen;
-var crowdMoment = require('../utils.js').crowdMoment;
+var infBound = require('../utils.js').infBound;
 var displaySchedule = require('../utils.js').displaySchedule;
 var numDay = require('../utils.js').numDay;
 
@@ -20,6 +21,7 @@ interface AppProps{
     rcFake: {}
 }
 interface AppState{
+    fav : bool
 }
 
 */
@@ -27,9 +29,11 @@ interface AppState{
 var App = React.createClass({
     displayName: 'App',
 
-    /*getInitialState: function(){
+    getInitialState: function(){
+        return {
+            fav: this.props.userFake.favouriteRC
         };
-    },*/
+    },
     
     render: function() {
         var self = this;
@@ -40,7 +44,7 @@ var App = React.createClass({
         // console.log('APP state', state);
         
         // 
-        var now = moment.utc();
+        var now = moment().utc();
         var week = ['lundi', 'mardi', 'mercredi', 'jeudi' , 'vendredi', 'samedi' , 'dimanche'];
         var months = [ "janvier", "février", "mars", "avril", "mai", "juin",
                           "juillet", "août", "septembre", "octobre", "novembre", "décembre"];
@@ -61,10 +65,45 @@ var App = React.createClass({
         //HEADER
         
         var name = props.rcFake.name;
-        var fav = props.rcFake.favourite ? "*" : "";
-                          
+        
+        var fav = state.fav;
+        
+        var favourite = new BooleanFilter({
+            active: fav,
+            className : "fa fa-star fa-3x",
+            onChange: function(){
+                if(!fav) {
+                    self.setState({fav : true});
+                }
+                else {
+                    self.setState({fav : false});
+                }
+                props.onFavChange(state.fav ? undefined : props.rcFake.name);
+            }      
+        });
+        
+        console.log('props.userF', props.userFake.favouriteRC);
+        
+        /*return BooleanFilter({
+                active: state.filterStates.get(element),
+                label: element,
+                onChange: function(nextState){
+                    if(!nextState)
+                        delete state.filterStates[element];
+                    else
+                        state.filterStates[element] = function(courtier){
+                            return courtier[element];
+                        };
+
+                    state.filterStates.set(element, nextState);
+                    
+                    props.onFiltersChange(state.filterStates);
+
+                }    
+            })*/
+    
         var header = React.DOM.header({className : 'inline'}, 
-                            React.DOM.div({}, fav),
+                            favourite,
                             React.DOM.h1({}, name)
                         );
         //============================================================================================
@@ -100,10 +139,10 @@ var App = React.createClass({
         // CROWD
         var len = props.rcFake.crowd.length;
         var waitingLevelNow = open? 
-            levelCalc(props.rcFake.maxSize, crowdMoment(now, props.rcFake.crowd)) : 
+            levelCalc(props.rcFake.maxSize, props.rcFake.crowd[infBound(now)]) : 
             undefined;
         
-        var waitingMessages = [["green","<5mn"], ["yellow","5mn<*<15mn"],["orange", ">15mn"], ["red", "fermé"]];
+        var waitingMessages = [["green","<5mn"], ["yellow","5mn<*<15mn"],["orange", ">15mn"], ["black", "fermé"]];
              
         var legendColor = waitingMessages.map(function(level){
             return React.DOM.dl({className : 'inline'},
@@ -118,8 +157,7 @@ var App = React.createClass({
         var legend= React.DOM.figcaption({className : 'inline'}, 
             legendColor, 
             legendNow);
-                                                    
-        
+                                
         var crowdPrediction = new Levels({
             crowd: props.rcFake.crowd,
             maxSize: props.rcFake.maxSize,
@@ -136,7 +174,6 @@ var App = React.createClass({
                 legend,
                 React.DOM.div({}, crowdPrediction))
         );
-  
         
         //============================================================================================
         
@@ -161,36 +198,40 @@ var App = React.createClass({
         
         var lis = [];
         
-        var lisAlert = [] ;
+        var lisAvaiable = [];
+        
+        var lisUnAvaiable = [] ;
                                            
-        for (var status in wastes){    
-            for (var index in wastes[status]){
-                var li = React.DOM.li({},
-                    React.DOM.dl({},
-                        React.DOM.dt({}, wastes[status][index]),
-                        React.DOM.dd({}, status)));
+        Object.keys(wastes).forEach(function(status){
+            wastes[status].forEach(function(waste){
+                
+                var li = React.DOM.dl({},
+                    React.DOM.dt({},
+                        waste,
+                        React.DOM.img({src : props.wastesFile[waste], alt : waste, width : 75})),
+                    React.DOM.dd({}, status));
                                       
                 if (status === "unavaiable") {
-                    var liAlert = React.DOM.li({},
-                    React.DOM.div({}, wastes[status][index])); 
-                                        
-                    lisAlert.push(liAlert); 
+                    var liUnAvaiable = React.DOM.li({className : 'redText'}, li);
+                    lisUnAvaiable.push(liUnAvaiable); 
+                }
+                else {
+                    var liAvaiable = React.DOM.li({className : 'greenText'}, li);
+                    lisAvaiable.push(liAvaiable);  
                 }
                 
-                 
-                lis.push(li);
-                                                 
-            }
-        }
+                lis.push(React.DOM.li({}, li));
+            })
+        })
         
         var wasteList = React.DOM.section({},
             React.DOM.h2({}, "Déchets"),
-            React.DOM.ul({}, lis)
+            React.DOM.ul({}, lisUnAvaiable, lisAvaiable)
             );
         
         var alert = React.DOM.section({className : 'redText'},
             React.DOM.h2({}, "Alerte"),
-            React.DOM.ul({}, lisAlert)
+            React.DOM.ul({}, lisUnAvaiable)
             );
             
         //============================================================================================

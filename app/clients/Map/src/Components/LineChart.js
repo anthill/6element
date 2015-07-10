@@ -64,7 +64,9 @@ var LineChart = React.createClass({
 
             data,
             {
-                labels: [ "time", "Traces wifi" ]
+                labels: [ "time", "Traces wifi" ],
+                legend: "onmouseover",
+                strokeWidth: 2
             }
 
           );
@@ -74,7 +76,7 @@ var LineChart = React.createClass({
 	render: function(){
 
         return new React.DOM.div({className: 'line-chart'},
-            React.DOM.div({ref: 'tsNumber'})
+            React.DOM.div({ref: 'tsNumber', className: 'chart'})
         );
 	}
 

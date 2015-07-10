@@ -31,7 +31,7 @@ var App = React.createClass({
 
     getInitialState: function(){
         return {
-            fav: undefined
+            fav: this.props.userFake.favouriteRC
         };
     },
     
@@ -66,25 +66,24 @@ var App = React.createClass({
         
         var name = props.rcFake.name;
         
-        //self.setState({ fav : props.userFake.favouriteRC });
-        
         var fav = state.fav;
         
         var favourite = new BooleanFilter({
             active: fav,
             className : "fa fa-star fa-3x",
-            onChange: function(nextState){
-                if(!nextState) {
+            onChange: function(){
+                if(!fav) {
                     self.setState({fav : true});
                 }
                 else {
                     self.setState({fav : false});
                 }
-                props.userFake.favouriteRC = state.fav ? props.rcFake.name : undefined;
+                props.onFavChange(state.fav ? undefined : props.rcFake.name);
             }      
         });
         
         console.log('props.userF', props.userFake.favouriteRC);
+        
         /*return BooleanFilter({
                 active: state.filterStates.get(element),
                 label: element,

@@ -222,5 +222,8 @@ var userFake = {
 React.render(new Application({
     rcFake: rcFake,
     wastesFile :  wastesFile,
-    userFake : userFake
+    userFake : userFake,
+    onFavChange : function(favourite){
+        userFake.favouriteRC = favourite;
+    }
 }), document.body);

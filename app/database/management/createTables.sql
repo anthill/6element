@@ -20,20 +20,21 @@ $$ language 'plpgsql';
 
 -- Business tables --
 
-CREATE TABLE IF NOT EXISTS recycling_centers (
+CREATE TABLE IF NOT EXISTS places (
     id           SERIAL PRIMARY KEY,
     name         text NOT NULL,
+    type         text DEFAULT NULL,
     lat          real NOT NULL,
     lon          real NOT NULL
 ) INHERITS(lifecycle);
-CREATE TRIGGER updated_at_recycling_centers BEFORE UPDATE ON recycling_centers FOR EACH ROW EXECUTE PROCEDURE update_updated_at_column();
+CREATE TRIGGER updated_at_places BEFORE UPDATE ON places FOR EACH ROW EXECUTE PROCEDURE update_updated_at_column();
 
 
 CREATE TABLE IF NOT EXISTS sensors (
     id          SERIAL PRIMARY KEY,
     name        VARCHAR(100) NOT NULL,
     -- type         some_enum -- affluence/bin-level
-    installed_at  integer REFERENCES recycling_centers (id) DEFAULT NULL,
+    installed_at  integer REFERENCES places (id) DEFAULT NULL,
     phone_number  text UNIQUE NOT NULL,
     quipu_status  quipu_status DEFAULT NULL, 
     sense_status  sense_status DEFAULT NULL,

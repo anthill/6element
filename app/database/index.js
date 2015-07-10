@@ -3,7 +3,7 @@
 var decl = require('./management/declarations.js');
 var databaseP = require('./management/databaseClientP');
 
-var recyclingCenter = decl.recycling_centers;
+var places = decl.places;
 var sensor = decl.sensors;
 var sensorMeasurement = decl.affluence_sensor_measurements;
 
@@ -14,50 +14,50 @@ var errlog = function(str){
 }
 
 module.exports = {
-    RecyclingCenters: require('./models/recycling-centers.js'),
+    Places: require('./models/places.js'),
     Sensors: require('./models/sensors.js'),
     SensorMeasurements: require('./models/sensor-measurements.js'),
     complexQueries: {
-        currentRecyclingCenterAffluences: function(){
+        currentPlaceAffluences: function(){
             return databaseP.then(function(db) {
                 /*
-                    For each recycling center, get the last measurement date
+                    For each place, get the last measurement date
                 */
-                var latestRecyclingCenterMeasurementDate = recyclingCenter
+                var latestPlaceMeasurementDate = places
                     .subQuery('latest_recycling_center_measurement_date')
                     .select(
-                        recyclingCenter.id,
+                        places.id,
                         sensorMeasurement.measurement_date.max().as('last_date')
                     )
                     .from(
-                        recyclingCenter
+                        places
                             .join(sensor
                                 .join(sensorMeasurement)
                                 .on(sensor.id.equals(sensorMeasurement.sensor_id)))
-                            .on(recyclingCenter.id.equals(sensor.installed_at))
+                            .on(places.id.equals(sensor.installed_at))
                     )
-                    .group(recyclingCenter.id, sensor.id);
+                    .group(places.id, sensor.id);
                 
                 /*
                     For each recycling center, get the measurement value associated to the last measurement date
                 */
-                var latestRecyclingCenterMeasurementValue = recyclingCenter
+                var latestPlaceMeasurementValue = places
                     .subQuery('latest_recycling_center_measurement_value')
                     .select(
-                        recyclingCenter.id,
+                        places.id,
                         sensorMeasurement
                             .literal('array_length(affluence_sensor_measurements.signal_strengths, 1)')
                             .as('latest')
                     )
                     .from(
-                        recyclingCenter
+                        places
                             .join(sensor
                                 .join(sensorMeasurement)
                                 .on(sensor.id.equals(sensorMeasurement.sensor_id)))
-                            .on(recyclingCenter.id.equals(sensor.installed_at))
-                            .join(latestRecyclingCenterMeasurementDate)
-                            .on(recyclingCenter.id.equals(latestRecyclingCenterMeasurementDate.id).and(
-                                latestRecyclingCenterMeasurementDate.last_date.equals(sensorMeasurement.measurement_date)
+                            .on(places.id.equals(sensor.installed_at))
+                            .join(latestPlaceMeasurementDate)
+                            .on(places.id.equals(latestPlaceMeasurementDate.id).and(
+                                latestPlaceMeasurementDate.last_date.equals(sensorMeasurement.measurement_date)
                             ))
                     );
                 
@@ -65,20 +65,20 @@ module.exports = {
                     For each recycling center, get the maximum measurement (and recycling center infos)
                     TODO restrict maximum to the last few months
                 */
-                var maxMeasurementPerRecyclingCenter = recyclingCenter
+                var maxMeasurementPerPlace = places
                     .subQuery('max_measurement_per_recycling_center')
                     .select(
-                        recyclingCenter.id, recyclingCenter.name, recyclingCenter.lat, recyclingCenter.lon,
+                        places.id, places.name, places.lat, places.lon,
                         'max(array_length(affluence_sensor_measurements.signal_strengths, 1))'
                     )
                     .from(
-                        recyclingCenter
+                        places
                             .join(sensor
                                 .join(sensorMeasurement)
                                 .on(sensor.id.equals(sensorMeasurement.sensor_id)))
-                            .on(recyclingCenter.id.equals(sensor.installed_at))
+                            .on(places.id.equals(sensor.installed_at))
                     )
-                    .group(recyclingCenter.id, sensor.id);
+                    .group(places.id, sensor.id);
                 
                 /*
                     For each recycling center, get
@@ -86,15 +86,15 @@ module.exports = {
                     * maximum number of signals
                     * latest measured number of signals
                 */
-                var query = recyclingCenter
+                var query = places
                     .select('*')
-                    .from(maxMeasurementPerRecyclingCenter
-                        .join(latestRecyclingCenterMeasurementValue)
-                        .on(maxMeasurementPerRecyclingCenter.id.equals(latestRecyclingCenterMeasurementValue.id))
+                    .from(maxMeasurementPerPlace
+                        .join(latestPlaceMeasurementValue)
+                        .on(maxMeasurementPerPlace.id.equals(latestPlaceMeasurementValue.id))
                     )
                     .toQuery();
                 
-                // console.log('currentRecyclingCenterAffluences query', query);
+                // console.log('currentPlaceAffluences query', query);
 
                 return new Promise(function (resolve, reject) {
                     db.query(query, function (err, result) {
@@ -106,7 +106,7 @@ module.exports = {
             
         },
         
-        getRecyclingCenterDetails: function(rcId){
+        getPlaceDetails: function(rcId){
             return databaseP.then(function(db){
 
                 var query = sensor

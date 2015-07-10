@@ -37,13 +37,13 @@ function rand(n){
     return Math.floor(n*Math.random());
 }
 
-// dropAllTables()
-//     .then(createTables)
-//     // .then(fillDBWithFakeData)
-//     .then(hardCodedSensors)
-//     .catch(function(error){
-//             console.log("error in drop and create: ", error);
-//         });
+dropAllTables()
+    .then(createTables)
+    // .then(fillDBWithFakeData)
+    .then(hardCodedSensors)
+    .catch(function(error){
+            console.log("error in drop and create: ", error);
+        });
 
 var server = http.Server(app);
 var io = require('socket.io')(server);
@@ -95,7 +95,7 @@ app.get('/Admin_app.js', function(req, res){
 });
 
 app.get('/live-affluence', function(req, res){
-    database.complexQueries.currentRecyclingCenterAffluences()
+    database.complexQueries.currentPlaceAffluences()
         .then(function(data){
             res.send(data);
         })
@@ -233,7 +233,7 @@ app.post('/twilio', function(req, res) {
 app.get('/recycling-center/:rcId', function(req, res){
     var rcId = Number(req.params.rcId);
     
-    database.complexQueries.getRecyclingCenterDetails(rcId)
+    database.complexQueries.getPlaceDetails(rcId)
         .then(function(data){
             res.send(data);
         })
@@ -256,7 +256,7 @@ app.get('/sensors', function(req, res){
 app.post('/updateRC', function(req, res){
     var rcId = Number(req.params.rcId);
     
-    database.RecyclingCenters.update(rcId, {
+    database.Places.update(rcId, {
         name: req.params.name,
         lat: req.params.lat,
         lon: req.params.lon
@@ -303,7 +303,7 @@ server.listen(PORT, function () {
 //     encodeForSMS([result]).then(function(sms){
 
 //         var toSend = {
-//             From: '+33783609060',
+//             From: '+33783699454',
 //             Body: '1' + sms
 //         };
         
@@ -323,5 +323,5 @@ server.listen(PORT, function () {
 //         });
 //     });
 
-// }, 60000);
+// }, 30000);
 

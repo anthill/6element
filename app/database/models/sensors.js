@@ -5,7 +5,7 @@ sql.setDialect('postgres');
 var databaseP = require('../management/databaseClientP');
 
 var sensors = require('../management/declarations.js').sensors;
-var recyclingCenters = require('../management/declarations.js').recycling_centers;
+var places = require('../management/declarations.js').places;
 
 module.exports = {
     create: function (data) {
@@ -79,14 +79,15 @@ module.exports = {
             var query = sensors
                 .select(
                     sensors.star(),
-                    recyclingCenters.name.as('rcName'),
-                    recyclingCenters.lat,
-                    recyclingCenters.lon
+                    places.name,
+                    places.type,
+                    places.lat,
+                    places.lon
                 )
                 .from(
                     sensors
-                    .join(recyclingCenters)
-                    .on(sensors.installed_at.equals(recyclingCenters.id))
+                    .join(places)
+                    .on(sensors.installed_at.equals(places.id))
                 )
                 .toQuery();
 

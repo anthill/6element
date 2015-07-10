@@ -70,7 +70,7 @@ var App = React.createClass({
         
         var favourite = new BooleanFilter({
             active: fav,
-            className : "fa fa-star fa-3x",
+            className : "col-lg-1 fa fa-star fa-3x",
             onChange: function(){
                 if(!fav) {
                     self.setState({fav : true});
@@ -81,34 +81,16 @@ var App = React.createClass({
                 props.onFavChange(state.fav ? undefined : props.rcFake.name);
             }      
         });
-        
-        console.log('props.userF', props.userFake.favouriteRC);
-        
-        /*return BooleanFilter({
-                active: state.filterStates.get(element),
-                label: element,
-                onChange: function(nextState){
-                    if(!nextState)
-                        delete state.filterStates[element];
-                    else
-                        state.filterStates[element] = function(courtier){
-                            return courtier[element];
-                        };
-
-                    state.filterStates.set(element, nextState);
-                    
-                    props.onFiltersChange(state.filterStates);
-
-                }    
-            })*/
-    
-        var header = React.DOM.header({className : 'inline'}, 
-                            favourite,
-                            React.DOM.h1({}, name)
-                        );
+            
+        var title = React.DOM.header({className : ""}, 
+            favourite,
+            React.DOM.h1({className : "col-lg-4"}, name));
         //============================================================================================
         
         //NAV
+        
+        //TO DO
+        
         var sectionTitles = [] ;
         
         var nav = React.DOM.nav({},
@@ -127,12 +109,12 @@ var App = React.createClass({
         
         var openDayMessage = displaySchedule(week,props.rcFake.schedule);   
         
-        var schedule = React.DOM.section({}, [
-             React.DOM.h2({}, "Horaires"),
-             open ?  React.DOM.h3({className : 'greenText'}, "Ouvert"):
-                     React.DOM.h3({className : 'redText'}, "Fermé"),
-             React.DOM.dl({}, openDayMessage), 
-             ]);
+        var schedule = React.DOM.section({className : "container"},
+             React.DOM.div({className : "row"},
+                 React.DOM.h2({className : "col-lg-3"}, "Horaires"),
+                 open ?  React.DOM.h3({className : 'col-lg-3 greenText'}, "Ouvert"):
+                         React.DOM.h3({className : 'col-lg-3 redText'}, "Fermé")),
+             openDayMessage);
         
         //============================================================================================
         
@@ -166,13 +148,18 @@ var App = React.createClass({
             schedule : props.rcFake.schedule
         });
         
-        var crowd = React.DOM.section({}, 
-            React.DOM.h2({}, "Attente"),
-            open ? React.DOM.h3({className : waitingMessages[waitingLevelNow][0]+'Text'}, waitingMessages[waitingLevelNow][1]) : undefined,
+        var crowd = React.DOM.section({className : "container"}, 
+            React.DOM.header({className : "row"},
+                React.DOM.h2({className : "col-lg-3"}, "Attente"),
+                open ? 
+                    React.DOM.h3({className : "col-lg-3 "+
+                                  waitingMessages[waitingLevelNow][0]+'Text'},
+                        waitingMessages[waitingLevelNow][1]) : 
+                    undefined),
             React.DOM.h4({}, date),
             React.DOM.figure({},
                 legend,
-                React.DOM.div({}, crowdPrediction))
+                React.DOM.div({className : "col-lg-12"}, crowdPrediction))
         );
         
         //============================================================================================
@@ -212,33 +199,31 @@ var App = React.createClass({
                     React.DOM.dd({}, status));
                                       
                 if (status === "unavaiable") {
-                    var liUnAvaiable = React.DOM.li({className : 'redText'}, li);
+                    var liUnAvaiable = React.DOM.li({className : '"col-lg-6 col-sm-4 col-xs-3 redText'}, li);
                     lisUnAvaiable.push(liUnAvaiable); 
                 }
                 else {
-                    var liAvaiable = React.DOM.li({className : 'greenText'}, li);
+                    var liAvaiable = React.DOM.li({className : '"col-lg-6 col-sm-4 col-xs-3 greenText'}, li);
                     lisAvaiable.push(liAvaiable);  
                 }
                 
-                lis.push(React.DOM.li({}, li));
+                lis.push(React.DOM.li({className : "col-lg-6 col-sm-4 col-xs-3"}, li));
             })
         })
         
-        var wasteList = React.DOM.section({},
+        var wasteList = React.DOM.section({className : "container"},
             React.DOM.h2({}, "Déchets"),
             React.DOM.ul({}, lisUnAvaiable, lisAvaiable)
             );
         
         var alert = React.DOM.section({className : 'redText'},
-            React.DOM.h2({}, "Alerte"),
-            React.DOM.ul({}, lisUnAvaiable)
-            );
+            React.DOM.div({className : "fa fa-exclamation-triangle"}, "Benne(s) indisponible(s)"));
             
         //============================================================================================
         
         // LOCALISATION
         
-        var localisation = React.DOM.section({},
+        var localisation = React.DOM.section({className : "container"},
             React.DOM.h2({}, "Localisation"),
             React.DOM.dl({}, 
                 React.DOM.dt({}, "adresse : "), 
@@ -258,9 +243,12 @@ var App = React.createClass({
         //############################################################################################
         
         // ALL
+        var header = React.DOM.div({className : "container row"}, 
+                      title,
+                      alert);
+        
         return React.DOM.div({id: 'myApp'},
                             header,
-                            wastes["unavaiable"] ? alert : undefined,
                             schedule,
                             crowd,
                             wasteList,

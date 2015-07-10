@@ -1,6 +1,9 @@
-/*.fa-star{
-    border : solid 1px black;
-}*/
+body {
+
+  padding-top: 10px;
+
+}
+
 
 .fa-star.active{
     color: yellow;
@@ -8,7 +11,7 @@
 
 
 .border{
-    border: solid 1px black;
+    outline: solid 1px black;
 }
 
 .colorBlock.border{

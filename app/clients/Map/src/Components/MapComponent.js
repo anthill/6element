@@ -48,7 +48,7 @@ module.exports = React.createClass({
             ],
             attributionControl: false,
             center: this.props.mapCenter,
-            zoom: 12
+            zoom: 10
         });
 
         this.map.on('zoomend', function(){

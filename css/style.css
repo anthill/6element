@@ -1,5 +1,8 @@
+/*.fa-star{
+    border : solid 1px black;
+}*/
 
-.fa-star.fav{
+.fa-star.active{
     color: yellow;
 }
 

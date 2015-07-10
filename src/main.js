@@ -75,8 +75,6 @@ var rcFake = {
     // NEVER CHANGE
     name: "Verac",
     
-    favourite: false,
-    
     // opened intervall in UTC
     schedule: {
         //UTC
@@ -214,9 +212,15 @@ var rcFake = {
     ],
 };
 
+var userFake = {
+    
+    favouriteRC : undefined
+}
+
 
 // Initial rendering
 React.render(new Application({
     rcFake: rcFake,
     wastesFile :  wastesFile,
+    userFake : userFake
 }), document.body);

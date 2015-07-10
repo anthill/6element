@@ -3,6 +3,7 @@
 var React = require('react');
 var moment = require('moment');
 
+var BooleanFilter = React.createFactory(require('./BooleanFilter.js'));
 var Levels = React.createFactory(require('./Levels.js'));
 
 var formatHour = require('../utils.js').formatHour;
@@ -28,9 +29,9 @@ interface AppState{
 var App = React.createClass({
     displayName: 'App',
 
-    getInitialState: function()
+    getInitialState: function(){
         return {
-            fav: props.rcFake.favourite;
+            fav: undefined
         };
     },
     
@@ -64,11 +65,46 @@ var App = React.createClass({
         //HEADER
         
         var name = props.rcFake.name;
-                          
+        
+        //self.setState({ fav : props.userFake.favouriteRC });
+        
+        var fav = state.fav;
+        
+        var favourite = new BooleanFilter({
+            active: fav,
+            className : "fa fa-star fa-3x",
+            onChange: function(nextState){
+                if(!nextState) {
+                    self.setState({fav : true});
+                }
+                else {
+                    self.setState({fav : false});
+                }
+                props.userFake.favouriteRC = state.fav ? props.rcFake.name : undefined;
+            }      
+        });
+        
+        console.log('props.userF', props.userFake.favouriteRC);
+        /*return BooleanFilter({
+                active: state.filterStates.get(element),
+                label: element,
+                onChange: function(nextState){
+                    if(!nextState)
+                        delete state.filterStates[element];
+                    else
+                        state.filterStates[element] = function(courtier){
+                            return courtier[element];
+                        };
+
+                    state.filterStates.set(element, nextState);
+                    
+                    props.onFiltersChange(state.filterStates);
+
+                }    
+            })*/
+    
         var header = React.DOM.header({className : 'inline'}, 
-                            props.rcFake.favourite ? 
-                                      React.DOM.i({className : "fa fa-star fa-3x fav"}) : 
-                                      React.DOM.i({className : "fa fa-star fa-3x"}),
+                            favourite,
                             React.DOM.h1({}, name)
                         );
         //============================================================================================

@@ -30,10 +30,11 @@ var recyclingCenters = BM_CITIES.map(function(name, i){
     }
 });
 
-function generateRecyclingCenters(){
+function generatePlaces(){
     return Promise.all(BM_CITIES.map(function(name){
-        return database.RecyclingCenters.create({
+        return database.Places.create({
             name: name,
+            type: "recyclingCenter",
             // random location around Bordeaux
             lat: BORDEAUX_COORDS[0] + 2*DIST*Math.random() - DIST,
             lon: BORDEAUX_COORDS[1] + 2*DIST*Math.random() - DIST
@@ -82,7 +83,7 @@ function generateSensorMeasurements(sensorIds){
 
 
 module.exports = function(){
-    return generateRecyclingCenters()
+    return generatePlaces()
         .then(generateSensors)
         .then(generateSensorMeasurements);
 }

@@ -1,13 +1,10 @@
 'use strict';
 
 var React = require("react");
-var ReactChartLine = require("react-chartjs").Line;
 
 /*
 interface LineChart Props{
-    labels: [],
-    metrics: {},
-    observed: []
+    measurements: [{id: 18, measurement: 18, measurement_date: "2015-07-09T12:45:53.629Z"}]
 }
 interface LineChart State{
 }
@@ -45,55 +42,42 @@ var defaultData = {
 };
 
 var LineChart = React.createClass({
+    componentDidMount: function(){
+        this.update();
+    },
+    componentDidUpdate: function(){
+        this.update();
+    },
+
+    update: function() {
+
+        var props = this.props;
+    
+        var data = props.measurements.map(function(x){
+            var date = new Date(x.measurement_date);
+            return [date, x.measurement];
+        });
+
+        new Dygraph(
+
+            React.findDOMNode(this.refs.tsNumber),
+
+            data,
+            {
+                labels: [ "time", "Traces wifi" ],
+                legend: "onmouseover",
+                strokeWidth: 2
+            }
+
+          );
+
+    },
 
 	render: function(){
 
-		var props = this.props;
-        console.log('LINECHART props', props);
-
-        var data = defaultData;
-        
-        // fill chart data
-        data.labels = props.labels;
-
-        data.datasets[0].data = props.observed;
-
-        // display metrics
-        /*var sumLegend = new React.DOM.div(
-            {
-                className: 'metrics table-layout'
-            },
-            React.DOM.div({},
-                "",
-                React.DOM.div({className: 'obs'}, "Observed")
-            ),
-            React.DOM.div({},
-                "Sum",
-                React.DOM.div({className: 'obs'}, Math.round(props.metrics.obsSum))
-            ),
-            React.DOM.div({},
-                "Mean",
-                React.DOM.div({className: 'obs'}, Math.round(props.metrics.obsMean))
-            )
-        );*/
-
-
-        // creating full chart component    
-        var fullChart = new React.DOM.div({className: 'line-chart'},
-            new ReactChartLine({
-                data: data,
-                redraw: true,
-                options: {
-                    scaleShowVerticalLines: false,
-                    pointHitDetectionRadius: 4,
-                    pointDot: false
-                }
-            })
-            /*,
-            sumLegend*/
+        return new React.DOM.div({className: 'line-chart'},
+            React.DOM.div({ref: 'tsNumber', className: 'chart'})
         );
-
-		return fullChart;
 	}
 
 });

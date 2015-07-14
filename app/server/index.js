@@ -234,38 +234,35 @@ app.get('/recycling-center/:rcId', function(req, res){
     var rcId = Number(req.params.rcId);
     
     database.complexQueries.getPlaceDetails(rcId)
-        .then(function(data){
-            res.send(data);
-        })
-        .catch(function(error){
-            console.log("error in /recycling-center/'+req.params.rcId: ", error);
-        });
-});
-
-app.get('/sensors', function(req, res){
-    database.Sensors.getAllSensorsInfo()
-        .then(function(data){
-            // debug('All sensors', data);
-            res.send(data);
-        })
-        .catch(function(error){
-            console.log("error in /sensors: ", error);
-        });
-});
-
-app.post('/updateRC', function(req, res){
-    var rcId = Number(req.params.rcId);
-    
-    database.Places.update(rcId, {
-        name: req.params.name,
-        lat: req.params.lat,
-        lon: req.params.lon
-    })
     .then(function(data){
         res.send(data);
     })
     .catch(function(error){
         console.log("error in /recycling-center/'+req.params.rcId: ", error);
+    });
+});
+
+app.get('/sensors', function(req, res){
+    database.Sensors.getAllSensorsInfo()
+    .then(function(data){
+        // debug('All sensors', data);
+        res.send(data);
+    })
+    .catch(function(error){
+        console.log("error in /sensors: ", error);
+    });
+});
+
+app.post('/updateRC', function(req, res){
+    var id = Number(req.body.id);
+
+    database.Places.update(id, req.body.delta)
+    .then(function(data){
+        res.send(data);
+    })
+    .catch(function(error){
+        res.status(500).send('Couldn\'t update Places database');
+        console.log("error in /updateRC/'+req.params.rcId: ", error);
     });
 });
 

@@ -16,26 +16,75 @@ function render(){
     React.render(new Application(topLevelStore), document.body);
 }
 
-function updateDB(table, id, fields){
+function updateDB(data){
     // send request to server according to the desired table
+
+    var delta = {};
+    delta[data.field] = data.value;
+
+    var obj = {
+        id: data.id,
+        delta: delta
+    };
+    
+    switch (data.table){
+        case 'rc':
+            serverAPI.updateRC(obj)
+            .then(function(res){
+                console.log('Places database updated successfully');
+                var ant = topLevelStore.antsByRC.get(res.id);
+                Object.assign(ant, res);
+                updateLocal(ant);
+            })
+            .catch(function(){
+                console.log('Places database didn\'t update correctly');
+                refreshView();
+            });
+            break;
+
+        case 'sensor':
+            serverAPI.updateSensor(obj)
+            .then()
+            ;
+            break;
+
+        default:
+            console.log('No such table as ', data.table);
+            break;
+    }        
+
+}
+
+function updateLocal(ant){
+    topLevelStore.antsByRC.set(ant.installed_at, ant);
+    topLevelStore.antsByRC.set(ant.id, ant);
+
+    render();
+}
+
+function refreshView(){
+    serverAPI.getAllSensors()
+    .then(function(sensors){
+
+        topLevelStore.ants = makeMap(sensors, 'id');
+        topLevelStore.antsByRC = makeMap(sensors, 'installed_at');
+        resetUpdate(topLevelStore.ants);
+
+        console.log('store', topLevelStore.ants);
+        
+        render();
+    })
+    .catch(errlog);
 }
 
 var topLevelStore = {
     ants: undefined,
+    antsByRC: undefined,
     onChange: updateDB
 };
 
-serverAPI.getAllSensors()
-.then(function(sensors){
-
-    topLevelStore.ants = makeMap(sensors, 'id');
-    resetUpdate(topLevelStore.ants);
-
-    console.log('topLevelStore', topLevelStore.ants);
-    // Initial rendering
-	render();
-})
-.catch(errlog);
+// Initial rendering
+refreshView();
 
 // THIS WILL BE NEEDED WHEN QUIPU SIGNAL IS INCORPORATED INTO DATA MSGS
 // socket.on('data', function (msg){

@@ -3,23 +3,25 @@
 var React = require('react');
 var Modifiable = React.createFactory(require('./Modifiable.js'));
 
+var moment = require('moment');
+
 /*
 
 interface AntProps{
     ant: {
         id: int,
         name: string,
+        installed_at: int,
+        rcName: string,
         phone_number: string,
-        installed_at: string,
-        latLng: {
-            lat: float,
-            long: float
-        },
+        lat: float,
+        lon: float,
         quipu_status: string,
-        signalStrength: int,
+        signal_strength: int,
         sense_status: string,
         latest_input: string,
-        latest_output: string
+        latest_output: string,
+        isUpdating: boolean
     },
     onChange: function()
 }
@@ -36,8 +38,9 @@ var Ant = React.createClass({
         var props = this.props;
         var state = this.state;
 
-        // console.log('APP props', props);
-        // console.log('APP state', state);
+        // console.log('ANT props', props);
+        // console.log('ANT state', state);
+
         var classes = [
             'ant',
             // isSelected ? 'selected' : '',
@@ -47,35 +50,52 @@ var Ant = React.createClass({
         ];
 
         return React.DOM.div({className: classes.join(' ')},
-            React.DOM.h1({}, props.ant.name),
+            new Modifiable({
+                className: 'rcName',
+                isUpdating: false,
+                text: props.ant.name,
+                dbLink: {
+                    table: 'rc',
+                    id: props.ant.installed_at,
+                    field: 'name'
+                },
+                onChange: props.onChange
+            }),
             React.DOM.ul({},
+                React.DOM.li({}, 
+                    React.DOM.div({}, 'Coords'),
+                    new Modifiable({
+                        isUpdating: false,
+                        text: props.ant.lat,
+                        dbLink: {
+                            table: 'rc',
+                            id: props.ant.installed_at,
+                            field: 'lat'
+                        },
+                        onChange: props.onChange
+                    }),
+                    new Modifiable({
+                        isUpdating: false,
+                        text: props.ant.lon,
+                        dbLink: {
+                            table: 'rc',
+                            id: props.ant.installed_at,
+                            field: 'lon'
+                        },
+                        onChange: props.onChange
+                    })
+                ),
                 React.DOM.li({}, 
                     React.DOM.div({}, 'ID'),
                     React.DOM.div({}, props.ant.id)
                 ),
                 React.DOM.li({}, 
-                    React.DOM.div({}, 'Installed at'),
-                    new Modifiable({
-                        text: props.ant.rcName,
-                        onChange: props.onChange,
-                        rcID: props.ant.installed_at,
-                        dbTable: 'rc',
-                        dbField: 'name' 
-                    }),
-                    React.DOM.div({}, props.ant.installed_at)
-                ),
-                React.DOM.li({}, 
-                    React.DOM.div({}, 'Coords'),
-                    React.DOM.div({}, props.ant.lat),
-                    React.DOM.div({}, props.ant.lon)
-                ),
-                React.DOM.li({}, 
                     React.DOM.div({}, 'Created'),
-                    React.DOM.div({}, props.ant.created_at)
+                    React.DOM.div({}, moment(props.ant.created_at).format("MMMM Do YYYY, h:mm:ss a"))
                 ),
                 React.DOM.li({}, 
                     React.DOM.div({}, 'Updated'),
-                    React.DOM.div({}, props.ant.updated_at)
+                    React.DOM.div({}, moment(props.ant.updated_at).fromNow())
                 ),
                 React.DOM.li({}, 
                     React.DOM.div({}, 'Phone'),

@@ -6,6 +6,7 @@
   "scripts": {
     "watch": "watchify src/main.js -o app.js -d -v",
     "build": "browserify src/main.js -o app.js -d",
+    "start": "devserver",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -25,6 +26,8 @@
   },
   "devDependencies": {
     "eslint": "^0.21.0",
+    "grunt": "^0.4.5",
+    "grunt-devserver": "^0.6.0",
     "watchify": "^3.2.1"
   }
 }

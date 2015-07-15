@@ -8,8 +8,10 @@ var Level = React.createFactory(require('./Level.js'));
 /*
 
 interface LevelProps{
-    date: string
-    waiting: [color, message]
+    date: string ISO,
+    waiting: [color, message],
+    gapNow : boolean,
+    oClock : boolean   
     
 }
 interface LevelState{
@@ -37,15 +39,12 @@ var Level = React.createClass({
         
         if (props.gapNow) classes.push('border ')
         
-        //displayHour = React.DOM.div({}, props.oClock);
-        
         // console.log('APP props', props);
         // console.log('APP state', state);
         
         return React.DOM.div({className : 'inline'},
             React.DOM.div({className: classes.join('')}),
             React.DOM.div({className : 'colorBlock'}, props.oClock ));
-            //props.oClock ? displayHour : React.DOM.div({className : 'colorBlock'}));
     }
 });
 

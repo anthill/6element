@@ -54,6 +54,10 @@ body {
     background-color: red;
 }
 
+.blackText{
+    color : black;
+}
+
 .greenText{
     color: green;
 }

@@ -1,10 +1,10 @@
 'use strict';
 
 var React = require('react');
-var sameHours = require('sameHours.js');
-var formatDay = require('formatDay.js');
+var sameHours = require('./sameHours.js');
+var formatDay = require('./formatDay.js');
 
-function displaySchedule(week, schedule){
+module.exports = function(week, schedule){
     
     var breakDay = true;
     var days = "";
@@ -49,8 +49,4 @@ function displaySchedule(week, schedule){
     
     return divs;
         
-}
-
-module.exports = {
-    displaySchedule : displaySchedule
 };

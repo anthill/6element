@@ -1,0 +1,139 @@
+0 info it worked if it ends with ok
+1 verbose cli [ '/usr/bin/node', '/usr/bin/npm', 'install', '-g', 'casperjs' ]
+2 info using npm@1.4.28
+3 info using node@v0.10.38
+4 verbose node symlink /usr/bin/node
+5 verbose cache add [ 'casperjs', null ]
+6 verbose cache add name=undefined spec="casperjs" args=["casperjs",null]
+7 verbose parsed url { protocol: null,
+7 verbose parsed url   slashes: null,
+7 verbose parsed url   auth: null,
+7 verbose parsed url   host: null,
+7 verbose parsed url   port: null,
+7 verbose parsed url   hostname: null,
+7 verbose parsed url   hash: null,
+7 verbose parsed url   search: null,
+7 verbose parsed url   query: null,
+7 verbose parsed url   pathname: 'casperjs',
+7 verbose parsed url   path: 'casperjs',
+7 verbose parsed url   href: 'casperjs' }
+8 silly lockFile 22320dcf-casperjs casperjs
+9 verbose lock casperjs /home/roxane/.npm/22320dcf-casperjs.lock
+10 silly lockFile 22320dcf-casperjs casperjs
+11 silly lockFile 22320dcf-casperjs casperjs
+12 verbose addNamed [ 'casperjs', '' ]
+13 verbose addNamed [ null, '*' ]
+14 silly lockFile e0fac4df-casperjs casperjs@
+15 verbose lock casperjs@ /home/roxane/.npm/e0fac4df-casperjs.lock
+16 silly addNameRange { name: 'casperjs', range: '*', hasData: false }
+17 verbose request where is /casperjs
+18 verbose request registry https://registry.npmjs.org/
+19 verbose request id 3231134d6fdc4555
+20 verbose url raw /casperjs
+21 verbose url resolving [ 'https://registry.npmjs.org/', './casperjs' ]
+22 verbose url resolved https://registry.npmjs.org/casperjs
+23 verbose request where is https://registry.npmjs.org/casperjs
+24 info trying registry request attempt 1 at 12:16:51
+25 http GET https://registry.npmjs.org/casperjs
+26 http 200 https://registry.npmjs.org/casperjs
+27 silly registry.get cb [ 200,
+27 silly registry.get   { server: 'CouchDB/1.5.0 (Erlang OTP/R16B03)',
+27 silly registry.get     etag: '"1B0ZXPB4JEHS08AXR6G1D7W9L"',
+27 silly registry.get     'content-type': 'application/json',
+27 silly registry.get     'cache-control': 'max-age=60',
+27 silly registry.get     'content-length': '15376',
+27 silly registry.get     'accept-ranges': 'bytes',
+27 silly registry.get     date: 'Thu, 16 Jul 2015 10:16:54 GMT',
+27 silly registry.get     via: '1.1 varnish',
+27 silly registry.get     age: '44',
+27 silly registry.get     connection: 'keep-alive',
+27 silly registry.get     'x-served-by': 'cache-lcy1122-LCY',
+27 silly registry.get     'x-cache': 'HIT',
+27 silly registry.get     'x-cache-hits': '1',
+27 silly registry.get     'x-timer': 'S1437041814.463916,VS0,VE0',
+27 silly registry.get     vary: 'Accept' } ]
+28 silly addNameRange number 2 { name: 'casperjs', range: '*', hasData: true }
+29 silly addNameRange versions [ 'casperjs', [ '1.1.0-beta2', '1.1.0-beta3' ] ]
+30 verbose addNamed [ 'casperjs', '1.1.0-beta3' ]
+31 verbose addNamed [ '1.1.0-beta3', '1.1.0-beta3' ]
+32 silly lockFile 679a3ce2-casperjs-1-1-0-beta3 casperjs@1.1.0-beta3
+33 verbose lock casperjs@1.1.0-beta3 /home/roxane/.npm/679a3ce2-casperjs-1-1-0-beta3.lock
+34 silly lockFile 8ebd632f-asperjs-casperjs-1-1-0-beta3-tgz https://registry.npmjs.org/casperjs/-/casperjs-1.1.0-beta3.tgz
+35 verbose lock https://registry.npmjs.org/casperjs/-/casperjs-1.1.0-beta3.tgz /home/roxane/.npm/8ebd632f-asperjs-casperjs-1-1-0-beta3-tgz.lock
+36 verbose addRemoteTarball [ 'https://registry.npmjs.org/casperjs/-/casperjs-1.1.0-beta3.tgz',
+36 verbose addRemoteTarball   '750ebf53623bc6f4ead3b85bcd09c848f47cedcd' ]
+37 info retry fetch attempt 1 at 12:16:56
+38 verbose fetch to= /tmp/npm-5225-m1z0_Mza/registry.npmjs.org/casperjs/-/casperjs-1.1.0-beta3.tgz
+39 http GET https://registry.npmjs.org/casperjs/-/casperjs-1.1.0-beta3.tgz
+40 http 200 https://registry.npmjs.org/casperjs/-/casperjs-1.1.0-beta3.tgz
+41 silly lockFile 8ebd632f-asperjs-casperjs-1-1-0-beta3-tgz https://registry.npmjs.org/casperjs/-/casperjs-1.1.0-beta3.tgz
+42 silly lockFile 8ebd632f-asperjs-casperjs-1-1-0-beta3-tgz https://registry.npmjs.org/casperjs/-/casperjs-1.1.0-beta3.tgz
+43 silly lockFile 679a3ce2-casperjs-1-1-0-beta3 casperjs@1.1.0-beta3
+44 silly lockFile 679a3ce2-casperjs-1-1-0-beta3 casperjs@1.1.0-beta3
+45 silly lockFile e0fac4df-casperjs casperjs@
+46 silly lockFile e0fac4df-casperjs casperjs@
+47 silly resolved [ { name: 'casperjs',
+47 silly resolved     description: 'A navigation scripting & testing utility for PhantomJS and SlimerJS',
+47 silly resolved     version: '1.1.0-beta3',
+47 silly resolved     keywords: [ 'phantomjs', 'slimerjs', 'test', 'testing', 'scraping' ],
+47 silly resolved     bin: { casperjs: './bin/casperjs' },
+47 silly resolved     author:
+47 silly resolved      { name: 'Nicolas Perriault',
+47 silly resolved        email: 'nicolas@perriault.net',
+47 silly resolved        url: 'https://nicolas.perriault.net/' },
+47 silly resolved     dependencies: { phantomjs: '>=1.8.2' },
+47 silly resolved     bugs: { url: 'https://github.com/n1k0/casperjs/issues' },
+47 silly resolved     repository: { type: 'git', url: 'git://github.com/n1k0/casperjs.git' },
+47 silly resolved     licenses: [ [Object] ],
+47 silly resolved     homepage: 'http://casperjs.org',
+47 silly resolved     readme: '# CasperJS\n\n>**Important note:** the `master` branch hosts the development version of CasperJS, which is now pretty stable and should be the right version to use if you ask me.\n>\n>Use the [`1.0` branch](https://github.com/n1k0/casperjs/tree/1.0) if you want to keep in sync with the stable old version, or [use tagged versions](https://github.com/n1k0/casperjs/tags).\n>\n>Currently, available documentation is:\n>\n>- **hosted on [docs.casperjs.org](http://docs.casperjs.org/) for the development branch**\n>- hosted on [casperjs.org](http://casperjs.org/) for the 1.0 branch\n>\n>[Travis-CI](http://travis-ci.org/n1k0/casperjs) build status:\n>\n>- ![Build Status](https://travis-ci.org/n1k0/casperjs.png?branch=master) `master` branch\n>- 1.0 tests unfortunately have to be run manually using the `casperjs selftest` command\n\nCasperJS is a navigation scripting & testing utility for [PhantomJS](http://www.phantomjs.org/)\nand [SlimerJS](http://slimerjs.org/). It eases the process of defining a full navigation\nscenario and provides useful high-level functions, methods & syntaxic sugar for doing common\ntasks such as:\n\n- defining & ordering [navigation steps](http://docs.casperjs.org/en/latest/quickstart.html)\n- [filling forms](http://docs.casperjs.org/en/latest/modules/casper.html#fill)\n- [clicking links](http://docs.casperjs.org/en/latest/modules/casper.html#click)\n- [capturing screenshots](http://docs.casperjs.org/en/latest/modules/casper.html#captureselector) of a page (or an area)\n- [making assertions on remote DOM](http://docs.casperjs.org/en/latest/modules/tester.html)\n- [logging](http://docs.casperjs.org/en/latest/logging.html) & [events](http://docs.casperjs.org/en/latest/events-filters.html)\n- [downloading](http://docs.casperjs.org/en/latest/modules/casper.html#download) resources, even binary ones\n- catching errors and react accordingly\n- writing [functional test suites](http://docs.casperjs.org/en/latest/testing.html), exporting results as JUnit XML (xUnit)\n\nBrowse the [sample examples repository](https://github.com/n1k0/casperjs/tree/master/samples).\nDon\'t hesitate to pull request for any cool example of yours as well!\n\n**Read the [full documentation](http://docs.casperjs.org/) on casperjs documentation website.**\n\nSubscribe to the [project mailing-list](https://groups.google.com/forum/#!forum/casperjs)\n\nFollow the CasperJS project [on twitter](https://twitter.com/casperjs_org) and [Google+](https://plus.google.com/b/106641872690063476159/).\n\n## Show me some code!\n\nFirst [install CasperJS](http://docs.casperjs.org/en/latest/installation.html), we\'ll use 1.1 beta here.\n\nSample test to see if some dropdown can be opened:\n\n```javascript\ncasper.test.begin(\'a twitter bootstrap dropdown can be opened\', 2, function(test) {\n    casper.start(\'http://getbootstrap.com/2.3.2/javascript.html#dropdowns\', function() {\n        test.assertExists(\'#navbar-example\');\n        this.click(\'#dropdowns .nav-pills .dropdown:last-of-type a.dropdown-toggle\');\n        this.waitUntilVisible(\'#dropdowns .nav-pills .open\', function() {\n            test.pass(\'Dropdown is open\');\n        });\n    }).run(function() {\n        test.done();\n    });\n});\n```\n\nRun the script:\n\n![](http://cl.ly/image/271e2i403A0F/Capture%20d%E2%80%99%C3%A9cran%202013-01-20%20%C3%A0%2009.26.15.png)\n\n##Support\n\nNeed help with getting CasperJS up and running? Got a time-consuming problem you want to get solved quickly?\n\nGet <a href="http://codersclan.net/?repo_id=32">CasperJS support on CodersClan.</a>\n\n<a href="http://codersclan.net/?repo_id=32"><img src="http://www.codersclan.net/gs_button/?repo_id=32" width="200"></a>\n## Contributing\n\n### Contributing code\n\nPlease read the [CONTRIBUTING.md](https://github.com/n1k0/casperjs/blob/master/CONTRIBUTING.md) file contents.\n\n### Contributing documentation\n\nCasperJS\'s documentation is written using the [Markdown format](http://daringfireball.net/projects/markdown/), and hosted on Github thanks to the [Github Pages Feature](http://pages.github.com/).\n\nTo view the source files on github, head to [the gh-pages branch](https://github.com/n1k0/casperjs/tree/gh-pages), and check the [documentation\'s README](https://github.com/n1k0/casperjs/tree/gh-pages#readme) for further instructions.\n\n## Team\n\n- Nicolas Perriault ([@n1k0](https://github.com/n1k0))\n- Nick Currier ([@hexid](https://github.com/hexid))\n- Laurent Jouanneau ([@laurentj](https://github.com/laurentj))\n- Mickaël Andrieu ([@mickaelandrieu](https://github.com/mickaelandrieu))\n- Matt DuVall ([@mduvall](https://github.com/mduvall))\n\n## License\n\nMIT\n',
+47 silly resolved     readmeFilename: 'README.md',
+47 silly resolved     _id: 'casperjs@1.1.0-beta3',
+47 silly resolved     dist:
+47 silly resolved      { shasum: '750ebf53623bc6f4ead3b85bcd09c848f47cedcd',
+47 silly resolved        tarball: 'http://registry.npmjs.org/casperjs/-/casperjs-1.1.0-beta3.tgz' },
+47 silly resolved     _from: 'casperjs@',
+47 silly resolved     _npmVersion: '1.3.14',
+47 silly resolved     _npmUser: { name: 'n1k0', email: 'nicolas@perriault.net' },
+47 silly resolved     maintainers: [ [Object] ],
+47 silly resolved     directories: {},
+47 silly resolved     _shasum: '750ebf53623bc6f4ead3b85bcd09c848f47cedcd',
+47 silly resolved     _resolved: 'https://registry.npmjs.org/casperjs/-/casperjs-1.1.0-beta3.tgz' } ]
+48 info install casperjs@1.1.0-beta3 into /usr/lib
+49 info installOne casperjs@1.1.0-beta3
+50 verbose lib/node_modules/casperjs unbuild
+51 verbose tar unpack /home/roxane/.npm/casperjs/1.1.0-beta3/package.tgz
+52 silly lockFile d37ad747-ar-usr-lib-node-modules-casperjs tar:///usr/lib/node_modules/casperjs
+53 verbose lock tar:///usr/lib/node_modules/casperjs /home/roxane/.npm/d37ad747-ar-usr-lib-node-modules-casperjs.lock
+54 silly lockFile f0d4cd06-casperjs-1-1-0-beta3-package-tgz tar:///home/roxane/.npm/casperjs/1.1.0-beta3/package.tgz
+55 verbose lock tar:///home/roxane/.npm/casperjs/1.1.0-beta3/package.tgz /home/roxane/.npm/f0d4cd06-casperjs-1-1-0-beta3-package-tgz.lock
+56 silly gunzTarPerm modes [ '775', '664' ]
+57 error Error: EACCES, mkdir '/usr/lib/node_modules/casperjs'
+57 error  { [Error: EACCES, mkdir '/usr/lib/node_modules/casperjs']
+57 error   errno: 3,
+57 error   code: 'EACCES',
+57 error   path: '/usr/lib/node_modules/casperjs',
+57 error   fstream_type: 'Directory',
+57 error   fstream_path: '/usr/lib/node_modules/casperjs',
+57 error   fstream_class: 'DirWriter',
+57 error   fstream_stack:
+57 error    [ '/usr/lib/node_modules/npm/node_modules/fstream/lib/dir-writer.js:36:23',
+57 error      '/usr/lib/node_modules/npm/node_modules/mkdirp/index.js:46:53',
+57 error      'Object.oncomplete (fs.js:108:15)' ] }
+58 error Please try running this command again as root/Administrator.
+59 error System Linux 3.13.0-55-generic
+60 error command "/usr/bin/node" "/usr/bin/npm" "install" "-g" "casperjs"
+61 error cwd /home/roxane/Bureau/6elementApp
+62 error node -v v0.10.38
+63 error npm -v 1.4.28
+64 error path /usr/lib/node_modules/casperjs
+65 error fstream_path /usr/lib/node_modules/casperjs
+66 error fstream_type Directory
+67 error fstream_class DirWriter
+68 error code EACCES
+69 error errno 3
+70 error stack Error: EACCES, mkdir '/usr/lib/node_modules/casperjs'
+71 error fstream_stack /usr/lib/node_modules/npm/node_modules/fstream/lib/dir-writer.js:36:23
+71 error fstream_stack /usr/lib/node_modules/npm/node_modules/mkdirp/index.js:46:53
+71 error fstream_stack Object.oncomplete (fs.js:108:15)
+72 verbose exit [ 3, true ]

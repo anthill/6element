@@ -4,7 +4,7 @@
 var React = require('react');
 var moment = require('moment');
 
-function infBound(datetimeObject){
+module.exports = function(datetimeObject){
 
     var hourMoment = datetimeObject.hours();
     var minMoment = datetimeObject.minutes();
@@ -17,8 +17,4 @@ function infBound(datetimeObject){
     });
     
     return inf.toISOString();
-}
-
-module.exports = {
-    infBound : infBound
 };

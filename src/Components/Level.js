@@ -3,8 +3,6 @@
 var React = require('react');
 var Level = React.createFactory(require('./Level.js'));
 
-
-
 /*
 
 interface LevelProps{
@@ -15,7 +13,6 @@ interface LevelProps{
     
 }
 interface LevelState{
-}
 
 */
 

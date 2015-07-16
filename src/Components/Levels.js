@@ -5,12 +5,20 @@ var moment = require('moment');
 
 var Level = React.createFactory(require('./Level.js'));
 
+//Functions
+var getCrowdLevel = require('../utils/getCrowdLevel.js');
+var isItOpen = require('../utils/isItOpen.js');
+var infBound = require('../utils/infBound.js');
+var displaySchedule = require('../utils/displaySchedule.js');
 var getDayNumber = require('../utils/utils.js').getDayNumber;
-var getCrowdLevel = require('..//utils/utils.js').getCrowdLevel;
-var infBound = require('..//utils/utils.js').infBound;
-var getHoursString = require('..//utils/utils.js').getHoursString;
-var getMinutesString = require('..//utils/utils.js').getMinutesString;
-var isItOpen = require('..//utils/utils.js').isItOpen;
+var getHoursString = require('../utils/utils.js').getHoursString;
+var getMinutesString = require('../utils/utils.js').getMinutesString;
+
+//Var
+
+var weekDays = require('../dateLists').weekDays;
+var months = require('../dateLists').months;
+
 
 /*
 

@@ -14,7 +14,6 @@ interface AppState{
 
 */
 
-
 var App = React.createClass({
     displayName: 'App',
     
@@ -23,9 +22,11 @@ var App = React.createClass({
         var props = this.props;
         var state = this.state;
         
-        var rc = props.rcsFake.get(state.id);
+        var rc = props.rcs.get(0);
+                
+        var rcSelected = new RC({rc: rc});
         
-        return React.DOM.div({});
+        return React.DOM.div({}, rcSelected);
     }
 });
 

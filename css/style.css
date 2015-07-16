@@ -35,8 +35,8 @@ body {
     width : 20px;
     height: 20px;
 }
-.blackFont{
-    background-color: black;
+.grayFont{
+    background-color: darkgray;
 }
 .greenFont{
     background-color: green;
@@ -54,8 +54,8 @@ body {
     background-color: red;
 }
 
-.blackText{
-    color : black;
+.grayText{
+    color : darkgray;
 }
 
 .greenText{

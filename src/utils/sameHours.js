@@ -2,7 +2,7 @@
 
 var React = require('react');
 
-function sameHours(d1,d2){
+module.exports = function(d1,d2){
     //don't compare each values if both list are not the same length
     if (d1.length !== d2.length) 
         return false;
@@ -17,7 +17,3 @@ function sameHours(d1,d2){
     return true;
         
 }
-
-module.exports = {
-    sameHours : sameHours
-};

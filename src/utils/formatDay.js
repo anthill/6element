@@ -1,9 +1,11 @@
 'use strict';
 
 var React = require('react');
-var formatHour = require('formatHour.js')
+var formatHour = require('./formatHour.js')
 
-function formatDay(scheduleDay){
+
+
+module.exports = function(scheduleDay){
     //Each day in schedule has to be a list composed with similar objects  {start : , end : }
     var div = "";
     var divs = []; 
@@ -14,8 +16,4 @@ function formatDay(scheduleDay){
     });
 
     return divs;
-}
-
-module.exports = {
-    formatDay: formatDay
 };

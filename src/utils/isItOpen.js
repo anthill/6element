@@ -2,12 +2,13 @@
 
 var React = require('react');
 var moment = require('moment');
-var getDayNumber = require('utils.js').getDayNumber;
-var getHoursString = require('utils.js').getHoursString;
-var getMinutesString = require('utils.js').getMinutesString;
+var getDayNumber = require('./utils.js').getDayNumber;
+var getHoursString = require('./utils.js').getHoursString;
+var getMinutesString = require('./utils.js').getMinutesString;
 
 
-function isItOpen(datetimeObject, schedule){
+
+module.exports = function(datetimeObject, schedule){
 
     var day = getDayNumber(datetimeObject);
     var open = false;
@@ -30,7 +31,3 @@ function isItOpen(datetimeObject, schedule){
     });
     return open;   
 }
-
-module.exports = {
-    isItOpen : isItOpen
-};

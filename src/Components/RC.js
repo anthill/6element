@@ -9,7 +9,7 @@ var BooleanFilter = React.createFactory(require('./BooleanFilter.js'));
 var Levels = React.createFactory(require('./Levels.js'));
 
 //Functions
-//var formatHour = require('../utils/formatHour.js');
+var formatHour = require('../utils/formatHour.js');
 var formatDay = require('../utils/formatDay.js');
 var getCrowdLevel = require('../utils/getCrowdLevel.js');
 var isItOpen = require('../utils/isItOpen.js');
@@ -21,21 +21,19 @@ var getDayNumber = require('../utils/utils.js').getDayNumber;
 
 var weekDays = require('../dateLists').weekDays;
 var months = require('../dateLists').months;
+var pictoDictionary = require('../pictoDictionary.json');
 
 
 /*
 
 interface RCProps{
-    rcFake: {},
-    userFake : {},
-    wastesImages : {}
-    isFav : boolean
+    rc: {}
 }
 interface RCState{
 }
 
 */
-
+var waitingMessages = [["green","<5mn"], ["yellow","5mn<*<15mn"],["orange", ">15mn"], ["gray", "indsponible"]];
 
 var RC = React.createClass({
     displayName: 'RC',
@@ -53,7 +51,7 @@ var RC = React.createClass({
         var now = moment().utc();
         var dayNumWeek = getDayNumber(now);
         var dayNumMonth = now.date();
-        var dayName = week[dayNumWeek];
+        var dayName = weekDays[dayNumWeek];
         var monthName = months[now.month()];
         var date = dayName + " " + dayNumMonth + " " +  monthName;
             
@@ -62,17 +60,19 @@ var RC = React.createClass({
         
         //HEADER
         
-        var name = props.rcFake.name;
+        var name = props.rc.name;
         
-        var fav = props.isFav;
+        var favourite = undefined;
+        
+/*        var fav = props.isFav;
         
         var favourite = new BooleanFilter({
             fav: fav,
             className : "col-lg-1 fa fa-star fa-3x",
             onChange: function(favState){
-                props.onFavChange(props.rcFake.id, favState);
+                props.onFavChange(props.rc.id, favState);
             }      
-        });
+        });*/
             
         var title = React.DOM.header({className : ""}, 
             favourite,
@@ -95,9 +95,9 @@ var RC = React.createClass({
         
         // SCHEDULE
                 
-        var open = isItOpen(now, props.rcFake.schedule);
+        var open = isItOpen(now, props.rc.schedule);
         
-        var openDayMessage = displaySchedule(week,props.rcFake.schedule);   
+        var openDayMessage = displaySchedule(weekDays,props.rc.schedule);   
         
         var schedule = React.DOM.section({className : "container"},
              React.DOM.div({className : "row"},
@@ -109,13 +109,11 @@ var RC = React.createClass({
         //============================================================================================
         
         // CROWD
-        var len = props.rcFake.crowd.length;
-        var waitingLevelNow = open? 
-            getCrowdLevel(props.rcFake.maxSize, props.rcFake.crowd[infBound(now)]) : 
-            undefined;
         
-        var waitingMessages = [["green","<5mn"], ["yellow","5mn<*<15mn"],["orange", ">15mn"], ["black", "fermé ou indisponible"]];
-             
+        //check is today is closed or last gap hour end is passed
+        //then display the next open day bound
+        
+        //if open or in a break
         var legendColor = waitingMessages.map(function(level){
             return React.DOM.dl({className : 'inline'},
                 React.DOM.dt({className : 'inline colorBlock '+level[0]+ 'Font'}),
@@ -129,13 +127,17 @@ var RC = React.createClass({
         var legend= React.DOM.figcaption({className : 'inline'}, 
             legendColor, 
             legendNow);
+        
+        var waitingLevelNow = open? 
+            getCrowdLevel(props.rc.maxSize, props.rc.crowd[infBound(now)]) : 
+            undefined;
                                 
         var crowdPrediction = new Levels({
-            crowd: props.rcFake.crowd,
-            maxSize: props.rcFake.maxSize,
+            crowd: props.rc.crowd,
+            maxSize: props.rc.maxSize,
             waitingMessages : waitingMessages,
             now : now,
-            schedule : props.rcFake.schedule
+            schedule : props.rc.schedule
         });
         
         var crowd = React.DOM.section({className : "container"}, 
@@ -164,7 +166,7 @@ var RC = React.createClass({
         
         var wasteList;
         
-        props.rcFake.wastes.forEach(function(waste){
+        props.rc.wastes.forEach(function(waste){
             if (waste.status === "unavailable") { 
                 wastes.unavailable.push(waste.type);
             }
@@ -181,11 +183,11 @@ var RC = React.createClass({
                                            
         Object.keys(wastes).forEach(function(status){
             wastes[status].forEach(function(waste){
-                
+                                
                 var li = React.DOM.dl({},
                     React.DOM.dt({},
-                        waste,
-                        React.DOM.img({src : props.wastesFile[waste], alt : waste, width : 75})),
+                        waste),
+                        React.DOM.img({src : pictoDictionary[waste], alt : waste, width : 75}),
                     React.DOM.dd({}, status));
                                       
                 if (status === "unavailable") {
@@ -206,7 +208,7 @@ var RC = React.createClass({
             React.DOM.ul({}, lisUnAvailable, lisAvailable)
             );
         
-        var alert = React.DOM.section({className : 'redText'},
+        var alert = React.DOM.div({className : 'redText'},
             React.DOM.div({className : "fa fa-exclamation-triangle"}, "Benne(s) indisponible(s)"));
             
         //============================================================================================
@@ -217,17 +219,17 @@ var RC = React.createClass({
             React.DOM.h2({}, "Localisation"),
             React.DOM.dl({}, 
                 React.DOM.dt({}, "adresse : "), 
-                React.DOM.dd({}, props.rcFake.address)),
+                React.DOM.dd({}, props.rc.address)),
             React.DOM.div({}, 
                 React.DOM.dl({},
                     React.DOM.dt({}, "latitude : "),
-                    React.DOM.dd({}, props.rcFake.coords.lat)),
+                    React.DOM.dd({}, props.rc.coords.lat)),
                 React.DOM.dl({},
                     React.DOM.dt({}, "longitude: "), 
-                    React.DOM.dd({}, props.rcFake.coords.long))),
+                    React.DOM.dd({}, props.rc.coords.long))),
             React.DOM.dl({}, 
                 React.DOM.dt({}, "téléphone : "), 
-                React.DOM.dd({}, props.rcFake.phone))
+                React.DOM.dd({}, props.rc.phone))
         );
         
         //############################################################################################

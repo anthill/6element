@@ -9,7 +9,7 @@ var BooleanFilter = React.createFactory(require('./BooleanFilter.js'));
 var Levels = React.createFactory(require('./Levels.js'));
 
 //Functions
-var formatHour = require('../utils/formatHour.js');
+//var formatHour = require('../utils/formatHour.js');
 var formatDay = require('../utils/formatDay.js');
 var getCrowdLevel = require('../utils/getCrowdLevel.js');
 var isItOpen = require('../utils/isItOpen.js');
@@ -25,28 +25,28 @@ var months = require('../dateLists').months;
 
 /*
 
-interface AppProps{
+interface RCProps{
     rcFake: {},
     userFake : {},
     wastesImages : {}
     isFav : boolean
 }
-interface AppState{
+interface RCState{
 }
 
 */
 
 
-var App = React.createClass({
-    displayName: 'App',
+var RC = React.createClass({
+    displayName: 'RC',
     
     render: function() {
         var self = this;
         var props = this.props;
         var state = this.state;
 
-        // console.log('APP props', props);
-        // console.log('APP state', state);
+        // console.log('RC props', props);
+        // console.log('RC state', state);
         
                 
         //ACTUAL
@@ -237,7 +237,7 @@ var App = React.createClass({
                       title,
                       alert);
         
-        return React.DOM.div({id: 'myApp'},
+        return React.DOM.div({id: 'myRC'},
                             header,
                             schedule,
                             crowd,
@@ -247,4 +247,4 @@ var App = React.createClass({
     }
 });
 
-module.exports = App;
+module.exports = RC;

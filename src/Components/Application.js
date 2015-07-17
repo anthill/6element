@@ -23,7 +23,7 @@ var App = React.createClass({
         var state = this.state;
         
         var rc = props.rcs.get(0);
-                
+        
         var rcSelected = new RC({rc: rc});
         
         return React.DOM.div({}, rcSelected);

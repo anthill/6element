@@ -20,18 +20,22 @@
                 {start: "0700", end: "1000"},
                 {start: "1200", end: "1600"}
             ],
+            //wednesday
             2 : [
                 {start: "0700", end: "1000"},
-                {start: "1200", end: "1600"}
+                {start: "1400", end: "1600"}
             ],
+            //thursday
             3: [
                 {start: "0700", end: "1000"},
                 {start: "1200", end: "1600"}
             ],
+            //friday
             4 : [
                 {start: "0700", end: "1000"},
-                {start: "1200", end: "1600"}
+                {start: "1400", end: "1600"}
             ],
+            //saturday
             5 : [
                 {start: "0700", end: "1000"},
                 {start: "1200", end: "1600"}

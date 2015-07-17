@@ -74,7 +74,7 @@ var RC = React.createClass({
             }      
         });*/
             
-        var title = React.DOM.header({className : ""}, 
+        var title = React.DOM.header({className : "row"}, 
             favourite,
             React.DOM.h1({className : "col-lg-4"}, name));
         //============================================================================================
@@ -113,7 +113,6 @@ var RC = React.createClass({
         //check is today is closed or last gap hour end is passed
         //then display the next open day bound
         
-        //if open or in a break
         var legendColor = waitingMessages.map(function(level){
             return React.DOM.dl({className : 'inline'},
                 React.DOM.dt({className : 'inline colorBlock '+level[0]+ 'Font'}),
@@ -235,7 +234,7 @@ var RC = React.createClass({
         //############################################################################################
         
         // ALL
-        var header = React.DOM.div({className : "container row"}, 
+        var header = React.DOM.section({className : "container"}, 
                       title,
                       alert);
         

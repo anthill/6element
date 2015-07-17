@@ -17,9 +17,9 @@ module.exports = function(week, schedule){
         // Check if it's open today
         
         if (schedule.hasOwnProperty(index))
-        {  
+        {
             if (breakDay) {
-                days += day + " - ";
+                days = day;
             }
                
             //Check if it's open tomorrow and if opening hours are the same 
@@ -28,8 +28,8 @@ module.exports = function(week, schedule){
             }
             
             else {
-                days += day;
-                hours = formatDay(schedule[index])
+                if(!breakDay) days += " - "+ day
+                hours = formatDay(schedule[index]);
                 div = React.DOM.dl({className : "row"},
                     React.DOM.dt({className : "col-lg-2"}, days, " : " ),
                     React.DOM.dd({className : "col-lg-3"}, hours));
@@ -46,6 +46,7 @@ module.exports = function(week, schedule){
             divs.push(div)
         }
     });
+    
     
     return divs;
         

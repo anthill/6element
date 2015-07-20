@@ -5,13 +5,11 @@
    - "db:postgres"
   ports:
    - "4000:4000"
-   - "35729:35729"
   environment:
    - VIRTUAL_HOST=6element.ants.builders 
    - VIRTUAL_PORT=4000
    - DEBUG=true
-   - POSTGRES_USER=elements
-   - POSTGRES_PASSWORD=elements
+   - POSTGRES_CONSTRING="postgres://postgres:elements@db:5432/postgres"
   volumes:
    - app:/6element/app
 db:
@@ -21,9 +19,5 @@ db:
       - POSTGRES_PASSWORD=elements
    ports:
       - "5432:5432"
-   volumes_from:
-      - data
-data:
-   image: busybox
    volumes:
       - /data/6element/db:/var/lib/postgresql/data

@@ -15,7 +15,6 @@ var app = express();
 var http = require('http');
 var compression = require('compression');
 var bodyParser = require('body-parser');
-var xml = require('xml');
 
 var database = require('../database');
 var dropAllTables = require('../database/management/dropAllTables');
@@ -164,8 +163,7 @@ app.post('/twilio', function(req, res) {
                                 }))
                                 .then(function(results){
                                     debug("Storage SUCCESS");
-                                    res.set('Content-Type', 'text/xml');
-                                    res.send(xml({"Response":""}));
+                                     res.json(200);
 
                                     // SOCKET IO
                                     if (socket)
@@ -174,8 +172,7 @@ app.post('/twilio', function(req, res) {
                                 })
                                 .catch(function(error){
                                     console.log("Storage FAILURE: ", error);
-                                    res.set('Content-Type', 'text/xml');
-                                    res.send(xml({"Response":""}));
+                                     res.json(200);
                                 });
                             });
                         break;
@@ -201,8 +198,7 @@ app.post('/twilio', function(req, res) {
                         })
                         .then(function(result){
                             debug("Storage SUCCESS");
-                            res.set('Content-Type', 'text/xml');
-                            res.send(xml({"Response":""}));
+                             res.json(200);
 
                             // SOCKET IO
                             if (socket)
@@ -211,8 +207,7 @@ app.post('/twilio', function(req, res) {
                         })
                         .catch(function(error){
                             console.log("Storage FAILURE: ", error);
-                            res.set('Content-Type', 'text/xml');
-                            res.send(xml({"Response":""}));
+                             res.json(200);
                         });
                         break;
 

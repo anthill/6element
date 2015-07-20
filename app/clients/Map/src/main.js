@@ -47,7 +47,7 @@ function render(){
 render();
 
 // Render again when receiving recyclingCenters from API
-serverAPI.getRecyclingCenters()
+serverAPI.getLiveAffzluence()
     .then(function(recyclingCenters){
         console.log('recyclingCenters', recyclingCenters);
     

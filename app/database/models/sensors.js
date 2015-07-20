@@ -73,22 +73,12 @@ module.exports = {
         });        
     },
 
-    getAllSensorsInfo: function() {
+    getAllSensors: function() {
         return databaseP.then(function (db) {
             
             var query = sensors
-                .select(
-                    places.name.as('placeName'),
-                    places.type,
-                    places.lat,
-                    places.lon,
-                    sensors.star()
-                )
-                .from(
-                    sensors
-                    .join(places)
-                    .on(sensors.installed_at.equals(places.id))
-                )
+                .select("*")
+                .from(sensors)
                 .toQuery();
 
             return new Promise(function (resolve, reject) {

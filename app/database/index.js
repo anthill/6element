@@ -106,7 +106,7 @@ module.exports = {
             
         },
         
-        getPlaceDetails: function(rcId){
+        getPlaceMeasurements: function(placeId){
             return databaseP.then(function(db){
 
                 var query = sensor
@@ -122,7 +122,7 @@ module.exports = {
                             .join(sensorMeasurement)
                             .on(sensor.id.equals(sensorMeasurement.sensor_id))
                     )
-                    .where(sensor.installed_at.equals(rcId))
+                    .where(sensor.installed_at.equals(placeId))
                     .toQuery();
                 
                 return new Promise(function (resolve, reject) {
@@ -132,7 +132,35 @@ module.exports = {
                     });
                 });
             })
+        },
 
+        getAllPlacesInfos: function() {
+            return databaseP.then(function (db) {
+            
+                var query = places
+                    .select(
+                        sensor.literal('array_agg(sensors.id)').as('sensor_id'), 
+                        places.star()
+                    )
+                    .from(
+                        places
+                        .join(sensor)
+                        .on(places.id.equals(sensor.installed_at))
+                    )
+                    .group(places.id)
+                    .toQuery();
+
+                return new Promise(function (resolve, reject) {
+                    db.query(query, function (err, result) {
+                        if (err) reject(err);
+
+                        else resolve(result.rows);
+                    });
+                });
+            })
+            .catch(function(err){
+                console.log('ERROR in getAllPlacesInfos', err);
+            });        
         }
     }
 };

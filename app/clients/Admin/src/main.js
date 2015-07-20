@@ -32,7 +32,7 @@ function updateDB(data){
             serverAPI.updateRC(obj)
             .then(function(res){
                 console.log('Places database updated successfully');
-                var ant = topLevelStore.antsByPlace.get(res.id);
+                var ant = topLevelStore.placeMap.get(res.id);
                 Object.assign(ant, res);
                 updateLocal(ant);
             })
@@ -56,30 +56,38 @@ function updateDB(data){
 }
 
 function updateLocal(ant){
-    topLevelStore.antsByPlace.set(ant.installed_at, ant);
-    topLevelStore.antsByPlace.set(ant.id, ant);
+    topLevelStore.placeMap.set(ant.installed_at, ant);
+    topLevelStore.placeMap.set(ant.id, ant);
 
     render();
 }
 
 function refreshView(){
-    serverAPI.getAllSensors()
-    .then(function(sensors){
 
-        topLevelStore.ants = makeMap(sensors, 'id');
-        topLevelStore.antsByPlace = makeMap(sensors, 'installed_at');
-        resetUpdate(topLevelStore.ants);
+    var placesP = serverAPI.getAllPlacesInfos();
+    var sensorsP = serverAPI.getAllSensors();
 
-        console.log('store', topLevelStore.ants);
+    Promise.all([placesP, sensorsP])
+    .then(function(results){
+
+        console.log('places', results[0]);
+        console.log('sensors', results[1]);
+
+        // topLevelStore.sensorMap = makeMap(sensors, 'id');
+        // topLevelStore.placeMap = makeMap(sensors, 'installed_at');
+
+        // resetUpdate(topLevelStore.sensorMap);
+
+        // console.log('topLevelStore', topLevelStore);
         
-        render();
+        // render();
     })
     .catch(errlog);
 }
 
 var topLevelStore = {
-    ants: undefined,
-    antsByPlace: undefined,
+    sensorMap: undefined,
+    placeMap: undefined,
     onChange: updateDB
 };
 
@@ -103,22 +111,22 @@ socket.on('status', function (msg) {
     var id = msg.sensorId;
     var status = msg.socketMessage;
 
-    resetUpdate(topLevelStore.ants);
+    resetUpdate(topLevelStore.sensorMap);
 
-    var updatingAnt = topLevelStore.ants.get(id);
-    updatingAnt.quipu_status = status.quipu.state;
-    updatingAnt.signal = status.quipu.signal;
-    updatingAnt.sense_status = status.sense;
-    updatingAnt.latest_input = status.info.command;
-    updatingAnt.latest_output = status.info.result;
-    updatingAnt.isUpdating = true;
+    var updatingSensorMap = topLevelStore.sensorMap.get(id);
+    updatingSensorMap.quipu_status = status.quipu.state;
+    updatingSensorMap.signal = status.quipu.signal;
+    updatingSensorMap.sense_status = status.sense;
+    updatingSensorMap.latest_input = status.info.command;
+    updatingSensorMap.latest_output = status.info.result;
+    updatingSensorMap.isUpdating = true;
     
-    // console.log('ant', updatingAnt);
+    // console.log('sensors', updatingSensors);
 
     render();
 
     setTimeout(function(){
-        resetUpdate(topLevelStore.ants);
+        resetUpdate(topLevelStore.sensorMap);
         render();
     }, 200);
 

@@ -230,7 +230,7 @@ app.post('/twilio', function(req, res) {
 
 
 
-app.get('/recycling-center/:rcId', function(req, res){
+app.get('/places/:rcId', function(req, res){
     var rcId = Number(req.params.rcId);
     
     database.complexQueries.getPlaceDetails(rcId)
@@ -242,14 +242,25 @@ app.get('/recycling-center/:rcId', function(req, res){
     });
 });
 
-app.get('/sensors', function(req, res){
-    database.Sensors.getAllSensorsInfo()
+app.get('/allPlacesInfos', function(req, res){
+    database.complexQueries.getAllPlacesInfos()
+    .then(function(data){
+        // debug('All places', data);
+        res.send(data);
+    })
+    .catch(function(error){
+        console.log("error in /allPlacesInfos: ", error);
+    });
+});
+
+app.get('/allSensors', function(req, res){
+    database.Sensors.getAllSensors()
     .then(function(data){
         // debug('All sensors', data);
         res.send(data);
     })
     .catch(function(error){
-        console.log("error in /sensors: ", error);
+        console.log("error in /allSensors: ", error);
     });
 });
 

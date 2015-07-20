@@ -2,14 +2,13 @@
    build: .
    command: bash -c "npm run prod"
    links:
-      - "db"
+      - db
    ports:
       - "4000:4000"
    environment:
       - VIRTUAL_HOST=6element.ants.builders 
       - VIRTUAL_PORT=4000
-      - POSTGRES_USER=elements
-      - POSTGRES_PASSWORD=elements
+      - POSTGRES_CONSTRING="postgres://postgres:elements@db:5432/postgres"
    volumes:
       - app:/6element/app
    restart: always
@@ -17,10 +16,7 @@
 db:
    image: postgres:9.4
    environment:
-      - POSTGRES_USER=elements
       - POSTGRES_PASSWORD=elements
-   ports:
-      - "5432:5432"
    volumes_from:
       - data
    restart: always

@@ -2,7 +2,7 @@
 
 var pg = require('pg');
 
-var conString = "postgres://" + process.env.POSTGRES_USER + ":" + process.env.POSTGRES_PASSWORD + "@" + process.env.DB_PORT_5432_TCP_ADDR + ":" + process.env.DB_PORT_5432_TCP_PORT + "/" + process.env.POSTGRES_USER;
+var conString = process.env.POSTGRES_CONSTRING;
 		
 module.exports = function(){
     return new Promise(function(resolve, reject){

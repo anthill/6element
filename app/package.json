@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "gulp dev --gulpfile app/gulpfile.js",
     "prod": "gulp prod --gulpfile app/gulpfile.js",
-    "sql-generate": "node-sql-generate --dsn postgres://postgres:password@$POSTGRES_PORT_5432_TCP_ADDR:$POSTGRES_PORT_5432_TCP_PORT/postgres > ./app/database/management/declarations.js",
+    "init": "gulp init --gulpfile app/gulpfile.js",
     "lint": "eslint ./"
   },
   "repository": {

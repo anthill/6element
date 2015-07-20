@@ -1,6 +1,6 @@
 6element:
    build: .
-   command: npm run prod
+   command: npm run init
    links:
       - db
    ports:
@@ -17,4 +17,6 @@ db:
    image: postgres:9.4
    environment:
       - POSTGRES_PASSWORD=elements
+   volumes:
+      - /data/6element/db:/var/lib/postgresql/data
    restart: always

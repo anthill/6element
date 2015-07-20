@@ -13,6 +13,11 @@ docker-compose -f compose-dev.yml up
 
 ### Pushing in production
 
+To create the db:
+
+```
+docker-compose -f compose-init.yml up
+```
 First stop and clean:
 
 ```

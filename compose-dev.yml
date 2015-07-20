@@ -1,8 +1,8 @@
 6element:
   build: .
-  command: bash -c "npm run dev"
+  command: npm run dev
   links:
-   - "db:postgres"
+   - db
   ports:
    - "4000:4000"
   environment:
@@ -19,5 +19,3 @@ db:
       - POSTGRES_PASSWORD=elements
    ports:
       - "5432:5432"
-   volumes:
-      - /data/6element/db:/var/lib/postgresql/data

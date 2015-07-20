@@ -1,11 +1,69 @@
 "use strict";
 
+require('es6-shim');
+
 var gulp = require('gulp');
 var server = require('gulp-express');
 // var livereload = require('gulp-livereload');
 var browserify = require('browserify');
 var source = require("vinyl-source-stream");
 // var watchify = require('watchify');
+var generateSqlDefinition = require('sql-generate');
+
+
+var conString = process.env.POSTGRES_CONSTRING;
+var sqlOptions = {
+    dsn: conString,
+    omitComments: true
+};
+
+
+gulp.task('init', function () {
+
+    // wait database to be created 
+    var interval = setInterval(function(){
+
+        console.log("checking for connection.");
+
+        require('./database/management/databaseClientP')
+            .then(function(db){
+                clearInterval(interval);
+
+                // when ready, drop and create tables
+                var dropAllTables = require('./database/management/dropAllTables.js');
+                var createTables = require('./database/management/createTables.js');
+
+                dropAllTables()
+                    .then(function(){
+                        createTables()
+                            .then(function(){
+                                console.log("Dropped and created the tables.")
+
+                                // regeneate the declarations
+                                generateSqlDefinition(sqlOptions, function(err, stats) {
+                                    if (err) {
+                                        console.error(err);
+                                        return;
+                                    }
+                                    fs.writeFileSync("./database/management/declarations.js", stats.buffer);
+                                });
+
+                            }).catch(function(err){
+                                console.error("Couldn't create tables", err);
+                            });
+                    }).catch(function(err){
+                        console.error("Couldn't drop tables", err);
+                    });         
+
+                    })
+            .catch(function(err){
+                console.error("Couldn't connect tables", err);
+            });
+
+
+    }, 1000);
+   
+});
 
 gulp.task('serve', function () {
     server.run(['./server/index.js']);

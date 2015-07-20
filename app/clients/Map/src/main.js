@@ -5,7 +5,7 @@ var io = require('socket.io-client');
 
 var Application = React.createFactory(require('./Components/Application.js'));
 
-var serverAPI = require('../../_common/js/serverAPI.js');
+var serverAPI = require('./serverAPI.js');
 var makeMap = require('../../_common/js/makeMap.js');
 
 var errlog = console.error.bind(console);

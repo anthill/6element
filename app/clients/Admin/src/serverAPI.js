@@ -1,6 +1,6 @@
 "use strict";
 
-var sendReq = require('../_common/js/sendReq.js');
+var sendReq = require('../../_common/js/sendReq.js');
 
 module.exports = {
     getRecyclingCenters: function(){

@@ -8,10 +8,12 @@ var createTableScript = fs.readFileSync( require.resolve('./createTables.sql') )
 
 module.exports = function(){
     return new Promise(function(resolve, reject){
-        databaseP.then(function(db){
-            db.query(createTableScript, function(err, result) {
-                if(err) reject(err); else resolve(result);
-            });
-        }).catch(resolve);
+        databaseP
+            .then(function(db){
+                db.query(createTableScript, function(err, result) {
+                    if(err) reject(err); else resolve(result);
+                });
+            })
+            .catch(reject);
     });
 };

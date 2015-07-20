@@ -53,7 +53,7 @@ var Ant = React.createClass({
             new Modifiable({
                 className: 'rcName',
                 isUpdating: false,
-                text: props.ant.name,
+                text: props.ant.rcName,
                 dbLink: {
                     table: 'rc',
                     id: props.ant.installed_at,

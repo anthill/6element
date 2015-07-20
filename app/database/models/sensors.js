@@ -78,11 +78,11 @@ module.exports = {
             
             var query = sensors
                 .select(
-                    sensors.star(),
-                    places.name,
+                    places.name.as('rcName'),
                     places.type,
                     places.lat,
-                    places.lon
+                    places.lon,
+                    sensors.star()
                 )
                 .from(
                     sensors

@@ -1,22 +1,32 @@
 6element:
-  build: .
-  command: bash -c "npm run prod"
-  links:
-   - "db:postgres"
-  ports:
-   - "4000:4000"
-  environment:
-   - VIRTUAL_HOST=6element.ants.builders 
-   - VIRTUAL_PORT=4000
-  volumes:
-   - app:/6element/app
-  restart: always
+   build: .
+   command: bash -c "npm run prod"
+   links:
+      - "db"
+   ports:
+      - "4000:4000"
+   environment:
+      - VIRTUAL_HOST=6element.ants.builders 
+      - VIRTUAL_PORT=4000
+      - POSTGRES_USER=elements
+      - POSTGRES_PASSWORD=elements
+   volumes:
+      - app:/6element/app
+   restart: always
+
 db:
-  image: postgres:9.4
-  environment:
-   - POSTGRES_PASSWORD=password
-  volumes:
-   - /data/backup/6element:/6element
-  ports:
-   - "5432:5432"
-  restart: always
+   image: postgres:9.4
+   environment:
+      - POSTGRES_USER=elements
+      - POSTGRES_PASSWORD=elements
+   ports:
+      - "5432:5432"
+   volumes_from:
+      - data
+   restart: always
+
+data:
+   image: busybox
+   volumes:
+      - /data/6element/db:/var/lib/postgresql/data
+   restart: always

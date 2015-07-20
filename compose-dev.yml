@@ -10,11 +10,20 @@
    - VIRTUAL_HOST=6element.ants.builders 
    - VIRTUAL_PORT=4000
    - DEBUG=true
+   - POSTGRES_USER=elements
+   - POSTGRES_PASSWORD=elements
   volumes:
    - app:/6element/app
 db:
-  image: postgres:9.4
-  environment:
-   - POSTGRES_PASSWORD=password
-  ports:
-   - "5432:5432"
+   image: postgres:9.4
+   environment:
+      - POSTGRES_USER=elements
+      - POSTGRES_PASSWORD=elements
+   ports:
+      - "5432:5432"
+   volumes_from:
+      - data
+data:
+   image: busybox
+   volumes:
+      - /data/6element/db:/var/lib/postgresql/data

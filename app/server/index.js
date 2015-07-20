@@ -36,13 +36,18 @@ function rand(n){
     return Math.floor(n*Math.random());
 }
 
-dropAllTables()
-    .then(createTables)
-    // .then(fillDBWithFakeData)
-    .then(hardCodedSensors)
-    .catch(function(error){
-            console.log("error in drop and create: ", error);
-        });
+// waiting the db to be ready
+setTimeout(function(){
+
+    dropAllTables()
+        .then(createTables)
+        // .then(fillDBWithFakeData)
+        .then(hardCodedSensors)
+        .catch(function(error){
+                console.log("error in drop and create: ", error);
+            });
+
+}, 10000)
 
 var server = http.Server(app);
 var io = require('socket.io')(server);
@@ -163,7 +168,7 @@ app.post('/twilio', function(req, res) {
                                 }))
                                 .then(function(results){
                                     debug("Storage SUCCESS");
-                                     res.json(200);
+                                     res.json(201);
 
                                     // SOCKET IO
                                     if (socket)
@@ -172,7 +177,7 @@ app.post('/twilio', function(req, res) {
                                 })
                                 .catch(function(error){
                                     console.log("Storage FAILURE: ", error);
-                                     res.json(200);
+                                     res.json(201);
                                 });
                             });
                         break;
@@ -198,7 +203,7 @@ app.post('/twilio', function(req, res) {
                         })
                         .then(function(result){
                             debug("Storage SUCCESS");
-                             res.json(200);
+                             res.json(201);
 
                             // SOCKET IO
                             if (socket)
@@ -207,7 +212,7 @@ app.post('/twilio', function(req, res) {
                         })
                         .catch(function(error){
                             console.log("Storage FAILURE: ", error);
-                             res.json(200);
+                             res.json(201);
                         });
                         break;
 

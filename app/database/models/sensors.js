@@ -78,7 +78,7 @@ module.exports = {
             
             var query = sensors
                 .select(
-                    places.name.as('rcName'),
+                    places.name.as('placeName'),
                     places.type,
                     places.lat,
                     places.lon,

@@ -1,5 +1,5 @@
 node_modules
-client/browserify-bundle.js
+*-browserify-bundle.js
 presentation
 dashboard
 predict

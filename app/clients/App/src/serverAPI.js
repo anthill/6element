@@ -1,6 +1,6 @@
 "use strict";
 
-var sendReq = require('./sendReq.js');
+var sendReq = require('../../_common/js/sendReq.js');
 
 module.exports = {
     getRecyclingCenters: function(){
@@ -11,8 +11,5 @@ module.exports = {
     },
     getAllSensors: function(){
         return sendReq('GET', '/sensors');
-    },
-    updateRC: function(data){
-    	return sendReq('POST', '/updateRC', data);
     }
 };

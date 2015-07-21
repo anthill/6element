@@ -33,20 +33,29 @@ gulp.task('init', function () {
                 // when ready, drop and create tables
                 var dropAllTables = require('./database/management/dropAllTables.js');
                 var createTables = require('./database/management/createTables.js');
+                var hardCodedSensors = require("./server/hardCodedSensors.js");
 
                 dropAllTables()
                     .then(function(){
                         createTables()
                             .then(function(){
-                                console.log("Dropped and created the tables.")
+                                hardCodedSensors()
+                                    .then(function(){
 
-                                // regeneate the declarations
-                                generateSqlDefinition(sqlOptions, function(err, stats) {
-                                    if (err) {
-                                        console.error(err);
-                                        return;
-                                    }
-                                    fs.writeFileSync("./database/management/declarations.js", stats.buffer);
+
+                                        console.log("Dropped and created the tables.")
+
+                                        // regeneate the declarations
+                                        generateSqlDefinition(sqlOptions, function(err, stats) {
+                                            if (err) {
+                                                console.error(err);
+                                                return;
+                                            }
+                                            fs.writeFileSync("./database/management/declarations.js", stats.buffer);
+                                        });
+                                    })
+                                    .catch(function(err){
+                                    console.error("Couldn't hard code sensors", err);
                                 });
 
                             }).catch(function(err){

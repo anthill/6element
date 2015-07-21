@@ -122,7 +122,7 @@ app.post('/twilio', function(req, res) {
                                 debug("Received init");
                                 var date = new Date();
                                 sendSMS("date:" + date.toISOString(), req.body.From);
-                                res.send(201);
+                                res.sendStatus(201);
                                 break;
                         }
                         break;
@@ -157,7 +157,7 @@ app.post('/twilio', function(req, res) {
                                 }))
                                 .then(function(results){
                                     debug("Storage SUCCESS");
-                                    res.send(201);
+                                    res.sendStatus(201);
 
                                     // SOCKET IO
                                     if (socket)
@@ -166,7 +166,7 @@ app.post('/twilio', function(req, res) {
                                 })
                                 .catch(function(error){
                                     console.log("Storage FAILURE: ", error);
-                                    res.send(422);
+                                    res.sendStatus(422);
                                 });
                             });
                         break;
@@ -192,7 +192,7 @@ app.post('/twilio', function(req, res) {
                         })
                         .then(function(result){
                             debug("Storage SUCCESS");
-                            res.send(201);;
+                            res.sendStatus(201);;
 
                             // SOCKET IO
                             if (socket)
@@ -201,7 +201,7 @@ app.post('/twilio', function(req, res) {
                         })
                         .catch(function(error){
                             console.log("Storage FAILURE: ", error);
-                            res.send(422);;
+                            res.sendStatus(422);;
                         });
                         break;
 

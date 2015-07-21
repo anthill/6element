@@ -9,15 +9,14 @@ module.exports = function(week, schedule){
     var breakDay = true;
     var days = "";
     var hours = "";
-    var div ; 
+    var div;
     var divs = [];
     
     
     week.forEach(function(day, index){
         // Check if it's open today
         
-        if (schedule.hasOwnProperty(index))
-        {
+        if (schedule.hasOwnProperty(index)){
             if (breakDay) {
                 days = day;
             }

@@ -6,5 +6,5 @@ module.exports = function(hour){
     var now = new Date();
     var localHour = (parseInt(hour) - (now.getTimezoneOffset()/60 * 100)).toString();
     
-    return localHour.slice(0,localHour.length-2) + ":" + localHour.slice(localHour.length-2);
+    return localHour.slice(0, localHour.length-2) + ":" + localHour.slice(localHour.length-2);
 };

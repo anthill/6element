@@ -1,14 +1,12 @@
 'use strict';
 
-var React = require('react');
-
-module.exports = function(d1,d2){
+module.exports = function(d1, d2){
     //ISSUE #7
     //don't compare each values if both list are not the same length
     
     var same = true;
     if (d1.length !== d2.length) {
-        var same = false;
+        same = false;
         return same;
     }
     
@@ -23,4 +21,4 @@ module.exports = function(d1,d2){
     }
     return same;
         
-}
+};

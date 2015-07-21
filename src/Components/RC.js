@@ -1,16 +1,15 @@
 'use strict';
 
-//Npm modules
+// NPM modules
 var React = require('react');
 var moment = require('moment');
 
-//Components
-var BooleanFilter = React.createFactory(require('./BooleanFilter.js'));
+// Our code
+//var BooleanFilter = React.createFactory(require('./BooleanFilter.js'));
 var Levels = React.createFactory(require('./Levels.js'));
 
-//Functions
-var formatHour = require('../utils/formatHour.js');
-var formatDay = require('../utils/formatDay.js');
+//var formatHour = require('../utils/formatHour.js');
+//var formatDay = require('../utils/formatDay.js');
 var getCrowdLevel = require('../utils/getCrowdLevel.js');
 var isItOpen = require('../utils/isItOpen.js');
 var infBound = require('../utils/infBound.js');
@@ -33,7 +32,12 @@ interface RCState{
 }
 
 */
-var waitingMessages = [["green","<5mn"], ["yellow","5mn<*<15mn"],["orange", ">15mn"], ["gray", "indsponible"]];
+var waitingMessages = {
+    0: ["green", "<5mn"],
+    1: ["yellow", "5mn<*<15mn"],
+    2: ["orange", ">15mn"],
+    undefined: ["gray", "indisponible"]
+};
 
 var RC = React.createClass({
     displayName: 'RC',
@@ -62,7 +66,7 @@ var RC = React.createClass({
         
         var name = props.rc.name;
         
-        var favourite = undefined;
+        var favourite;
         
 /*        var fav = props.isFav;
         

@@ -13,7 +13,7 @@ var rcs = makeMap(rcsJson, 'id');
 // Initial rendering
 React.render(new Application({
     rcs : rcs,
-    onFavChange : function(favourite){
+    onFavChange : function(/*favourite*/){
         //to change userFake's fav
     }
 }), document.body);

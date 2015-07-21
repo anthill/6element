@@ -1,18 +1,15 @@
 'use strict';
 
-var React = require('react');
-
-var moment = require('moment');
 //==============================================================================================================================
 // HOUR / DATE FUNCTIONS
 
 
 function getHoursString(timeString) {
-    return parseInt(timeString.slice(0,2));
+    return parseInt(timeString.slice(0, 2));
 }
 
 function getMinutesString(timeString) {
-    return parseInt(timeString.slice(2,4));
+    return parseInt(timeString.slice(2, 4));
 }
 
 function getDayNumber(datetimeObject){

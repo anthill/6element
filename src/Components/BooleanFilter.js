@@ -15,16 +15,13 @@ module.exports = React.createClass({
         return { active: this.props.active };
     },
 
-
     render: function(){
-        var state = this.state;
         var props = this.props;
-        
-        var self = this;
+        var state = this.state;
         
         return React.DOM.button({className: [props.className, (state.active ? 'active' : '')].join(' '),
             onClick: function(){
-                props.onChange(!propS.fav);
+                props.onChange(!props.fav);
             }});
     }
 });

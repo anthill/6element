@@ -70,18 +70,8 @@ app.get('/', function(req, res){
 });
 
 
-app.get('/Admin_app.js', function(req, res){
-    // // send sms to sensors to ask them their status
-    // database.Sensors.getAllSensorsInfo()
-    //     .then(function(sensors){
-    //         sensors.forEach(function(sensor){
-    //             sendSMS("status", sensor.phone_number);
-    //         });
-    //     })
-    //     .catch(function(error){
-    //         console.log("error in sending status sms ", error);
-    //     });
-    res.sendFile(path.join(__dirname, '../clients/Admin_app.js'));
+app.get('/Admin-browserify-bundle.js', function(req, res){
+    res.sendFile(path.join(__dirname, '../clients/Admin-browserify-bundle.js'));
 });
 
 app.get('/live-affluence', function(req, res){

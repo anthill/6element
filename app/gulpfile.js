@@ -22,7 +22,7 @@ gulp.task('build-admin', function(){
 });
 
 gulp.task('build-app', function(){
-    browserifyShare('Map');
+    browserifyShare('App');
 });
 
 gulp.task('watch-app', function() {
@@ -32,10 +32,10 @@ gulp.task('watch-app', function() {
         gulp.run('serve-app');
     });
 
-    var mapWatcher = gulp.watch('./clients/Map/src/**', ['build-app']);
+    var appWatcher = gulp.watch('./clients/App/src/**', ['build-app']);
 
-    mapWatcher.on('change', function(event) {
-        console.log('*** Map *** File ' + event.path + ' was ' + event.type + ', running tasks...');
+    appWatcher.on('change', function(event) {
+        console.log('*** App *** File ' + event.path + ' was ' + event.type + ', running tasks...');
         // livereload.changed(event.path)
     });
 });

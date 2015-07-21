@@ -1,5 +1,7 @@
 "use strict";
 
+var join = require('path').join;
+
 var gulp = require('gulp');
 var server = require('gulp-express');
 // var livereload = require('gulp-livereload');
@@ -15,11 +17,11 @@ gulp.task('serve-admin', function () {
     server.run(['./server/admin.js']);
 });
 
-gulp.task('buildAdmin', function(){
+gulp.task('build-admin', function(){
     browserifyShare('Admin');
 });
 
-gulp.task('buildMap', function(){
+gulp.task('build-app', function(){
     browserifyShare('Map');
 });
 
@@ -30,7 +32,7 @@ gulp.task('watch-app', function() {
         gulp.run('serve-app');
     });
 
-    var mapWatcher = gulp.watch('./clients/Map/src/**', ['buildMap']);
+    var mapWatcher = gulp.watch('./clients/Map/src/**', ['build-app']);
 
     mapWatcher.on('change', function(event) {
         console.log('*** Map *** File ' + event.path + ' was ' + event.type + ', running tasks...');
@@ -45,7 +47,7 @@ gulp.task('watch-admin', function() {
         gulp.run('serve-admin');
     });
 
-    var adminWatcher = gulp.watch('./clients/Admin/src/**', ['buildAdmin']);
+    var adminWatcher = gulp.watch('./clients/Admin/src/**', ['build-admin']);
    
     adminWatcher.on('change', function(event) {
         console.log('*** Admin *** File ' + event.path + ' was ' + event.type + ', running tasks...');
@@ -54,41 +56,38 @@ gulp.task('watch-admin', function() {
 });
 
 
-function browserifyShare(app){
+function browserifyShare(name){
     var b = browserify({
         cache: {},
         packageCache: {},
         fullPaths: true
     });
-    // b = watchify(b);
-    // b.on('update', function(){
-    //     bundleShare(b);
-    // });
     
-    b.add('./clients/' + app + '/src/main.js');
-    bundleShare(b, app);
+    b.add( join('./clients', name, 'src', 'main.js') );
+    bundleShare(b, name);
 }
 
 function bundleShare(b, name) {
     b.bundle()
-    .pipe(source('./clients/' + name + '_app.js'))
+    .pipe(source( join('./clients', name+'-browserify-bundle.js') ) )
     .pipe(gulp.dest('.'))
     .on('error', function (err) {
         console.log(err.message);
     });
 }
 
-gulp.task('admin-dev', ['serve-admin', 'buildAdmin', 'watch-admin'], function(){
+
+/*
+    Tasks used on the outside
+*/
+gulp.task('admin-dev', ['serve-admin', 'build-admin', 'watch-admin'], function(){
     console.log('Starting admin in dev');
 });
 
-gulp.task('admin-prod', ['serve-admin', 'buildAdmin']);
+gulp.task('admin-prod', ['serve-admin', 'build-admin']);
 
-gulp.task('app-dev', ['serve-app', 'buildMap', 'watch-app'], function(){
+gulp.task('app-dev', ['serve-app', 'build-app', 'watch-app'], function(){
     console.log('Starting app in dev');
 });
 
-gulp.task('app-prod', ['serve-app', 'buildMap']);
-
-gulp.task('default', ['serve-app', 'serve-prod', 'buildAdmin', 'buildMap', 'watch']);
-
+gulp.task('app-prod', ['serve-app', 'build-app']);

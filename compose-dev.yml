@@ -1,6 +1,6 @@
-6elementapp:
+app:
   build: .
-  command: bash -c "npm run start-app-dev"
+  command: npm run start-app-dev
   links:
    - "db:postgres"
   ports:
@@ -12,9 +12,9 @@
    - NODE_ENV=development
   volumes:
    - app:/6element/app
-6elementadmin:
+admin:
   build: .
-  command: bash -c "npm run start-admin-dev"
+  command: npm run start-admin-dev
   links:
    - "db:postgres"
   ports:

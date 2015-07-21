@@ -3,12 +3,21 @@
 var gulp = require('gulp');
 var server = require('gulp-express');
 // var livereload = require('gulp-livereload');
+var plumber = require('gulp-plumber');
 var browserify = require('browserify');
 var source = require("vinyl-source-stream");
 // var watchify = require('watchify');
 
+// http://stackoverflow.com/a/23973536
+function swallowError(error) {
+    console.log('swallowing', error.toString());
+
+    this.emit('end');
+}
+
 gulp.task('serve', function () {
     server.run(['./server/index.js']);
+    
 });
 
 gulp.task('buildAdmin', function(){
@@ -19,13 +28,14 @@ gulp.task('buildMap', function(){
     browserifyShare('Map');
 });
 
+gulp.task('server-stop', function(){
+    server.stop();
+})
+
 gulp.task('watch', function() {
     console.log('Watching');
-    var serverWatcher = gulp.watch(['./server/**', './database/**'], function(){
-        server.stop();
-        gulp.run('serve');
-    });
 
+    var serverWatcher = gulp.watch('./server/**', ['server-stop', 'serve']);
     var adminWatcher = gulp.watch('./clients/Admin/src/**', ['buildAdmin']);
     var mapWatcher = gulp.watch('./clients/Map/src/**', ['buildMap']);
 
@@ -61,10 +71,7 @@ function browserifyShare(app){
 function bundleShare(b, name) {
     b.bundle()
     .pipe(source('./clients/' + name + '_app.js'))
-    .pipe(gulp.dest('.'))
-    .on('error', function (err) {
-        console.log(err.message);
-    });
+    .pipe(gulp.dest('.'));
 }
 
 gulp.task('dev', ['serve', 'buildAdmin', 'buildMap', 'watch'], function(){

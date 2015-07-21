@@ -26,11 +26,16 @@ var sendSMS = require('./sendSMS.js');
 var PORT = 4000;
 var DEBUG = process.env.DEBUG ? process.env.DEBUG : false;
 
-var debug = function() {
-    if (DEBUG) {
-        [].unshift.call(arguments, "[DEBUG 6element] ");
-        console.log.apply(console, arguments);
-    };
+function debug() {
+    var args = Array.from(arguments);
+    
+    return function(){
+        if (DEBUG) {
+            console.log("DEBUG from 6element server:");
+            console.log.apply(console, args.concat(arguments));
+            console.log("==================");
+        };
+    }
 }
 
 function rand(n){
@@ -58,7 +63,6 @@ io.on('connection', function(_socket) {
 
 
 app.use(compression());
-app.use(bodyParser.urlencoded());
 app.use(bodyParser.json());
 
 app.use("/leaflet.css", express.static(path.join(__dirname, '../../node_modules/leaflet/dist/leaflet.css')));
@@ -275,50 +279,7 @@ server.listen(PORT, function () {
 });
 
 
-// // USE TO SIMULATE A MEASUREMENT SENDING TO SERVER FROM SENSOR
-
-// var encodeForSMS = require('6sense/src/codec/encodeForSMS.js');
-// var request = require('request');
-
-// setInterval(function(){
-
-//     var now = new Date().toISOString();
-
-//     var nbMeasurements = Math.floor(Math.random()*10);
-//     var dummyArray = [];
-//     for (var i = 0; i < nbMeasurements; i++) { 
-//         dummyArray.push(0);
-//     };
-
-//     var result = {
-//         date: now,
-//         signal_strengths: dummyArray
-//     };
-
-//     console.log('new measure', result.signal_strengths.length);
-
-//     encodeForSMS([result]).then(function(sms){
-
-//         var toSend = {
-//             From: '+33783699454',
-//             Body: '1' + sms
-//         };
-        
-//         request.post({
-//             rejectUnauthorized: false,
-//             url: 'http://192.168.59.103:4000/twilio',
-//             headers: {
-//                'Content-Type': 'application/json'
-//             },
-//             body: JSON.stringify(toSend)
-//         }, function(error, response, body){
-//             if(error) {
-//                console.log("ERROR:", error);
-//             } else {
-//                debug(response.statusCode, body);
-//             }
-//         });
-//     });
-
-// }, 30000);
-
+process.on('uncaughtException', function(e){
+    console.error('uncaught', e, e.stack);
+    process.kill();
+});

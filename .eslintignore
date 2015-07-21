@@ -1,6 +1,0 @@
-node_modules
-*-browserify-bundle.js
-presentation
-dashboard
-predict
-client/lib/spinner.js

@@ -3,7 +3,6 @@
 require('es6-shim');
 require('better-log').install();
 
-var fs = require('fs');
 var quipuParser = require('quipu/parser.js');
 
 var hardCodedSensors = require("./hardCodedSensors.js");
@@ -20,28 +19,21 @@ var xml = require('xml');
 var database = require('../database');
 var dropAllTables = require('../database/management/dropAllTables');
 var createTables = require('../database/management/createTables');
-var fillDBWithFakeData = require('./fillDBWithFakeData.js');
 var sendSMS = require('./sendSMS.js');
 
 var PORT = 4001;
 var DEBUG = process.env.DEBUG ? process.env.DEBUG : false;
 
-function debug() {
-    var args = Array.from(arguments);
-    
-    return function(){
-        if (DEBUG) {
-            console.log("DEBUG from 6element server:");
-            console.log.apply(console, args.concat(arguments));
-            console.log("==================");
-        };
+
+var debug = function() {
+    if (DEBUG) {
+        [].unshift.call(arguments, "[DEBUG 6element] ");
+        console.log.apply(console, arguments);
     }
 }
 
-function rand(n){
-    return Math.floor(n*Math.random());
-}
 
+//var fillDBWithFakeData = require('./fillDBWithFakeData.js');
 dropAllTables()
     .then(createTables)
     // .then(fillDBWithFakeData)
@@ -50,7 +42,7 @@ dropAllTables()
             console.log("error in drop and create: ", error);
         });
 
-var server = http.Server(app);
+var server = new http.Server(app);
 var io = require('socket.io')(server);
 
 io.set('origins', '*:*');

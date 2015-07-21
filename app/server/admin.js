@@ -214,15 +214,15 @@ app.post('/twilio', function(req, res) {
 
 
 
-app.get('/recycling-center/:rcId', function(req, res){
-    var rcId = Number(req.params.rcId);
+app.get('/place/:id', function(req, res){
+    var id = Number(req.params.id);
     
-    database.complexQueries.getPlaceDetails(rcId)
+    database.complexQueries.getPlaceDetails(id)
     .then(function(data){
         res.send(data);
     })
     .catch(function(error){
-        console.log("error in /recycling-center/'+req.params.rcId: ", error);
+        console.log("error in /place/'+req.params.id: ", error);
     });
 });
 
@@ -237,7 +237,7 @@ app.get('/sensors', function(req, res){
     });
 });
 
-app.post('/updateRC', function(req, res){
+app.post('/updatePlace', function(req, res){
     var id = Number(req.body.id);
 
     database.Places.update(id, req.body.delta)
@@ -246,7 +246,7 @@ app.post('/updateRC', function(req, res){
     })
     .catch(function(error){
         res.status(500).send('Couldn\'t update Places database');
-        console.log("error in /updateRC/'+req.params.rcId: ", error);
+        console.log("error in /updatePlace/'+req.params.id: ", error);
     });
 });
 

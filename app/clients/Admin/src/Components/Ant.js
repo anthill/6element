@@ -12,7 +12,7 @@ interface AntProps{
         id: int,
         name: string,
         installed_at: int,
-        rcName: string,
+        placeName: string,
         phone_number: string,
         lat: float,
         lon: float,
@@ -51,11 +51,11 @@ var Ant = React.createClass({
 
         return React.DOM.div({className: classes.join(' ')},
             new Modifiable({
-                className: 'rcName',
+                className: 'placeName',
                 isUpdating: false,
                 text: props.ant.name,
                 dbLink: {
-                    table: 'rc',
+                    table: 'place',
                     id: props.ant.installed_at,
                     field: 'name'
                 },
@@ -68,7 +68,7 @@ var Ant = React.createClass({
                         isUpdating: false,
                         text: props.ant.lat,
                         dbLink: {
-                            table: 'rc',
+                            table: 'place',
                             id: props.ant.installed_at,
                             field: 'lat'
                         },
@@ -78,7 +78,7 @@ var Ant = React.createClass({
                         isUpdating: false,
                         text: props.ant.lon,
                         dbLink: {
-                            table: 'rc',
+                            table: 'place',
                             id: props.ant.installed_at,
                             field: 'lon'
                         },

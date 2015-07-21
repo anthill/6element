@@ -28,11 +28,11 @@ function updateDB(data){
     };
     
     switch (data.table){
-        case 'rc':
-            serverAPI.updateRC(obj)
+        case 'place':
+            serverAPI.updatePlace(obj)
             .then(function(res){
                 console.log('Places database updated successfully');
-                var ant = topLevelStore.antsByRC.get(res.id);
+                var ant = topLevelStore.antsByPlace.get(res.id);
                 Object.assign(ant, res);
                 updateLocal(ant);
             })
@@ -56,8 +56,8 @@ function updateDB(data){
 }
 
 function updateLocal(ant){
-    topLevelStore.antsByRC.set(ant.installed_at, ant);
-    topLevelStore.antsByRC.set(ant.id, ant);
+    topLevelStore.antsByPlace.set(ant.installed_at, ant);
+    topLevelStore.antsByPlace.set(ant.id, ant);
 
     render();
 }
@@ -67,7 +67,7 @@ function refreshView(){
     .then(function(sensors){
 
         topLevelStore.ants = makeMap(sensors, 'id');
-        topLevelStore.antsByRC = makeMap(sensors, 'installed_at');
+        topLevelStore.antsByPlace = makeMap(sensors, 'installed_at');
         resetUpdate(topLevelStore.ants);
 
         console.log('store', topLevelStore.ants);
@@ -79,7 +79,7 @@ function refreshView(){
 
 var topLevelStore = {
     ants: undefined,
-    antsByRC: undefined,
+    antsByPlace: undefined,
     onChange: updateDB
 };
 

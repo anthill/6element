@@ -7,7 +7,7 @@ var database = require('../database');
 
 var BORDEAUX_COORDS = [44.84, -0.57];
 var BM_CITIES = [
-    "Bordeaux","Ambarès-et-Lagrave","Ambès","Artigues-près-Bordeaux","Bassens","Bègles","Blanquefort","Bouliac","Bruges","Carbon-Blanc","Cenon","Eysines","Floirac","Gradignan","Le Bouscat","Le Haillan","Le Taillan-Médoc","Lormont","Martignas-sur-Jalle","Mérignac","Parempuyre","Pessac","Saint-Aubin-de-Médoc","Saint-Louis-de-Montferrand","Saint-Médard-en-Jalles","Saint-Vincent-de-Paul","Talence","Villenave-d'Ornon"
+    "Bordeaux", "Ambarès-et-Lagrave", "Ambès", "Artigues-près-Bordeaux", "Bassens", "Bègles", "Blanquefort", "Bouliac", "Bruges", "Carbon-Blanc", "Cenon", "Eysines", "Floirac", "Gradignan", "Le Bouscat", "Le Haillan", "Le Taillan-Médoc", "Lormont", "Martignas-sur-Jalle", "Mérignac", "Parempuyre", "Pessac", "Saint-Aubin-de-Médoc", "Saint-Louis-de-Montferrand", "Saint-Médard-en-Jalles", "Saint-Vincent-de-Paul", "Talence", "Villenave-d'Ornon"
 ];
 
 function rand(max, min){
@@ -18,17 +18,6 @@ function rand(max, min){
 }
 
 var DIST = 0.1;
-var recyclingCenters = BM_CITIES.map(function(name, i){
-    var max = 50 + rand(50);
-
-    return {
-        
-        max: max,
-        current: rand(max),
-        name: name,
-        id: i
-    }
-});
 
 function generatePlaces(){
     return Promise.all(BM_CITIES.map(function(name){

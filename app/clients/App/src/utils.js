@@ -1,3 +1,5 @@
+"use strict";
+
 module.exports = {
 
 	makeMap: function(object, desiredKey){

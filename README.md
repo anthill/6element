@@ -1,52 +1,18 @@
-## Scope
+# Scope
 
 6element is a open innovation project of waste optimisation.
 [Learn more](http://ants.builders/pages/6element.html)
 
-### Running in dev mode
+### Getting started
 
-To have automatic reload of the server and rebuild of the frontend use:
-```
-docker-compose -f compose-dev.yml build
-docker-compose -f compose-dev.yml up
-```
-
-### Pushing in production
-
-To create the db:
-
-```
-docker-compose -f compose-init.yml up
-```
-First stop and clean:
-
-```
-docker-compose -f compose-prod.yml stop
-docker-compose -f compose-prod.yml rm
-```
-
-then you only need to:
-
-```
-docker-compose -f compose-prod.yml build --no-cache
-docker-compose -f compose-prod.yml up --no-deps -d
-```
-
-#### Getting started
-
-Initialization
-
-You can install [npm](https://github.com/nodesource/distributions#install-nodejs) 
-and [docker](https://docs.docker.com/installation/ubuntulinux/#installing-docker-on-ubuntu)
-
+#### Preambule
 
 ````
 git clone git@github.com:anthill/6element.git
 cd 6element
-npm install
 ````
 
-Then, you must copy/create the missing file `PRIVATE.json` situated in the `app` folfer containing:
+Copy/create the missing file `PRIVATE.json` situated in the `app` folder containing:
 
 ````
 {
@@ -57,18 +23,30 @@ Then, you must copy/create the missing file `PRIVATE.json` situated in the `app`
 }
 ````
 
+## Running in dev mode
 
-````
-npm run watch
-````
-
-In a new console
+To have automatic reload of the server and rebuild of the frontend use as well as fake data automatically populated:
 
 ```
-npm start
-````
+docker-compose -f compose-dev.yml build
+docker-compose -f compose-dev.yml up
+```
 
-You can now open the returned URL
+## Pushing to production
+
+First build the database separately:
+
+```
+docker-compose -f compose-init.yml up
+```
+
+then you only need to:
+
+```
+docker-compose -f compose-prod.yml up -d
+```
+
+
 
 
 

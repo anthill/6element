@@ -10,10 +10,12 @@ interface LineChart State{
 }
 */
 
+var CHART_DIV_REF = 'tsNumber';
+
 // build empty values => enable empty chart
 var defaultLabels = [];
 var defaultObserved = [];
-var defaultPredicted = [];
+
 for (var i = 0; i < 20; i++){
     if (i % 3 === 0)
         defaultLabels.push(6 + Math.round(i/3));
@@ -22,24 +24,6 @@ for (var i = 0; i < 20; i++){
 
     defaultObserved.push(Math.random()*4);
 }
-
-
-// setting up line chart data => could be better, I KNOW !
-var defaultData = {
-    labels: defaultLabels,
-    datasets: [
-        {
-            label: "Observés",
-            fillColor: "rgba(0,0,0,0.2)",
-            strokeColor: "rgba(0,0,0,1)",
-            pointColor: "rgba(0,0,0,1)",
-            pointStrokeColor: "#fff",
-            pointHighlightFill: "#fff",
-            pointHighlightStroke: "rgba(0,0,0,1)",
-            data: defaultObserved
-        }
-    ]
-};
 
 var LineChart = React.createClass({
     componentDidMount: function(){
@@ -50,7 +34,6 @@ var LineChart = React.createClass({
     },
 
     update: function() {
-
         var props = this.props;
     
         var data = props.measurements.map(function(x){
@@ -58,25 +41,22 @@ var LineChart = React.createClass({
             return [date, x.measurement];
         });
 
-        new Dygraph(
-
-            React.findDOMNode(this.refs.tsNumber),
-
+        // this part is super awkward, not very React-y.
+        var chart = new Dygraph(
+            React.findDOMNode(this.refs[CHART_DIV_REF]),
             data,
             {
                 labels: [ "time", "Traces wifi" ],
                 legend: "onmouseover",
                 strokeWidth: 2
             }
-
-          );
-
+        );
+        console.log(chart)
     },
 
 	render: function(){
-
-        return new React.DOM.div({className: 'line-chart'},
-            React.DOM.div({ref: 'tsNumber', className: 'chart'})
+        return React.DOM.div({className: 'line-chart'},
+            React.DOM.div({ref: CHART_DIV_REF, className: 'chart'})
         );
 	}
 

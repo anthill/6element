@@ -1,6 +1,6 @@
 6element:
    build: .
-   command: npm run prod
+   command: npm run start-app-prod
    links:
       - db
    ports:
@@ -12,7 +12,20 @@
    volumes:
       - app:/6element/app
    restart: always
-
+admin:
+   build: .
+   command: npm run start-admin-prod
+   links:
+      - db
+   ports:
+      - "4001:4001"
+   environment:
+      - VIRTUAL_HOST=admin.6element.ants.builders 
+      - VIRTUAL_PORT=4001
+      - POSTGRES_PASSWORD=elements
+   volumes:
+      - app:/6element/app
+   restart: always
 db:
    image: postgres:9.4
    environment:

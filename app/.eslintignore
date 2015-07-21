@@ -1,0 +1,5 @@
+node_modules
+
+database/management/declarations.js
+clients/Admin_app.js
+clients/Map_app.js

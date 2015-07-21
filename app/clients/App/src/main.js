@@ -5,7 +5,7 @@ var io = require('socket.io-client');
 
 var Application = React.createFactory(require('./Components/Application.js'));
 
-var serverAPI = require('../../_common/js/serverAPI.js');
+var serverAPI = require('./serverAPI.js');
 var makeMap = require('../../_common/js/makeMap.js');
 
 var errlog = console.error.bind(console);
@@ -18,21 +18,21 @@ var topLevelStore = {
     mapBoxToken: PRIVATE.mapbox_token,
     mapId: PRIVATE.map_id,
     mapCenter: BORDEAUX_COORDS,
-    recyclingCenterMap: undefined,
-    selectedRCMap: new Map(),
+    placeMap: undefined,
+    selectedPlaceMap: new Map(),
     updatingIDs: [],
-    getRecyclingCenterDetails: function(rc){
-        serverAPI.getRecyclingCenterDetails(rc.id)
+    getPlaceMeasurements: function(place){
+        serverAPI.getPlaceMeasurements(place.id)
             .then(function(details){
-                console.log('rc details', rc, details);
+                console.log('place measurements', place, details);
                 
                 // sort by asc time in case it's not already thus sorted
                 details.sort(function(d1, d2){
                     return new Date(d1.measurement_date).getTime() - new Date(d2.measurement_date).getTime()
                 })
             
-                rc.details = details;
-                topLevelStore.selectedRCMap.set(rc.id, rc);
+                place.details = details;
+                topLevelStore.selectedPlaceMap.set(place.id, place);
                 render();
             })
             .catch(errlog);
@@ -47,11 +47,11 @@ function render(){
 render();
 
 // Render again when receiving recyclingCenters from API
-serverAPI.getRecyclingCenters()
-    .then(function(recyclingCenters){
-        console.log('recyclingCenters', recyclingCenters);
+serverAPI.getAllPlacesLiveAffluence()
+    .then(function(places){
+        console.log('places', places);
     
-        topLevelStore.recyclingCenterMap = makeMap(recyclingCenters, 'id');
+        topLevelStore.placeMap = makeMap(places, 'id');
         render();
     })
     .catch(errlog);
@@ -69,16 +69,15 @@ socket.on('data', function (results) {
 
         // console.log('results', value);
         
-        // GET RECYCLING CENTER
-        var rc = topLevelStore.recyclingCenterMap.get(id);
-        // console.log('rc', rc);
+        // GET PLACE
+        var place = topLevelStore.placeMap.get(id);
         
-        rc.max = Math.max(rc.max, value);
-        rc.latest = value;
+        place.max = Math.max(place.max, value);
+        place.latest = value;
 
-        if (rc.details)
+        if (place.details)
         // UPDATE CURVE
-            rc.details.push({
+            place.details.push({
                 measurement_date: date,
                 measurement: value
             });

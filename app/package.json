@@ -4,10 +4,15 @@
   "description": "Reducing waste with sensors and an app",
   "main": "index.js",
   "scripts": {
-    "dev": "gulp dev --gulpfile app/gulpfile.js",
-    "prod": "gulp prod --gulpfile app/gulpfile.js",
-    "init": "gulp init --gulpfile app/gulpfile.js",
-    "lint": "eslint ./"
+    "postinstall": "cp ../git-hooks/pre-commit ../.git/hooks/pre-commit; chmod a+x ../.git/hooks/pre-commit",
+    "start-admin-dev": "gulp admin-dev --gulpfile app/gulpfile.js",
+    "start-admin-prod": "gulp admin-prod --gulpfile app/gulpfile.js",
+    "start-app-dev": "gulp app-dev --gulpfile app/gulpfile.js",
+    "start-app-prod": "gulp app-prod --gulpfile app/gulpfile.js",
+    "init-prod": "gulp init-prod --gulpfile app/gulpfile.js",
+    "sql-generate": "node-sql-generate --dsn postgres://postgres:password@$POSTGRES_PORT_5432_TCP_ADDR:$POSTGRES_PORT_5432_TCP_PORT/postgres > ./app/database/management/declarations.js",
+    "lint": "eslint ./",
+    "test": "mocha test/automated/*"
   },
   "repository": {
     "type": "git",
@@ -52,9 +57,9 @@
   "devDependencies": {
     "eslint": "^0.21.0",
     "gulp": "~3.8.8",
-    "gulp-express": "^0.3.5",
+    "gulp-express": "git://github.com/gimm/gulp-express.git#9a3c842b55246fe039c85b56b4a8e5401ce779bf",
     "gulp-livereload": "~2.1.1",
-    "gulp-plumber": "~0.6.6",
+    "gulp-plumber": "^1.0.1",
     "vinyl-source-stream": "^1.1.0",
     "watchify": "^3.2.1"
   }

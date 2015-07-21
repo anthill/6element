@@ -3,9 +3,11 @@
 require('es6-shim');
 
 var fs = require("fs");
+var join = require('path').join;
 var gulp = require('gulp');
 var server = require('gulp-express');
 // var livereload = require('gulp-livereload');
+var plumber = require('gulp-plumber');
 var browserify = require('browserify');
 var source = require("vinyl-source-stream");
 // var watchify = require('watchify');
@@ -19,7 +21,7 @@ var sqlOptions = {
 };
 
 
-gulp.task('init', function () {
+var dropCreateAndDeclare = function(callbackP) {                                    
 
     // wait database to be created 
     var interval = setInterval(function(){
@@ -33,15 +35,13 @@ gulp.task('init', function () {
                 // when ready, drop and create tables
                 var dropAllTables = require('./database/management/dropAllTables.js');
                 var createTables = require('./database/management/createTables.js');
-                var hardCodedSensors = require("./server/hardCodedSensors.js");
 
                 dropAllTables()
                     .then(function(){
                         createTables()
                             .then(function(){
-                                hardCodedSensors()
+                                callbackP()
                                     .then(function(){
-
 
                                         console.log("Dropped and created the tables.")
 
@@ -55,9 +55,9 @@ gulp.task('init', function () {
                                         });
                                     })
                                     .catch(function(err){
-                                    console.error("Couldn't hard code sensors", err);
-                                });
-
+                                        console.error("Couldn't write the schema", err);
+                                    });
+                                
                             }).catch(function(err){
                                 console.error("Couldn't create tables", err);
                             });
@@ -73,73 +73,111 @@ gulp.task('init', function () {
 
     }, 1000);
    
+};
+
+gulp.task('init-prod', function () {
+    var hardCodedSensors = require("./server/hardCodedSensors.js");
+    dropCreateAndDeclare(hardCodedSensors);
 });
 
-gulp.task('serve', function () {
-    server.run(['./server/index.js']);
+gulp.task('initDev', function () {
+    var fillDBWithFakeData = require('./server/fillDBWithFakeData.js');
+    dropCreateAndDeclare(fillDBWithFakeData);
 });
 
-gulp.task('buildAdmin', function(){
+
+// http://stackoverflow.com/a/23973536
+// function swallowError(error) {
+//     console.log('swallowing', error.toString());
+
+//     this.emit('end');
+// }
+
+
+gulp.task('serve-app', function () {
+    server.run(['./server/app.js']);
+});
+
+gulp.task('serve-admin', function () {
+    server.run(['./server/admin.js']);
+});
+
+gulp.task('build-admin', function(){
     browserifyShare('Admin');
 });
 
-gulp.task('buildMap', function(){
-    browserifyShare('Map');
+gulp.task('build-app', function(){
+    browserifyShare('App');
 });
 
-gulp.task('watch', function() {
+gulp.task('server-stop', function(){
+    server.stop();
+})
+
+gulp.task('watch-app', function() {
     console.log('Watching');
-    var serverWatcher = gulp.watch(['./server/**', './database/**'], function(){
+    gulp.watch(['./server/**', './database/**'], function(){
         server.stop();
-        gulp.run('serve');
+        gulp.run('serve-app');
     });
 
-    var adminWatcher = gulp.watch('./clients/Admin/src/**', ['buildAdmin']);
-    var mapWatcher = gulp.watch('./clients/Map/src/**', ['buildMap']);
+    var appWatcher = gulp.watch('./clients/App/src/**', ['build-app']);
 
-    adminWatcher.on('change', function(event) {
-        console.log('*** Admin *** File ' + event.path + ' was ' + event.type + ', running tasks...');
-        // livereload({
-        //     host: 1234,
-        //     reloadPage: './clients/Admin/index.html'
-        // });
-    });
-    mapWatcher.on('change', function(event) {
-        console.log('*** Map *** File ' + event.path + ' was ' + event.type + ', running tasks...');
+    appWatcher.on('change', function(event) {
+        console.log('*** App *** File ' + event.path + ' was ' + event.type + ', running tasks...');
         // livereload.changed(event.path)
     });
 });
 
+gulp.task('watch-admin', function() {
+    console.log('Watching admin');
+    gulp.watch(['./server/**', './database/**'], function(){
+        server.stop();
+        gulp.run('serve-admin');
+    });
 
-function browserifyShare(app){
+    var adminWatcher = gulp.watch('./clients/Admin/src/**', ['build-admin']);
+   
+    adminWatcher.on('change', function(event) {
+        console.log('*** Admin *** File ' + event.path + ' was ' + event.type + ', running tasks...');
+    });
+
+});
+
+
+function browserifyShare(name){
     var b = browserify({
         cache: {},
         packageCache: {},
         fullPaths: true
     });
-    // b = watchify(b);
-    // b.on('update', function(){
-    //     bundleShare(b);
-    // });
     
-    b.add('./clients/' + app + '/src/main.js');
-    bundleShare(b, app);
+    b.add( join('./clients', name, 'src', 'main.js') );
+    bundleShare(b, name);
 }
 
 function bundleShare(b, name) {
     b.bundle()
-    .pipe(source('./clients/' + name + '_app.js'))
+
+    .pipe(source( join('./clients', name+'-browserify-bundle.js') ) )
     .pipe(gulp.dest('.'))
     .on('error', function (err) {
         console.log(err.message);
     });
 }
 
-gulp.task('dev', ['serve', 'buildAdmin', 'buildMap', 'watch'], function(){
-    console.log('Starting dev environnement');
+
+/*
+    Tasks used on the outside
+*/
+gulp.task('admin-dev', ['serve-admin', 'build-admin', 'watch-admin'], function(){
+    console.log('Starting admin in dev');
 });
 
-gulp.task('prod', ['serve', 'buildAdmin', 'buildMap']);
+gulp.task('admin-prod', ['serve-admin', 'build-admin']);
 
-gulp.task('default', ['serve', 'buildAdmin', 'buildMap', 'watch']);
+gulp.task('app-dev', ['initDev', 'serve-app', 'build-app', 'watch-app'], function(){
+    console.log('Starting app in dev');
+});
 
+gulp.task('app-prod', ['serve-app', 'build-app']);

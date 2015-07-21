@@ -9,9 +9,18 @@
 */
 
 .ant{
-	display: inline-block; margin: 1em; padding: .5em;
+	display: inline-block; margin: 1em; padding: .5em; width: 30%;
 	border: 1px solid black; border-radius: 5px;
 	background-color: white;
+}
+
+.ant .placeName {
+	display: block; width: 100%; margin: 0 auto;
+	font-weight: bold; font-size: 1.5em;
+}
+
+.ant div{
+	display: inline-block; margin: 0 1em;
 }
 
 .ant li * {
@@ -41,6 +50,14 @@
 
 .modifiable:focus{
 	outline-offset: 0;
+}
+
+li .modifiable{
+	width: 20%;
+}
+
+.modifiable.updating {
+	color: orange;
 }
 
 /* quipu status */

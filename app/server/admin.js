@@ -3,10 +3,8 @@
 require('es6-shim');
 require('better-log').install();
 
-var fs = require('fs');
 var quipuParser = require('quipu/parser.js');
 
-var hardCodedSensors = require("./hardCodedSensors.js");
 var decoder = require('6sense/src/codec/decodeFromSMS.js');
 
 var path = require('path');
@@ -17,27 +15,20 @@ var compression = require('compression');
 var bodyParser = require('body-parser');
 
 var database = require('../database');
-var dropAllTables = require('../database/management/dropAllTables');
-var createTables = require('../database/management/createTables');
-var fillDBWithFakeData = require('./fillDBWithFakeData.js');
 var sendSMS = require('./sendSMS.js');
 
-var PORT = 4000;
-var DEBUG = process.env.DEBUG ? process.env.DEBUG : false;
+var PORT = 4001;
+var DEBUG = process.env.NODE_ENV === "development" ? true : false;
+
 
 var debug = function() {
     if (DEBUG) {
         [].unshift.call(arguments, "[DEBUG 6element] ");
         console.log.apply(console, arguments);
-    };
+    }
 }
 
-function rand(n){
-    return Math.floor(n*Math.random());
-}
-
-
-var server = http.Server(app);
+var server = new http.Server(app);
 var io = require('socket.io')(server);
 
 io.set('origins', '*:*');
@@ -50,40 +41,19 @@ io.on('connection', function(_socket) {
 
 
 app.use(compression());
-app.use(bodyParser.urlencoded());
 app.use(bodyParser.json());
 
 app.use("/leaflet.css", express.static(path.join(__dirname, '../../node_modules/leaflet/dist/leaflet.css')));
-app.use("/socket.io.js", express.static(path.join(__dirname, '../../node_modules/socket.io/node_modules/socket.io-client/socket.io.js')));
-app.use("/dygraph-combined.js", express.static(path.join(__dirname, '../../node_modules/dygraphs/dygraph-combined.js')));
-app.use("/Map", express.static(path.join(__dirname, '../clients/Map')));
 app.use("/Admin", express.static(path.join(__dirname, '../clients/Admin')));
 app.use("/_common", express.static(path.join(__dirname, '../clients/_common')));
 
 app.get('/', function(req, res){
-    res.sendFile(path.join(__dirname, '../clients/Map/index.html'));
-});
-
-app.get('/Admin', function(req, res){
     res.sendFile(path.join(__dirname, '../clients/Admin/index.html'));
 });
 
-app.get('/Map_app.js', function(req, res){
-    res.sendFile(path.join(__dirname, '../clients/Map_app.js'));
-});
 
-app.get('/Admin_app.js', function(req, res){
-    // // send sms to sensors to ask them their status
-    // database.Sensors.getAllSensorsInfo()
-    //     .then(function(sensors){
-    //         sensors.forEach(function(sensor){
-    //             sendSMS("status", sensor.phone_number);
-    //         });
-    //     })
-    //     .catch(function(error){
-    //         console.log("error in sending status sms ", error);
-    //     });
-    res.sendFile(path.join(__dirname, '../clients/Admin_app.js'));
+app.get('/Admin-browserify-bundle.js', function(req, res){
+    res.sendFile(path.join(__dirname, '../clients/Admin-browserify-bundle.js'));
 });
 
 app.get('/live-affluence', function(req, res){
@@ -158,7 +128,7 @@ app.post('/twilio', function(req, res) {
                                         })
                                         .catch(function(error){
                                             console.log("Storage FAILURE: ", error);
-                                            res.sendStatus(422);
+                                            res.status(500).send("Storage FAILURE: ", error);
                                         });                                   
                                 }))
                                 .then(function(results){
@@ -172,12 +142,12 @@ app.post('/twilio', function(req, res) {
                                 })
                                 .catch(function(error){
                                     console.log("Storage FAILURE: ", error);
-                                    res.sendStatus(422);
+                                    res.status(500).send("Storage FAILURE: ", error);
                                 });
                             })
                             .catch(function(error){
                                     console.log("Could not decode ", error);
-                                    res.sendStatus(422);
+                                    res.status(500).send("Could not decode ", error);
                                 });
                         break;
 
@@ -211,63 +181,60 @@ app.post('/twilio', function(req, res) {
                         })
                         .catch(function(error){
                             console.log("Storage FAILURE: ", error);
-                            res.sendStatus(422);;
+                            res.status(500).send("Storage FAILURE: ", error);
                         });
                         break;
 
                     default:
                         console.log('Error: message has not type character');
-                        res.sendStatus(404);
+                        res.status(500).send('Error: message has not type character');
                 }
             } else {
                 console.log("No sensor corresponding to this number.");
-                res.sendStatus(404);
+                res.status(500).send("No sensor corresponding to this number.");
             }
         })
         .catch(function(error){
             console.log("Error in findByPhoneNumber: ", error);
-            res.sendStatus(404);
+            res.status(500).send("Error in findByPhoneNumber: ", error);
         });   
 });
 
 
 
-app.get('/recycling-center/:rcId', function(req, res){
-    var rcId = Number(req.params.rcId);
+app.get('/place/:id', function(req, res){
+    var id = Number(req.params.id);
     
-    database.complexQueries.getPlaceDetails(rcId)
-        .then(function(data){
-            res.send(data);
-        })
-        .catch(function(error){
-            console.log("error in /recycling-center/'+req.params.rcId: ", error);
-        });
-});
-
-app.get('/sensors', function(req, res){
-    database.Sensors.getAllSensorsInfo()
-        .then(function(data){
-            // debug('All sensors', data);
-            res.send(data);
-        })
-        .catch(function(error){
-            console.log("error in /sensors: ", error);
-        });
-});
-
-app.post('/updateRC', function(req, res){
-    var rcId = Number(req.params.rcId);
-    
-    database.Places.update(rcId, {
-        name: req.params.name,
-        lat: req.params.lat,
-        lon: req.params.lon
-    })
+    database.complexQueries.getPlaceDetails(id)
     .then(function(data){
         res.send(data);
     })
     .catch(function(error){
-        console.log("error in /recycling-center/'+req.params.rcId: ", error);
+        console.log("error in /place/'+req.params.id: ", error);
+    });
+});
+
+app.get('/sensors', function(req, res){
+    database.Sensors.getAllSensorsInfo()
+    .then(function(data){
+        // debug('All sensors', data);
+        res.send(data);
+    })
+    .catch(function(error){
+        console.log("error in /sensors: ", error);
+    });
+});
+
+app.post('/updatePlace', function(req, res){
+    var id = Number(req.body.id);
+
+    database.Places.update(id, req.body.delta)
+    .then(function(data){
+        res.send(data);
+    })
+    .catch(function(error){
+        res.status(500).send('Couldn\'t update Places database');
+        console.log("error in /updatePlace/'+req.params.id: ", error);
     });
 });
 
@@ -280,50 +247,7 @@ server.listen(PORT, function () {
 });
 
 
-// // USE TO SIMULATE A MEASUREMENT SENDING TO SERVER FROM SENSOR
-
-// var encodeForSMS = require('6sense/src/codec/encodeForSMS.js');
-// var request = require('request');
-
-// setInterval(function(){
-
-//     var now = new Date().toISOString();
-
-//     var nbMeasurements = Math.floor(Math.random()*10);
-//     var dummyArray = [];
-//     for (var i = 0; i < nbMeasurements; i++) { 
-//         dummyArray.push(0);
-//     };
-
-//     var result = {
-//         date: now,
-//         signal_strengths: dummyArray
-//     };
-
-//     console.log('new measure', result.signal_strengths.length);
-
-//     encodeForSMS([result]).then(function(sms){
-
-//         var toSend = {
-//             From: '+33783699454',
-//             Body: '1' + sms
-//         };
-        
-//         request.post({
-//             rejectUnauthorized: false,
-//             url: 'http://192.168.59.103:4000/twilio',
-//             headers: {
-//                'Content-Type': 'application/json'
-//             },
-//             body: JSON.stringify(toSend)
-//         }, function(error, response, body){
-//             if(error) {
-//                console.log("ERROR:", error);
-//             } else {
-//                debug(response.statusCode, body);
-//             }
-//         });
-//     });
-
-// }, 30000);
-
+process.on('uncaughtException', function(e){
+    console.error('uncaught', e, e.stack);
+    process.kill();
+});

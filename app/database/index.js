@@ -7,12 +7,6 @@ var places = decl.places;
 var sensor = decl.sensors;
 var sensorMeasurement = decl.affluence_sensor_measurements;
 
-var errlog = function(str){
-    return function(err){
-        console.error(str, err, err.stack);
-    }
-}
-
 module.exports = {
     Places: require('./models/places.js'),
     Sensors: require('./models/sensors.js'),

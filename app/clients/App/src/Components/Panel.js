@@ -7,10 +7,7 @@ var Detail = React.createFactory(require('./Detail.js'));
 /*
 
 interface PanelProps{
-    recyclingCenterMap: Map ( id => RecyclingCenter )
-}
-interface PanelState{
-
+    placeMap: Map ( id => Place )
 }
 
 */
@@ -22,9 +19,8 @@ var Panel = React.createClass({
     },
 
     render: function() {
-        var self = this;
+        //var self = this;
         var props = this.props;
-        var state = this.state;
 
         // console.log('PANEL props', props);
 
@@ -39,13 +35,13 @@ var Panel = React.createClass({
             }
         });
 
-        if (props.recyclingCenterMap){
-            if (props.recyclingCenterMap.size > 0)
+        if (props.placeMap){
+            if (props.placeMap.size > 0)
                 classes = 'open';
 
-            props.recyclingCenterMap.forEach(function (rc){
+            props.placeMap.forEach(function (rc){
                 details.push(new Detail({
-                    recyclingCenter: rc
+                    place: rc
                 }));
             });
         }

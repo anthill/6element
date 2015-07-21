@@ -33,9 +33,8 @@ var App = React.createClass({
     displayName: 'App',
 
     render: function() {
-        var self = this;
+        //var self = this;
         var props = this.props;
-        var state = this.state;
 
         // console.log('APP props', props);
         // console.log('APP state', state);
@@ -43,12 +42,14 @@ var App = React.createClass({
         var myAnts = [];
 
         props.ants.forEach(function(ant){
-            myAnts.push(new Ant({ant: ant}));
+            myAnts.push(new Ant({
+                ant: ant,
+                onChange: props.onChange
+            }));
         });
         
         return React.DOM.div({
-            id: 'myApp',
-            onChange: props.onChange
+            id: 'myApp'
         },
             myAnts
         );

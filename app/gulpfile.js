@@ -5,9 +5,17 @@ var join = require('path').join;
 var gulp = require('gulp');
 var server = require('gulp-express');
 // var livereload = require('gulp-livereload');
+var plumber = require('gulp-plumber');
 var browserify = require('browserify');
 var source = require("vinyl-source-stream");
-// var watchify = require('watchify');
+
+// http://stackoverflow.com/a/23973536
+// function swallowError(error) {
+//     console.log('swallowing', error.toString());
+
+//     this.emit('end');
+// }
+
 
 gulp.task('serve-app', function () {
     server.run(['./server/app.js']);
@@ -24,6 +32,10 @@ gulp.task('build-admin', function(){
 gulp.task('build-app', function(){
     browserifyShare('App');
 });
+
+gulp.task('server-stop', function(){
+    server.stop();
+})
 
 gulp.task('watch-app', function() {
     console.log('Watching');
@@ -69,6 +81,7 @@ function browserifyShare(name){
 
 function bundleShare(b, name) {
     b.bundle()
+
     .pipe(source( join('./clients', name+'-browserify-bundle.js') ) )
     .pipe(gulp.dest('.'))
     .on('error', function (err) {

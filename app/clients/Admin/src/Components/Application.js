@@ -43,12 +43,14 @@ var App = React.createClass({
         var myAnts = [];
 
         props.ants.forEach(function(ant){
-            myAnts.push(new Ant({ant: ant}));
+            myAnts.push(new Ant({
+                ant: ant,
+                onChange: props.onChange
+            }));
         });
         
         return React.DOM.div({
-            id: 'myApp',
-            onChange: props.onChange
+            id: 'myApp'
         },
             myAnts
         );

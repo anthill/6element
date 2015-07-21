@@ -1,4 +1,4 @@
-.recyclingCenter{
+.place{
 	/*background-color: white;*/
     /*font-size: 2em;*/
     /*fill: black;*/
@@ -18,25 +18,25 @@
 	stroke-width: 3; stroke-opacity: 1; stroke: red;
 }
 
-.recyclingCenter.selected{
+.place.selected{
 	stroke: hsl(0, 100%, 100%);
 	stroke-width: 2;
 }
 
-.recyclingCenter.updating {
+.place.updating {
 	stroke-width: 3; stroke-opacity: 1; stroke: red;
 }
 
-.recyclingCenterName{
+.placeName{
 	display: block; padding: 5px; background-color: rgba(0,0,0, 0.5); white-space: nowrap; border-radius: 5px;
 	color: 	#DDD;
 }
 
-.recyclingCenterName.updating{
+.placeName.updating{
 	color: red;
 }
 
-.recyclingCenterName.selected{
+.placeName.selected{
 	text-decoration: underline;
 }
 

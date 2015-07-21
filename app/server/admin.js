@@ -26,11 +26,16 @@ var sendSMS = require('./sendSMS.js');
 var PORT = 4001;
 var DEBUG = process.env.DEBUG ? process.env.DEBUG : false;
 
-var debug = function() {
-    if (DEBUG) {
-        [].unshift.call(arguments, "[DEBUG 6element] ");
-        console.log.apply(console, arguments);
-    };
+function debug() {
+    var args = Array.from(arguments);
+    
+    return function(){
+        if (DEBUG) {
+            console.log("DEBUG from 6element server:");
+            console.log.apply(console, args.concat(arguments));
+            console.log("==================");
+        };
+    }
 }
 
 function rand(n){
@@ -58,7 +63,6 @@ io.on('connection', function(_socket) {
 
 
 app.use(compression());
-app.use(bodyParser.urlencoded());
 app.use(bodyParser.json());
 
 app.use("/leaflet.css", express.static(path.join(__dirname, '../../node_modules/leaflet/dist/leaflet.css')));
@@ -210,42 +214,39 @@ app.post('/twilio', function(req, res) {
 
 
 
-app.get('/recycling-center/:rcId', function(req, res){
-    var rcId = Number(req.params.rcId);
+app.get('/place/:id', function(req, res){
+    var id = Number(req.params.id);
     
-    database.complexQueries.getPlaceDetails(rcId)
-        .then(function(data){
-            res.send(data);
-        })
-        .catch(function(error){
-            console.log("error in /recycling-center/'+req.params.rcId: ", error);
-        });
-});
-
-app.get('/sensors', function(req, res){
-    database.Sensors.getAllSensorsInfo()
-        .then(function(data){
-            // debug('All sensors', data);
-            res.send(data);
-        })
-        .catch(function(error){
-            console.log("error in /sensors: ", error);
-        });
-});
-
-app.post('/updateRC', function(req, res){
-    var rcId = Number(req.params.rcId);
-    
-    database.Places.update(rcId, {
-        name: req.params.name,
-        lat: req.params.lat,
-        lon: req.params.lon
-    })
+    database.complexQueries.getPlaceDetails(id)
     .then(function(data){
         res.send(data);
     })
     .catch(function(error){
-        console.log("error in /recycling-center/'+req.params.rcId: ", error);
+        console.log("error in /place/'+req.params.id: ", error);
+    });
+});
+
+app.get('/sensors', function(req, res){
+    database.Sensors.getAllSensorsInfo()
+    .then(function(data){
+        // debug('All sensors', data);
+        res.send(data);
+    })
+    .catch(function(error){
+        console.log("error in /sensors: ", error);
+    });
+});
+
+app.post('/updatePlace', function(req, res){
+    var id = Number(req.body.id);
+
+    database.Places.update(id, req.body.delta)
+    .then(function(data){
+        res.send(data);
+    })
+    .catch(function(error){
+        res.status(500).send('Couldn\'t update Places database');
+        console.log("error in /updatePlace/'+req.params.id: ", error);
     });
 });
 
@@ -258,50 +259,7 @@ server.listen(PORT, function () {
 });
 
 
-// // USE TO SIMULATE A MEASUREMENT SENDING TO SERVER FROM SENSOR
-
-// var encodeForSMS = require('6sense/src/codec/encodeForSMS.js');
-// var request = require('request');
-
-// setInterval(function(){
-
-//     var now = new Date().toISOString();
-
-//     var nbMeasurements = Math.floor(Math.random()*10);
-//     var dummyArray = [];
-//     for (var i = 0; i < nbMeasurements; i++) { 
-//         dummyArray.push(0);
-//     };
-
-//     var result = {
-//         date: now,
-//         signal_strengths: dummyArray
-//     };
-
-//     console.log('new measure', result.signal_strengths.length);
-
-//     encodeForSMS([result]).then(function(sms){
-
-//         var toSend = {
-//             From: '+33783699454',
-//             Body: '1' + sms
-//         };
-        
-//         request.post({
-//             rejectUnauthorized: false,
-//             url: 'http://192.168.59.103:4000/twilio',
-//             headers: {
-//                'Content-Type': 'application/json'
-//             },
-//             body: JSON.stringify(toSend)
-//         }, function(error, response, body){
-//             if(error) {
-//                console.log("ERROR:", error);
-//             } else {
-//                debug(response.statusCode, body);
-//             }
-//         });
-//     });
-
-// }, 30000);
-
+process.on('uncaughtException', function(e){
+    console.error('uncaught', e, e.stack);
+    process.kill();
+});

@@ -6,12 +6,16 @@ var React = require('react');
 
 interface ModifiableProps{
     text: string or int or float,
-    onChange: function(),
-    rcID: int,
-    dbTable: string,
-    dbField: string
+    dbLink: {
+        table: string,
+        id: int,
+        field: string
+    },
+    onChange: function()
 }
 interface ModifiableState{
+    isUpdating: boolean,
+    text: string or int or float,
     inputMode: boolean
 }
 
@@ -22,13 +26,19 @@ var Modifiable = React.createClass({
 
     getInitialState: function(){
         return {
+            isUpdating: this.props.isUpdating,
+            text: this.props.text,
             inputMode: false
         };
     },
 
-    morphToInput: function(){
-        console.log('click');
+    componentWillReceiveProps: function(newProps){
+        this.setState({
+            isUpdating: newProps.isUpdating
+        });
+    },
 
+    morphToInput: function(){
         this.setState({
             inputMode: true
         }, function(){
@@ -46,14 +56,26 @@ var Modifiable = React.createClass({
                     ((event.charCode) ? event.charCode : 
                         ((event.keyCode) ? event.keyCode : 0));
 
-        if (key === 13 || key === 27){
-            console.log('Enter or escape');
+        if (key === 13){
+            console.log('Enter pressed');
 
             var newValue = this.getDOMNode().value;
-            console.log('newValue', newValue);
 
-            var dbField = props.dbField;
-            props.onChange(props.dbTable, props.rcID, {dbField: newValue});
+            var dbLink = Object.assign(this.props.dbLink, {
+                value: newValue
+            });
+            this.props.onChange(dbLink);
+
+            this.setState({
+                isUpdating: true,
+                text: newValue,
+                inputMode: false
+            }, function(){
+                window.removeEventListener('keyup', this.morphToDiv);
+            });
+        }
+        else if (key === 27){
+            console.log('Escape pressed');
 
             this.setState({
                 inputMode: false
@@ -70,20 +92,28 @@ var Modifiable = React.createClass({
         var state = this.state;
 
         // console.log('MODIFIABLE props', props);
-        console.log('MODIFIABLE state', state);
+        // console.log('MODIFIABLE state', state);
+
+        var classes = [
+            'modifiable',
+            state.inputMode ? 'clicked' : '',
+            // isSelected ? 'selected' : '',
+            state.isUpdating ? 'updating' : '',
+            props.className
+        ];
 
         var content = state.inputMode ? 
-            // if clicked, return an input
+            // if clicked, returns an input
             React.DOM.input({
-                className: 'modifiable clicked',
+                className: classes.join(' '),
                 type: 'text',
-                defaultValue: props.text
+                defaultValue: state.text
             })
-            // if not clicked, return a simple div
+            // if not clicked, returns a simple div
             : React.DOM.div({
-                className: 'modifiable',
+                className: classes.join(' '),
                 onClick: this.morphToInput
-            }, props.text);
+            }, state.text);
 
         return content;
     }

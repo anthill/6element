@@ -3,13 +3,16 @@
 var sendReq = require('../../_common/js/sendReq.js');
 
 module.exports = {
-    getRecyclingCenters: function(){
+    getAllPlacesLiveAffluence: function(){
         return sendReq('GET', '/live-affluence');
     },
-    getRecyclingCenterDetails: function(rcId){
-        return sendReq('GET', '/recycling-center/'+rcId);
+    getPlaceMeasurements: function(id){
+        return sendReq('GET', '/place/' + id);
     },
     getAllSensors: function(){
         return sendReq('GET', '/sensors');
+    },
+    updatePlace: function(data){
+    	return sendReq('POST', '/updatePlace', data);
     }
 };

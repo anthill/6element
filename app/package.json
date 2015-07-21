@@ -55,9 +55,9 @@
   "devDependencies": {
     "eslint": "^0.21.0",
     "gulp": "~3.8.8",
-    "gulp-express": "^0.3.5",
+    "gulp-express": "git://github.com/gimm/gulp-express.git#9a3c842b55246fe039c85b56b4a8e5401ce779bf",
     "gulp-livereload": "~2.1.1",
-    "gulp-plumber": "~0.6.6",
+    "gulp-plumber": "^1.0.1",
     "vinyl-source-stream": "^1.1.0",
     "watchify": "^3.2.1"
   }

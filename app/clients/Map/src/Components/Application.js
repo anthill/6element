@@ -56,7 +56,7 @@ module.exports = React.createClass({
         var state = this.state;
         
         var panel = new Panel({
-            recyclingCenterMap: state.selectedRCMap,
+            recyclingCenterMap: state.selectedRCMap
         });
 
 

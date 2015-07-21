@@ -3,10 +3,8 @@
 require('es6-shim');
 require('better-log').install();
 
-var fs = require('fs');
 var quipuParser = require('quipu/parser.js');
 
-var hardCodedSensors = require("./hardCodedSensors.js");
 var decoder = require('6sense/src/codec/decodeFromSMS.js');
 
 var path = require('path');
@@ -18,9 +16,6 @@ var bodyParser = require('body-parser');
 var xml = require('xml');
 
 var database = require('../database');
-var dropAllTables = require('../database/management/dropAllTables');
-var createTables = require('../database/management/createTables');
-var fillDBWithFakeData = require('./fillDBWithFakeData.js');
 var simulateSensorMeasurementArrival = require('./simulateSensorMeasurementArrival')
 
 var sendSMS = require('./sendSMS.js');
@@ -32,15 +27,11 @@ var debug = function() {
     if (DEBUG) {
         [].unshift.call(arguments, "[DEBUG 6element] ");
         console.log.apply(console, arguments);
-    };
-}
-
-function rand(n){
-    return Math.floor(n*Math.random());
+    }
 }
 
 
-var server = http.Server(app);
+var server = new http.Server(app);
 var io = require('socket.io')(server);
 
 io.set('origins', '*:*');

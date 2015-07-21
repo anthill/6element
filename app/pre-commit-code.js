@@ -1,6 +1,5 @@
 "use strict";
 
-var join = require('path').join
 var eslint = require('eslint');
 // 'git ls-files -om --exclude-standard' to list all files that were changed then filter out non-JS files
 

@@ -9,9 +9,6 @@ var Detail = React.createFactory(require('./Detail.js'));
 interface PanelProps{
     recyclingCenterMap: Map ( id => RecyclingCenter )
 }
-interface PanelState{
-
-}
 
 */
 
@@ -22,9 +19,8 @@ var Panel = React.createClass({
     },
 
     render: function() {
-        var self = this;
+        //var self = this;
         var props = this.props;
-        var state = this.state;
 
         // console.log('PANEL props', props);
 

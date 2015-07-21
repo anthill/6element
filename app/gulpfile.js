@@ -25,7 +25,7 @@ gulp.task('buildMap', function(){
 
 gulp.task('watch-app', function() {
     console.log('Watching');
-    var serverWatcher = gulp.watch(['./server/**', './database/**'], function(){
+    gulp.watch(['./server/**', './database/**'], function(){
         server.stop();
         gulp.run('serve-app');
     });
@@ -40,7 +40,7 @@ gulp.task('watch-app', function() {
 
 gulp.task('watch-admin', function() {
     console.log('Watching admin');
-    var serverWatcher = gulp.watch(['./server/**', './database/**'], function(){
+    gulp.watch(['./server/**', './database/**'], function(){
         server.stop();
         gulp.run('serve-admin');
     });

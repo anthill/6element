@@ -1,9 +1,6 @@
 "use strict";
 
-var moment = require('moment');
-
 var database = require('../database');
-
 
 module.exports = function(){
     return Promise.all([

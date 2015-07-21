@@ -11,6 +11,7 @@
         "no-use-before-define": "no-func",
         "no-native-reassign": 1,
         "no-process-exit": 0,
+        "no-func-assign": 0,
         
         "eol-last": 1,
         "no-space-before-semi": 1,
@@ -30,6 +31,9 @@
         "consistent-return": 0
     },
     "globals": {
-        "Promise": true
+        "Promise": true,
+        "Dygraph": true,
+        "describe": true,
+        "it": true
     }
 }

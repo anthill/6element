@@ -16,7 +16,7 @@ function render(){
     React.render(new Application(topLevelStore), document.body);
 }
 
-function updateDB(table, id, fields){
+function updateDB(/*table, id, fields*/){
     // send request to server according to the desired table
 }
 

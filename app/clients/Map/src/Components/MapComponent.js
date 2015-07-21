@@ -92,8 +92,7 @@ module.exports = React.createClass({
         return marker;
     },
 
-    createRecyclingCenterName: function(recyclingCenter, zoom){
-
+    createRecyclingCenterName: function(recyclingCenter){
         var props = this.props;
 
         // check if recyclingCenter is selected, and define selectedClas
@@ -157,7 +156,7 @@ module.exports = React.createClass({
                 props.recyclingCenterMap.forEach(function(recyclingCenter){
                     if (zoom > 11) {
                         size = 10;
-                        var name = self.createRecyclingCenterName(recyclingCenter, zoom);
+                        var name = self.createRecyclingCenterName(recyclingCenter);
                         nameMarkers.push(name); 
                     }   
 

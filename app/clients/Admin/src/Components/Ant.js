@@ -9,19 +9,17 @@ var moment = require('moment');
 
 interface AntProps{
     ant: {
+        create_at : string,
         id: int,
-        name: string,
         installed_at: int,
-        rcName: string,
-        phone_number: string,
-        lat: float,
-        lon: float,
-        quipu_status: string,
-        signal_strength: int,
-        sense_status: string,
+        isUpdating: boolean,
         latest_input: string,
         latest_output: string,
-        isUpdating: boolean
+        name: string,
+        phone_number: string,
+        quipu_status: string,
+        sense_status: string,
+        updated_at: string
     },
     onChange: function()
 }
@@ -43,7 +41,7 @@ var Ant = React.createClass({
 
         var classes = [
             'ant',
-            // isSelected ? 'selected' : '',
+            //isSelected ? 'selected' : '',
             props.ant.isUpdating ? 'updating' : '',
             props.ant.quipu_status,
             props.ant.sense_status
@@ -51,9 +49,9 @@ var Ant = React.createClass({
 
         return React.DOM.div({className: classes.join(' ')},
             new Modifiable({
-                className: 'placeName',
+                className: 'antName',
                 isUpdating: false,
-                text: props.ant.placeName,
+                text: props.ant.name,
                 dbLink: {
                     table: 'place',
                     id: props.ant.installed_at,
@@ -62,29 +60,6 @@ var Ant = React.createClass({
                 onChange: props.onChange
             }),
             React.DOM.ul({},
-                React.DOM.li({}, 
-                    React.DOM.div({}, 'Coords'),
-                    new Modifiable({
-                        isUpdating: false,
-                        text: props.ant.lat,
-                        dbLink: {
-                            table: 'place',
-                            id: props.ant.installed_at,
-                            field: 'lat'
-                        },
-                        onChange: props.onChange
-                    }),
-                    new Modifiable({
-                        isUpdating: false,
-                        text: props.ant.lon,
-                        dbLink: {
-                            table: 'place',
-                            id: props.ant.installed_at,
-                            field: 'lon'
-                        },
-                        onChange: props.onChange
-                    })
-                ),
                 React.DOM.li({}, 
                     React.DOM.div({}, 'ID'),
                     React.DOM.div({}, props.ant.id)
@@ -104,7 +79,7 @@ var Ant = React.createClass({
                 React.DOM.li({className: 'quipu'},
                     React.DOM.div({}, 'Quipu Status'),
                     React.DOM.div({}, props.ant.quipu_status),
-                    React.DOM.div({}, props.ant.signal)
+                    React.DOM.div({}, props.ant.signal) // Pas de signal ???
                 ),
                 React.DOM.li({className: '6sense'},
                     React.DOM.div({}, '6sense Status'),

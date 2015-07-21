@@ -57,13 +57,6 @@ var App = React.createClass({
                 }));
             }
         });
-
-        // props.sensorMap.forEach(function(ant){
-        //     myAnts.push(new Ant({
-        //         ant: ant,
-        //         onChange: props.onChange
-        //     }));
-        // });
         
         return React.DOM.div({
             id: 'myApp'

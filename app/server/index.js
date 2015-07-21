@@ -36,18 +36,6 @@ function rand(n){
     return Math.floor(n*Math.random());
 }
 
-// waiting the db to be ready
-setTimeout(function(){
-
-    dropAllTables()
-        .then(createTables)
-        // .then(fillDBWithFakeData)
-        .then(hardCodedSensors)
-        .catch(function(error){
-                console.log("error in drop and create: ", error);
-            });
-
-}, 10000)
 
 var server = http.Server(app);
 var io = require('socket.io')(server);

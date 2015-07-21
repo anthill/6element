@@ -11,10 +11,8 @@ module.exports = function(body, destination){
         from: PRIVATE.twilio_number,
         body: body
 
-    }, function(err, responseData) {
-
+    }, function(err) {
         if (err)
             console.log("ERROR sending with twilio: ", err);
-
     });
-}
+};

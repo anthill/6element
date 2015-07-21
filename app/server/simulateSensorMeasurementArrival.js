@@ -11,7 +11,7 @@ function doIt(){
         var dummyArray = [];
         for (var i = 0; i < nbMeasurements; i++) { 
             dummyArray.push(Math.floor(Math.random()*40));
-        };
+        }
 
         var result = {
             date: now,

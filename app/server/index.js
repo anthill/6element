@@ -122,6 +122,7 @@ app.post('/twilio', function(req, res) {
                                 debug("Received init");
                                 var date = new Date();
                                 sendSMS("date:" + date.toISOString(), req.body.From);
+                                res.send(201);
                                 break;
                         }
                         break;
@@ -156,7 +157,7 @@ app.post('/twilio', function(req, res) {
                                 }))
                                 .then(function(results){
                                     debug("Storage SUCCESS");
-                                     res.json(201);
+                                    res.send(201);
 
                                     // SOCKET IO
                                     if (socket)
@@ -165,7 +166,7 @@ app.post('/twilio', function(req, res) {
                                 })
                                 .catch(function(error){
                                     console.log("Storage FAILURE: ", error);
-                                     res.json(201);
+                                    res.send(422);
                                 });
                             });
                         break;
@@ -191,7 +192,7 @@ app.post('/twilio', function(req, res) {
                         })
                         .then(function(result){
                             debug("Storage SUCCESS");
-                             res.json(201);
+                            res.send(201);;
 
                             // SOCKET IO
                             if (socket)
@@ -200,19 +201,22 @@ app.post('/twilio', function(req, res) {
                         })
                         .catch(function(error){
                             console.log("Storage FAILURE: ", error);
-                             res.json(201);
+                            res.send(422);;
                         });
                         break;
 
                     default:
                         console.log('Error: message has not type character');
+                        res.send(404);
                 }
             } else {
                 console.log("No sensor corresponding to this number.");
+                res.send(404);
             }
         })
         .catch(function(error){
             console.log("Error in findByPhoneNumber: ", error);
+            res.send(404);
         });   
 });
 

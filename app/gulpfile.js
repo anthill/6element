@@ -11,7 +11,7 @@ var source = require("vinyl-source-stream");
 var generateSqlDefinition = require('sql-generate');
 
 
-var conString = process.env.POSTGRES_CONSTRING;
+var conString = "postgres://postgres:" + process.env.POSTGRES_PASSWORD + "@" + process.env.DB_PORT_5432_TCP_ADDR + ":5432/postgres";
 var sqlOptions = {
     dsn: conString,
     omitComments: true

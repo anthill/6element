@@ -8,7 +8,7 @@
    environment:
       - VIRTUAL_HOST=6element.ants.builders 
       - VIRTUAL_PORT=4000
-      - POSTGRES_CONSTRING="postgres://postgres:elements@db:5432/postgres"
+      - POSTGRES_PASSWORD=elements
    volumes:
       - app:/6element/app
    restart: always
@@ -17,11 +17,4 @@ db:
    image: postgres:9.4
    environment:
       - POSTGRES_PASSWORD=elements
-   volumes_from:
-      - data
    restart: always
-
-data:
-   image: busybox
-   volumes:
-      - /var/lib/postgresql/data

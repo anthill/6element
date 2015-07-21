@@ -49,7 +49,7 @@ var Ant = React.createClass({
             props.ant.sense_status
         ];
 
-        return React.DOM.div({className: classes.join(' ')},
+        return React.DOM.div({className: 'ant'},
             new Modifiable({
                 className: 'rcName',
                 isUpdating: false,

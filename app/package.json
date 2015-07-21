@@ -4,6 +4,7 @@
   "description": "Reducing waste with sensors and an app",
   "main": "index.js",
   "scripts": {
+    "postinstall": "cp ../git-hooks/pre-commit ../.git/hooks/pre-commit; chmod a+x ../.git/hooks/pre-commit",
     "start-admin-dev": "gulp admin-dev --gulpfile app/gulpfile.js",
     "start-admin-prod": "gulp admin-prod --gulpfile app/gulpfile.js",
     "start-app-dev": "gulp app-dev --gulpfile app/gulpfile.js",

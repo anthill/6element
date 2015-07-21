@@ -17,11 +17,5 @@ db:
    image: postgres:9.4
    environment:
       - POSTGRES_PASSWORD=elements
-   volumes_from:
-      - data
    restart: always
 
-data:
-   image: busybox
-   volumes:
-      - /var/lib/postgresql/data

@@ -160,6 +160,7 @@ module.exports = React.createClass({
                     if (zoom > 11) {
                         size = 10;
                         var name = self.createPlaceName(place, zoom);
+
                         nameMarkers.push(name); 
                     }   
 

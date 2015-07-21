@@ -4,16 +4,10 @@ var React = require('react');
 var LineChart = React.createFactory(require('./LineChart.js'));
 
 /*
-
 interface DetailProps{
     place: Place
 }
-interface DetailState{
-
-}
-
 */
-
 
 var Detail = React.createClass({
 
@@ -22,9 +16,8 @@ var Detail = React.createClass({
     },
 
     render: function() {
-        var self = this;
+        //var self = this;
         var props = this.props;
-        var state = this.state;
 
         // console.log('detail props', props);
                 
@@ -35,6 +28,5 @@ var Detail = React.createClass({
     }
 
 });
-
 
 module.exports = Detail;

@@ -55,6 +55,7 @@ var Modifiable = React.createClass({
         var key = (event.which) ? event.which : 
                     ((event.charCode) ? event.charCode : 
                         ((event.keyCode) ? event.keyCode : 0));
+        var props = this.props;
 
         if (key === 13){
             console.log('Enter pressed');
@@ -87,7 +88,7 @@ var Modifiable = React.createClass({
     },
 
     render: function() {
-        var self = this;
+        //var self = this;
         var props = this.props;
         var state = this.state;
 

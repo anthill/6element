@@ -45,6 +45,7 @@ var Modifiable = React.createClass({
         var key = (event.which) ? event.which : 
                     ((event.charCode) ? event.charCode : 
                         ((event.keyCode) ? event.keyCode : 0));
+        var props = this.props;
 
         if (key === 13 || key === 27){
             console.log('Enter or escape');
@@ -53,7 +54,10 @@ var Modifiable = React.createClass({
             console.log('newValue', newValue);
 
             var dbField = props.dbField;
-            props.onChange(props.dbTable, props.rcID, {dbField: newValue});
+            var delta = {};
+            delta[dbField] = newValue;
+            
+            props.onChange(props.dbTable, props.rcID, delta);
 
             this.setState({
                 inputMode: false
@@ -65,7 +69,7 @@ var Modifiable = React.createClass({
     },
 
     render: function() {
-        var self = this;
+        //var self = this;
         var props = this.props;
         var state = this.state;
 

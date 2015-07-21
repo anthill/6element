@@ -32,12 +32,10 @@ var Ant = React.createClass({
     displayName: 'Ant',
 
     render: function() {
-        var self = this;
+        //var self = this;
         var props = this.props;
-        var state = this.state;
 
         // console.log('APP props', props);
-        // console.log('APP state', state);
         var classes = [
             'ant',
             // isSelected ? 'selected' : '',

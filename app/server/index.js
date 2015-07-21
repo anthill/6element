@@ -174,7 +174,11 @@ app.post('/twilio', function(req, res) {
                                     console.log("Storage FAILURE: ", error);
                                     res.sendStatus(422);
                                 });
-                            });
+                            })
+                            .catch(function(error){
+                                    console.log("Could not decode ", error);
+                                    res.sendStatus(422);
+                                });
                         break;
 
                     // regular encoded message

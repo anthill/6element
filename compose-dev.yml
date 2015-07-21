@@ -1,20 +1,19 @@
 6element:
-  build: .
-  command: npm run dev
-  links:
-   - db
-  ports:
-   - "4000:4000"
-  environment:
-   - VIRTUAL_HOST=6element.ants.builders 
-   - VIRTUAL_PORT=4000
-   - DEBUG=true
-   - POSTGRES_PASSWORD=elements
-  volumes:
-   - app:/6element/app
+   build: .
+   command: npm run dev
+   links:
+      - db
+   ports:
+      - "4000:4000"
+   environment:
+      - VIRTUAL_HOST=6element.ants.builders 
+      - VIRTUAL_PORT=4000
+      - DEBUG=true
+      - POSTGRES_PASSWORD=elements
+   volumes:
+      - app:/6element/app
 db:
    image: postgres:9.4
    environment:
       - POSTGRES_PASSWORD=elements
-   ports:
-      - "5432:5432"
+

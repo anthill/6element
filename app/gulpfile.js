@@ -2,6 +2,7 @@
 
 require('es6-shim');
 
+var fs = require("fs");
 var gulp = require('gulp');
 var server = require('gulp-express');
 // var livereload = require('gulp-livereload');

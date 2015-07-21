@@ -147,13 +147,19 @@ app.post('/twilio', function(req, res) {
                                     socketMessage['installed_at'] = sensor.installed_at;
 
                                     // persist message in database
+                                    if (message.date )
 
-                                    return database.SensorMeasurements.create(messageContent).then(function(id){
-                                        return {
-                                            sensorMeasurementId: id,
-                                            measurement: socketMessage
-                                        };
-                                    });                                    
+                                    return database.SensorMeasurements.create(messageContent)
+                                        .then(function(id){
+                                            return {
+                                                sensorMeasurementId: id,
+                                                measurement: socketMessage
+                                            };
+                                        })
+                                        .catch(function(error){
+                                            console.log("Storage FAILURE: ", error);
+                                            res.sendStatus(422);
+                                        });                                   
                                 }))
                                 .then(function(results){
                                     debug("Storage SUCCESS");
@@ -207,16 +213,16 @@ app.post('/twilio', function(req, res) {
 
                     default:
                         console.log('Error: message has not type character');
-                        res.send(404);
+                        res.sendStatus(404);
                 }
             } else {
                 console.log("No sensor corresponding to this number.");
-                res.send(404);
+                res.sendStatus(404);
             }
         })
         .catch(function(error){
             console.log("Error in findByPhoneNumber: ", error);
-            res.send(404);
+            res.sendStatus(404);
         });   
 });
 

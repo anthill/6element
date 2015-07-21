@@ -139,7 +139,7 @@ module.exports = {
             
                 var query = places
                     .select(
-                        sensor.literal('array_agg(sensors.id)').as('sensor_id'), 
+                        sensor.literal('array_agg(sensors.id)').as('sensor_ids'), 
                         places.star()
                     )
                     .from(

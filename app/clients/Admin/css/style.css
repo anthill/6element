@@ -8,30 +8,30 @@
 // 7. le reste
 */
 
-.ant{
+.place{
 	display: inline-block; margin: 1em; padding: .5em; width: 30%;
 	border: 1px solid black; border-radius: 5px;
 	background-color: white;
 }
 
-.ant .placeName {
+.place .placeName {
 	display: block; width: 100%; margin: 0 auto;
 	font-weight: bold; font-size: 1.5em;
 }
 
-.ant div{
+.place div{
 	display: inline-block; margin: 0 1em;
 }
 
-.ant li * {
+.place li * {
 	display: inline-block; margin: 0 1em;
 }
 
-.ant ul ul {
+.place ul ul {
 	margin-left: 1em;
 }
 
-.ant.updating {
+.place.updating {
 	background-color: red;
 	transition: background-color 1s;
 }

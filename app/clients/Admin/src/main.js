@@ -32,9 +32,9 @@ function updateDB(data){
             serverAPI.updateRC(obj)
             .then(function(res){
                 console.log('Places database updated successfully');
-                var ant = topLevelStore.placeMap.get(res.id);
-                Object.assign(ant, res);
-                updateLocal(ant);
+                var place = topLevelStore.placeMap.get(res.id);
+                Object.assign(place, res);
+                updateLocal(place);
             })
             .catch(function(){
                 console.log('Places database didn\'t update correctly');
@@ -55,9 +55,9 @@ function updateDB(data){
 
 }
 
-function updateLocal(ant){
-    topLevelStore.placeMap.set(ant.installed_at, ant);
-    topLevelStore.placeMap.set(ant.id, ant);
+function updateLocal(place){
+    topLevelStore.placeMap.set(place.installed_at, place);
+    topLevelStore.placeMap.set(place.id, place);
 
     render();
 }
@@ -70,17 +70,16 @@ function refreshView(){
     Promise.all([placesP, sensorsP])
     .then(function(results){
 
-        console.log('places', results[0]);
-        console.log('sensors', results[1]);
+        // console.log('places', results[0]);
+        // console.log('sensors', results[1]);
 
-        // topLevelStore.sensorMap = makeMap(sensors, 'id');
-        // topLevelStore.placeMap = makeMap(sensors, 'installed_at');
+        topLevelStore.placeMap = makeMap(results[0], 'id');
+        topLevelStore.sensorMap = makeMap(results[1], 'id');
 
-        // resetUpdate(topLevelStore.sensorMap);
+        console.log('topLevelStore', topLevelStore);
 
-        // console.log('topLevelStore', topLevelStore);
-        
-        // render();
+        resetUpdate(topLevelStore.sensorMap);
+        render();
     })
     .catch(errlog);
 }

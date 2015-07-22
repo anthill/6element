@@ -2,6 +2,7 @@
 
 var React = require('react');
 var Modifiable = React.createFactory(require('./Modifiable.js'));
+var ID_selector = React.createFactory(require('./ID_selector.js'));
 
 var moment = require('moment');
 
@@ -21,6 +22,7 @@ interface AntProps{
         sense_status: string,
         updated_at: string
     },
+    antIDset : Set,
     onChange: function()
 }
 interface AppState{
@@ -36,7 +38,7 @@ var Ant = React.createClass({
         var props = this.props;
         var state = this.state;
 
-        // console.log('ANT props', props);
+        console.log('ANT props', props);
         // console.log('ANT state', state);
 
         var classes = [
@@ -61,9 +63,21 @@ var Ant = React.createClass({
                             id: props.ant.id,
                             field: 'name'
                         },
+                        onChange: props.onChange,
+                    }),
+                    new ID_selector({
+                        antIDset: props.antIDset,
+                        currentID: props.ant.id,
                         onChange: props.onChange
                     })
                 ),
+                // React.DOM.div({},
+                //     new ID_selector({
+                //         antIDset: props.antIDset,
+                //         currentID: props.ant.id,
+                //         onChange: props.onChange
+                //     })
+                // ),
                 React.DOM.li({}, 
                     React.DOM.div({}, 'Created'),
                     React.DOM.div({}, moment(props.ant.created_at).format("MMMM Do YYYY, h:mm:ss a"))

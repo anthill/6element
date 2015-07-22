@@ -9,18 +9,29 @@ var Place = React.createFactory(require('./Place.js'));
 /*
 
 interface AppProps{
-    ants: Map (id => ant{
+    placeMap: Map (id => place{
+        created_at: string,
         id: int,
-        name: strint,
-        latLng: {
-            lat: float,
-            long: float
-        },
-        ip: string,
-        signal: int,
-        registration: int,
-        quipuStatus: string,
-        6senseStatus: string
+        lat: int,
+        lon: int,
+        name: string,
+        sensor_ids : list[],
+        type, string,
+        updated_at, string
+        }
+    sensorMap: Map (id => sensor{
+        created_at: string,
+        id: int,
+        installed_at: int,
+        isUpdating: bool,
+        latest_input: string,
+        latest_output: string
+        name: string,
+        phone_number: string,
+        quipu_status: string,
+        sense_status: string,
+        updated_at: string
+        }
     }),
     onChange: function()
 }
@@ -41,7 +52,15 @@ var App = React.createClass({
         console.log('APP props', props);
         console.log('APP state', state);
 
-        //var myAnts = [];
+        var antIDList = [];
+
+        props.sensorMap.forEach(function (sensor){
+            antIDList.push(sensor.id);
+        });
+
+        var antIDset = new Set(antIDList);
+
+
         var myPlaces = [];
 
         props.placeMap.forEach(function (place) {
@@ -51,8 +70,9 @@ var App = React.createClass({
                     mySensors.push(props.sensorMap.get(sensor_id));
                 })
                 myPlaces.push(new Place ({
-                    place, place,
-                    mySensors, mySensors,
+                    place: place,
+                    mySensors: mySensors,
+                    antIDset: antIDset,
                     onChange: props.onChange
                 }));
             }

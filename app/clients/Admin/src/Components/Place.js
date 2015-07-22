@@ -28,6 +28,7 @@ interface placeProps{
 	    sense_status: string,
 	    updated_at: string
 	},
+	antIDset : Set,
 	onChange: function()
 }
 
@@ -96,6 +97,7 @@ var Place = React.createClass({
         			props.mySensors.map(function (ant){
                 		return new Ant({
                 			ant: ant,
+                			antIDset: props.antIDset,
                 			onChange: props.onChange
             			});
             		})

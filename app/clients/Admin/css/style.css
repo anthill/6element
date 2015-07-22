@@ -10,7 +10,7 @@
 
 .place{
 	display: inline-block; margin: 1em; padding: .5em; width: 30%;
-	border: 1px solid black; border-radius: 5px;
+	border: 1px solid orange; border-radius: 5px;
 	background-color: white;
 }
 
@@ -74,7 +74,13 @@ li .modifiable{
 	transition: background-color 1s;
 }
 
-.ant.name {
+.ant{
+	display: inline-block; margin: 1em; padding: .5em;
+	border: 1px solid green; border-radius: 5px;
+	background-color: white;
+}
+
+.ant.sensorName {
 	font-weight: bold;
 }
 

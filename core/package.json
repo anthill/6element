@@ -9,7 +9,7 @@
     "start-admin-prod": "gulp admin-prod --gulpfile core/gulpfile.js",
     "start-app-dev": "gulp app-dev --gulpfile core/gulpfile.js",
     "start-app-prod": "gulp app-prod --gulpfile core/gulpfile.js",
-    "init-prod": "gulp init-prod --gulpfile core/gulpfile.js",
+    "init-db": "gulp init --gulpfile core/gulpfile.js",
     "lint": "eslint ./",
     "test": "mocha test/automated/*"
   },
@@ -25,7 +25,7 @@
     "sustainable",
     "development"
   ],
-  "author": "David Bruant <bruant.d@gmail.com> (https://twitter.com/DavidBruant)",
+  "author": "Ants",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/anthill/6element/issues"

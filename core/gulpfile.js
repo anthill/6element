@@ -21,7 +21,7 @@ var sqlOptions = {
 };
 
 
-var dropCreateAndDeclare = function(callbackP) {                                    
+gulp.task('init', function () {                                 
 
     // wait database to be created 
     var interval = setInterval(function(){
@@ -35,12 +35,13 @@ var dropCreateAndDeclare = function(callbackP) {
                 // when ready, drop and create tables
                 var dropAllTables = require('./database/management/dropAllTables.js');
                 var createTables = require('./database/management/createTables.js');
+                var hardCodedSensors = require("./server/hardCodedSensors.js");
 
                 dropAllTables()
                     .then(function(){
                         createTables()
                             .then(function(){
-                                callbackP()
+                                hardCodedSensors()
                                     .then(function(){
 
                                         console.log("Dropped and created the tables.")
@@ -74,16 +75,6 @@ var dropCreateAndDeclare = function(callbackP) {
     }, 1000);
    
 };
-
-gulp.task('init-prod', function () {
-    var hardCodedSensors = require("./server/hardCodedSensors.js");
-    dropCreateAndDeclare(hardCodedSensors);
-});
-
-gulp.task('initDev', function () {
-    var fillDBWithFakeData = require('./server/fillDBWithFakeData.js');
-    dropCreateAndDeclare(fillDBWithFakeData);
-});
 
 
 // http://stackoverflow.com/a/23973536
@@ -176,7 +167,7 @@ gulp.task('admin-dev', ['serve-admin', 'build-admin', 'watch-admin'], function()
 
 gulp.task('admin-prod', ['serve-admin', 'build-admin']);
 
-gulp.task('app-dev', ['initDev', 'serve-app', 'build-app', 'watch-app'], function(){
+gulp.task('app-dev', ['init', 'serve-app', 'build-app', 'watch-app'], function(){
     console.log('Starting app in dev');
 });
 

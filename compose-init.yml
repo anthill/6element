@@ -1,6 +1,6 @@
 6element:
    build: .
-   command: npm run init-prod
+   command: npm run init-db
    links:
       - db
    ports:

@@ -60,7 +60,11 @@ li .modifiable{
 	color: orange;
 }
 
-.phone_number.modifiable.updating {
+.sensorName.modifiable.updating {
+	color: green;
+}
+
+.sensorPhone_number.modifiable.updating {
 	color: green;
 }
 /* quipu status */

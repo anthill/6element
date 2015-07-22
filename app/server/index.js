@@ -282,7 +282,7 @@ app.post('/updateSensor', function(req, res){
 
     database.Sensors.update(id, req.body.delta)
     .then(function(data){
-        debug('updateSensor', data);
+        // debug('updateSensor', data);
         res.send(data);
     })
     .catch(function(error){

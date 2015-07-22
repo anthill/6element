@@ -53,7 +53,7 @@ var Ant = React.createClass({
                     React.DOM.div({}, 'Name'),
                     // React.DOM.div({}, props.ant.id)
                     new Modifiable({
-                        className: 'name',
+                        className: 'sensorName',
                         isUpdating: false,
                         text: props.ant.name,
                         dbLink: {
@@ -76,7 +76,7 @@ var Ant = React.createClass({
                     React.DOM.div({}, 'Phone'),
                     // React.DOM.div({}, props.ant.phone_number)
                     new Modifiable({
-                        className: 'phone_number',
+                        className: 'sensorPhone_number',
                         isUpdating: false,
                         text: props.ant.phone_number,
                         dbLink: {

@@ -26,13 +26,28 @@ var Selector = React.createClass({
 
         console.log('Selector props', props);
         console.log('Selector state', state);
-        
-        return React.DOM.div({id: 'selector'},
-            React.DOM.ul({},
-                React.DOM.li({}, 
-                    React.DOM.div({}, props.currentID)
-                )
-            )
+
+
+        // var classes = [
+        //     'selector',
+        //     //isSelected ? 'selected' : '',
+        // ];
+        var list = undefined;
+
+        if (true) {
+            var lis = [];
+            props.antIDset.forEach(function (antID) {
+                lis.push(React.DOM.li({}, antID));
+            });
+
+            list == React.DOM.ul({}, lis);
+        }
+
+        console.log("lis", lis);
+
+        return React.DOM.div({className: 'selector'},
+            React.DOM.div({className: 'currentID'}, props.currentID),
+            list
         );
     }
 });

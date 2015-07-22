@@ -61,12 +61,12 @@ app.get('/App-browserify-bundle.js', function(req, res){
 
 app.get('/live-affluence', function(req, res){
     database.complexQueries.currentPlaceAffluences()
-        .then(function(data){
-            res.send(data);
-        })
-        .catch(function(error){
-            console.log("error in /live-affluence: ", error);
-        });
+    .then(function(data){
+        res.send(data);
+    })
+    .catch(function(error){
+        console.log("error in /live-affluence: ", error);
+    });
     
 });
 
@@ -104,55 +104,55 @@ app.post('/twilio', function(req, res) {
                     // 6sense encoded message
                     case '1':
                         decoder(body)
-                            .then(function(decodedMsg){
+                        .then(function(decodedMsg){
 
-                                debug("decoded msg ", decodedMsg);
+                            debug("decoded msg ", decodedMsg);
 
-                                // [{"date":"2015-05-20T13:48:00.000Z","signal_strengths":[]},{"date":"2015-05-20T13:49:00.000Z","signal_strengths":[]},{"date":"2015-05-20T13:50:00.000Z","signal_strengths":[]},{"date":"2015-05-20T13:51:00.000Z","signal_strengths":[]},{"date":"2015-05-20T13:52:00.000Z","signal_strengths":[]}]
-                                Promise.all(decodedMsg.map(function(message){
-                                    var messageContent = {
-                                        'sensor_id': sensor.id,
-                                        'signal_strengths': message.signal_strengths,
-                                        'measurement_date': message.date
-                                        // 'quipu_signal_strength': message.quipu.signalStrength
-                                    };
-                                    debug("decoded msg ", message);
-                                    var socketMessage = Object.assign({}, messageContent);
-                                    socketMessage['installed_at'] = sensor.installed_at;
+                            // [{"date":"2015-05-20T13:48:00.000Z","signal_strengths":[]},{"date":"2015-05-20T13:49:00.000Z","signal_strengths":[]},{"date":"2015-05-20T13:50:00.000Z","signal_strengths":[]},{"date":"2015-05-20T13:51:00.000Z","signal_strengths":[]},{"date":"2015-05-20T13:52:00.000Z","signal_strengths":[]}]
+                            Promise.all(decodedMsg.map(function(message){
+                                var messageContent = {
+                                    'sensor_id': sensor.id,
+                                    'signal_strengths': message.signal_strengths,
+                                    'measurement_date': message.date
+                                    // 'quipu_signal_strength': message.quipu.signalStrength
+                                };
+                                debug("decoded msg ", message);
+                                var socketMessage = Object.assign({}, messageContent);
+                                socketMessage['installed_at'] = sensor.installed_at;
 
-                                    // persist message in database
-                                    if (message.date )
+                                // persist message in database
+                                if (message.date )
 
-                                    return database.SensorMeasurements.create(messageContent)
-                                        .then(function(id){
-                                            return {
-                                                sensorMeasurementId: id,
-                                                measurement: socketMessage
-                                            };
-                                        })
-                                        .catch(function(error){
-                                            console.log("Storage FAILURE: ", error);
-                                            res.status(500).send("Storage FAILURE: ", error);
-                                        });                                   
-                                }))
-                                .then(function(results){
-                                    debug("Storage SUCCESS");
-                                    res.sendStatus(201);
+                                return database.SensorMeasurements.create(messageContent)
+                                    .then(function(id){
+                                        return {
+                                            sensorMeasurementId: id,
+                                            measurement: socketMessage
+                                        };
+                                    })
+                                    .catch(function(error){
+                                        console.log("Storage FAILURE: ", error);
+                                        res.status(500).send("Storage FAILURE: ", error);
+                                    });                                   
+                            }))
+                            .then(function(results){
+                                debug("Storage SUCCESS");
+                                res.sendStatus(201);
 
-                                    // SOCKET IO
-                                    if (socket)
-                                        socket.emit('data', results);
-                                    
-                                })
-                                .catch(function(error){
-                                    console.log("Storage FAILURE: ", error);
-                                    res.status(500).send("Storage FAILURE: ", error);
-                                });
+                                // SOCKET IO
+                                if (socket)
+                                    socket.emit('data', results);
+                                
                             })
                             .catch(function(error){
-                                    console.log("Could not decode ", error);
-                                    res.status(500).send("Could not decode ", error);
-                                });
+                                console.log("Storage FAILURE: ", error);
+                                res.status(500).send("Storage FAILURE: ", error);
+                            });
+                        })
+                        .catch(function(error){
+                            console.log("Could not decode ", error);
+                            res.status(500).send("Could not decode ", error);
+                        });
                         break;
 
                     // regular encoded message
@@ -172,6 +172,10 @@ app.post('/twilio', function(req, res) {
                                     sensorId: sensor.id,
                                     socketMessage: sensorStatus
                                 };
+                            })
+                            .catch(function(error){
+                                console.log("Storage FAILURE: ", error);
+                                res.status(500).send("Storage FAILURE: ", error);
                             });
                         })
                         .then(function(result){
@@ -208,23 +212,23 @@ app.get('/place/:id', function(req, res){
     var id = Number(req.params.id);
     
     database.complexQueries.getPlaceDetails(id)
-        .then(function(data){
-            res.send(data);
-        })
-        .catch(function(error){
-            console.log("error in /recycling-center/'+req.params.id: ", error);
-        });
+    .then(function(data){
+        res.send(data);
+    })
+    .catch(function(error){
+        console.log("error in /recycling-center/'+req.params.id: ", error);
+    });
 });
 
 app.get('/sensors', function(req, res){
     database.Sensors.getAllSensorsInfo()
-        .then(function(data){
-            // debug('All sensors', data);
-            res.send(data);
-        })
-        .catch(function(error){
-            console.log("error in /sensors: ", error);
-        });
+    .then(function(data){
+        // debug('All sensors', data);
+        res.send(data);
+    })
+    .catch(function(error){
+        console.log("error in /sensors: ", error);
+    });
 });
 
 app.post('/updatePlace', function(req, res){

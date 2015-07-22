@@ -34,13 +34,13 @@ docker-compose -f compose-dev.yml up
 
 ## Pushing to production
 
-First build the database separately:
+If you want to clear (and lose all the data) because you changed the schema or for whatever reason you can drop and create the db as well as rewrite the `declaration.js`:
 
 ```
 docker-compose -f compose-init.yml up
 ```
 
-then you only need to:
+When you only want to restart the service use:
 
 ```
 docker-compose -f compose-prod.yml up -d

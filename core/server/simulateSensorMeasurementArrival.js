@@ -23,7 +23,7 @@ function doIt(){
         encodeForSMS([result]).then(function(sms){
 
             var toSend = {
-                From: '+33783699454',
+                From: "xxx" + Math.floor(Math.random()*20) ,
                 Body: '1' + sms
             };
 
@@ -42,7 +42,7 @@ function doIt(){
             });
         });
 
-    }, 30000);
+    }, 3000);
 }
 
 module.exports = function(){

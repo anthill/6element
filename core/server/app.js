@@ -13,15 +13,12 @@ var app = express();
 var http = require('http');
 var compression = require('compression');
 var bodyParser = require('body-parser');
-var xml = require('xml');
 
 var database = require('../database');
 var simulateSensorMeasurementArrival = require('./simulateSensorMeasurementArrival')
 
-var sendSMS = require('./sendSMS.js');
-
 var PORT = 4000;
-var DEBUG = process.env.DEBUG ? process.env.DEBUG : false;
+var DEBUG = process.env.NODE_ENV === "development" ? true : false;
 
 var debug = function() {
     if (DEBUG) {
@@ -32,6 +29,7 @@ var debug = function() {
 
 
 var server = new http.Server(app);
+
 var io = require('socket.io')(server);
 
 io.set('origins', '*:*');
@@ -63,14 +61,15 @@ app.get('/App-browserify-bundle.js', function(req, res){
 
 app.get('/live-affluence', function(req, res){
     database.complexQueries.currentPlaceAffluences()
-        .then(function(data){
-            res.send(data);
-        })
-        .catch(function(error){
-            console.log("error in /live-affluence: ", error);
-        });
+    .then(function(data){
+        res.send(data);
+    })
+    .catch(function(error){
+        console.log("error in /live-affluence: ", error);
+    });
     
 });
+
 
 // endpoint receiving the sms from twilio
 app.post('/twilio', function(req, res) {
@@ -97,6 +96,7 @@ app.post('/twilio', function(req, res) {
                                 debug("Received init");
                                 var date = new Date();
                                 sendSMS("date:" + date.toISOString(), req.body.From);
+                                res.sendStatus(201);
                                 break;
                         }
                         break;
@@ -104,47 +104,55 @@ app.post('/twilio', function(req, res) {
                     // 6sense encoded message
                     case '1':
                         decoder(body)
-                            .then(function(decodedMsg){
+                        .then(function(decodedMsg){
 
-                                debug("decoded msg ", decodedMsg);
+                            debug("decoded msg ", decodedMsg);
 
-                                // [{"date":"2015-05-20T13:48:00.000Z","signal_strengths":[]},{"date":"2015-05-20T13:49:00.000Z","signal_strengths":[]},{"date":"2015-05-20T13:50:00.000Z","signal_strengths":[]},{"date":"2015-05-20T13:51:00.000Z","signal_strengths":[]},{"date":"2015-05-20T13:52:00.000Z","signal_strengths":[]}]
-                                Promise.all(decodedMsg.map(function(message){
-                                    var messageContent = {
-                                        'sensor_id': sensor.id,
-                                        'signal_strengths': message.signal_strengths,
-                                        'measurement_date': message.date
-                                        // 'quipu_signal_strength': message.quipu.signalStrength
-                                    };
-                                    debug("decoded msg ", message);
-                                    var socketMessage = Object.assign({}, messageContent);
-                                    socketMessage['installed_at'] = sensor.installed_at;
+                            // [{"date":"2015-05-20T13:48:00.000Z","signal_strengths":[]},{"date":"2015-05-20T13:49:00.000Z","signal_strengths":[]},{"date":"2015-05-20T13:50:00.000Z","signal_strengths":[]},{"date":"2015-05-20T13:51:00.000Z","signal_strengths":[]},{"date":"2015-05-20T13:52:00.000Z","signal_strengths":[]}]
+                            Promise.all(decodedMsg.map(function(message){
+                                var messageContent = {
+                                    'sensor_id': sensor.id,
+                                    'signal_strengths': message.signal_strengths,
+                                    'measurement_date': message.date
+                                    // 'quipu_signal_strength': message.quipu.signalStrength
+                                };
+                                debug("decoded msg ", message);
+                                var socketMessage = Object.assign({}, messageContent);
+                                socketMessage['installed_at'] = sensor.installed_at;
 
-                                    // persist message in database
+                                // persist message in database
+                                if (message.date )
 
-                                    return database.SensorMeasurements.create(messageContent).then(function(id){
+                                return database.SensorMeasurements.create(messageContent)
+                                    .then(function(id){
                                         return {
                                             sensorMeasurementId: id,
                                             measurement: socketMessage
                                         };
-                                    });                                    
-                                }))
-                                .then(function(results){
-                                    debug("Storage SUCCESS");
-                                    res.set('Content-Type', 'text/xml');
-                                    res.send(xml({"Response":""}));
+                                    })
+                                    .catch(function(error){
+                                        console.log("Storage FAILURE: ", error);
+                                        res.status(500).send("Storage FAILURE: ", error);
+                                    });                                   
+                            }))
+                            .then(function(results){
+                                debug("Storage SUCCESS");
+                                res.sendStatus(201);
 
-                                    // SOCKET IO
-                                    if (socket)
-                                        socket.emit('data', results);
-                                    
-                                })
-                                .catch(function(error){
-                                    console.log("Storage FAILURE: ", error);
-                                    res.set('Content-Type', 'text/xml');
-                                    res.send(xml({"Response":""}));
-                                });
+                                // SOCKET IO
+                                if (socket)
+                                    socket.emit('data', results);
+                                
+                            })
+                            .catch(function(error){
+                                console.log("Storage FAILURE: ", error);
+                                res.status(500).send("Storage FAILURE: ", error);
                             });
+                        })
+                        .catch(function(error){
+                            console.log("Could not decode ", error);
+                            res.status(500).send("Could not decode ", error);
+                        });
                         break;
 
                     // regular encoded message
@@ -164,12 +172,15 @@ app.post('/twilio', function(req, res) {
                                     sensorId: sensor.id,
                                     socketMessage: sensorStatus
                                 };
+                            })
+                            .catch(function(error){
+                                console.log("Storage FAILURE: ", error);
+                                res.status(500).send("Storage FAILURE: ", error);
                             });
                         })
                         .then(function(result){
                             debug("Storage SUCCESS");
-                            res.set('Content-Type', 'text/xml');
-                            res.send(xml({"Response":""}));
+                            res.sendStatus(201);;
 
                             // SOCKET IO
                             if (socket)
@@ -178,46 +189,46 @@ app.post('/twilio', function(req, res) {
                         })
                         .catch(function(error){
                             console.log("Storage FAILURE: ", error);
-                            res.set('Content-Type', 'text/xml');
-                            res.send(xml({"Response":""}));
+                            res.status(500).send("Storage FAILURE: ", error);
                         });
                         break;
 
                     default:
                         console.log('Error: message has not type character');
+                        res.status(500).send('Error: message has not type character');
                 }
             } else {
                 console.log("No sensor corresponding to this number.");
+                res.status(500).send("No sensor corresponding to this number.");
             }
         })
         .catch(function(error){
             console.log("Error in findByPhoneNumber: ", error);
+            res.status(500).send("Error in findByPhoneNumber: ", error);
         });   
 });
-
-
 
 app.get('/place/:id', function(req, res){
     var id = Number(req.params.id);
     
     database.complexQueries.getPlaceDetails(id)
-        .then(function(data){
-            res.send(data);
-        })
-        .catch(function(error){
-            console.log("error in /recycling-center/'+req.params.id: ", error);
-        });
+    .then(function(data){
+        res.send(data);
+    })
+    .catch(function(error){
+        console.log("error in /recycling-center/'+req.params.id: ", error);
+    });
 });
 
 app.get('/sensors', function(req, res){
     database.Sensors.getAllSensorsInfo()
-        .then(function(data){
-            // debug('All sensors', data);
-            res.send(data);
-        })
-        .catch(function(error){
-            console.log("error in /sensors: ", error);
-        });
+    .then(function(data){
+        // debug('All sensors', data);
+        res.send(data);
+    })
+    .catch(function(error){
+        console.log("error in /sensors: ", error);
+    });
 });
 
 app.post('/updatePlace', function(req, res){

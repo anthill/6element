@@ -10,7 +10,7 @@
       - VIRTUAL_PORT=4000
       - POSTGRES_PASSWORD=elements
    volumes:
-      - app:/6element/app
+      - core:/6element/core
    restart: always
 admin:
    build: .
@@ -24,7 +24,7 @@ admin:
       - VIRTUAL_PORT=4001
       - POSTGRES_PASSWORD=elements
    volumes:
-      - app:/6element/app
+      - core:/6element/core
    restart: always
 db:
    image: postgres:9.4

@@ -5,12 +5,11 @@
   "main": "index.js",
   "scripts": {
     "postinstall": "cp ../git-hooks/pre-commit ../.git/hooks/pre-commit; chmod a+x ../.git/hooks/pre-commit",
-    "start-admin-dev": "gulp admin-dev --gulpfile app/gulpfile.js",
-    "start-admin-prod": "gulp admin-prod --gulpfile app/gulpfile.js",
-    "start-app-dev": "gulp app-dev --gulpfile app/gulpfile.js",
-    "start-app-prod": "gulp app-prod --gulpfile app/gulpfile.js",
-    "init-prod": "gulp init-prod --gulpfile app/gulpfile.js",
-    "sql-generate": "node-sql-generate --dsn postgres://postgres:password@$POSTGRES_PORT_5432_TCP_ADDR:$POSTGRES_PORT_5432_TCP_PORT/postgres > ./app/database/management/declarations.js",
+    "start-admin-dev": "gulp admin-dev --gulpfile core/gulpfile.js",
+    "start-admin-prod": "gulp admin-prod --gulpfile core/gulpfile.js",
+    "start-app-dev": "gulp app-dev --gulpfile core/gulpfile.js",
+    "start-app-prod": "gulp app-prod --gulpfile core/gulpfile.js",
+    "init-prod": "gulp init-prod --gulpfile core/gulpfile.js",
     "lint": "eslint ./",
     "test": "mocha test/automated/*"
   },

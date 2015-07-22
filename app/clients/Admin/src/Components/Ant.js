@@ -58,7 +58,7 @@ var Ant = React.createClass({
                         text: props.ant.name,
                         dbLink: {
                             table: 'sensor',
-                            id: props.ant.name,
+                            id: props.ant.id,
                             field: 'name'
                         },
                         onChange: props.onChange

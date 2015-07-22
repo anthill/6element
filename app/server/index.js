@@ -277,6 +277,20 @@ app.post('/updateRC', function(req, res){
     });
 });
 
+app.post('/updateSensor', function(req, res){
+    var id = Number(req.body.id);
+
+    database.Sensors.update(id, req.body.delta)
+    .then(function(data){
+        debug('updateSensor', data);
+        res.send(data);
+    })
+    .catch(function(error){
+        res.status(500).send('Couldn\'t update Sensors database');
+        console.log("error in /updateSensor/'+req.params.rcId: ", error);
+    });
+});
+
 
 server.listen(PORT, function () {
     console.log('Server running on', [

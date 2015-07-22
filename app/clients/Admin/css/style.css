@@ -60,7 +60,19 @@ li .modifiable{
 	color: orange;
 }
 
+.phone_number.modifiable.updating {
+	color: green;
+}
 /* quipu status */
+
+.place.updating {
+	background-color: red;
+	transition: background-color 1s;
+}
+
+.ant.name {
+	font-weight: bold;
+}
 
 .ant.uninitialized .quipu {
 	color: orange;

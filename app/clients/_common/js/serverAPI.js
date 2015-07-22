@@ -17,5 +17,8 @@ module.exports = {
     },
     updateRC: function(data){
     	return sendReq('POST', '/updateRC', data);
+    },
+    updateSensor: function(data){
+        return sendReq('POST', '/updateSensor', data);
     }
 };

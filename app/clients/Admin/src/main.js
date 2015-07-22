@@ -26,7 +26,10 @@ function updateDB(data){
         id: data.id,
         delta: delta
     };
-    
+
+    console.log("updateDB data", data);
+    console.log("delta", delta);
+    console.log('obj', obj);
     switch (data.table){
         case 'place':
             serverAPI.updateRC(obj)
@@ -34,18 +37,26 @@ function updateDB(data){
                 console.log('Places database updated successfully');
                 var place = topLevelStore.placeMap.get(res.id);
                 Object.assign(place, res);
-                updateLocal(place);
+                updateLocalPlace(place);
             })
-            .catch(function(){
-                console.log('Places database didn\'t update correctly');
+            .catch(function(err){
+                console.log('Places database didn\'t update correctly', err);
                 refreshView();
             });
             break;
 
         case 'sensor':
             serverAPI.updateSensor(obj)
-            .then()
-            ;
+            .then(function(res){
+                console.log('Sensor database updated successfully');
+                var sensor = topLevelStore.sensorMap.get(res.id);
+                Object.assign(sensor, res);
+                updateLocalSensor(sensor);
+            })
+            .catch(function(err) {
+                console.log('Sensor database didn\'t update correctly', err);
+                refreshView();
+            });
             break;
 
         default:
@@ -55,9 +66,16 @@ function updateDB(data){
 
 }
 
-function updateLocal(place){
+function updateLocalPlace(place){
     topLevelStore.placeMap.set(place.installed_at, place);
     topLevelStore.placeMap.set(place.id, place);
+
+    render();
+}
+
+function updateLocalSensor(sensor){
+    topLevelStore.sensorMap.set(sensor.id, sensor);
+    topLevelStore.sensorMap.set(sensor.id, sensor);
 
     render();
 }

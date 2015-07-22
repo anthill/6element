@@ -36,8 +36,8 @@ var Ant = React.createClass({
         var props = this.props;
         var state = this.state;
 
-        console.log('ANT props', props);
-        console.log('ANT state', state);
+        // console.log('ANT props', props);
+        // console.log('ANT state', state);
 
         var classes = [
             'ant',
@@ -48,21 +48,21 @@ var Ant = React.createClass({
         ];
 
         return React.DOM.div({className: classes.join(' ')},
-            new Modifiable({
-                className: 'antName',
-                isUpdating: false,
-                text: props.ant.name,
-                dbLink: {
-                    table: 'place',
-                    id: props.ant.installed_at,
-                    field: 'name'
-                },
-                onChange: props.onChange
-            }),
             React.DOM.ul({},
                 React.DOM.li({}, 
-                    React.DOM.div({}, 'ID'),
-                    React.DOM.div({}, props.ant.id)
+                    React.DOM.div({}, 'Name'),
+                    // React.DOM.div({}, props.ant.id)
+                    new Modifiable({
+                        className: 'name',
+                        isUpdating: false,
+                        text: props.ant.name,
+                        dbLink: {
+                            table: 'sensor',
+                            id: props.ant.name,
+                            field: 'name'
+                        },
+                        onChange: props.onChange
+                    })
                 ),
                 React.DOM.li({}, 
                     React.DOM.div({}, 'Created'),
@@ -74,7 +74,18 @@ var Ant = React.createClass({
                 ),
                 React.DOM.li({}, 
                     React.DOM.div({}, 'Phone'),
-                    React.DOM.div({}, props.ant.phone_number)
+                    // React.DOM.div({}, props.ant.phone_number)
+                    new Modifiable({
+                        className: 'phone_number',
+                        isUpdating: false,
+                        text: props.ant.phone_number,
+                        dbLink: {
+                            table: 'sensor',
+                            id: props.ant.id,
+                            field: 'phone_number'
+                        },
+                        onChange: props.onChange
+                    })
                 ),
                 React.DOM.li({className: 'quipu'},
                     React.DOM.div({}, 'Quipu Status'),

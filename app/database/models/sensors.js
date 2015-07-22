@@ -58,6 +58,7 @@ module.exports = {
             var query = sensors
                 .update(delta)
                 .where(sensors.id.equals(id))
+                .returning("*")
                 .toQuery();
 
             //console.log('sensors findByPhoneNumber query', query);

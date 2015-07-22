@@ -45,8 +45,8 @@ var Place = React.createClass({
         var props = this.props;
         var state = this.state;
 
-        console.log('PLACE props', props);
-        console.log('PLACE state', state);
+        // console.log('PLACE props', props);
+        // console.log('PLACE state', state);
 
         var classes = [
             'place'
@@ -92,7 +92,7 @@ var Place = React.createClass({
                         onChange: props.onChange
                     })
                 ),
-                React.DOM.li({}, 
+                React.DOM.div({}, 
         			props.mySensors.map(function (ant){
                 		return new Ant({
                 			ant: ant,

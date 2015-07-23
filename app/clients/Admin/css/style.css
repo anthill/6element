@@ -113,3 +113,8 @@ li .modifiable{
 .ant.recording .6sense {
 	color: black;
 }
+
+.selector.currentID.onClick {
+	cursor: pointer;
+	transition: all 0.30s ease-in-out;
+}

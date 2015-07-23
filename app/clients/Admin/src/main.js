@@ -84,7 +84,7 @@ function refreshView(){
 
     var placesP = serverAPI.getAllPlacesInfos();
     var sensorsP = serverAPI.getAllSensors();
-    
+
 
     Promise.all([placesP, sensorsP])
     .then(function(results){

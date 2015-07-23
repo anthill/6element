@@ -1,5 +1,24 @@
-## Usings
+# Usings
+##2nd Life
 
+* I want to give/throw out something
+ * Check who want this
+ * Post an ad
+ * Have an alert when somebody looks for something I have
+* I want to get something
+ * Check who got this
+ * Post an ad
+ * Have an alert when somebody got something I want
+* Indicate personal informations to be faster (city, ...)
+* Communication system : chat
+* I can indicate that I gave/get ot thrown out my object easily
+* Everything can be done with the app, no mail, sms, ...
+* Organize garbage collection ? (Later ? )
+* It works for occasional AND recursive offers / asking
+* I can sort ad depending on:
+ * the kind of person (particulier, pro, asso..)
+
+## 6element
 * I have a favourite RC
  * Can I go now?
  * When should I go?

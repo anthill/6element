@@ -62,10 +62,10 @@ var Modifiable = React.createClass({
 
             var newValue = this.getDOMNode().value;
 
-            var dbLink = Object.assign(this.props.dbLink, {
+            var dbLink = Object.assign(props.dbLink, {
                 value: newValue
             });
-            this.props.onChange(dbLink);
+            props.onChange(dbLink);
 
             this.setState({
                 isUpdating: true,

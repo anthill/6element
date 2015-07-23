@@ -23,7 +23,7 @@ function doIt(){
         encodeForSMS([result]).then(function(sms){
 
             var toSend = {
-                From: "xxx" + Math.floor(Math.random()*20) ,
+                From: "xxx" + Math.floor(Math.random()*20),
                 Body: '1' + sms
             };
 

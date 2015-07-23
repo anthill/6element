@@ -7,7 +7,7 @@ var join = require('path').join;
 var gulp = require('gulp');
 var server = require('gulp-express');
 // var livereload = require('gulp-livereload');
-var plumber = require('gulp-plumber');
+// var plumber = require('gulp-plumber');
 var browserify = require('browserify');
 var source = require("vinyl-source-stream");
 // var watchify = require('watchify');
@@ -29,52 +29,52 @@ gulp.task('init', function () {
         console.log("checking for connection.");
 
         require('./database/management/databaseClientP')
-            .then(function(db){
-                clearInterval(interval);
+        .then(function(){
+            clearInterval(interval);
 
-                // when ready, drop and create tables
-                var dropAllTables = require('./database/management/dropAllTables.js');
-                var createTables = require('./database/management/createTables.js');
-                var hardCodedSensors = require("./server/hardCodedSensors.js");
+            // when ready, drop and create tables
+            var dropAllTables = require('./database/management/dropAllTables.js');
+            var createTables = require('./database/management/createTables.js');
+            var hardCodedSensors = require("./server/hardCodedSensors.js");
 
-                dropAllTables()
+            dropAllTables()
+            .then(function(){
+                createTables()
+                .then(function(){
+                    hardCodedSensors()
                     .then(function(){
-                        createTables()
-                            .then(function(){
-                                hardCodedSensors()
-                                    .then(function(){
 
-                                        console.log("Dropped and created the tables.")
+                        console.log("Dropped and created the tables.")
 
-                                        // regeneate the declarations
-                                        generateSqlDefinition(sqlOptions, function(err, stats) {
-                                            if (err) {
-                                                console.error(err);
-                                                return;
-                                            }
-                                            fs.writeFileSync("./database/management/declarations.js", stats.buffer);
-                                        });
-                                    })
-                                    .catch(function(err){
-                                        console.error("Couldn't write the schema", err);
-                                    });
-                                
-                            }).catch(function(err){
-                                console.error("Couldn't create tables", err);
-                            });
-                    }).catch(function(err){
-                        console.error("Couldn't drop tables", err);
-                    });         
-
+                        // regeneate the declarations
+                        generateSqlDefinition(sqlOptions, function(err, stats) {
+                            if (err) {
+                                console.error(err);
+                                return;
+                            }
+                            fs.writeFileSync("./database/management/declarations.js", stats.buffer);
+                        });
                     })
-            .catch(function(err){
-                console.error("Couldn't connect tables", err);
-            });
+                    .catch(function(err){
+                        console.error("Couldn't write the schema", err);
+                    });
+                    
+                }).catch(function(err){
+                    console.error("Couldn't create tables", err);
+                });
+            }).catch(function(err){
+                console.error("Couldn't drop tables", err);
+            });         
+
+                })
+        .catch(function(err){
+            console.error("Couldn't connect tables", err);
+        });
 
 
     }, 1000);
    
-};
+});
 
 
 // http://stackoverflow.com/a/23973536

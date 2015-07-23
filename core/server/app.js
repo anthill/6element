@@ -5,6 +5,7 @@ require('better-log').install();
 
 var quipuParser = require('quipu/parser.js');
 
+var sendSMS = require('./sendSMS.js');
 var decoder = require('6sense/src/codec/decodeFromSMS.js');
 
 var path = require('path');
@@ -180,7 +181,7 @@ app.post('/twilio', function(req, res) {
                         })
                         .then(function(result){
                             debug("Storage SUCCESS");
-                            res.sendStatus(201);;
+                            res.sendStatus(201);
 
                             // SOCKET IO
                             if (socket)

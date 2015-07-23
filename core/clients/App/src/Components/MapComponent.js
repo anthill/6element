@@ -92,7 +92,7 @@ module.exports = React.createClass({
         return marker;
     },
 
-    createPlaceName: function(place, zoom){
+    createPlaceName: function(place){
 
         var props = this.props;
 
@@ -159,7 +159,7 @@ module.exports = React.createClass({
                 props.placeMap.forEach(function(place){
                     if (zoom > 11) {
                         size = 10;
-                        var name = self.createPlaceName(place, zoom);
+                        var name = self.createPlaceName(place);
 
                         nameMarkers.push(name); 
                     }   

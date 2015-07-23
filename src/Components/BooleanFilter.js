@@ -1,12 +1,10 @@
-
-
 'use strict';
 
 var React = require('react');
     
 /*
     props: {
-        active: boolean,
+        fav: boolean,
         className: String,
         onChange: (nextStat: boolean) => void
     }
@@ -17,29 +15,13 @@ module.exports = React.createClass({
         return { active: this.props.active };
     },
 
-
     render: function(){
-        var state = this.state;
         var props = this.props;
-        
-        var self = this;
+        var state = this.state;
         
         return React.DOM.button({className: [props.className, (state.active ? 'active' : '')].join(' '),
             onClick: function(){
-                var nextState = !state.active;
-                self.setState({active: nextState});
-                props.onChange(nextState);
+                props.onChange(!props.fav);
             }});
-                                
-        
-        
-/*        return React.DOM.li({className: [props.className, (state.active ? 'active' : '')].join(' ')}, 
-            React.DOM.button({
-                onClick: function(){
-                    var nextState = !state.active;
-                    self.setState({active: nextState});
-                    props.onChange(nextState);
-                }
-            }, props.label));*/
     }
 });

@@ -27,9 +27,9 @@
 	display: inline-block; margin: 0 1em;
 }
 
-.place ul ul {
+/*.place ul ul {
 	margin-left: 1em;
-}
+}*/
 
 .place.updating {
 	background-color: red;
@@ -75,7 +75,7 @@ li .modifiable{
 }
 
 .ant{
-	display: inline-block; margin: 1em; padding: .5em;
+	display: inline-block; margin: 1em; padding: .5em; position: relative;
 	border: 1px solid green; border-radius: 5px;
 	background-color: white;
 }
@@ -114,7 +114,37 @@ li .modifiable{
 	color: black;
 }
 
-.selector.currentID.onClick {
+.selector {
+	position: absolute; top: .5em; right: .5em;
+}
+.selector div{
+	margin: 0 auto;
+	padding: 0;
+	text-align:center;
+}
+
+.selector .currentID {
 	cursor: pointer;
 	transition: all 0.30s ease-in-out;
+	background:#bfd70e;
+	border-radius:50%;
+	width:2em;
+	height:2em;
+	border:2px solid #679403;
+	box-shadow: 1px 1px 1px black;
+	font: bold;
+	color: white;
+
+}
+
+.currentID ul {
+	margin: 0;
+	padding: 0;
+	background: #bfd70e;
+	border:2px solid #679403; 
+	border-radius: 1em;
+}
+
+.currentID li {
+	margin: 0 0.5em;
 }

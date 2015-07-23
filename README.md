@@ -12,7 +12,7 @@ git clone git@github.com:anthill/6element.git
 cd 6element
 ````
 
-Copy/create the missing file `PRIVATE.json` situated in the `app` folder containing:
+Copy/create the missing file `PRIVATE.json` situated in the `core` folder containing:
 
 ````
 {
@@ -22,6 +22,13 @@ Copy/create the missing file `PRIVATE.json` situated in the `app` folder contain
     "mapId": "..."
 }
 ````
+
+Install dependencies locally (this is mainly to enable automated lint functionality)
+````
+cd core
+npm install
+````
+
 
 ## Running in dev mode
 

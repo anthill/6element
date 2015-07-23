@@ -43,6 +43,10 @@
     "leaflet": "^0.7.3",
     "moment": "^2.10.3",
     "pg": "^4.3.0",
+    "gulp": "~3.8.8",
+    "gulp-express": "git://github.com/gimm/gulp-express.git#9a3c842b55246fe039c85b56b4a8e5401ce779bf",
+    "gulp-livereload": "~2.1.1",
+    "gulp-plumber": "^1.0.1",
     "quipu": "^0.1.0",
     "react": "^0.13.3",
     "request": "^2.58.0",
@@ -51,15 +55,11 @@
     "sql": "^0.51.0",
     "sql-generate": "^1.0.0",
     "twilio": "^2.2.1",
+    "vinyl-source-stream": "^1.1.0",
     "xml": "^1.0.0"
   },
   "devDependencies": {
     "eslint": "^0.21.0",
-    "gulp": "~3.8.8",
-    "gulp-express": "git://github.com/gimm/gulp-express.git#9a3c842b55246fe039c85b56b4a8e5401ce779bf",
-    "gulp-livereload": "~2.1.1",
-    "gulp-plumber": "^1.0.1",
-    "vinyl-source-stream": "^1.1.0",
     "watchify": "^3.2.1"
   }
 }

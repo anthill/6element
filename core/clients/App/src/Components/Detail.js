@@ -11,7 +11,7 @@ interface DetailProps{
 
 var Detail = React.createClass({
 
-	getInitialState: function(){
+    getInitialState: function(){
         return {}
     },
 
@@ -22,8 +22,8 @@ var Detail = React.createClass({
         // console.log('detail props', props);
                 
         return React.DOM.div({id: 'detail'}, 
-        	React.DOM.h2({}, props.place.name),
-	    	LineChart({ measurements: props.place.details })
+            React.DOM.h2({}, props.place.name),
+            new LineChart({ measurements: props.place.details })
         );
     }
 

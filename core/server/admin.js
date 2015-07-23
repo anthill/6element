@@ -3,10 +3,6 @@
 require('es6-shim');
 require('better-log').install();
 
-var quipuParser = require('quipu/parser.js');
-
-var decoder = require('6sense/src/codec/decodeFromSMS.js');
-
 var path = require('path');
 var express = require('express');
 var app = express();
@@ -15,7 +11,6 @@ var compression = require('compression');
 var bodyParser = require('body-parser');
 
 var database = require('../database');
-var sendSMS = require('./sendSMS.js');
 
 var PORT = 4001;
 var DEBUG = process.env.NODE_ENV === "development" ? true : false;
@@ -29,15 +24,15 @@ var debug = function() {
 }
 
 var server = new http.Server(app);
-var io = require('socket.io')(server);
+// var io = require('socket.io')(server);
 
-io.set('origins', '*:*');
+// io.set('origins', '*:*');
 
-var socket = false;
+// var socket = false;
 
-io.on('connection', function(_socket) {
-    socket = _socket;
-});
+// io.on('connection', function(_socket) {
+//     socket = _socket;
+// });
 
 
 app.use(compression());
@@ -83,7 +78,7 @@ app.get('/place/:id', function(req, res){
 app.get('/sensors', function(req, res){
     database.Sensors.getAllSensorsInfo()
     .then(function(data){
-        // debug('All sensors', data);
+        debug('All sensors', data);
         res.send(data);
     })
     .catch(function(error){

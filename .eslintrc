@@ -18,6 +18,7 @@
         "new-cap": [2, {
             "capIsNewExceptions": ["React"]
         }],
+        "comma-spacing": 1,
         "semi": 0,
         "quotes": 0,
         "no-trailing-spaces": 0,

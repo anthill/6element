@@ -43,9 +43,7 @@ var RC = React.createClass({
     displayName: 'RC',
     
     render: function() {
-        var self = this;
         var props = this.props;
-        var state = this.state;
 
         // console.log('RC props', props);
         // console.log('RC state', state);
@@ -81,19 +79,6 @@ var RC = React.createClass({
         var title = React.DOM.header({className : "row"}, 
             favourite,
             React.DOM.h1({className : "col-lg-4"}, name));
-        //============================================================================================
-        
-        //NAV
-        
-        //TO DO
-        
-        var sectionTitles = [] ;
-        
-        var nav = React.DOM.nav({},
-            //each section header
-            React.DOM.ul({},
-                sectionTitles));
-                         
         
         //=============================================================================================
         
@@ -101,7 +86,7 @@ var RC = React.createClass({
                 
         var open = isItOpen(now, props.rc.schedule);
         
-        var openDayMessage = displaySchedule(weekDays,props.rc.schedule);   
+        var openDayMessage = displaySchedule(weekDays, props.rc.schedule);   
         
         var schedule = React.DOM.section({className : "container"},
              React.DOM.div({className : "row"},
@@ -119,8 +104,8 @@ var RC = React.createClass({
         
         var legendColor = waitingMessages.map(function(level){
             return React.DOM.dl({className : 'inline'},
-                React.DOM.dt({className : 'inline colorBlock '+level[0]+ 'Font'}),
-                React.DOM.dd({className : 'inline '+level[0]+ 'Text'}, level[1]))
+                React.DOM.dt({className : 'inline colorBlock ' + level[0] + 'Font'}),
+                React.DOM.dd({className : 'inline ' + level[0] + 'Text'}, level[1]))
         });
         
         var legendNow = React.DOM.dl({className : 'inline'},
@@ -166,9 +151,7 @@ var RC = React.createClass({
             unavailable : [],
             available : []        
         }; 
-        
-        var wasteList;
-        
+                
         props.rc.wastes.forEach(function(waste){
             if (waste.status === "unavailable") { 
                 wastes.unavailable.push(waste.type);
@@ -182,7 +165,7 @@ var RC = React.createClass({
         
         var lisAvailable = [];
         
-        var lisUnAvailable = [] ;
+        var lisUnAvailable = [];
                                            
         Object.keys(wastes).forEach(function(status){
             wastes[status].forEach(function(waste){

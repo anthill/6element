@@ -5,7 +5,7 @@
 
 ### Getting started
 
-#### Preambule
+#### Preambule 
 
 ````
 git clone git@github.com:anthill/6element.git

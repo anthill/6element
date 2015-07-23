@@ -5,12 +5,20 @@ var moment = require('moment');
 
 var Level = React.createFactory(require('./Level.js'));
 
-var numDay = require('../utils.js').numDay;
-var levelCalc = require('../utils.js').levelCalc;
-var infBound = require('../utils.js').infBound;
-var getHoursString = require('../utils.js').getHoursString;
-var getMinutesString = require('../utils.js').getMinutesString;
-var isItOpen = require('../utils.js').isItOpen;
+//Functions
+var getCrowdLevel = require('../utils/getCrowdLevel.js');
+var isItOpen = require('../utils/isItOpen.js');
+var infBound = require('../utils/infBound.js');
+var displaySchedule = require('../utils/displaySchedule.js');
+var getDayNumber = require('../utils/utils.js').getDayNumber;
+var getHoursString = require('../utils/utils.js').getHoursString;
+var getMinutesString = require('../utils/utils.js').getMinutesString;
+
+//Var
+
+var weekDays = require('../dateLists').weekDays;
+var months = require('../dateLists').months;
+
 
 /*
 
@@ -37,7 +45,7 @@ var Levels = React.createClass({
         // console.log('APP props', props);
         // console.log('APP state', state);                   
 
-        var myDay = props.schedule[numDay(props.now)];
+        var myDay = props.schedule[getDayNumber(props.now)];
         
         var startDay = moment.utc({
             hour : getHoursString(myDay[0].start), 
@@ -53,7 +61,7 @@ var Levels = React.createClass({
 
             var gapString = gap.toISOString();
             var waiting = isItOpen(gap, props.schedule) ?
-                props.waitingMessages[levelCalc(props.maxSize, props.crowd[infBound(gap)])] :
+                props.waitingMessages[getCrowdLevel(props.maxSize, props.crowd[infBound(gap)])] :
                 props.waitingMessages[3];
             var infB = moment(infBound(props.now));
             var gapNow = gap.unix() === infB.unix() ? gap : false;

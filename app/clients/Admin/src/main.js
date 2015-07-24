@@ -16,55 +16,145 @@ function render(){
     React.render(new Application(topLevelStore), document.body);
 }
 
-function updateDB(data){
-    // send request to server according to the desired table
 
-    var delta = {};
-    delta[data.field] = data.value;
+function updatePlaceDb(datas) {
 
-    var obj = {
-        id: data.id,
-        delta: delta
-    };
+    if (typeof(datas) === 'object')
+        datas = [datas];
 
-    console.log("updateDB data", data);
-    console.log("delta", delta);
-    console.log('obj', obj);
-    switch (data.table){
-        case 'place':
-            serverAPI.updateRC(obj)
-            .then(function(res){
-                console.log('Places database updated successfully');
+    var objs = datas.map(function (data){
+        var delta = {};
+        delta[data.field] = data.value;
+
+        var obj = {
+            id: data.id,
+            delta: delta
+        };
+        return obj;
+    });
+
+    var queryP = objs.map(function (obj) {
+        return serverAPI.updateRC(obj);
+    });
+
+    Promise.all(queryP)
+        .then(function (ress) {
+            console.log("ress", ress);
+            console.log('Places database updated successfully (updatePlaceDb)');
+            ress.map(function (res) {
                 var place = topLevelStore.placeMap.get(res.id);
-                Object.assign(place, res);
+                Object.assign(place);
                 updateLocalPlace(place);
-            })
-            .catch(function(err){
-                console.log('Places database didn\'t update correctly', err);
+            });
+        })
+        .catch(function(err){
+                console.log('Places database didn\'t update correctly (updatePlaceDb)', err);
                 refreshView();
             });
-            break;
-
-        case 'sensor':
-            serverAPI.updateSensor(obj)
-            .then(function(res){
-                console.log('Sensor database updated successfully');
-                var sensor = topLevelStore.sensorMap.get(res.id);
-                Object.assign(sensor, res);
-                updateLocalSensor(sensor);
-            })
-            .catch(function(err) {
-                console.log('Sensor database didn\'t update correctly', err);
-                refreshView();
-            });
-            break;
-
-        default:
-            console.log('No such table as ', data.table);
-            break;
-    }        
-
 }
+
+
+
+function updateSensorDb(datas) {
+
+    if (typeof(datas) === 'object')
+        datas = [datas];
+    console.log("datas", datas);
+
+    var objs = datas.map(function (data){
+        var delta = {};
+        delta[data.field] = data.value;
+
+        var obj = {
+            id: data.id,
+            delta: delta
+        };
+        return obj;
+    });
+
+    var queryP = objs.map(function (obj) {
+        return serverAPI.updateSensor(obj);
+    });
+
+    Promise.all(queryP)
+        .then(function (ress) {
+            console.log("ress", ress);
+            console.log('Places database updated successfully (updateSensorDb)');
+            ress.map(function (res) {
+                var sensor = topLevelStore.sensorMap.get(res.id);
+                Object.assign(sensor);
+                updateLocalSensor(sensor);
+            });
+        })
+        .catch(function(err){
+                console.log('Places database didn\'t update correctly (updateSensorDb)', err);
+                refreshView();
+            });
+}
+
+
+// function updateDB(data){
+//     // send request to server according to the desired table
+
+//     var delta = {};
+//     delta[data.field] = data.value;
+
+//     var obj = {
+//         id: data.id,
+//         delta: delta
+//     };
+
+//     console.log("updateDB data", data);
+//     console.log("delta", delta);
+//     console.log('obj', obj);
+//     switch (data.table){
+//         case 'place':
+//             serverAPI.updateRC(obj)
+//             .then(function(res){
+//                 console.log('Places database updated successfully');
+//                 var place = topLevelStore.placeMap.get(res.id);
+//                 Object.assign(place, res);
+//                 updateLocalPlace(place);
+//             })
+//             .catch(function(err){
+//                 console.log('Places database didn\'t update correctly', err);
+//                 refreshView();
+//             });
+//             break;
+
+//         case 'sensor':
+//             serverAPI.updateSensor(obj)
+//             .then(function(res){
+//                 console.log('Sensor database updated successfully');
+//                 var sensor = topLevelStore.sensorMap.get(res.id);
+//                 Object.assign(sensor, res);
+//                 updateLocalSensor(sensor);
+//             })
+//             .catch(function(err) {
+//                 console.log('Sensor database didn\'t update correctly', err);
+//                 refreshView();
+//             });
+//             break;
+//         // case 'sensorPlace'
+//         //     serverAPI.updateSensorPlace(obj)
+//         //     .then(function(res){
+//         //         console.log('sensorPlace database updated successfully');
+//         //         var sensor = topLevelStore.sensorMap.get(res.id);
+//         //         Object.assign(sensor, res);
+//         //         updateLocalSensor(sensor);
+//         //     })
+//         //     .catch(function(err) {
+//         //         console.log('sensorPlace database didn\'t update correctly', err);
+//         //         refreshView();
+//         //     });
+//         //     break;
+
+//         default:
+//             console.log('No such table as ', data.table);
+//             break;
+//     }        
+
+// }
 
 function updateLocalPlace(place){
     topLevelStore.placeMap.set(place.installed_at, place);
@@ -106,7 +196,9 @@ function refreshView(){
 var topLevelStore = {
     sensorMap: undefined,
     placeMap: undefined,
-    onChange: updateDB
+    // onChange: updateDB,
+    onChangePlace: updatePlaceDb,
+    onChangeSensor: updateSensorDb
 };
 
 // Initial rendering

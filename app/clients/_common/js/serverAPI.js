@@ -21,4 +21,7 @@ module.exports = {
     updateSensor: function(data){
         return sendReq('POST', '/updateSensor', data);
     }
+    // updateSensorPlace: function(date){
+    //     return sendReq('POST', '/updateSensorPlace', data);
+    // }
 };

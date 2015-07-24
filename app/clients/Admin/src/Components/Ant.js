@@ -23,7 +23,7 @@ interface AntProps{
         updated_at: string
     },
     antIDset : Set,
-    onChange: function()
+    onChangeSensor: function()
 }
 interface AppState{
 }
@@ -38,8 +38,8 @@ var Ant = React.createClass({
         var props = this.props;
         var state = this.state;
 
-        // console.log('ANT props', props);
-        // console.log('ANT state', state);
+        console.log('ANT props', props);
+        console.log('ANT state', state);
 
         var classes = [
             'ant',
@@ -59,16 +59,15 @@ var Ant = React.createClass({
                         isUpdating: false,
                         text: props.ant.name,
                         dbLink: {
-                            table: 'sensor',
                             id: props.ant.id,
                             field: 'name'
                         },
-                        onChange: props.onChange,
+                        onChange: props.onChangeSensor,
                     }),
                     new ID_selector({
                         antIDset: props.antIDset,
                         currentID: props.ant.id,
-                        onChange: props.onChange
+                        onChangeSensor: props.onChangeSensor
                     })
                 ),
                 // React.DOM.div({},
@@ -94,11 +93,10 @@ var Ant = React.createClass({
                         isUpdating: false,
                         text: props.ant.phone_number,
                         dbLink: {
-                            table: 'sensor',
                             id: props.ant.id,
                             field: 'phone_number'
                         },
-                        onChange: props.onChange
+                        onChange: props.onChangeSensor
                     })
                 ),
                 React.DOM.li({className: 'quipu'},

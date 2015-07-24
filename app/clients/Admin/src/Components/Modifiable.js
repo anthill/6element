@@ -12,6 +12,7 @@ interface ModifiableProps{
         field: string
     },
     onChange: function()
+    onChangePlace: function()
 }
 interface ModifiableState{
     isUpdating: boolean,

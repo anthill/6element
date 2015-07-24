@@ -33,7 +33,8 @@ interface AppProps{
         updated_at: string
         }
     }),
-    onChange: function()
+    onChangePlace: function(),
+    onChangeSensor: function()
 }
 interface AppState{
     selectedTab: int
@@ -73,7 +74,8 @@ var App = React.createClass({
                     place: place,
                     mySensors: mySensors,
                     antIDset: antIDset,
-                    onChange: props.onChange
+                    onChangePlace: props.onChangePlace,
+                    onChangeSensor: props.onChangeSensor
                 }));
             }
         });

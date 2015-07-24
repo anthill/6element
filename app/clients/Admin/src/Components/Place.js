@@ -29,7 +29,8 @@ interface placeProps{
 	    updated_at: string
 	},
 	antIDset : Set,
-	onChange: function()
+	onChangePlace: function(),
+    onChangeSensor: function()
 }
 
 interface AppState{
@@ -63,11 +64,10 @@ var Place = React.createClass({
                 isUpdating: false,
                 text: props.place.name,
                 dbLink: {
-                    table: 'place',
                     id: props.place.id,
                     field: 'name'
                 },
-                onChange: props.onChange
+                onChange: props.onChangePlace
             }),
             React.DOM.ul({},
                 React.DOM.li({}, 
@@ -76,21 +76,19 @@ var Place = React.createClass({
                         isUpdating: false,
                         text: props.place.lat,
                         dbLink: {
-                            table: 'place',
                             id: props.place.id,
                             field: 'lat'
                         },
-                        onChange: props.onChange
+                        onChange: props.onChangePlace
                     }),
                     new Modifiable({
                         isUpdating: false,
                         text: props.place.lon,
                         dbLink: {
-                            table: 'place',
                             id: props.place.id,
                             field: 'lon'
                         },
-                        onChange: props.onChange
+                        onChange: props.onChangePlace
                     })
                 ),
                 React.DOM.div({}, 
@@ -98,7 +96,8 @@ var Place = React.createClass({
                 		return new Ant({
                 			ant: ant,
                 			antIDset: props.antIDset,
-                			onChange: props.onChange
+                			onChangeSensor: props.onChangeSensor,
+
             			});
             		})
                 )

@@ -8,7 +8,7 @@ interface SelectorProps{
     antIDSet: Set(antID),
     currentID: int,
     onClick: function(),
-    onChange: function()
+    onChangeSensor: function()
 }
 interface SelectorState{
     isOpen: bool
@@ -35,20 +35,22 @@ var Selector = React.createClass({
 
         var listID = undefined;
 
-        console.log("isOpen", state.isOpen);
-        
-
         if (state.isOpen) {
             console.log("Dans isOpen");
             var lis = [];
             props.antIDset.forEach(function (antID) {
-                lis.push(React.DOM.li({}, antID));
+                //creat data
+
+                lis.push(React.DOM.li({
+                    onClick: function(){
+                        console.log('onclick currentID', props.currentID);
+                        onChange : props.onChangeSensor
+                    }
+                }, antID));
             });
 
             listID = React.DOM.ul({}, lis);
         }
-
-        console.log("listID", listID);
 
         return React.DOM.div({className: 'selector',
             onClick: function(){
@@ -56,6 +58,10 @@ var Selector = React.createClass({
                     self.setState({
                         isOpen: !state.isOpen
                     });
+                    props.onChangeSensor({
+                        id: props.currentID,
+                        field: 'installed_at'
+                    })
                 }
             },
             React.DOM.div({className: 'currentID'},

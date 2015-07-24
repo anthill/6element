@@ -31,6 +31,11 @@ He likes using 2ndLife app because:
  * It has been designed by a french start up
  * Organize collect
 
+## Scenario
+
+### Get compost
+
+Samuel wants to organize a compost collection every week in the department. ??????
 
 
 

@@ -41,6 +41,20 @@ He likes using 2ndLife app because:
  * It is more agreeable than Donnons.org
  * He can give broken stuffs but that can be reused instead of throwing it out
  * Emmaüs is sometimes too much expensive and is not reachable for pepole without car
+ 
+##Scenario
+
+### Bike enhancement
+
+
+Serge got an old bike and want to enhance it. He wants to turn it in "fixie", so he bought a special cog and a new chain. 
+He wants to see if he can find the rest of the material on 2ndLife. He needs yet a saddle, a dynamo, a foot pedal and an handlebar.
+It would be easier if he can have it from the same person. He has a car so he can pick it up. 
+He first check if there are not some available right now and will place an ad if he can't find something. 
+We are currently in May and he would like to finish it before middle June so if he doesn't find his stuff before two weeks, he will buy these parts. 
+He posts a common ad for the rest of things he's looking for and then search people who are already giving it
+
+
 
 
 

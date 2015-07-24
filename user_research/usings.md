@@ -17,7 +17,7 @@
 * It works for occasional AND recursive offers / asking
 * I can sort ad depending on:
  * the kind of person (particulier, pro, asso..)
-
+ * mobility
 ## 6element
 * I have a favourite RC
  * Can I go now?

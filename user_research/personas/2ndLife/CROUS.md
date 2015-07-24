@@ -40,5 +40,15 @@ She likes using 2ndLife app because:
 
 Actually he put stuff he can't take with in the garbage room
 
+## Scenario
+
+### Get stuff
+Elsa just arrived in her new studio. This one has no library and a bed table. She also would like to decor her dirty wall that she cannot clean with books' scrap. She uses 2ndLife to find this. She is also looking for other ideas to decor her appartment.
+She goes on 2ndLife and type her research for library, bed table and books but search with category for decoration ideas.
+She posts an ad if she can't find the first free elements.
+
+### Give broken microwave
+Elsa's microwave just crashed. she want to put it on the street but put first an ad on 2nd Life to know if somebody is looking for it or a part of it
+She makes a search and post an ad if she can't find somebody interested
 
 

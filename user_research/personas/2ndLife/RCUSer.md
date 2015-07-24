@@ -52,6 +52,10 @@ He scrolls giving and asking ad in front of TV
 He likes using 2ndLife app because:
  * It is simpler than goint at RC
  * It helps people
+ 
+ ## Scenario
+ 
+ Stephane wants to go to the RC in order to throw out his stuff but RC'schedule does'nt match with his, so he uses 2ndLife. To be faster he takes a picture of each element and fields complete by themself. He wants everything is gone fast for not it to be more exhaustive than going at RC. 
 
 
 

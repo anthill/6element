@@ -50,8 +50,8 @@ var App = React.createClass({
         var props = this.props;
         var state = this.state;
 
-        console.log('APP props', props);
-        console.log('APP state', state);
+        // console.log('APP props', props);
+        // console.log('APP state', state);
 
         var antIDList = [];
 

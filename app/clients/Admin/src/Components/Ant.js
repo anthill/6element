@@ -2,7 +2,8 @@
 
 var React = require('react');
 var Modifiable = React.createFactory(require('./Modifiable.js'));
-var ID_selector = React.createFactory(require('./ID_selector.js'));
+var Display_sensor_id = React.createFactory(require('./Display_sensor_id.js'));
+var Selector_sensor_id = React.createFactory(require('./Selector_sensor_id.js'));
 
 var moment = require('moment');
 
@@ -23,6 +24,7 @@ interface AntProps{
         updated_at: string
     },
     antIDset : Set,
+    currentPlaceId : int,
     onChangeSensor: function()
 }
 interface AppState{
@@ -32,6 +34,16 @@ interface AppState{
 
 var Ant = React.createClass({
     displayName: 'Ant',
+
+    getInitialState: function(){
+        return {
+            isOpen: false,
+        };
+    },
+
+    setOpen: function(isOpen){
+        this.setState({isOpen: isOpen});
+    },
 
     render: function() {
         var self = this;
@@ -64,17 +76,27 @@ var Ant = React.createClass({
                         },
                         onChange: props.onChangeSensor,
                     }),
-                    new ID_selector({
+                    new Display_sensor_id({
+                        currentSensorId: props.ant.id,
+                        isOpen: state.isOpen,
+                        setOpen: this.setOpen
+                    }),
+                    new Selector_sensor_id({
                         antIDset: props.antIDset,
                         currentID: props.ant.id,
-                        onChangeSensor: props.onChangeSensor
+                        isOpen: state.isOpen,
+                        currentPlaceId: props.currentPlaceId,
+                        onChangeSensor: props.onChangeSensor,
+                        setOpen: this.setOpen
                     })
                 ),
+                
                 // React.DOM.div({},
-                //     new ID_selector({
+                //     new Selector_sensor_id({
                 //         antIDset: props.antIDset,
                 //         currentID: props.ant.id,
-                //         onChange: props.onChange
+                //         currentPlaceId: props.currentPlaceId,
+                //         onChangeSensor: props.onChangeSensor
                 //     })
                 // ),
                 React.DOM.li({}, 

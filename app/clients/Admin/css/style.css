@@ -123,7 +123,7 @@ li .modifiable{
 	text-align:center;
 }
 
-.selector .currentID {
+.selector .display_sensor_id {
 	cursor: pointer;
 	transition: all 0.30s ease-in-out;
 	background:#bfd70e;
@@ -137,7 +137,7 @@ li .modifiable{
 
 }
 
-.currentID ul {
+.display_sensor_id ul {
 	margin: 0;
 	padding: 0;
 	background: #bfd70e;
@@ -145,6 +145,6 @@ li .modifiable{
 	border-radius: 1em;
 }
 
-.currentID li {
+.display_sensor_id li {
 	margin: 0 0.5em;
 }

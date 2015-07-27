@@ -96,8 +96,8 @@ var Place = React.createClass({
                 		return new Ant({
                 			ant: ant,
                 			antIDset: props.antIDset,
-                			onChangeSensor: props.onChangeSensor,
-
+                            currentPlaceId: props.place.id,
+                			onChangeSensor: props.onChangeSensor
             			});
             		})
                 )

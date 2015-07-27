@@ -9,8 +9,8 @@ sensor/vision/data/*
 *.doc
 *.doc#
 
-client/browserify-bundle.js
+*-browserify-bundle.js
 
-*-credentials.json
+PRIVATE.json
 
 npm-debug.log

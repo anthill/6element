@@ -1,23 +1,33 @@
 6element:
-  build: .
-  command: bash -c "npm install && npm run build && node server/index.js"
-  links:
-   - "db:postgres"
-  ports:
-   - "4000:4000"
-  environment:
-   - VIRTUAL_HOST=6element.ants.builders 
-   - VIRTUAL_PORT=4000
-   - SOCKETIO_SERVER=https://6element.ants.builders/
-  volumes:
-   - /home/shared/6element:/6element
-  restart: always
+   build: .
+   command: npm run start-app-prod
+   links:
+      - db
+   ports:
+      - "4000:4000"
+   environment:
+      - VIRTUAL_HOST=6element.ants.builders 
+      - VIRTUAL_PORT=4000
+      - POSTGRES_PASSWORD=elements
+   volumes:
+      - core:/6element/core
+   restart: always
+admin:
+   build: .
+   command: npm run start-admin-prod
+   links:
+      - db
+   ports:
+      - "4001:4001"
+   environment:
+      - VIRTUAL_HOST=admin.6element.ants.builders 
+      - VIRTUAL_PORT=4001
+      - POSTGRES_PASSWORD=elements
+   volumes:
+      - core:/6element/core
+   restart: always
 db:
-  image: postgres:9.4
-  environment:
-   - POSTGRES_PASSWORD=password
-  volumes:
-   - /data/backup/6element:/6element
-  ports:
-   - "5432:5432"
-  restart: always
+   image: postgres:9.4
+   environment:
+      - POSTGRES_PASSWORD=elements
+   restart: always

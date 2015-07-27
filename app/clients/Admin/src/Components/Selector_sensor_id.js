@@ -24,8 +24,8 @@ var Display_sensor_id = React.createClass({
         var props = this.props;
         var state = this.state;
 
-        console.log('Selector_sensor_id props', props);
-        console.log('Selector_sensor_id state', state);
+        // console.log('Selector_sensor_id props', props);
+        // console.log('Selector_sensor_id state', state);
 
         var listID = undefined;
 
@@ -35,6 +35,11 @@ var Display_sensor_id = React.createClass({
                 lis.push(React.DOM.li({
                             onClick: function(){
                                 console.log('onclick listID_sensor', antID);
+                                props.onChange({
+                                    'field': "installed_at",
+                                    'id': antID,
+                                    'value': props.currentPlaceId
+                                });
                                 props.setOpen(!props.isOpen);
                             }
                         },

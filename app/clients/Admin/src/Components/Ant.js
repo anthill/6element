@@ -50,8 +50,8 @@ var Ant = React.createClass({
         var props = this.props;
         var state = this.state;
 
-        console.log('ANT props', props);
-        console.log('ANT state', state);
+        // console.log('ANT props', props);
+        // console.log('ANT state', state);
 
         var classes = [
             'ant',
@@ -83,10 +83,10 @@ var Ant = React.createClass({
                     }),
                     new Selector_sensor_id({
                         antIDset: props.antIDset,
-                        currentID: props.ant.id,
+                        currentSensorId: props.ant.id,
                         isOpen: state.isOpen,
                         currentPlaceId: props.currentPlaceId,
-                        onChangeSensor: props.onChangeSensor,
+                        onChange: props.onChangeSensor,
                         setOpen: this.setOpen
                     })
                 ),

@@ -75,12 +75,13 @@ function updateSensorDb(datas) {
     var queryP = objs.map(function (obj) {
         return serverAPI.updateSensor(obj);
     });
-
+    console.log("queryP", queryP);
     Promise.all(queryP)
         .then(function (ress) {
             console.log("ress", ress);
             console.log('Places database updated successfully (updateSensorDb)');
             ress.map(function (res) {
+                console.log("res", res);
                 var sensor = topLevelStore.sensorMap.get(res.id);
                 Object.assign(sensor);
                 updateLocalSensor(sensor);

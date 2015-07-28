@@ -82,7 +82,7 @@ var Ant = React.createClass({
                         setOpen: this.setOpen
                     }),
                     new Selector_sensor_id({
-                        antIDset: props.antIDset,
+                        antIDset: props.antIDset.remove(props.ant.id),
                         currentSensorId: props.ant.id,
                         isOpen: state.isOpen,
                         currentPlaceId: props.currentPlaceId,
@@ -91,14 +91,6 @@ var Ant = React.createClass({
                     })
                 ),
                 
-                // React.DOM.div({},
-                //     new Selector_sensor_id({
-                //         antIDset: props.antIDset,
-                //         currentID: props.ant.id,
-                //         currentPlaceId: props.currentPlaceId,
-                //         onChangeSensor: props.onChangeSensor
-                //     })
-                // ),
                 React.DOM.li({}, 
                     React.DOM.div({}, 'Created'),
                     React.DOM.div({}, moment(props.ant.created_at).format("MMMM Do YYYY, h:mm:ss a"))

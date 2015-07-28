@@ -1,10 +1,12 @@
 'use strict';
 
 var React = require('react');
+var Immutable = require('immutable');
 // var Tabs = React.createFactory(require('./Tabs.js'));
 // var TabContent = React.createFactory(require('./TabContent.js'));
 var Ant = React.createFactory(require('./Ant.js'));
 var Place = React.createFactory(require('./Place.js'));
+// var placeOrphan = React.createFactory(require('./placeOrphan.js'));
 
 /*
 
@@ -59,17 +61,19 @@ var App = React.createClass({
             antIDList.push(sensor.id);
         });
 
-        var antIDset = new Set(antIDList);
-
+        var antIDset = Immutable.Set(antIDList.sort(function(a, b){
+            return a - b;
+        }));
 
         var myPlaces = [];
+        var myPlacesOrphan = [];
 
         props.placeMap.forEach(function (place) {
             var mySensors = [];
             if (place.sensor_ids.length !== 0) {
                 place.sensor_ids.forEach(function (sensor_id) {
                     mySensors.push(props.sensorMap.get(sensor_id));
-                })
+                });
                 myPlaces.push(new Place ({
                     place: place,
                     mySensors: mySensors,
@@ -78,6 +82,15 @@ var App = React.createClass({
                     onChangeSensor: props.onChangeSensor
                 }));
             }
+            // else {
+            //     myPlacesOrphan.push(new PlacesOrphan ({
+            //         place: place,
+            //         antIDset: antIDset,
+            //         onChangePlace: props.onChangePlace,
+            //         onChangeSensor: props.onChangeSensor
+            //     }))
+            // }
+
         });
         
         return React.DOM.div({

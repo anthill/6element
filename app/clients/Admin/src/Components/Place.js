@@ -15,7 +15,7 @@ interface placeProps{
         sensor_ids: array
 
     },	
-	mySensors {
+	mySensors: [{
 		create_at : string,
 		id: int,
 		installed_at: int,
@@ -27,7 +27,7 @@ interface placeProps{
 	    quipu_status: string,
 	    sense_status: string,
 	    updated_at: string
-	},
+	}],
 	antIDset : Set,
 	onChangePlace: function(),
     onChangeSensor: function()
@@ -95,7 +95,7 @@ var Place = React.createClass({
         			props.mySensors.map(function (ant){
                 		return new Ant({
                 			ant: ant,
-                			antIDset: props.antIDset,
+                			antIDset: props.antIDset.remove(ant.id),
                             currentPlaceId: props.place.id,
                 			onChangeSensor: props.onChangeSensor
             			});

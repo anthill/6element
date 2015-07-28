@@ -69,9 +69,10 @@ module.exports = {
                 });
             });
         })
-        .catch(function(err){
+        /*.catch(function(err){
             console.log('ERROR in update', err);
-        });        
+            throw err;
+        })*/;        
     },
 
     getAllSensors: function() {

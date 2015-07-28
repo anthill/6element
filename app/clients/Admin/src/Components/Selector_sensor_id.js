@@ -32,25 +32,26 @@ var Display_sensor_id = React.createClass({
         if (props.isOpen) {
             var lis = [];
             props.antIDset.forEach(function (antID) {
+                console.log('antID', antID);
                 lis.push(React.DOM.li({
-                            onClick: function(){
-                                console.log('onclick listID_sensor', antID);
-                                props.onChange([{
-                                    'field': "installed_at",
-                                    'id': antID,
-                                    'value': props.currentPlaceId
-                                },
-                                {
-                                    'field': "installed_at",
-                                    'id': props.currentSensorId,
-                                    'value': null   
-                                }
-                                ]);
-                                props.setOpen(!props.isOpen);
-                            }
+                    onClick: function(){
+                        console.log('onclick listID_sensor', antID);
+                        props.onChange([{
+                            'field': "installed_at",
+                            'id': antID,
+                            'value': props.currentPlaceId
                         },
-                            antID
-                        )
+                        {
+                            'field': "installed_at",
+                            'id': props.currentSensorId,
+                            'value': null   
+                        }
+                        ]);
+                        props.setOpen(!props.isOpen);
+                    }
+                },
+                    antID
+                )
                 );
             });
 

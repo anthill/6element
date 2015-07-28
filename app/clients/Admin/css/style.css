@@ -148,3 +148,9 @@ li .modifiable{
 .display_sensor_id li {
 	margin: 0 0.5em;
 }
+
+.placeOrphan{
+	display: inline-block; margin: 1em; padding: .5em; width: 30%;
+	border: 1px solid red; border-radius: 5px;
+	background-color: white;
+}

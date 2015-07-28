@@ -58,7 +58,7 @@ var Place = React.createClass({
             // props.ant.sense_status
         ];
 
-        return React.DOM.div({className: classes.join(' ')},
+        return React.DOM.div({className: classes.join(' '), key: props.place.id},
             new Modifiable({
                 className: 'placeName',
                 isUpdating: false,

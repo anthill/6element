@@ -144,7 +144,7 @@ module.exports = {
                     )
                     .from(
                         places
-                        .join(sensor)
+                        .leftJoin(sensor)
                         .on(places.id.equals(sensor.installed_at))
                     )
                     .group(places.id)

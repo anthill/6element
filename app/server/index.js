@@ -245,7 +245,7 @@ app.get('/places/:rcId', function(req, res){
 app.get('/allPlacesInfos', function(req, res){
     database.complexQueries.getAllPlacesInfos()
     .then(function(data){
-        // debug('All places', data);
+        debug('All places', data);
         res.send(data);
     })
     .catch(function(error){

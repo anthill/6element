@@ -50,7 +50,7 @@ var Ant = React.createClass({
         var props = this.props;
         var state = this.state;
 
-        // console.log('ANT props', props);
+        console.log('ANT props', props.ant);
         // console.log('ANT state', state);
 
         var classes = [
@@ -61,7 +61,7 @@ var Ant = React.createClass({
             props.ant.sense_status
         ];
 
-        return React.DOM.div({className: classes.join(' ')},
+        return React.DOM.div({className: classes.join(' '), key: props.ant.id},
             React.DOM.ul({},
                 React.DOM.li({}, 
                     React.DOM.div({}, 'Name'),

@@ -27,10 +27,6 @@
 	display: inline-block; margin: 0 1em;
 }
 
-/*.place ul ul {
-	margin-left: 1em;
-}*/
-
 .place.updating {
 	background-color: red;
 	transition: background-color 1s;
@@ -153,4 +149,17 @@ li .modifiable{
 	display: inline-block; margin: 1em; padding: .5em; width: 30%;
 	border: 1px solid red; border-radius: 5px;
 	background-color: white;
+}
+
+.placeOrphan .placeOrphanName {
+	display: block; width: 100%; margin: 0 auto;
+	font-weight: bold; font-size: 1.5em;
+}
+
+.placeOrphan div{
+	display: inline-block; margin: 0 1em;
+}
+
+.placeOrphan li * {
+	display: inline-block; margin: 0 1em;
 }

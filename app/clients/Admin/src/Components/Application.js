@@ -52,8 +52,8 @@ var App = React.createClass({
         var props = this.props;
         var state = this.state;
 
-        // console.log('APP props', props);
-        // console.log('APP state', state);
+        console.log('APP props', props);
+        console.log('APP state', state);
 
         var antIDList = [];
 
@@ -70,7 +70,8 @@ var App = React.createClass({
 
         props.placeMap.forEach(function (place) {
             var mySensors = [];
-            if (place.sensor_ids.length !== 0) {
+            console.log("place", place);
+            if (place.sensor_ids.size !== 0) {
                 place.sensor_ids.forEach(function (sensor_id) {
                     mySensors.push(props.sensorMap.get(sensor_id));
                 });
@@ -84,12 +85,12 @@ var App = React.createClass({
             }
             else {
                 console.log('PlacesOrphan', place)
-                myPlacesOrphan.push(new PlacesOrphan ({
+                myPlacesOrphan.push(new placeOrphan ({
                     place: place,
                     antIDset: antIDset,
                     onChangePlace: props.onChangePlace,
                     onChangeSensor: props.onChangeSensor
-                }))
+                }));
             }
 
         });
@@ -97,7 +98,8 @@ var App = React.createClass({
         return React.DOM.div({
             id: 'myApp'
         },
-            myPlaces
+            myPlaces,
+            myPlacesOrphan
         );
     }
 });

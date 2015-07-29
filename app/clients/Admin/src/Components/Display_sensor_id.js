@@ -25,7 +25,7 @@ var Display_sensor_id = React.createClass({
         var props = this.props;
         var state = this.state;
 
-        console.log('Display_sensor_id props', props);
+        // console.log('Display_sensor_id props', props);
         // console.log('Display_sensor_id state', state);
 
         return React.DOM.div({className: 'Display_sensor_id',

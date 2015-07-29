@@ -50,7 +50,7 @@ var Ant = React.createClass({
         var props = this.props;
         var state = this.state;
 
-        console.log('ANT props', props.ant);
+        // console.log('ANT props', props.ant);
         // console.log('ANT state', state);
 
         var classes = [

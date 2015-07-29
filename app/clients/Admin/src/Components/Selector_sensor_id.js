@@ -32,7 +32,6 @@ var Display_sensor_id = React.createClass({
         if (props.isOpen) {
             var lis = [];
             props.antIDset.forEach(function (antID) {
-                console.log('antID', antID);
                 lis.push(React.DOM.li({
                     onClick: function(){
                         console.log('onclick listID_sensor', antID);

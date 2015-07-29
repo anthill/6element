@@ -69,13 +69,11 @@ var App = React.createClass({
         var myPlacesOrphan = [];
 
         props.placeMap.forEach(function (place) {
-            console.log('place', place.name);
             var mySensors = [];
             if (place.sensor_ids.length !== 0) {
                 place.sensor_ids.forEach(function (sensor_id) {
                     mySensors.push(props.sensorMap.get(sensor_id));
                 });
-                console.log('mySensors', mySensors);
                 myPlaces.push(new Place ({
                     place: place,
                     mySensors: mySensors,

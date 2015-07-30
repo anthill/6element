@@ -2,20 +2,28 @@
 
 var dispatcher = require('../Dispatcher/dispatcher.js');
 var constants = require('../Constants/constants.js');
-var displayActionTypes = constants.actionTypes.displayState;
+
+var actionTypes = constants.actionTypes;
 
 module.exports = {
     loadDisplayState: function(displayState) {
         dispatcher.dispatch({
-            type: displayActionTypes.LOAD_DISPLAY,
+            type: actionTypes.LOAD_DISPLAY,
             displayState: displayState
         });
     },
 
     loadUserPrefs: function(userPrefs){
         dispatcher.dispatch({
-            type: displayActionTypes.LOAD_USER_PREFS,
+            type: actionTypes.LOAD_USER_PREFS,
             userPrefs: userPrefs
+        });
+    },
+
+    loadRecyclingCenters: function(recyclingCenterMap){
+        dispatcher.dispatch({
+            type: actionTypes.LOAD_RCS,
+            recyclingCenterMap: recyclingCenterMap
         });
     }
 

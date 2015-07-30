@@ -4,11 +4,13 @@ var React = require('react');
 
 // COMPONENTS
 var Tab = React.createFactory(require('../Components/Tab.js'));
+var RecyclingCenter = React.createFactory(require('../Components/RecyclingCenter.js'));
 
 // STORES
 var DisplayedItemStore = require('../Stores/displayedItemStore.js');
 
-var constants = require('../Constants/constants.js');
+// CONSTANTS
+var tabTypes = require('../Constants/constants.js').tabTypes;
 
 /*
 
@@ -20,7 +22,7 @@ interface AppState{
 
 */
 
-var tabTypes = constants.tabTypes;
+
 
 function getStateFromStores() {
     return {
@@ -37,11 +39,11 @@ var Application = React.createClass({
     },
 
     componentDidMount: function() {
-        DisplayedItemStore.addChangeListener(this._onChange);
+        DisplayedItemStore.addChangeListener(this.onChange);
     },
 
     componentWillUnmount: function() {
-        DisplayedItemStore.removeChangeListener(this._onChange);
+        DisplayedItemStore.removeChangeListener(this.onChange);
     },
     
     render: function() {
@@ -52,11 +54,13 @@ var Application = React.createClass({
         var tabs = [
             new Tab({
                 name: 'Déchetteries',
-                type: tabTypes.RC_DETAIL
+                type: tabTypes.RC_DETAIL,
+                key: 0
             }),
             new Tab({
                 name: 'Carte',
-                type: tabTypes.MAP
+                type: tabTypes.MAP,
+                key: 1
             })
         ];
 
@@ -64,7 +68,7 @@ var Application = React.createClass({
 
         switch(state.view){
             case tabTypes.RC_DETAIL:
-                view = 'Je suis une déchetterie';
+                view = new RecyclingCenter({id: 'recyclingCenter'});
                 break;
 
             case tabTypes.MAP:
@@ -82,7 +86,7 @@ var Application = React.createClass({
         );
     },
 
-    _onChange: function() {
+    onChange: function() {
         this.setState(getStateFromStores());
     }
 });

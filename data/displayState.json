@@ -1,4 +1,5 @@
 {
-	"activeTab": "MAP",
-	"lastRC": "undefined"
+	"activeTab": "RC_DETAIL",
+	"activeRC": 0,
+	"isRCListOpen": false
 }

@@ -6,7 +6,7 @@ var React = require('react');
 var DisplayedItemStore = require('../Stores/displayedItemStore.js');
 
 // ACTIONS
-var displayActionCreator = require('../Actions/displayActionCreator.js');
+var _changeTab = require('../Actions/displayActionCreator.js').changeTab;
 
 /*
 
@@ -34,11 +34,11 @@ var Tab = React.createClass({
     },
 
     componentDidMount: function() {
-        DisplayedItemStore.addChangeListener(this._onChange);
+        DisplayedItemStore.addChangeListener(this.onChange);
     },
 
     componentWillUnmount: function() {
-        DisplayedItemStore.removeChangeListener(this._onChange);
+        DisplayedItemStore.removeChangeListener(this.onChange);
     },
     
     render: function() {
@@ -52,20 +52,18 @@ var Tab = React.createClass({
         
         return React.DOM.div({
                 className: classes.join(' '),
-                onClick: this._onClick
+                onClick: this.changeTab
             },
             props.name
         );
     },
 
-    _onClick: function(){
-        console.log('click', this.props.type);
-
+    changeTab: function(){
         if (!this.state.isActive)
-            displayActionCreator.changeTab(this.props.type);
+            _changeTab(this.props.type);
     },
 
-    _onChange: function() {
+    onChange: function() {
         this.setState(getStateFromStores(this.props.type));
     }
 });

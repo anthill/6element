@@ -8,20 +8,14 @@ var localAPIUtils = require('../Utils/localAPIUtils.js');
 
 module.exports = {
 
-    changeTab: function(selectedTab) {
+    changeRC: function(id) {
         dispatcher.dispatch({
-            type: actionTypes.CHANGE_TAB,
-            selectedTab: selectedTab
+            type: actionTypes.CHANGE_RC,
+            selectedRC: id
         });
 
         localAPIUtils.saveDisplayState({
-            activeTab: selectedTab
-        });
-    },
-
-    toggleRCList: function(){
-        dispatcher.dispatch({
-            type: actionTypes.TOGGLE_RC_LIST
+            activeRC: id
         });
     }
 

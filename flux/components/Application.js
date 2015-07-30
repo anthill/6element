@@ -3,12 +3,12 @@
 var React = require('react');
 
 // COMPONENTS
-var Tab = React.createFactory(require('../components/Tab.js'));
+var Tab = React.createFactory(require('../Components/Tab.js'));
 
 // STORES
-var DisplayedItemStore = require('../stores/displayedItemStore.js');
+var DisplayedItemStore = require('../Stores/displayedItemStore.js');
 
-var constants = require('../constants/constants.js');
+var constants = require('../Constants/constants.js');
 
 /*
 

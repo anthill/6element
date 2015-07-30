@@ -3,10 +3,10 @@
 var React = require('react');
 
 // STORES
-var DisplayedItemStore = require('../stores/displayedItemStore.js');
+var DisplayedItemStore = require('../Stores/displayedItemStore.js');
 
 // ACTIONS
-var tabActionCreator = require('../actions/tabActionCreator.js');
+var displayActionCreator = require('../Actions/displayActionCreator.js');
 
 /*
 
@@ -62,7 +62,7 @@ var Tab = React.createClass({
         console.log('click', this.props.type);
 
         if (!this.state.isActive)
-            tabActionCreator.changeTab(this.props.type);
+            displayActionCreator.changeTab(this.props.type);
     },
 
     _onChange: function() {

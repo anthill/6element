@@ -3,67 +3,67 @@
     
     //####################################################################################################
     // NEVER CHANGE
-        id : 0,
+        "id" : 0,
 
-        name: "Verac",
+        "name": "Verac",
 
         // opened intervall in UTC
-        schedule: {
+        "schedule": {
             //UTC
             //monday
-            0:  [
-                {start: "0700", end: "1000"},
-                {start: "1200", end: "1600"}
+            "0":  [
+                {"start": "0700", "end": "1000"},
+                {"start": "1200", "end": "1600"}
             ],
             // tuesday
-            1:  [
-                {start: "0700", end: "1000"},
-                {start: "1200", end: "1600"}
+            "1":  [
+                {"start": "0700", "end": "1000"},
+                {"start": "1200", "end": "1600"}
             ],
             //wednesday
-            2 : [
-                {start: "0700", end: "1000"},
-                {start: "1400", end: "1600"}
+            "2":  [
+                {"start": "0700", "end": "1000"},
+                {"start": "1400", "end": "1600"}
             ],
             //thursday
-            3: [
-                {start: "0700", end: "1000"},
-                {start: "1200", end: "1600"}
+            "3":  [
+                {"start": "0700", "end": "1000"},
+                {"start": "1200", "end": "1600"}
             ],
             //friday
-            4 : [
-                {start: "0700", end: "1000"},
-                {start: "1400", end: "1600"}
+            "4":  [
+                {"start": "0700", "end": "1000"},
+                {"start": "1400", "end": "1600"}
             ],
             //saturday
-            5 : [
-                {start: "0700", end: "1000"},
-                {start: "1200", end: "1600"}
+            "5":  [
+                {"start": "0700", "end": "1000"},
+                {"start": "1200", "end": "1600"}
             ]
         },  
 
-        maxSize : 23,   
+        "maxSize": 23,   
 
-        address: {
-            number: 5,
-            typeRoad: 'ld',
-            nameRoad: 'Teycheres',
-            PC: 33240,
-            town: 'Verac'
+        "address": {
+            "number": 5,
+            "typeRoad": "ld",
+            "nameRoad": "Teycheres",
+            "PC": 33240,
+            "town": "Verac"
         },
 
-        coords: {
-            lat: -0.4586,
-            long: 4.4586
+        "coords": {
+            "lat": -0.4586,
+            "long": 4.4586
         },
 
-        owner: "SMICVAL",
+        "owner": "SMICVAL",
 
-        phone: "0505050505",
+        "phone": "0505050505",
 
         //#################################################################################################"
         // CHANGE EACH 5mn
-        crowd: {
+        "crowd": {
             //local + GMT (-2 in France)
 
             "2015-07-27T07:00:00.000Z" : 15,
@@ -128,83 +128,83 @@
 
     },
 
-        wastes: 
+        "wastes": 
         //type never change
         //status does
 
         [
             {
-                type: "Dechets_verts",
-                status: "unavailable"
+                "type": "Dechets_verts",
+                "status": "unavailable"
             },
             {
-                type: "Bois",
-                status: "available"
+                "type": "Bois",
+                "status": "available"
             },
             {
-                type: "Cartons",
-                status: "available"
+                "type": "Cartons",
+                "status": "available"
             }
         ],
     },
     {
-        id : 1,
+        "id": 1,
 
-        name: "Verac",
+        "name": "Verac",
 
         // opened intervall in UTC
-        schedule: {
+        "schedule": {
             //UTC
             //monday
-            0:  [
-                {start: "0700", end: "1000"},
-                {start: "1200", end: "1600"}
+            "0":  [
+                {"start": "0700", "end": "1000"},
+                {"start": "1200", "end": "1600"}
             ],
             // tuesday
-            1:  [
-                {start: "0700", end: "1000"},
-                {start: "1200", end: "1600"}
+            "1":  [
+                {"start": "0700", "end": "1000"},
+                {"start": "1200", "end": "1600"}
             ],
-            2 : [
-                {start: "0700", end: "1000"},
-                {start: "1200", end: "1600"}
+            "2":  [
+                {"start": "0700", "end": "1000"},
+                {"start": "1200", "end": "1600"}
             ],
-            3: [
-                {start: "0700", end: "1000"},
-                {start: "1200", end: "1600"}
+            "3":  [
+                {"start": "0700", "end": "1000"},
+                {"start": "1200", "end": "1600"}
             ],
-            4 : [
-                {start: "0700", end: "1000"},
-                {start: "1200", end: "1600"}
+            "4": [
+                {"start": "0700", "end": "1000"},
+                {"start": "1200", "end": "1600"}
             ],
-            5 : [
-                {start: "0700", end: "1000"},
-                {start: "1200", end: "1600"}
+            "5": [
+                {"start": "0700", "end": "1000"},
+                {"start": "1200", "end": "1600"}
             ]
         },  
 
-        maxSize : 23,   
+        "maxSize": 23,   
 
-        address: {
-            number: 5,
-            typeRoad: 'ld',
-            nameRoad: 'Teycheres',
-            PC: 33240,
-            town: 'Saint Denis de Pile'
+        "address": {
+            "number": 5,
+            "typeRoad": "ld",
+            "nameRoad": "Teycheres",
+            "PC": 33240,
+            "town": "Saint Denis de Pile"
         },
 
-        coords: {
-            lat: -0.4586,
-            long: 4.4586
+        "coords": {
+            "lat": -0.4586,
+            "long": 4.4586
         },
 
-        owner: "SMICVAL",
+        "owner": "SMICVAL",
 
-        phone: "0505050505",
+        "phone": "0505050505",
 
         //#################################################################################################"
         // CHANGE EACH 5mn
-        crowd: {
+        "crowd": {
             //local + GMT (-2 in France)
 
             "2015-07-27T07:00:00.000Z" : 15,
@@ -269,22 +269,22 @@
 
     },
 
-        wastes: 
+        "wastes": 
         //type never change
         //status does
 
         [
             {
-                type: "Dechets_verts",
-                status: "unavailable"
+                "type": "Dechets_verts",
+                "status": "unavailable"
             },
             {
-                type: "Bois",
-                status: "available"
+                "type": "Bois",
+                "status": "available"
             },
             {
-                type: "Cartons",
-                status: "available"
+                "type": "Cartons",
+                "status": "available"
             }
         ],
     }

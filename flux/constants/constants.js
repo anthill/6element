@@ -9,7 +9,14 @@ module.exports = {
 		MAP: null
 	}),
 
-	actionTypes: keyMirror({
-		CHANGE_TAB: null
-	})
+	actionTypes: {
+		displayState: keyMirror({
+			LOAD_DISPLAY: null,
+			CHANGE_TAB: null
+		}),
+		userPrefs: keyMirror({
+			LOAD_USER_PREFS: null,
+			UPDATE_USER_PREFS: null
+		})
+	}
 };

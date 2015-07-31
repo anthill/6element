@@ -58,26 +58,34 @@ var PlaceOrphan = React.createClass({
         ];
 
         return React.DOM.div({className: classes.join(' '), key: props.place.id},
-            new Modifiable({
-                className: 'placeOrphanName',
-                isUpdating: false,
-                text: props.place.name,
-                dbLink: {
-                    id: props.place.id,
-                    field: 'name'
-                },
-                onChange: props.onChangePlace
-            }),
-            React.DOM.div({className: 'placeOrphanAddingSensor'}, 'Add sensor',
-            new Selector_sensor_id({
-                        antIDset: props.antIDset,
-                        currentSensorId: undefined,
-                        isOpen: state.isOpen,
-                        currentPlaceId: props.currentPlaceId,
-                        onChange: props.onChangeSensor,
-                        setOpen: this.setOpen
-            })),
             React.DOM.ul({},
+                React.DOM.li({}, 
+                    new Modifiable({
+                        className: 'placeOrphanName',
+                        isUpdating: false,
+                        text: props.place.name,
+                        dbLink: {
+                            id: props.place.id,
+                            field: 'name'
+                        },
+                        onChange: props.onChangePlace
+                    }),
+                    React.DOM.div({onClick: function(){
+                                        console.log('onclick adding sensor to placeOrphan');
+                                        props.setOpen(!props.isOpen);
+                                  }
+                        },
+                        'Add sensor',
+                        new Selector_sensor_id({
+                                    antIDset: props.antIDset,
+                                    currentSensorId: undefined,
+                                    isOpen: state.isOpen,
+                                    currentPlaceId: props.currentPlaceId,
+                                    onChange: props.onChangeSensor,
+                                    setOpen: this.setOpen
+                        })
+                    )
+                ),
                 React.DOM.li({}, 
                     React.DOM.div({}, 'Coords'),
                     new Modifiable({

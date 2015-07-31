@@ -47,7 +47,7 @@ He likes using 2ndLife app because:
 ### Bike enhancement
 
 
-Serge got an old bike and want to enhance it. He wants to turn it in "fixie", so he bought a special cog and a new chain. 
+Serge got an old bike and wants to enhance it. He wants to turn it in "fixie", so he bought a special cog and a new chain. 
 He wants to see if he can find the rest of the material on 2ndLife. He needs yet a saddle, a dynamo, a foot pedal and an handlebar.
 It would be easier if he could have it from the same person. He has a car so he can pick it up. 
 He first checks if there are some available right now and will place an ad if he can't find something. 
@@ -55,7 +55,9 @@ We are currently in May and he would like to finish it before middle June so if 
 He posts a common ad for the rest of things he's looking for and then search people who are already giving it
 
 
+### Wood
 
+Serge got some wood from an old wardrobe and wants to make somebody benefit of it. He posts an ad and can see once it's posted that smb is already looking for it. He submits him his ad.
 
 
 

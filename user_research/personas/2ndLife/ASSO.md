@@ -35,7 +35,7 @@ He likes using 2ndLife app because:
 
 ### Get compost
 
-Samuel wants to organize a compost collection every week in the department. ??????
+Samuel wants to organize a compost collection every week in the department. He writes a perpetual ad. ??????
 
 
 

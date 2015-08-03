@@ -5,6 +5,7 @@ var React = require('react');
 // COMPONENTS
 var Tab = React.createFactory(require('../Components/Tab.js'));
 var Home = React.createFactory(require('../Components/Home.js'));
+var Activity = React.createFactory(require('../Components/Activity.js'));
 
 // STORES
 var DisplayedItemStore = require('../Stores/displayedItemStore.js');
@@ -58,8 +59,8 @@ var Application = React.createClass({
                 key: 0
             }),
             new Tab({
-                name: 'Historique',
-                type: tabTypes.HISTORY,
+                name: 'Activité',
+                type: tabTypes.ACTIVITY,
                 key: 1
             }),
             new Tab({
@@ -76,8 +77,8 @@ var Application = React.createClass({
                 view = new Home();
                 break;
 
-            case tabTypes.HISTORY:
-                view = 'Une liste: 1, 2, 3';
+            case tabTypes.ACTIVITY:
+                view = new Activity();
                 break;
 
             default:

@@ -6,7 +6,7 @@ module.exports = {
     
     tabTypes: keyMirror({
         HOME: null,
-        HISTORY: null,
+        ACTIVITY: null,
         RECYCLING_CENTER: null
     }),
 

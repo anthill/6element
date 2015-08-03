@@ -4,7 +4,7 @@ var React = require('react');
 
 // COMPONENTS
 var Tab = React.createFactory(require('../Components/Tab.js'));
-var RecyclingCenter = React.createFactory(require('../Components/RecyclingCenter.js'));
+var Home = React.createFactory(require('../Components/Home.js'));
 
 // STORES
 var DisplayedItemStore = require('../Stores/displayedItemStore.js');
@@ -53,26 +53,35 @@ var Application = React.createClass({
 
         var tabs = [
             new Tab({
-                name: 'Déchetteries',
-                type: tabTypes.RC_DETAIL,
+                name: 'Home',
+                type: tabTypes.HOME,
                 key: 0
             }),
             new Tab({
-                name: 'Carte',
-                type: tabTypes.MAP,
+                name: 'Mes Annonces',
+                type: tabTypes.MY_ADS,
                 key: 1
+            }),
+            new Tab({
+                name: 'Mes Messages',
+                type: tabTypes.MY_MSGS,
+                key: 2
             })
         ];
 
         var view;
 
         switch(state.view){
-            case tabTypes.RC_DETAIL:
-                view = new RecyclingCenter({id: 'recyclingCenter'});
+            case tabTypes.HOME:
+                view = new Home({id: 'recyclingCenter'});
                 break;
 
-            case tabTypes.MAP:
-                view = 'Je suis la carte';
+            case tabTypes.MY_ADS:
+                view = 'Je suis la section contenant vos annonces';
+                break;
+
+            case tabTypes.MY_MSGS:
+                view = 'Je suis la section contenant vos messages';
                 break;
 
             default:

@@ -4,6 +4,9 @@
 // HOUR / DATE FUNCTIONS
 
 
+var weekDays = ['lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi', 'dimanche'];
+var months = ["janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août", "septembre", "octobre", "novembre", "décembre"];
+
 function getHoursString(timeString) {
     return parseInt(timeString.slice(0, 2));
 }
@@ -18,8 +21,6 @@ function getDayNumber(datetimeObject){
         numDay = 6;
     return numDay;
 }
-    
-
 
 //CREATE A MAP FROM A LIST OR AN OBJECT OF OBJECT
 function makeMap(objects, expectedKey){
@@ -41,6 +42,8 @@ function makeMap(objects, expectedKey){
 // EXPORT
 
 module.exports = {
+    weekDays: weekDays,
+    months: months,
     getHoursString : getHoursString,
     getMinutesString : getMinutesString,
     getDayNumber : getDayNumber,

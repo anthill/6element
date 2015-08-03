@@ -4,7 +4,7 @@ var React = require('react');
 
 // COMPONENTS
 var Tab = React.createFactory(require('../Components/Tab.js'));
-var Home = React.createFactory(require('../Components/Home.js'));
+var RecyclingCenter = React.createFactory(require('../Components/RecyclingCenter.js'));
 
 // STORES
 var DisplayedItemStore = require('../Stores/displayedItemStore.js');
@@ -63,8 +63,8 @@ var Application = React.createClass({
                 key: 1
             }),
             new Tab({
-                name: 'Mes Messages',
-                type: tabTypes.MY_MSGS,
+                name: 'Dechetteries',
+                type: tabTypes.RCS,
                 key: 2
             })
         ];
@@ -73,15 +73,16 @@ var Application = React.createClass({
 
         switch(state.view){
             case tabTypes.HOME:
-                view = new Home({id: 'recyclingCenter'});
+                view = "I'm home !!";
+                // view = new Home({id: 'recyclingCenter'});
                 break;
 
             case tabTypes.MY_ADS:
                 view = 'Je suis la section contenant vos annonces';
                 break;
 
-            case tabTypes.MY_MSGS:
-                view = 'Je suis la section contenant vos messages';
+            case tabTypes.RCS:
+                view = new RecyclingCenter({className: 'RC'});
                 break;
 
             default:

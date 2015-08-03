@@ -7,7 +7,8 @@ module.exports = {
     tabTypes: keyMirror({
         HOME: null,
         MY_ADS: null,
-        MY_MESSAGES: null
+        MY_MESSAGES: null,
+        RCS: null
     }),
 
     homeViewTypes: keyMirror({

@@ -4,7 +4,7 @@ var React = require('react');
 
 // COMPONENTS
 var Tab = React.createFactory(require('../Components/Tab.js'));
-var RecyclingCenter = React.createFactory(require('../Components/RecyclingCenter.js'));
+var Home = React.createFactory(require('../Components/Home.js'));
 
 // STORES
 var DisplayedItemStore = require('../Stores/displayedItemStore.js');
@@ -53,35 +53,40 @@ var Application = React.createClass({
 
         var tabs = [
             new Tab({
-                name: 'Déchetteries',
-                type: tabTypes.RC_DETAIL,
+                name: 'Accueil',
+                type: tabTypes.HOME,
                 key: 0
             }),
             new Tab({
-                name: 'Carte',
-                type: tabTypes.MAP,
+                name: 'Historique',
+                type: tabTypes.HISTORY,
                 key: 1
+            }),
+            new Tab({
+                name: 'Déchèteries',
+                type: tabTypes.RECYCLING_CENTER,
+                key: 2
             })
         ];
 
         var view;
 
         switch(state.view){
-            case tabTypes.RC_DETAIL:
-                view = new RecyclingCenter({id: 'recyclingCenter'});
+            case tabTypes.HOME:
+                view = new Home();
                 break;
 
-            case tabTypes.MAP:
-                view = 'Je suis la carte';
+            case tabTypes.HISTORY:
+                view = 'Une liste: 1, 2, 3';
                 break;
 
             default:
-                console.log('ERROR');
+                console.error('Unknown state.view', state.view, state);
                 break;
         }
         
         return React.DOM.div({id: 'app'},
-            tabs,
+            React.DOM.div({className: 'tabs'}, tabs),          
             view
         );
     },

@@ -1,0 +1,13 @@
+.tabs{
+    display: flex;
+    justify-content: center;
+}
+
+.tabs > * {
+    padding: 1em;
+    cursor: pointer;
+}
+
+.tabs > .active {
+    outline: 1px solid gold;
+}

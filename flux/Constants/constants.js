@@ -5,8 +5,9 @@ var keyMirror = require('keymirror');
 module.exports = {
     
     tabTypes: keyMirror({
-        RC_DETAIL: null,
-        MAP: null
+        HOME: null,
+        HISTORY: null,
+        RECYCLING_CENTER: null
     }),
 
     actionTypes: keyMirror({

@@ -3,13 +3,88 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <style>
+            /*
+            http://www.paulirish.com/2012/box-sizing-border-box-ftw/
+            */
+            *, *:before, *:after {
+                box-sizing: border-box;
+                /* if you really care about older browsers, add prefixed versions at your own risks */
+            }
+
+            /*
+            Repeating the background mostly makes sense in the <body>. Otherwise, people usually want the image and preferably its center (not the top-right corner)
+            */
+            *:not(body) {
+                background-repeat: no-repeat;
+                background-position: center center;
+                background-size: cover;
+            }
+
+            /*
+            Makes the hidden attribute works even when an element is styled display: flex
+            http://lists.whatwg.org/pipermail/whatwg-whatwg.org/2014-May/254198.html
+            */
+            [hidden] {
+                display: none !important;
+            }
+
+
+            html, body {
+                padding: 0;
+                margin: 0;
+            }
+
+            /*
+            In applications, there can be lists but HTML lists have bullet points and a bunch of useless styling attributes 
+            */
+            ul, ol, menu {
+                margin: 0;
+                padding: 0;
+
+            }
+
+            ul, menu {
+                list-style: none;
+            }
+
+            li {
+                margin: 0;
+                padding: 0;
+            }
+
+
+
+            /*
+            fairly classic thing to do
+            */
+            .table-layout {
+                display: table;
+            }
+            .table-layout > * {
+                display: table-row;
+            }
+            .table-layout > * > *{
+                display: table-cell;
+                vertical-align: top;
+            }
+
+            * {
+                border-collapse: collapse;
+            }
+        </style>
         
         <link href="css/normalize.css" rel="stylesheet">
-        <link href="css/style.css" rel="stylesheet">
         <link href="node_modules/bootstrap/dist/css/bootstrap.min.css" rel = "stylesheet">        
         <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
-
-        <title> Ants - 6element App - Sketch </title>
+        
+        <link href="css/application.css" rel="stylesheet">
+        <link href="css/tabs.css" rel="stylesheet">
+        <link href="css/home.css" rel="stylesheet">
+        
+        
+        <title>6element App - Sketch - Ants</title>
 
         <script data-polyfill>
             if (!String.prototype.startsWith) {

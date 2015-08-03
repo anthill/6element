@@ -5,11 +5,10 @@ module.exports = function(maxSize, crowdMoment){
     
     if (ratio <= 0.50)
         return 0;
-    else{
-        if(ratio <=0.75)
+    else {
+        if (ratio <= 0.75)
             return 1;
-        else{
+        else
             return ratio > 0.75 ? 2 : 3;
-        }
     }
 };

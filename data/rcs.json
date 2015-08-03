@@ -54,7 +54,7 @@
 
         "coords": {
             "lat": -0.4586,
-            "long": 4.4586
+            "lon": 4.4586
         },
 
         "owner": "SMICVAL",
@@ -150,7 +150,7 @@
     {
         "id": 1,
 
-        "name": "Verac",
+        "name": "St Denis de Pile",
 
         // opened intervall in UTC
         "schedule": {
@@ -194,8 +194,8 @@
         },
 
         "coords": {
-            "lat": -0.4586,
-            "long": 4.4586
+            "lat": -0.6648,
+            "lon": 4.7621
         },
 
         "owner": "SMICVAL",

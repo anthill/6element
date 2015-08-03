@@ -4,6 +4,9 @@ body {
 
 }
 
+.tab.active{
+    font-weight: bold;
+}
 
 .fa-star.active{
     color: yellow;

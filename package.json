@@ -4,10 +4,11 @@
   "description": "First sketches of the 6element App",
   "main": "app.js",
   "scripts": {
-    "postinstall": "cp ../git-hooks/pre-commit ../.git/hooks/pre-commit; chmod a+x ../.git/hooks/pre-commit",
-    "watch": "watchify src/main.js -o app.js -d -v",
-    "build": "browserify src/main.js -o app.js",
+    "postinstall": "cp git-hooks/pre-commit .git/hooks/pre-commit; chmod a+x .git/hooks/pre-commit",
+    "watch": "watchify flux/main.js -o app.js -d -v",
+    "build": "browserify flux/main.js -o app.js",
     "start": "devserver",
+    "lint": "eslint ./",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -23,6 +24,8 @@
   "dependencies": {
     "bootstrap": "^3.3.5",
     "browserify": "^10.2.4",
+    "flux": "^2.0.3",
+    "keymirror": "^0.1.1",
     "moment": "^2.10.3",
     "react": "^0.13.3"
   },

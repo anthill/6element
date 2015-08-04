@@ -2,18 +2,12 @@
 
 var React = require('react');
 var Application = React.createFactory(require('./Components/Application.js'));
-    
-var makeMap = require('./utils/utils.js').makeMap;
 
-var rcsJson = require('./rcs.json');
-var rcs = makeMap(rcsJson, 'id');
+var localAPIUtils = require('./Utils/localAPIUtils.js');
+var serverAPIUtils = require('./Utils/serverAPIUtils.js');
 
-//add bool isFav() for each RC
+localAPIUtils.loadDisplayState();
+serverAPIUtils.loadRCs();
 
 // Initial rendering
-React.render(new Application({
-    rcs : rcs,
-    onFavChange : function(/*favourite*/){
-        //to change userFake's fav
-    }
-}), document.body);
+React.render(new Application({}), document.body);

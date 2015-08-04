@@ -23,6 +23,15 @@ body {
     
 }
 
+.open {
+    color: green;
+}
+
+.closed {
+    color: red;
+}
+
+
 /*dl{
     display : inline-block;
 }*/

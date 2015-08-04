@@ -2,6 +2,8 @@
 
 var React = require('react');
 var Modifiable = React.createFactory(require('./Modifiable.js'));
+var Display_sensor_id = React.createFactory(require('./Display_sensor_id.js'));
+var Selector_sensor_id = React.createFactory(require('./Selector_sensor_id.js'));
 
 var moment = require('moment');
 
@@ -9,21 +11,21 @@ var moment = require('moment');
 
 interface AntProps{
     ant: {
+        create_at : string,
         id: int,
-        name: string,
         installed_at: int,
-        placeName: string,
-        phone_number: string,
-        lat: float,
-        lon: float,
-        quipu_status: string,
-        signal_strength: int,
-        sense_status: string,
+        isUpdating: boolean,
         latest_input: string,
         latest_output: string,
-        isUpdating: boolean
+        name: string,
+        phone_number: string,
+        quipu_status: string,
+        sense_status: string,
+        updated_at: string
     },
-    onChange: function()
+    antIDset : Set,
+    currentPlaceId : int,
+    onChangeSensor: function()
 }
 interface AppState{
 }
@@ -33,58 +35,63 @@ interface AppState{
 var Ant = React.createClass({
     displayName: 'Ant',
 
+    getInitialState: function(){
+        return {
+            isOpen: false
+        };
+    },
+
+    setOpen: function(isOpen){
+        this.setState({isOpen: isOpen});
+    },
+
     render: function() {
         //var self = this;
         var props = this.props;
+        var state = this.state;
+
+        // console.log('ANT props', props.ant);
+        // console.log('ANT state', state);
 
         var classes = [
             'ant',
-            // isSelected ? 'selected' : '',
+            //isSelected ? 'selected' : '',
             props.ant.isUpdating ? 'updating' : '',
             props.ant.quipu_status,
             props.ant.sense_status
         ];
 
-        return React.DOM.div({className: classes},
-            new Modifiable({
-                className: 'placeName',
-                isUpdating: false,
-                text: props.ant.name,
-                dbLink: {
-                    table: 'place',
-                    id: props.ant.installed_at,
-                    field: 'name'
-                },
-                onChange: props.onChange
-            }),
+
+        return React.DOM.div({className: classes.join(' ')},
             React.DOM.ul({},
                 React.DOM.li({}, 
-                    React.DOM.div({}, 'Coords'),
+                    React.DOM.div({}, 'Name'),
+                    // React.DOM.div({}, props.ant.id)
                     new Modifiable({
+                        className: 'sensorName',
                         isUpdating: false,
-                        text: props.ant.lat,
+                        text: props.ant.name,
                         dbLink: {
-                            table: 'place',
-                            id: props.ant.installed_at,
-                            field: 'lat'
+                            id: props.ant.id,
+                            field: 'name'
                         },
-                        onChange: props.onChange
+                        onChange: props.onChangeSensor
                     }),
-                    new Modifiable({
-                        isUpdating: false,
-                        text: props.ant.lon,
-                        dbLink: {
-                            table: 'place',
-                            id: props.ant.installed_at,
-                            field: 'lon'
-                        },
-                        onChange: props.onChange
+                    new Display_sensor_id({
+                        currentSensorId: props.ant.id,
+                        isOpen: state.isOpen,
+                        setOpen: this.setOpen
+                    }),
+                    new Selector_sensor_id({
+                        antIDset: props.antIDset.remove(props.ant.id),
+                        currentSensorId: props.ant.id,
+                        isOpen: state.isOpen,
+                        currentPlaceId: props.currentPlaceId,
+                        onChange: props.onChangeSensor,
+                        setOpen: this.setOpen
                     })
                 ),
-                React.DOM.li({}, 
-                    React.DOM.div({}, 'ID'),
-                    React.DOM.div({}, props.ant.id)
-                ),
+                
                 React.DOM.li({}, 
                     React.DOM.div({}, 'Created'),
                     React.DOM.div({}, moment(props.ant.created_at).format("MMMM Do YYYY, h:mm:ss a"))
@@ -95,12 +102,22 @@ var Ant = React.createClass({
                 ),
                 React.DOM.li({}, 
                     React.DOM.div({}, 'Phone'),
-                    React.DOM.div({}, props.ant.phone_number)
+                    // React.DOM.div({}, props.ant.phone_number)
+                    new Modifiable({
+                        className: 'sensorPhone_number',
+                        isUpdating: false,
+                        text: props.ant.phone_number,
+                        dbLink: {
+                            id: props.ant.id,
+                            field: 'phone_number'
+                        },
+                        onChange: props.onChangeSensor
+                    })
                 ),
                 React.DOM.li({className: 'quipu'},
                     React.DOM.div({}, 'Quipu Status'),
                     React.DOM.div({}, props.ant.quipu_status),
-                    React.DOM.div({}, props.ant.signal)
+                    React.DOM.div({}, props.ant.signal) // Pas de signal ???
                 ),
                 React.DOM.li({className: '6sense'},
                     React.DOM.div({}, '6sense Status'),

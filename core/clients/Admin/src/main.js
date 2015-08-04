@@ -16,71 +16,105 @@ function render(){
     React.render(new Application(topLevelStore), document.body);
 }
 
-function updateDB(data){
-    // send request to server according to the desired table
 
-    var delta = {};
-    delta[data.field] = data.value;
+function updatePlaceDb(datas) {
 
-    var obj = {
-        id: data.id,
-        delta: delta
-    };
-    
-    switch (data.table){
-        case 'place':
-            serverAPI.updatePlace(obj)
-            .then(function(res){
-                console.log('Places database updated successfully');
-                var ant = topLevelStore.antsByPlace.get(res.id);
-                Object.assign(ant, res);
-                updateLocal(ant);
-            })
-            .catch(function(){
-                console.log('Places database didn\'t update correctly');
-                refreshView();
-            });
-            break;
+    if (typeof (datas) === 'object')
+        datas = [datas];
 
-        case 'sensor':
-            serverAPI.updateSensor(obj)
-            .then()
-            ;
-            break;
+    var objs = datas.map(function (data){
+        var delta = {};
+        delta[data.field] = data.value;
 
-        default:
-            console.log('No such table as ', data.table);
-            break;
-    }        
+        var obj = {
+            id: data.id,
+            delta: delta
+        };
+        return obj;
+    });
 
+    var queryP = objs.map(function (obj) {
+        return serverAPI.updateRC(obj);
+    });
+
+    Promise.all(queryP)
+    .then(function() {
+        console.log('Places database updated successfully (updatePlaceDb)');
+        refreshView();
+    })
+    .catch(function(err){
+        console.log('Places database didn\'t update correctly (updatePlaceDb)', err);
+        refreshView();
+    });
 }
 
-function updateLocal(ant){
-    topLevelStore.antsByPlace.set(ant.installed_at, ant);
-    topLevelStore.antsByPlace.set(ant.id, ant);
 
-    render();
+
+function updateSensorDb(datas) {
+
+    var objs = datas.map(function (data){
+        var delta = {};
+        delta[data.field] = data.value;
+
+        var obj = {
+            id: data.id,
+            delta: delta
+        };
+        return obj;
+    });
+
+    console.log('objs dans updateSensorDb', objs);
+
+    var queryP = objs.map(function (obj) {
+        return serverAPI.updateSensor(obj);
+    });
+    // console.log("queryP", queryP);
+    Promise.all(queryP)
+        .then(function() {
+            // console.log("results", results);
+            console.log('Places database updated successfully (updateSensorDb)');
+            refreshView();
+        })
+        .catch(function(err){
+            console.log('Places database didn\'t update correctly (updateSensorDb)', err);
+            refreshView();
+        });
 }
 
 function refreshView(){
-    serverAPI.getAllSensors()
-    .then(function(sensors){
 
-        topLevelStore.ants = makeMap(sensors, 'id');
-        topLevelStore.antsByPlace = makeMap(sensors, 'installed_at');
-        resetUpdate(topLevelStore.ants);
+    var placesP = serverAPI.getAllPlacesInfos();
+    var sensorsP = serverAPI.getAllSensors();
 
-        console.log('store', topLevelStore.ants);
-        
+    Promise.all([placesP, sensorsP])
+    .then(function(results){
+
+        // console.log('places', results[0]);
+        // console.log('sensors', results[1]);
+
+        topLevelStore.placeMap = makeMap(results[0], 'id');
+        topLevelStore.sensorMap = makeMap(results[1], 'id');
+
+        topLevelStore.placeMap.forEach(function (place){
+            if (place.sensor_ids[0] !== null)
+                place.sensor_ids = new Set(place.sensor_ids);
+            else
+                place.sensor_ids = new Set()
+        });
+
+        resetUpdate(topLevelStore.sensorMap);
+        // console.log('topLevelStore', topLevelStore.placeMap);
         render();
     })
     .catch(errlog);
 }
 
 var topLevelStore = {
-    ants: undefined,
-    antsByPlace: undefined,
-    onChange: updateDB
+    sensorMap: undefined,
+    placeMap: undefined,
+    // onChange: updateDB,
+    onChangePlace: updatePlaceDb,
+    onChangeSensor: updateSensorDb
 };
 
 // Initial rendering
@@ -103,22 +137,22 @@ socket.on('status', function (msg) {
     var id = msg.sensorId;
     var status = msg.socketMessage;
 
-    resetUpdate(topLevelStore.ants);
+    resetUpdate(topLevelStore.sensorMap);
 
-    var updatingAnt = topLevelStore.ants.get(id);
-    updatingAnt.quipu_status = status.quipu.state;
-    updatingAnt.signal = status.quipu.signal;
-    updatingAnt.sense_status = status.sense;
-    updatingAnt.latest_input = status.info.command;
-    updatingAnt.latest_output = status.info.result;
-    updatingAnt.isUpdating = true;
+    var updatingSensorMap = topLevelStore.sensorMap.get(id);
+    updatingSensorMap.quipu_status = status.quipu.state;
+    updatingSensorMap.signal = status.quipu.signal;
+    updatingSensorMap.sense_status = status.sense;
+    updatingSensorMap.latest_input = status.info.command;
+    updatingSensorMap.latest_output = status.info.result;
+    updatingSensorMap.isUpdating = true;
     
-    // console.log('ant', updatingAnt);
+    // console.log('sensors', updatingSensors);
 
     render();
 
     setTimeout(function(){
-        resetUpdate(topLevelStore.ants);
+        resetUpdate(topLevelStore.sensorMap);
         render();
     }, 200);
 

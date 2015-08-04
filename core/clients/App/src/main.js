@@ -50,7 +50,7 @@ render();
 serverAPI.getAllPlacesLiveAffluence()
     .then(function(places){
         console.log('places', places);
-    
+
         topLevelStore.placeMap = makeMap(places, 'id');
         render();
     })

@@ -5,7 +5,6 @@ sql.setDialect('postgres');
 var databaseP = require('../management/databaseClientP');
 
 var sensors = require('../management/declarations.js').sensors;
-var places = require('../management/declarations.js').places;
 
 module.exports = {
     create: function (data) {
@@ -58,6 +57,7 @@ module.exports = {
             var query = sensors
                 .update(delta)
                 .where(sensors.id.equals(id))
+                .returning("*")
                 .toQuery();
 
             //console.log('sensors findByPhoneNumber query', query);
@@ -68,27 +68,18 @@ module.exports = {
                 });
             });
         })
-        .catch(function(err){
+        /*.catch(function(err){
             console.log('ERROR in update', err);
-        });        
+            throw err;
+        })*/;        
     },
 
-    getAllSensorsInfo: function() {
+    getAllSensors: function() {
         return databaseP.then(function (db) {
             
             var query = sensors
-                .select(
-                    sensors.star(),
-                    places.name,
-                    places.type,
-                    places.lat,
-                    places.lon
-                )
-                .from(
-                    sensors
-                    .join(places)
-                    .on(sensors.installed_at.equals(places.id))
-                )
+                .select("*")
+                .from(sensors)
                 .toQuery();
 
             return new Promise(function (resolve, reject) {

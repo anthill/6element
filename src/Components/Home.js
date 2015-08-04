@@ -17,7 +17,11 @@ module.exports = React.createClass({
         
         return React.DOM.div({className: 'home'}, [
             
-            React.DOM.form({}, [
+            React.DOM.form({
+                onSubmit: function(e){
+                    e.preventDefault();
+                }
+            }, [
                 // mode switch
                 React.DOM.div({className: 'mode-switch'}, [
                     React.DOM.label({}, [

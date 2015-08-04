@@ -54,8 +54,6 @@ var Levels = React.createClass({
                 props.waitingMessages[getCrowdLevel(props.maxSize, props.crowd[infBound(gap)])] :
                 props.waitingMessages['undefined'];
 
-            console.log('waiting', waiting);
-
             var infB = moment(infBound(props.now));
             var gapNow = gap.unix() === infB.unix() ? gap : false;
             var oClock = (gap.minutes() === 0) ? gap.hours() + moment().utcOffset()/60 : false;

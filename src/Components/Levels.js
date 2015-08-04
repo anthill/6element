@@ -6,12 +6,12 @@ var moment = require('moment');
 var Level = React.createFactory(require('./Level.js'));
 
 //Functions
-var getCrowdLevel = require('../utils/getCrowdLevel.js');
-var isItOpen = require('../utils/isItOpen.js');
-var infBound = require('../utils/infBound.js');
-var getDayNumber = require('../utils/utils.js').getDayNumber;
-var getHoursString = require('../utils/utils.js').getHoursString;
-var getMinutesString = require('../utils/utils.js').getMinutesString;
+var getCrowdLevel = require('../Utils/getCrowdLevel.js');
+var isItOpen = require('../Utils/isItOpen.js');
+var infBound = require('../Utils/infBound.js');
+var getDayNumber = require('../Utils/utils.js').getDayNumber;
+var getHoursString = require('../Utils/utils.js').getHoursString;
+var getMinutesString = require('../Utils/utils.js').getMinutesString;
 
 /*
 

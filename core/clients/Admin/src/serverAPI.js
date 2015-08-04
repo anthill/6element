@@ -15,8 +15,8 @@ module.exports = {
     getAllSensors: function(){
         return sendReq('GET', '/allSensors');
     },
-    updateRC: function(data){
-        return sendReq('POST', '/updateRC', data);
+    updatePlace: function(data){
+        return sendReq('POST', '/updatePlace', data);
     },
     updateSensor: function(data){
         return sendReq('POST', '/updateSensor', data);

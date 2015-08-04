@@ -61,7 +61,7 @@ var Ant = React.createClass({
             props.ant.sense_status
         ];
 
-        return React.DOM.div({className: classes.join(' '), key: props.ant.id},
+        return React.DOM.div({className: classes.join(' ')},
             React.DOM.ul({},
                 React.DOM.li({}, 
                     React.DOM.div({}, 'Name'),

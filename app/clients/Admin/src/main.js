@@ -66,7 +66,7 @@ function updateSensorDb(datas) {
         return obj;
     });
 
-    // console.log('objs', objs);
+    console.log('objs dans updateSensorDb', objs);
 
     var queryP = objs.map(function (obj) {
         return serverAPI.updateSensor(obj);
@@ -76,24 +76,6 @@ function updateSensorDb(datas) {
         .then(function (results) {
             // console.log("results", results);
             console.log('Places database updated successfully (updateSensorDb)');
-            // results.map(function (result) {
-            //     console.log("result", result);
-            //     topLevelStore.sensorMap.set(res.id, res);
-
-            //     if (res.installed_at){
-            //         var placeToUpdate = topLevelStore.placeMap.get(res.installed_at);
-            //         placeToUpdate.sensor_ids.add(res.id);
-            //     }
-            //     else {
-            //         var placeToUpdate = topLevelStore.placeMap.get(res.installed_at);
-            //         placeToUpdate.sensor_ids.add(res.id);
-            //     }
-                    
-
-            //     var sensor = topLevelStore.sensorMap.get(res.id);
-            //     Object.assign(sensor);
-            //     updateLocalSensor(sensor);
-            // });
             refreshView();
         })
         .catch(function(err){

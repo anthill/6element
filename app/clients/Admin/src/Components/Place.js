@@ -58,7 +58,7 @@ var Place = React.createClass({
             // props.ant.sense_status
         ];
 
-        return React.DOM.div({className: classes.join(' '), key: props.place.id},
+        return React.DOM.div({className: classes.join(' ')},
             new Modifiable({
                 className: 'placeName',
                 isUpdating: false,
@@ -94,6 +94,7 @@ var Place = React.createClass({
                 React.DOM.div({}, 
         			props.mySensors.map(function (ant){
                 		return new Ant({
+                            key: ant.id,
                 			ant: ant,
                 			antIDset: props.antIDset.remove(ant.id),
                             currentPlaceId: props.place.id,

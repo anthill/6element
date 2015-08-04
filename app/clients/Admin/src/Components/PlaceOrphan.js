@@ -2,6 +2,7 @@
 
 var React = require('react');
 var Modifiable = React.createFactory(require('./Modifiable.js'));
+var Display_sensor_id = React.createFactory(require('./Display_sensor_id.js'));
 var Selector_sensor_id = React.createFactory(require('./Selector_sensor_id.js'));
 
 
@@ -46,8 +47,8 @@ var PlaceOrphan = React.createClass({
         var props = this.props;
         var state = this.state;
 
-        console.log('PLACE props', props);
-        console.log('PLACE state', state);
+        console.log('PLACE Orphan props', props);
+        console.log('PLACE Orphan state', state);
 
         var classes = [
             'placeOrphan'
@@ -57,7 +58,7 @@ var PlaceOrphan = React.createClass({
             // props.ant.sense_status
         ];
 
-        return React.DOM.div({className: classes.join(' '), key: props.place.id},
+        return React.DOM.div({className: classes.join(' ')},
             React.DOM.ul({},
                 React.DOM.li({}, 
                     new Modifiable({
@@ -70,21 +71,19 @@ var PlaceOrphan = React.createClass({
                         },
                         onChange: props.onChangePlace
                     }),
-                    React.DOM.div({onClick: function(){
-                                        console.log('onclick adding sensor to placeOrphan');
-                                        props.setOpen(!props.isOpen);
-                                  }
-                        },
-                        'Add sensor',
-                        new Selector_sensor_id({
-                                    antIDset: props.antIDset,
-                                    currentSensorId: undefined,
-                                    isOpen: state.isOpen,
-                                    currentPlaceId: props.currentPlaceId,
-                                    onChange: props.onChangeSensor,
-                                    setOpen: this.setOpen
-                        })
-                    )
+                    new Display_sensor_id({
+                        currentSensorId: 'Add sensor',
+                        isOpen: state.isOpen,
+                        setOpen: this.setOpen
+                    }),
+                    new Selector_sensor_id({
+                        antIDset: props.antIDset,
+                        currentSensorId: null,
+                        isOpen: state.isOpen,
+                        currentPlaceId: props.place.id,
+                        onChange: props.onChangeSensor,
+                        setOpen: this.setOpen
+                    })
                 ),
                 React.DOM.li({}, 
                     React.DOM.div({}, 'Coords'),

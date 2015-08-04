@@ -8,6 +8,7 @@ var serverAPIUtils = require('./Utils/serverAPIUtils.js');
 
 localAPIUtils.loadDisplayState();
 serverAPIUtils.loadRCs();
+serverAPIUtils.loadTrocs();
 
 // Initial rendering
 React.render(new Application({}), document.body);

@@ -5,8 +5,8 @@
   "main": "app.js",
   "scripts": {
     "postinstall": "cp git-hooks/pre-commit .git/hooks/pre-commit; chmod a+x .git/hooks/pre-commit",
-    "watch": "watchify flux/main.js -o app.js -d -v",
-    "build": "browserify flux/main.js -o app.js",
+    "watch": "watchify src/main.js -o app.js -d -v",
+    "build": "browserify src/main.js -o app.js",
     "start": "devserver",
     "lint": "eslint ./",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -30,6 +30,7 @@
     "react": "^0.13.3"
   },
   "devDependencies": {
+    "es6-shim": "^0.33.0",
     "eslint": "^0.24.1",
     "grunt-devserver": "^0.6.0",
     "watchify": "^3.2.1"

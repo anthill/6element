@@ -25,6 +25,27 @@ module.exports = {
             type: actionTypes.LOAD_RCS,
             recyclingCenterMap: recyclingCenterMap
         });
+    },
+
+    loadTrocs: function(trocMap){
+        dispatcher.dispatch({
+            type: actionTypes.LOAD_TROCS,
+            trocMap: trocMap
+        });
+    },
+
+    loadAds: function(adMap){
+        dispatcher.dispatch({
+            type: actionTypes.LOAD_ADS,
+            adMap: adMap
+        });
+    },
+
+    loadUsers: function(userMap){
+        dispatcher.dispatch({
+            type: actionTypes.LOAD_USERS,
+            userMap: userMap
+        });
     }
 
 };

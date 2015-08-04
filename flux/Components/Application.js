@@ -3,7 +3,7 @@
 var React = require('react');
 
 // COMPONENTS
-var Tab = React.createFactory(require('../Components/Tab.js'));
+var Tab = React.createFactory(require('./Tab.js'));
 var Home = React.createFactory(require('../Components/Home.js'));
 var Activity = React.createFactory(require('../Components/Activity.js'));
 

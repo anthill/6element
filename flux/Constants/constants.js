@@ -18,5 +18,10 @@ module.exports = {
         LOAD_RCS: null,
         UPDATE_RC: null,
         TOGGLE_RC_LIST: null
+    }),
+    
+    adType: keyMirror({
+        GIVE: null,
+        NEED: null
     })
 };

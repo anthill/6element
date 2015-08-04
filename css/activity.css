@@ -1,16 +1,3 @@
-.home form{
-    display: flex;
-    flex-direction: column;
-}
-
-.home form > *{
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    
-    margin: 1em 0;
-}
-
 .activity form .filter{
     display: flex;
     justify-content: center;
@@ -25,3 +12,52 @@
 .activity form input[type="search"]{
     width: 100%;
 }
+
+.activity form h1{
+    font-size: 1.5em;  
+    text-align: center;
+}
+
+
+.activity .activity-items{
+    list-style: none;
+}
+.activity .activity-items li{
+    padding: 1em;
+}
+
+.activity .activity-items li header{
+    height: 100%;
+    width: 100%;
+    
+    display: flex;
+    align-items: center;
+}
+
+.activity .activity-items li h1{
+    font-size: 1em;
+    margin: 0;
+    padding: 0;
+    flex-grow: 100; /* take all the remaining space */
+}
+
+.activity .activity-items li.give{
+    background-color: hsl(118, 38%, 74%);
+}
+.activity .activity-items li.need{
+    background-color: hsl(204, 38%, 74%);
+}
+
+.activity .activity-items li .private{
+    margin: 0.2em;
+    outline: 1px solid grey;
+    min-width: 3em;
+}
+.activity .activity-items li .private::before{
+    content: ' ';
+}
+
+
+
+
+

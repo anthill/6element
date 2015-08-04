@@ -2,6 +2,37 @@
 
 var React = require('react');
 
+var ActivityItem = React.createFactory(require('./ActivityItem.js'));
+
+var K = require('../Constants/constants.js');
+
+var data = [
+    {
+        ad: {
+            title: "Donne des collants neufs",
+            private: true,
+            type: K.adType.GIVE
+        },
+        proposals: [
+            {name: 'David', message: 'yo'},
+            {name: 'Romain', message: 'hi'},
+            {name: 'Alex', message: "'sup"}
+        ]
+    },
+    {
+        ad: {
+            title: "Récupère des chaussettes trouées",
+            private: false,
+            type: K.adType.NEED
+        },
+        proposals: [
+            {name: 'Roxane', message: 'bla'},
+            {name: 'Max', message: 'hey ya!'}
+        ]
+    }
+]
+
+
 
 module.exports = React.createClass({
 
@@ -37,6 +68,8 @@ module.exports = React.createClass({
                         })
                     ])
                 ]),
+                
+                React.DOM.h1({}, 'Mes annonces'),
 
                 React.DOM.input({
                     type: 'search',
@@ -46,7 +79,11 @@ module.exports = React.createClass({
                 
             ]),
             
-            React.DOM.ol({}, [])
+            React.DOM.ol({className: "activity-items"}, 
+                data.map(function(aItemData){
+                    return new ActivityItem(aItemData);
+                })
+            )
             
         ])
             

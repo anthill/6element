@@ -279,7 +279,6 @@ app.post('/updateRC', function(req, res){
 
 app.post('/updateSensor', function(req, res){
     var id = Number(req.body.id);
-    console.log('/updateSensor req.body.delta', req.body.delta);
     database.Sensors.update(id, req.body.delta)
     .then(function(data){
         debug('updateSensor', data);

@@ -7,6 +7,7 @@ var Immutable = require('immutable');
 var Ant = React.createFactory(require('./Ant.js'));
 var Place = React.createFactory(require('./Place.js'));
 var placeOrphan = React.createFactory(require('./placeOrphan.js'));
+var displaySensor = React.createFactory(require('./displaySensor.js'));
 
 /*
 
@@ -52,8 +53,8 @@ var App = React.createClass({
         var props = this.props;
         var state = this.state;
 
-        // console.log('APP props', props);
-        // console.log('APP state', state);
+        console.log('APP props', props);
+        console.log('APP state', state);
 
         var antIDList = [];
 
@@ -94,14 +95,28 @@ var App = React.createClass({
                     onChangeSensor: props.onChangeSensor
                 }));
             }
+        });
+        
+        var allSensors = [];
+        props.sensorMap.forEach(function (sensor) {
+            var sensorOrphan = 0;
+            if (!sensor.installed_at)
+                sensorOrphan = 1;
 
+            allSensors.push(new displaySensor ({
+                key: sensor.id,
+                sensor: sensor,
+                orphan: sensorOrphan,
+                onChangeSensor: props.onChangeSensor
+            }));
         });
         
         return React.DOM.div({
             id: 'myApp'
         },
             myPlaces,
-            myPlacesOrphan
+            myPlacesOrphan,
+            allSensors
         );
     }
 });

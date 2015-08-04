@@ -12,6 +12,7 @@ interface ModifiableProps{
         field: string
     },
     onChange: function()
+    onChangePlace: function()
 }
 interface ModifiableState{
     isUpdating: boolean,
@@ -65,7 +66,8 @@ var Modifiable = React.createClass({
             var dbLink = Object.assign(props.dbLink, {
                 value: newValue
             });
-            props.onChange(dbLink);
+
+            props.onChange([dbLink]);
 
             this.setState({
                 isUpdating: true,

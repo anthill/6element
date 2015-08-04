@@ -80,8 +80,6 @@ module.exports = function(){
                 installed_at: placesId[0],
                 phone_number: "+33781095259"
             }),
-
-
             database.Sensors.create({
                 name: "ant2",
                 installed_at: placesId[1],
@@ -112,15 +110,11 @@ module.exports = function(){
                 installed_at: placesId[6],
                 phone_number: "+33783585494"
             }),
-
-
             database.Sensors.create({
                 name: "ant9",
                 installed_at: placesId[7],
                 phone_number: "+33783818983"
             }),
-
-
             database.Sensors.create({
                 name: "ant12",
                 installed_at: placesId[8],

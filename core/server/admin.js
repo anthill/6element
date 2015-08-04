@@ -75,8 +75,19 @@ app.get('/place/:id', function(req, res){
     });
 });
 
-app.get('/sensors', function(req, res){
-    database.Sensors.getAllSensorsInfo()
+app.get('/allPlacesInfos', function(req, res){
+    database.complexQueries.getAllPlacesInfos()
+    .then(function(data){
+        debug('All places infos', data);
+        res.send(data);
+    })
+    .catch(function(error){
+        console.log("error in /allPlacesInfos: ", error);
+    });
+});
+
+app.get('/allSensors', function(req, res){
+    database.Sensors.getAllSensors()
     .then(function(data){
         debug('All sensors', data);
         res.send(data);
@@ -99,6 +110,18 @@ app.post('/updatePlace', function(req, res){
     });
 });
 
+app.post('/updateSensor', function(req, res){
+    var id = Number(req.body.id);
+
+    database.Sensors.update(id, req.body.delta)
+    .then(function(data){
+        res.send(data);
+    })
+    .catch(function(error){
+        res.status(500).send('Couldn\'t update Sensors database');
+        console.log("error in /updateSensors/'+req.params.id: ", error);
+    });
+});
 
 server.listen(PORT, function () {
     console.log('Server running on', [

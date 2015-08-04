@@ -6,6 +6,6 @@ RUN npm install gulp -g
 RUN mkdir /6element
 WORKDIR /6element
 
-COPY ./package.json /6element/package.json
+COPY ./core/package.json /6element/package.json
 
 RUN npm install

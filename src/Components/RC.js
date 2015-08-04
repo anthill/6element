@@ -43,14 +43,11 @@ var RC = React.createClass({
     displayName: 'RC',
     
     render: function() {
-        var self = this;
         var props = this.props;
-        var state = this.state;
 
         // console.log('RC props', props);
         // console.log('RC state', state);
         
-                
         //ACTUAL
         var now = moment().utc();
         var dayNumWeek = getDayNumber(now);
@@ -72,28 +69,15 @@ var RC = React.createClass({
         
         var favourite = new BooleanFilter({
             fav: fav,
-            className : "col-lg-1 fa fa-star fa-3x",
+            className: "col-lg-1 fa fa-star fa-3x",
             onChange: function(favState){
                 props.onFavChange(props.rc.id, favState);
             }      
         });*/
             
-        var title = React.DOM.header({className : "row"}, 
+        var title = React.DOM.header({className: "row"}, 
             favourite,
-            React.DOM.h1({className : "col-lg-4"}, name));
-        //============================================================================================
-        
-        //NAV
-        
-        //TO DO
-        
-        var sectionTitles = [] ;
-        
-        var nav = React.DOM.nav({},
-            //each section header
-            React.DOM.ul({},
-                sectionTitles));
-                         
+            React.DOM.h1({className: "col-lg-4"}, name));
         
         //=============================================================================================
         
@@ -101,13 +85,13 @@ var RC = React.createClass({
                 
         var open = isItOpen(now, props.rc.schedule);
         
-        var openDayMessage = displaySchedule(weekDays,props.rc.schedule);   
+        var openDayMessage = displaySchedule(weekDays, props.rc.schedule);   
         
-        var schedule = React.DOM.section({className : "container"},
-             React.DOM.div({className : "row"},
-                 React.DOM.h2({className : "col-lg-3"}, "Horaires"),
-                 open ?  React.DOM.h3({className : 'col-lg-3 greenText'}, "Ouvert"):
-                         React.DOM.h3({className : 'col-lg-3 redText'}, "Fermé")),
+        var schedule = React.DOM.section({className: "container"},
+             React.DOM.div({className: "row"},
+                 React.DOM.h2({className: "col-lg-3"}, "Horaires"),
+                 open ?  React.DOM.h3({className: 'col-lg-3 greenText'}, "Ouvert"):
+                         React.DOM.h3({className: 'col-lg-3 redText'}, "Fermé")),
              openDayMessage);
         
         //============================================================================================
@@ -117,44 +101,49 @@ var RC = React.createClass({
         //check is today is closed or last gap hour end is passed
         //then display the next open day bound
         
-        var legendColor = waitingMessages.map(function(level){
-            return React.DOM.dl({className : 'inline'},
-                React.DOM.dt({className : 'inline colorBlock '+level[0]+ 'Font'}),
-                React.DOM.dd({className : 'inline '+level[0]+ 'Text'}, level[1]))
+        var legendColor = Object.keys(waitingMessages).map(function(keys){
+            var message = waitingMessages[keys];
+
+            return React.DOM.dl({className: 'inline'},
+                React.DOM.dt({className: 'inline colorBlock ' + message[0] + 'Font'}),
+                React.DOM.dd({className: 'inline ' + message[0] + 'Text'}, message[1]))
         });
         
-        var legendNow = React.DOM.dl({className : 'inline'},
-            React.DOM.dt({className : 'inline colorBlock border'}),
-            React.DOM.dd({className : 'inline'}, 'maintenant'));
+        var legendNow = React.DOM.dl({className: 'inline'},
+            React.DOM.dt({className: 'inline colorBlock border'}),
+            React.DOM.dd({className: 'inline'}, 'maintenant'));
         
-        var legend= React.DOM.figcaption({className : 'inline'}, 
+        var legend = React.DOM.figcaption({className: 'inline'}, 
             legendColor, 
             legendNow);
+
+        console.log('crowd', props.rc.crowd);
+        console.log('infBound', infBound(now));
         
-        var waitingLevelNow = open? 
-            getCrowdLevel(props.rc.maxSize, props.rc.crowd[infBound(now)]) : 
+        var waitingLevelNow = open ? 
+            getCrowdLevel(props.rc.maxSize, props.rc.crowd[infBound(now)]): 
             undefined;
                                 
         var crowdPrediction = new Levels({
             crowd: props.rc.crowd,
             maxSize: props.rc.maxSize,
-            waitingMessages : waitingMessages,
-            now : now,
-            schedule : props.rc.schedule
+            waitingMessages: waitingMessages,
+            now: now,
+            schedule: props.rc.schedule
         });
         
-        var crowd = React.DOM.section({className : "container"}, 
-            React.DOM.header({className : "row"},
-                React.DOM.h2({className : "col-lg-3"}, "Attente"),
+        var crowd = React.DOM.section({className: "container"}, 
+            React.DOM.header({className: "row"},
+                React.DOM.h2({className: "col-lg-3"}, "Attente"),
                 open ? 
-                    React.DOM.h3({className : "col-lg-3 "+
+                    React.DOM.h3({className: "col-lg-3 "+
                                   waitingMessages[waitingLevelNow][0]+'Text'},
-                        waitingMessages[waitingLevelNow][1]) : 
+                        waitingMessages[waitingLevelNow][1]): 
                     undefined),
             React.DOM.h4({}, date),
             React.DOM.figure({},
                 legend,
-                React.DOM.div({className : "col-lg-12"}, crowdPrediction))
+                React.DOM.div({className: "col-lg-12"}, crowdPrediction))
         );
         
         //============================================================================================
@@ -163,12 +152,10 @@ var RC = React.createClass({
         
         var wastes = {
             // sort bins unavailable / available
-            unavailable : [],
-            available : []        
+            unavailable: [],
+            available: []        
         }; 
-        
-        var wasteList;
-        
+            
         props.rc.wastes.forEach(function(waste){
             if (waste.status === "unavailable") { 
                 wastes.unavailable.push(waste.type);
@@ -182,7 +169,7 @@ var RC = React.createClass({
         
         var lisAvailable = [];
         
-        var lisUnAvailable = [] ;
+        var lisUnAvailable = [];
                                            
         Object.keys(wastes).forEach(function(status){
             wastes[status].forEach(function(waste){
@@ -190,55 +177,55 @@ var RC = React.createClass({
                 var li = React.DOM.dl({},
                     React.DOM.dt({},
                         waste),
-                        React.DOM.img({src : pictoDictionary[waste], alt : waste, width : 75}),
+                        React.DOM.img({src: pictoDictionary[waste], alt: waste, width: 75}),
                     React.DOM.dd({}, status));
                                       
                 if (status === "unavailable") {
-                    var liUnavailable = React.DOM.li({className : '"col-lg-6 col-sm-4 col-xs-3 redText'}, li);
+                    var liUnavailable = React.DOM.li({className: '"col-lg-6 col-sm-4 col-xs-3 redText'}, li);
                     lisUnAvailable.push(liUnavailable); 
                 }
                 else {
-                    var liavailable = React.DOM.li({className : '"col-lg-6 col-sm-4 col-xs-3 greenText'}, li);
+                    var liavailable = React.DOM.li({className: '"col-lg-6 col-sm-4 col-xs-3 greenText'}, li);
                     lisAvailable.push(liavailable);  
                 }
                 
-                lis.push(React.DOM.li({className : "col-lg-6 col-sm-4 col-xs-3"}, li));
+                lis.push(React.DOM.li({className: "col-lg-6 col-sm-4 col-xs-3"}, li));
             })
         })
         
-        var wasteList = React.DOM.section({className : "container"},
+        var wasteList = React.DOM.section({className: "container"},
             React.DOM.h2({}, "Déchets"),
             React.DOM.ul({}, lisUnAvailable, lisAvailable)
             );
         
-        var alert = React.DOM.div({className : 'redText'},
-            React.DOM.div({className : "fa fa-exclamation-triangle"}, "Benne(s) indisponible(s)"));
+        var alert = React.DOM.div({className: 'redText'},
+            React.DOM.div({className: "fa fa-exclamation-triangle"}, "Benne(s) indisponible(s)"));
             
         //============================================================================================
         
         // LOCALISATION
         
-        var localisation = React.DOM.section({className : "container"},
+        var localisation = React.DOM.section({className: "container"},
             React.DOM.h2({}, "Localisation"),
             React.DOM.dl({}, 
-                React.DOM.dt({}, "adresse : "), 
+                React.DOM.dt({}, "adresse: "), 
                 React.DOM.dd({}, props.rc.address)),
             React.DOM.div({}, 
                 React.DOM.dl({},
-                    React.DOM.dt({}, "latitude : "),
+                    React.DOM.dt({}, "latitude: "),
                     React.DOM.dd({}, props.rc.coords.lat)),
                 React.DOM.dl({},
                     React.DOM.dt({}, "longitude: "), 
                     React.DOM.dd({}, props.rc.coords.long))),
             React.DOM.dl({}, 
-                React.DOM.dt({}, "téléphone : "), 
+                React.DOM.dt({}, "téléphone: "), 
                 React.DOM.dd({}, props.rc.phone))
         );
         
         //############################################################################################
         
         // ALL
-        var header = React.DOM.section({className : "container"}, 
+        var header = React.DOM.section({className: "container"}, 
                       title,
                       alert);
         

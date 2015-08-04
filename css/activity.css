@@ -1,0 +1,27 @@
+.home form{
+    display: flex;
+    flex-direction: column;
+}
+
+.home form > *{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    
+    margin: 1em 0;
+}
+
+.activity form .filter{
+    display: flex;
+    justify-content: center;
+}
+
+.activity form .filter > *{
+    padding: 0.8em;
+    outline: 1px solid darkblue;
+    cursor: pointer;
+}
+
+.activity form input[type="search"]{
+    width: 100%;
+}

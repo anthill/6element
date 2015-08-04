@@ -24,8 +24,7 @@ module.exports = React.createClass({
         var classes = [
             'inline',
             'colorBlock',
-            props.waiting[0],
-            'Font'
+            props.waiting[0] + 'Font'
         ];
         
         if (props.gapNow)

@@ -9,9 +9,10 @@ var actionTypes = constants.actionTypes;
 var CHANGE_EVENT = 'change';
 
 var _displayed = {
-    activeTab: undefined, // string
-    activeRC: undefined, // integer
-    isRCListOpen: undefined // boolean
+    // activeTab: string
+    // activeView: string
+    // activeRC: integer
+    // isRCListOpen: boolean
 };
 
 var DisplayedItemStore = Object.assign({}, EventEmitter.prototype, {
@@ -36,6 +37,10 @@ var DisplayedItemStore = Object.assign({}, EventEmitter.prototype, {
         return _displayed.activeTab;
     },
 
+    getDisplayedView: function() {
+        return _displayed.activeView;
+    },
+
     getAll: function() {
         return _displayed;
     }
@@ -47,7 +52,7 @@ DisplayedItemStore.dispatchToken = dispatcher.register(function(action) {
     switch(action.type) {
 
         case actionTypes.LOAD_DISPLAY:
-            _displayed = action.displayState;
+            _displayed = Object.assign(action.displayState, {isRCListOpen: false});
             console.log('display', _displayed);
             DisplayedItemStore.emitChange();
             break;

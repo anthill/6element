@@ -6,6 +6,7 @@ var React = require('react');
 var Tab = React.createFactory(require('../Components/Tab.js'));
 var Home = React.createFactory(require('../Components/Home.js'));
 var Activity = React.createFactory(require('../Components/Activity.js'));
+var RecyclingCenter = React.createFactory(require('../Components/RecyclingCenter.js'));
 
 // STORES
 var DisplayedItemStore = require('../Stores/displayedItemStore.js');
@@ -79,6 +80,10 @@ var Application = React.createClass({
 
             case tabTypes.ACTIVITY:
                 view = new Activity();
+                break;
+
+            case tabTypes.RECYCLING_CENTER:
+                view = new RecyclingCenter({className: 'RC'});
                 break;
 
             default:

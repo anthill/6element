@@ -7,8 +7,17 @@ module.exports = {
     tabTypes: keyMirror({
         HOME: null,
         ACTIVITY: null,
-        RECYCLING_CENTER: null
+        RECYCLING_CENTER: null,
+        MY_ADS: null,
+        MY_MESSAGES: null
     }),
+
+    homeViewTypes: keyMirror({
+        SEARCH_RCS: null,
+        RC_DETAILS: null,
+        SEARCH_ADS: null,
+        POST_AD: null
+    }), 
 
     actionTypes: keyMirror({
         LOAD_DISPLAY: null,

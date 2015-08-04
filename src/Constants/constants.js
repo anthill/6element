@@ -30,5 +30,10 @@ module.exports = {
         LOAD_TROCS: null,
         LOAD_ADS: null,
         LOAD_USERS: null
+    }),
+    
+    adType: keyMirror({
+        GIVE: null,
+        NEED: null
     })
 };

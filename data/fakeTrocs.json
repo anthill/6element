@@ -1,0 +1,35 @@
+[
+  {
+    "id": 0,
+    "links": [
+      {
+        "userId": 10,
+        "adId": 10,
+        "state": "potential"
+      },
+      {
+        "userId": 11,
+        "adId": 11,
+        "state": "interested"
+      }
+    ],
+    "direction": "need",
+    "state": "ongoing"
+  },
+  {
+    "id": 1,
+    "myAd": 1,
+    "links": [
+      {
+        "userId": 12,
+        "state": "potential"
+      },
+      {
+        "userId": 13,
+        "state": "interested"
+      }
+    ],
+    "direction": "give",
+    "state": "ongoing"
+  }
+]

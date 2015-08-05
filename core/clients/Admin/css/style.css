@@ -24,11 +24,10 @@ body{
 	top: 0;
 	right: 0;
 	background-color: white;
-
+	border-left: 1px solid black;
 	width: 20vw;
 	height: 100%;
 }
-
 
 .place{
 	display: inline-block; margin: 1em; padding: .5em; width: 30%;

@@ -114,7 +114,7 @@ app.post('/twilio', function(req, res) {
     database.Sensors.findByPhoneNumber(req.body.From)
         .then(function(sensor){
             if (sensor){
-                debug("Found corresponding sensor: ", sensor);
+                // debug("Found corresponding sensor: ", sensor);
 
                 var header = req.body.Body[0];
                 var body = req.body.Body.substr(1);
@@ -124,10 +124,10 @@ app.post('/twilio', function(req, res) {
                     
                     // clear message
                     case '0':
-                        debug('Received clear message');
+                        // debug('Received clear message');
                         switch(body) {
                             case "init":
-                                debug("Received init");
+                                // debug("Received init");
                                 var date = new Date();
                                 sendSMS("date:" + date.toISOString(), req.body.From);
                                 break;
@@ -139,7 +139,7 @@ app.post('/twilio', function(req, res) {
                         decoder(body)
                             .then(function(decodedMsg){
 
-                                debug("decoded msg ", decodedMsg);
+                                // debug("decoded msg ", decodedMsg);
 
                                 // [{"date":"2015-05-20T13:48:00.000Z","signal_strengths":[]},{"date":"2015-05-20T13:49:00.000Z","signal_strengths":[]},{"date":"2015-05-20T13:50:00.000Z","signal_strengths":[]},{"date":"2015-05-20T13:51:00.000Z","signal_strengths":[]},{"date":"2015-05-20T13:52:00.000Z","signal_strengths":[]}]
                                 Promise.all(decodedMsg.map(function(message){
@@ -149,7 +149,7 @@ app.post('/twilio', function(req, res) {
                                         'measurement_date': message.date
                                         // 'quipu_signal_strength': message.quipu.signalStrength
                                     };
-                                    debug("decoded msg ", message);
+                                    // debug("decoded msg ", message);
                                     var socketMessage = Object.assign({}, messageContent);
                                     socketMessage['installed_at'] = sensor.installed_at;
 
@@ -163,7 +163,7 @@ app.post('/twilio', function(req, res) {
                                     });                                    
                                 }))
                                 .then(function(results){
-                                    debug("Storage SUCCESS");
+                                    // debug("Storage SUCCESS");
                                     res.set('Content-Type', 'text/xml');
                                     res.send(xml({"Response":""}));
 
@@ -191,7 +191,7 @@ app.post('/twilio', function(req, res) {
                                 sense_status: sensorStatus.sense
                             })
                             .then(function(){
-                                debug('id', sensor.id);
+                                // debug('id', sensor.id);
 
                                 return {
                                     sensorId: sensor.id,
@@ -200,7 +200,7 @@ app.post('/twilio', function(req, res) {
                             });
                         })
                         .then(function(result){
-                            debug("Storage SUCCESS");
+                            // debug("Storage SUCCESS");
                             res.set('Content-Type', 'text/xml');
                             res.send(xml({"Response":""}));
 

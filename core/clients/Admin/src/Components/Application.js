@@ -3,13 +3,8 @@
 var React = require('react');
 var Immutable = require('immutable');
 var Place = React.createFactory(require('./Place.js'));
-<<<<<<< HEAD:app/clients/Admin/src/Components/Application.js
-var placeOrphan = React.createFactory(require('./placeOrphan.js'));
-var displaySensor = React.createFactory(require('./displaySensor.js'));
-=======
 var PlaceOrphan = React.createFactory(require('./placeOrphan.js'));
 var DisplaySensor = React.createFactory(require('./displaySensor.js'));
->>>>>>> 02d9328b28cad11c54e2f26763014e4ee9ebade2:core/clients/Admin/src/Components/Application.js
 
 /*
 
@@ -55,7 +50,7 @@ var App = React.createClass({
         var props = this.props;
 
         console.log('APP props', props);
-        console.log('APP state', state);
+        // console.log('APP state', state);
 
         var antIDList = [];
 
@@ -98,40 +93,13 @@ var App = React.createClass({
             }
         });
         
-        var allSensors = [];
-        props.sensorMap.forEach(function (sensor) {
-            var sensorOrphan = 0;
-            if (!sensor.installed_at)
-                sensorOrphan = 1;
-
-            allSensors.push(new displaySensor ({
-                key: sensor.id,
-                sensor: sensor,
-                orphan: sensorOrphan,
-                onChangeSensor: props.onChangeSensor
-            }));
-        });
-        
-<<<<<<< HEAD:app/clients/Admin/src/Components/Application.js
-        return React.DOM.div({
-            id: 'myApp'
-        },
-            myPlaces,
-            myPlacesOrphan,
-            allSensors
-=======
         // For all sensor
         var allSensor = [];
         props.sensorMap.forEach(function (sensor) {
-            // To find sensor without place
-            var sensorOrphan = 0;
-            if (!sensor.installed_at)
-                sensorOrphan = 1;
 
             allSensor.push(new DisplaySensor ({
                 key: sensor.id,
                 sensor, sensor,
-                sensorOrphan: sensorOrphan,
                 onChangeSensor: props.onChangeSensor 
             }));
         });
@@ -144,7 +112,6 @@ var App = React.createClass({
             React.DOM.div({id: 'panel'}, 
                 allSensor
             )
->>>>>>> 02d9328b28cad11c54e2f26763014e4ee9ebade2:core/clients/Admin/src/Components/Application.js
         );
     }
 });

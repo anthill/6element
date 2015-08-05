@@ -24,8 +24,6 @@ interface AppState{
 
 */
 
-
-
 function getStateFromStores() {
     return {
         view: DisplayedItemStore.getDisplayedTab()
@@ -52,6 +50,8 @@ var Application = React.createClass({
         // var self = this;
         // var props = this.props;
         var state = this.state;
+
+        console.log('APP state', state);
 
         var tabs = [
             new Tab({

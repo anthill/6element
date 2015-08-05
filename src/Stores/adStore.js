@@ -1,0 +1,70 @@
+'use strict';
+
+var dispatcher = require('../Dispatcher/dispatcher.js');
+var EventEmitter = require('events').EventEmitter;
+
+var constants = require('../Constants/constants.js');
+var actionTypes = constants.actionTypes;
+
+var CHANGE_EVENT = 'change';
+
+var _adMap; // Map: id -> Ad
+/*
+
+Interface Ad
+{
+    id: integer,
+    owner: integer,
+    content: {
+      title: string,
+      categories: [string],
+      location: string,
+      state: string,
+      text: string
+    },
+    direction: string,
+    state: string
+  },
+
+*/
+
+var AdStore = Object.assign({}, EventEmitter.prototype, {
+
+    emitChange: function() {
+        this.emit(CHANGE_EVENT);
+    },
+
+    addChangeListener: function(callback) {
+        this.on(CHANGE_EVENT, callback);
+    },
+
+    removeChangeListener: function(callback) {
+        this.removeListener(CHANGE_EVENT, callback);
+    },
+
+    get: function(id){
+        return _adMap.get(id);
+    },
+
+    getAll: function(){
+        return _adMap;
+    }
+
+});
+
+AdStore.dispatchToken = dispatcher.register(function(action) {
+
+    switch(action.type) {
+
+        case actionTypes.LOAD_ADS:
+            _adMap = action.adMap;
+            AdStore.emitChange();
+            break;
+
+        default:
+          // do nothing
+    }
+
+});
+
+module.exports = AdStore;

@@ -30,6 +30,7 @@
     "react": "^0.13.3"
   },
   "devDependencies": {
+    "es6-shim": "^0.33.0",
     "eslint": "^0.24.1",
     "grunt-devserver": "^0.6.0",
     "watchify": "^3.2.1"

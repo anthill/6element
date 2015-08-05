@@ -26,7 +26,10 @@ module.exports = {
         UPDATE_USER_PREFS: null,
         LOAD_RCS: null,
         UPDATE_RC: null,
-        TOGGLE_RC_LIST: null
+        TOGGLE_RC_LIST: null,
+        LOAD_TROCS: null,
+        LOAD_ADS: null,
+        LOAD_USERS: null
     }),
     
     adType: keyMirror({

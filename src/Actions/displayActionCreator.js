@@ -1,8 +1,8 @@
 'use strict';
 
 var dispatcher = require('../Dispatcher/dispatcher.js');
-var constants = require('../Constants/constants.js');
-var actionTypes = constants.actionTypes;
+var K = require('../Constants/constants.js');
+var actionTypes = K.actionTypes;
 
 var localAPIUtils = require('../Utils/localAPIUtils.js');
 
@@ -23,6 +23,13 @@ module.exports = {
         dispatcher.dispatch({
             type: actionTypes.TOGGLE_RC_LIST
         });
+    },
+    
+    goToScreen: function(screen){
+        dispatcher.dispatch({
+            type: actionTypes.GO_TO_SCREEN,
+            screen: screen
+        })
     }
 
 };

@@ -29,7 +29,13 @@ module.exports = {
         TOGGLE_RC_LIST: null,
         LOAD_TROCS: null,
         LOAD_ADS: null,
-        LOAD_USERS: null
+        LOAD_USERS: null,
+        GO_TO_SCREEN: null
+    }),
+
+    screen: keyMirror({
+        AD_POST: null,
+        MAIN: null
     }),
     
     adType: keyMirror({

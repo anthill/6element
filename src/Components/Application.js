@@ -3,16 +3,19 @@
 var React = require('react');
 
 // COMPONENTS
-var Tab = React.createFactory(require('../Components/Tab.js'));
-var Home = React.createFactory(require('../Components/Home.js'));
-var Activity = React.createFactory(require('../Components/Activity.js'));
-var RecyclingCenter = React.createFactory(require('../Components/RecyclingCenter.js'));
+var AdPost = React.createFactory(require('./AdPost.js'));
+
+var Home = React.createFactory(require('./Home.js'));
+var Tab = React.createFactory(require('./Tab.js'));
+var Activity = React.createFactory(require('./Activity.js'));
+var RecyclingCenter = React.createFactory(require('./RecyclingCenter.js'));
 
 // STORES
 var DisplayedItemStore = require('../Stores/displayedItemStore.js');
 
 // CONSTANTS
-var tabTypes = require('../Constants/constants.js').tabTypes;
+var K = require('../Constants/constants.js');
+var tabTypes = K.tabTypes;
 
 /*
 
@@ -26,7 +29,8 @@ interface AppState{
 
 function getStateFromStores() {
     return {
-        view: DisplayedItemStore.getDisplayedTab()
+        screen: DisplayedItemStore.getActiveScreen(),
+        tab: DisplayedItemStore.getDisplayedTab()
     };
 }
 
@@ -38,12 +42,16 @@ var Application = React.createClass({
         return getStateFromStores();
     },
 
+    onTabChange: function() {
+        this.setState(getStateFromStores());
+    },
+
     componentDidMount: function() {
-        DisplayedItemStore.addChangeListener(this.onChange);
+        DisplayedItemStore.on(DisplayedItemStore.events.CHANGE_TAB, this.onTabChange);
     },
 
     componentWillUnmount: function() {
-        DisplayedItemStore.removeChangeListener(this.onChange);
+        DisplayedItemStore.removeListener(DisplayedItemStore.events.CHANGE_TAB, this.onTabChange);
     },
     
     render: function() {
@@ -71,34 +79,48 @@ var Application = React.createClass({
             })
         ];
 
-        var view;
+        var screen;        
+        
+        switch(state.screen){
+            case K.screen.MAIN:
+                screen = new AdPost();
+                
+                var tab;
+                
+                switch(state.tab){
+                    case tabTypes.HOME:
+                        tab = new Home();
+                        break;
 
-        switch(state.view){
-            case tabTypes.HOME:
-                view = new Home();
+                    case tabTypes.ACTIVITY:
+                        tab = new Activity();
+                        break;
+
+                    case tabTypes.RECYCLING_CENTER:
+                        tab = new RecyclingCenter({className: 'RC'});
+                        break;
+
+                    default:
+                        console.error('Unknown state.tab', state.tab, state);
+                        break;
+                }
+                
+                screen = [
+                    React.DOM.div({className: 'tabs'}, tabs),
+                    tab
+                ];
+                
                 break;
-
-            case tabTypes.ACTIVITY:
-                view = new Activity();
+            case K.screen.AD_POST:
+                screen = new AdPost();
                 break;
-
-            case tabTypes.RECYCLING_CENTER:
-                view = new RecyclingCenter({className: 'RC'});
-                break;
-
             default:
-                console.error('Unknown state.view', state.view, state);
-                break;
+                console.error('Unknown state.screen', state.screen, state);
+
         }
         
-        return React.DOM.div({id: 'app'},
-            React.DOM.div({className: 'tabs'}, tabs),          
-            view
-        );
-    },
-
-    onChange: function() {
-        this.setState(getStateFromStores());
+        
+        return React.DOM.div({id: 'app'}, screen);
     }
 });
 

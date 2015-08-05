@@ -6,28 +6,19 @@ var EventEmitter = require('events').EventEmitter;
 var constants = require('../Constants/constants.js');
 var actionTypes = constants.actionTypes;
 
-var CHANGE_EVENT = 'change';
-
 var _displayed = {
-    // activeTab: string
-    // activeView: string
+    activeTab: undefined, // K.tabTypes
+    activeScreen: undefined // K.screen
     // activeRC: integer
     // isRCListOpen: boolean
 };
 
 var DisplayedItemStore = Object.assign({}, EventEmitter.prototype, {
 
-    emitChange: function() {
-        this.emit(CHANGE_EVENT);
-    },
-
-    addChangeListener: function(callback) {
-        this.on(CHANGE_EVENT, callback);
-    },
-
-    removeChangeListener: function(callback) {
-        this.removeListener(CHANGE_EVENT, callback);
-    },
+    events: Object.freeze({
+        CHANGE_TAB: 'change tab',
+        CHANGE_SCREEN: 'change screen'
+    }),
 
     isRCListOpen: function(){
         return _displayed.isRCListOpen;
@@ -37,8 +28,8 @@ var DisplayedItemStore = Object.assign({}, EventEmitter.prototype, {
         return _displayed.activeTab;
     },
 
-    getDisplayedView: function() {
-        return _displayed.activeView;
+    getActiveScreen: function() {
+        return _displayed.activeScreen;
     },
 
     getAll: function() {
@@ -54,22 +45,27 @@ DisplayedItemStore.dispatchToken = dispatcher.register(function(action) {
         case actionTypes.LOAD_DISPLAY:
             _displayed = Object.assign(action.displayState, {isRCListOpen: false});
             console.log('display', _displayed);
-            DisplayedItemStore.emitChange();
+            DisplayedItemStore.emit(DisplayedItemStore.events.CHANGE_TAB);
             break;
 
         case actionTypes.CHANGE_TAB:
             _displayed.activeTab = action.selectedTab;
-            DisplayedItemStore.emitChange();
+            DisplayedItemStore.emit(DisplayedItemStore.events.CHANGE_TAB);
             break;
 
         case actionTypes.TOGGLE_RC_LIST:
             _displayed.isRCListOpen = !_displayed.isRCListOpen;
-            DisplayedItemStore.emitChange();
+            DisplayedItemStore.emit(DisplayedItemStore.events.CHANGE_TAB);
             break;
 
         case actionTypes.CHANGE_RC:
             _displayed.isRCListOpen = false;
-            DisplayedItemStore.emitChange();
+            DisplayedItemStore.emit(DisplayedItemStore.events.CHANGE_TAB);
+            break;
+
+        case actionTypes.GO_TO_SCREEN:
+            _displayed.activeScreen = action.screen;
+            DisplayedItemStore.emit(DisplayedItemStore.events.CHANGE_TAB);
             break;
 
         default:

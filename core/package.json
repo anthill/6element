@@ -1,0 +1,66 @@
+{
+  "name": "6element",
+  "version": "1.0.0",
+  "description": "Reducing waste with sensors and an app",
+  "main": "index.js",
+  "scripts": {
+    "postinstall": "cp ../git-hooks/pre-commit ../.git/hooks/pre-commit; chmod a+x ../.git/hooks/pre-commit",
+    "start-admin-dev": "gulp admin-dev --gulpfile core/gulpfile.js",
+    "start-admin-prod": "gulp admin-prod --gulpfile core/gulpfile.js",
+    "start-app-dev": "gulp app-dev --gulpfile core/gulpfile.js",
+    "start-app-prod": "gulp app-prod --gulpfile core/gulpfile.js",
+    "init-db": "gulp init --gulpfile core/gulpfile.js",
+    "lint": "eslint ./",
+    "test": "mocha test/automated/*"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/anthill/6element.git"
+  },
+  "keywords": [
+    "waste",
+    "app",
+    "mobile",
+    "citizen",
+    "sustainable",
+    "development"
+  ],
+  "author": "Ants",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/anthill/6element/issues"
+  },
+  "homepage": "https://github.com/anthill/6element",
+  "dependencies": {
+    "6sense": "0.0.9",
+    "better-log": "^1.1.0",
+    "body-parser": "^1.10.1",
+    "browserify": "^10.2.0",
+    "compression": "^1.4.4",
+    "dygraphs": "^1.1.1",
+    "es6-shim": "^0.31.2",
+    "express": "^4.12.4",
+    "immutable": "^3.7.4",
+    "leaflet": "^0.7.3",
+    "moment": "^2.10.3",
+    "pg": "^4.3.0",
+    "gulp": "~3.8.8",
+    "gulp-express": "git://github.com/gimm/gulp-express.git#9a3c842b55246fe039c85b56b4a8e5401ce779bf",
+    "gulp-livereload": "~2.1.1",
+    "gulp-plumber": "^1.0.1",
+    "quipu": "^0.1.0",
+    "react": "^0.13.3",
+    "request": "^2.58.0",
+    "socket.io": "^1.3.5",
+    "socket.io-client": "^1.3.5",
+    "sql": "^0.51.0",
+    "sql-generate": "^1.0.0",
+    "twilio": "^2.2.1",
+    "vinyl-source-stream": "^1.1.0",
+    "xml": "^1.0.0"
+  },
+  "devDependencies": {
+    "eslint": "^0.21.0",
+    "watchify": "^3.2.1"
+  }
+}

@@ -8,9 +8,8 @@ sensor/vision/data/*
 *.pdf
 *.doc
 *.doc#
-*_app.js
 
-browserify-bundle.js
+*-browserify-bundle.js
 
 PRIVATE.json
 

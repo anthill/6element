@@ -1,0 +1,5 @@
+node_modules
+
+database/management/declarations.js
+clients/Admin-browserify-bundle.js
+clients/App-browserify-bundle.js

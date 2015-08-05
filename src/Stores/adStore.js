@@ -46,6 +46,17 @@ var AdStore = Object.assign({}, EventEmitter.prototype, {
         return _adMap.get(id);
     },
 
+    getFromUser: function(userId){
+        var ads = [];
+
+        _adMap.forEach(function(ad){
+            if (ad.owner === userId)
+                ads.push(ad);
+        });
+
+        return ads;
+    },
+
     getAll: function(){
         return _adMap;
     }
@@ -58,6 +69,7 @@ AdStore.dispatchToken = dispatcher.register(function(action) {
 
         case actionTypes.LOAD_ADS:
             _adMap = action.adMap;
+            console.log('_adMap', _adMap);
             AdStore.emitChange();
             break;
 

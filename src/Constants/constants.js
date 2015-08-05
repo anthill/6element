@@ -32,7 +32,7 @@ module.exports = {
         LOAD_USERS: null
     }),
     
-    adType: keyMirror({
+    adTypes: keyMirror({
         GIVE: null,
         NEED: null
     })

@@ -1,9 +1,9 @@
-.activity form .filter{
+.activity .filter{
     display: flex;
     justify-content: center;
 }
 
-.activity form .filter > *{
+.activity .filter > *{
     padding: 0.8em;
     outline: 1px solid darkblue;
     cursor: pointer;
@@ -41,10 +41,10 @@
     flex-grow: 100; /* take all the remaining space */
 }
 
-.activity .activity-items li.give{
+.activity .activity-items li.GIVE{
     background-color: hsl(118, 38%, 74%);
 }
-.activity .activity-items li.need{
+.activity .activity-items li.NEED{
     background-color: hsl(204, 38%, 74%);
 }
 

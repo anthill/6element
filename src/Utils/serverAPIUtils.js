@@ -9,9 +9,7 @@ var makeMap = require('./utils.js').makeMap;
 // i couldn't use RC_FILE as the require parameter :/
 // var RC_FILE = '../../data/rcs.json';
 var recyclingCenters = require('../../data/rcs.json');
-var fakeAds = require('../../data/fakeAds.json');
-var fakeTrocs = require('../../data/fakeTrocs.json');
-var fakeUsers = require('../../data/fakeUsers.json');
+var fakeData = require('../../fake_src/fakeTrocGenerator.js');
 
 module.exports = {
 
@@ -21,9 +19,9 @@ module.exports = {
     },
 
     loadTrocs: function(){
-        var trocMap = makeMap(fakeTrocs, 'id');
-        var adMap = makeMap(fakeAds, 'id');
-        var userMap = makeMap(fakeUsers, 'id');
+        var trocMap = makeMap(fakeData.trocs, 'id');
+        var adMap = makeMap(fakeData.ads, 'id');
+        var userMap = makeMap(fakeData.users, 'id');
 
         loadActionCreator.loadTrocs(trocMap);
         loadActionCreator.loadAds(adMap);

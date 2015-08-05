@@ -1,8 +1,5 @@
 'use strict';
 
-require('es6-shim');
-var fs = require('fs');
-
 var ad1 = {
     id: 1,
     owner: 0,
@@ -107,7 +104,8 @@ var user5 = {
     name: 'Armand'
 };
 
-
-fs.writeFile('../data/fakeAds.json', JSON.stringify([ad1, ad2, ad3]));
-fs.writeFile('../data/fakeTrocs.json', JSON.stringify([troc1, troc2]));
-fs.writeFile('../data/fakeUsers.json', JSON.stringify([user1, user2, user3, user4, user5]));
+module.exports = {
+    ads: [ad1, ad2, ad3],
+    users: [user1, user2, user3, user4, user5],
+    trocs: [troc1, troc2]
+};

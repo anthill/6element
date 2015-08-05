@@ -8,6 +8,28 @@
 // 7. le reste
 */
 
+
+body{
+    position: relative;
+}
+
+#adminTool{
+    position: relative;
+    height: 100vh;
+    width: 80vw;
+}
+
+#panel {
+	position: absolute;
+	top: 0;
+	right: 0;
+	background-color: white;
+
+	width: 20vw;
+	height: 100%;
+}
+
+
 .place{
 	display: inline-block; margin: 1em; padding: .5em; width: 30%;
 	border: 1px solid orange; border-radius: 5px;
@@ -162,4 +184,27 @@ li .modifiable{
 
 .placeOrphan li * {
 	display: inline-block; margin: 0 1em;
+}
+
+/*
+CSS PANEL
+*/
+.displaySensor div{
+	display: inline-block; margin: 0 1em;
+}
+
+.displaySensor li * {
+	display: inline-block; margin: 0 1em;
+	text-align: left;
+}
+
+.displaySensor .DisplaySensorPhoneNumber {
+	text-align: left;
+}
+
+
+.orphan {
+	font-weight: bold;
+    color: white;
+    background-color: orange;
 }

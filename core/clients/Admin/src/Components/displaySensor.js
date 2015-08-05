@@ -19,7 +19,7 @@ interface placeProps{
 	    sense_status: string,
 	    updated_at: string
 	}],
-	orpha: boolean             // 0 : has place | 1 : No place
+	placeName: string,
     onChangeSensor: function()
 }
 
@@ -38,7 +38,7 @@ var DisplaySensor = React.createClass({
         var state = this.state;
 
         console.log('DISPLAYSENSOR props', props);
-        console.log('DISPLAYSENSOR state', state);
+        // console.log('DISPLAYSENSOR state', state);
 
         var classes = [
             'displaySensor',
@@ -64,7 +64,7 @@ var DisplaySensor = React.createClass({
                         },
                         onChange: props.onChangeSensor,
                     }),
-                    props.sensor.installed_at
+                    props.sensor.installed_at ? props.placeName : "Add me a place"
                 ),
                 React.DOM.li({}, 
                     new Modifiable({

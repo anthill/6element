@@ -96,10 +96,14 @@ var App = React.createClass({
         // For all sensor
         var allSensor = [];
         props.sensorMap.forEach(function (sensor) {
+            var place = props.placeMap.get(sensor.installed_at);
+
+            var placeName = place ? place.name : null;
 
             allSensor.push(new DisplaySensor ({
                 key: sensor.id,
-                sensor, sensor,
+                sensor: sensor,
+                placeName: placeName,
                 onChangeSensor: props.onChangeSensor 
             }));
         });

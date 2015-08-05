@@ -260,8 +260,8 @@ server.listen(PORT, function () {
 
 // In dev, there are usually no sensor pushing.
 // Let's simulate that part
-if(process.env.NODE_ENV === 'development'){
-    simulateSensorMeasurementArrival();
-}
+// if(process.env.NODE_ENV === 'development'){
+//     simulateSensorMeasurementArrival();
+// }
 
 

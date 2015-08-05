@@ -2,6 +2,8 @@
 
 var React = require('react');
 
+var displayActions = require('../Actions/displayActionCreator');
+
 module.exports = React.createClass({
 
     displayName: 'AdPost',
@@ -13,6 +15,10 @@ module.exports = React.createClass({
     render: function() {
         // Do NOT use 'ad-post' as class name since it's blocked by AdBlock
         return React.DOM.div({className: "post-an-ad"}, [
+            
+            React.DOM.button({
+                onClick: displayActions.goBack
+            }, '⇚'),
             
             React.DOM.form({
                 onSubmit: function(e){

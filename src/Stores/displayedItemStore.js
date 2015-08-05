@@ -4,12 +4,13 @@ var dispatcher = require('../Dispatcher/dispatcher.js');
 var EventEmitter = require('events').EventEmitter;
 
 var constants = require('../Constants/constants.js');
+
 var actionTypes = constants.actionTypes;
 
 var _displayed = {
     activeTab: undefined, // K.tabTypes
-    activeScreen: undefined // K.screen
-    // activeRC: integer
+    activeScreen: undefined, // K.screen
+    previousScreen: undefined // K.screen // a single value means we can only go one step back. URLs, the 'page' npm package and History API should be the way to go if more is needed
     // isRCListOpen: boolean
 };
 
@@ -64,8 +65,15 @@ DisplayedItemStore.dispatchToken = dispatcher.register(function(action) {
             break;
 
         case actionTypes.GO_TO_SCREEN:
+            _displayed.previousScreen = _displayed.activeScreen;
             _displayed.activeScreen = action.screen;
-            DisplayedItemStore.emit(DisplayedItemStore.events.CHANGE_TAB);
+            DisplayedItemStore.emit(DisplayedItemStore.events.CHANGE_SCREEN);
+            break;
+
+        case actionTypes.GO_BACK:
+            _displayed.activeScreen = _displayed.previousScreen;
+            _displayed.previousScreen = undefined;
+            DisplayedItemStore.emit(DisplayedItemStore.events.CHANGE_SCREEN);
             break;
 
         default:

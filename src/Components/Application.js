@@ -27,7 +27,7 @@ interface AppState{
 
 */
 
-function getStateFromStores() {
+function makeStateFromStores() {
     return {
         screen: DisplayedItemStore.getActiveScreen(),
         tab: DisplayedItemStore.getDisplayedTab()
@@ -39,19 +39,25 @@ var Application = React.createClass({
     displayName: 'App',
 
     getInitialState: function(){
-        return getStateFromStores();
+        return makeStateFromStores();
     },
 
     onTabChange: function() {
-        this.setState(getStateFromStores());
+        this.setState(makeStateFromStores());
+    },
+
+    onScreenChange: function() {
+        this.setState(makeStateFromStores());
     },
 
     componentDidMount: function() {
         DisplayedItemStore.on(DisplayedItemStore.events.CHANGE_TAB, this.onTabChange);
+        DisplayedItemStore.on(DisplayedItemStore.events.CHANGE_SCREEN, this.onScreenChange);
     },
 
     componentWillUnmount: function() {
         DisplayedItemStore.removeListener(DisplayedItemStore.events.CHANGE_TAB, this.onTabChange);
+        DisplayedItemStore.removeListener(DisplayedItemStore.events.CHANGE_SCREEN, this.onScreenChange);
     },
     
     render: function() {

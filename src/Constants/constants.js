@@ -30,7 +30,8 @@ module.exports = {
         LOAD_TROCS: null,
         LOAD_ADS: null,
         LOAD_USERS: null,
-        GO_TO_SCREEN: null
+        GO_TO_SCREEN: null,
+        GO_BACK: null
     }),
 
     screen: keyMirror({

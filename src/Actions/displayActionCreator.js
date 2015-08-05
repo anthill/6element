@@ -30,6 +30,12 @@ module.exports = {
             type: actionTypes.GO_TO_SCREEN,
             screen: screen
         })
+    },
+    
+    goBack: function(){
+        dispatcher.dispatch({
+            type: actionTypes.GO_BACK
+        })
     }
 
 };

@@ -39,7 +39,7 @@ module.exports = {
         MAIN: null
     }),
     
-    adType: keyMirror({
+    adTypes: keyMirror({
         GIVE: null,
         NEED: null
     })

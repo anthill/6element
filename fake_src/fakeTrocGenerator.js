@@ -1,7 +1,7 @@
 'use strict';
 
 var ad1 = {
-    id: 1,
+    id: 10,
     owner: 0,
     content: {
         title: 'VESTE ROUGE DECHIREE',
@@ -16,8 +16,8 @@ var ad1 = {
 };
 
 var ad2 = {
-    id: 10,
-    owner: 10,
+    id: 11,
+    owner: 0,
     content: {
         title: 'VESTE BLEUE',
         categories: ['Vetements', 'Veste'],
@@ -31,7 +31,7 @@ var ad2 = {
 };
 
 var ad3 = {
-    id: 11,
+    id: 1,
     owner: 11,
     content: {
         title: 'VELO PEUGEOT',
@@ -45,41 +45,66 @@ var ad3 = {
     state: 'ongoing'
 };
 
+var ad4 = {
+    id: 2,
+    owner: 0,
+    content: {
+        title: 'VELO BON ETAT',
+        categories: ['Transport', 'Vélo'],
+        location: 'Bordeaux',
+        pics: '../data/Tattoo_Zelda.png',
+        state: 'Tous',
+        text: 'Je cherche un vélo'
+    },
+    direction: 'GIVE',
+    state: 'ongoing'
+};
+
+var ad5 = {
+    id: 3,
+    owner: 12,
+    content: {
+        title: 'VELO DE VILLE',
+        categories: ['Transport', 'Vélo'],
+        location: 'Bordeaux',
+        pics: undefined,
+        state: 'Usagé',
+        text: 'Je donne mon super vélo de ville'
+    },
+    direction: 'GIVE',
+    state: 'ongoing'
+};
+
 var troc1 = {
     id: 0,
-    myAd: undefined,
+    myAdId: 2,
     links: [
         {
-            userId: 10,
-            adId: 10,
+            adId: 1,
             state: 'potential'
         },
         {
-            userId: 11,
-            adId: 11,
+            adId: 3,
             state: 'interested'
         }
     ],
-    direction: 'need',
+    direction: 'NEED',
     state: 'ongoing'
 };
 
 var troc2 = {
     id: 1,
-    myAd: 1,
-    links: [
-        {
-            userId: 12,
-            adId: undefined,
-            state: 'potential'
-        },
-        {
-            userId: 13,
-            adId: undefined,
-            state: 'interested'
-        }
-    ],
-    direction: 'give',
+    myAdId: 10,
+    links: [],
+    direction: 'GIVE',
+    state: 'ongoing'
+};
+
+var troc3 = {
+    id: 2,
+    myAdId: 11,
+    links: [],
+    direction: 'GIVE',
     state: 'ongoing'
 };
 
@@ -105,7 +130,7 @@ var user5 = {
 };
 
 module.exports = {
-    ads: [ad1, ad2, ad3],
+    ads: [ad1, ad2, ad3, ad4, ad5],
     users: [user1, user2, user3, user4, user5],
-    trocs: [troc1, troc2]
+    trocs: [troc1, troc2, troc3]
 };

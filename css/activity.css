@@ -1,9 +1,9 @@
-.activity form .filter{
+.activity .filter{
     display: flex;
     justify-content: center;
 }
 
-.activity form .filter > *{
+.activity .filter > *{
     padding: 0.8em;
     outline: 1px solid darkblue;
     cursor: pointer;

@@ -44,7 +44,11 @@ var TrocStore = Object.assign({}, EventEmitter.prototype, {
     },
 
     getAll: function(){
-        return _trocMap;
+        var trocs = [];
+        _trocMap.forEach(function(troc){
+            trocs.push(troc);
+        })
+        return trocs;
     }
 
 });

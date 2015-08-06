@@ -32,7 +32,7 @@ module.exports = {
     removeTroc: function(id){
         dispatcher.dispatch({
             type: actionTypes.REMOVE_TROC,
-            id: id,
+            id: id
         });
     }
 

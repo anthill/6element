@@ -34,11 +34,11 @@ var Tab = React.createClass({
     },
 
     componentDidMount: function() {
-        DisplayedItemStore.addChangeListener(this.onChange);
+        DisplayedItemStore.on(DisplayedItemStore.events.CHANGE_TAB, this.onChange);
     },
 
     componentWillUnmount: function() {
-        DisplayedItemStore.removeChangeListener(this.onChange);
+        DisplayedItemStore.removeListener(DisplayedItemStore.events.CHANGE_TAB, this.onChange);
     },
     
     render: function() {

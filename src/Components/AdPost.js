@@ -3,22 +3,22 @@
 var React = require('react');
 
 var displayActions = require('../Actions/displayActionCreator');
-var K = require('../Constants/constants');
 
 module.exports = React.createClass({
 
-    displayName: 'Home',
+    displayName: 'AdPost',
 
     getInitialState: function(){
-        return {};//getStateFromStores();
+        return {};
     },
     
     render: function() {
-        //var self = this;
-        //var props = this.props;
-        //var state = this.state;
-        
-        return React.DOM.div({className: 'home'}, [
+        // Do NOT use 'ad-post' as class name since it's blocked by AdBlock
+        return React.DOM.div({className: "post-an-ad"}, [
+            
+            React.DOM.button({
+                onClick: displayActions.goBack
+            }, '⇚'),
             
             React.DOM.form({
                 onSubmit: function(e){
@@ -53,23 +53,29 @@ module.exports = React.createClass({
                     })
                 ]),
                 
-                React.DOM.div({className: 'submit-group'}, [
+                React.DOM.label({},
+                    'Où ?',
+                    React.DOM.input({
+                        type: 'text',
+                        id: 'where'
+                    })
+                ),
+                
+                React.DOM.label({}, 
+                    'Photo',
+                    React.DOM.input({
+                        type: 'file',
+                        id: 'pic'
+                    })
+                ),
+                
+                React.DOM.div({className: 'submit-group'}, 
                     React.DOM.button({
                         type: "submit"
-                    }, "Aller en déchèterie"),
-                    React.DOM.button({
-                        type: "submit"
-                    }, "Voir les personnes qui cherchent (21)"),
-                    React.DOM.button({
-                        type: "submit",
-                        onClick: function(){
-                            displayActions.goToScreen(K.screen.AD_POST);
-                        }
-                    }, "Déposer une annonce")
-                ])
+                    }, "Poster")
+                )
             ])
-            
-        ])
-        
+        ])                 
     }
+    
 });

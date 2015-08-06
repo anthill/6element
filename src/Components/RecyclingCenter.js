@@ -57,12 +57,12 @@ var RecyclingCenter = React.createClass({
     },
 
     componentDidMount: function() {
-        DisplayedItemStore.addChangeListener(this.onChange);
+        DisplayedItemStore.on(DisplayedItemStore.events.CHANGE_TAB, this.onChange);
         RecyclingCenterStore.addChangeListener(this.onChange);
     },
 
     componentWillUnmount: function() {
-        DisplayedItemStore.removeChangeListener(this.onChange);
+        DisplayedItemStore.removeListener(DisplayedItemStore.events.CHANGE_TAB, this.onChange);
         RecyclingCenterStore.removeChangeListener(this.onChange);
     },
     
@@ -128,6 +128,8 @@ var RecyclingCenter = React.createClass({
             legendNow
         );
         
+        console.log('state.recyclingCenter', state.recyclingCenter)
+        
         var waitingLevelNow = open ? 
             getCrowdLevel(state.recyclingCenter.maxSize, state.recyclingCenter.crowd[infBound(now)]): 
             undefined;
@@ -139,6 +141,8 @@ var RecyclingCenter = React.createClass({
             now: now,
             schedule: state.recyclingCenter.schedule
         });
+        
+        console.log("waitingMessages", waitingMessages, waitingLevelNow);
         
         var crowd = React.DOM.section({className: "container"}, 
             React.DOM.header({className: "row"},

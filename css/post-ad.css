@@ -1,0 +1,26 @@
+.post-an-ad form{
+    display: flex;
+    flex-direction: column;
+}
+
+.post-an-ad form > *{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    
+    margin: 1em 0;
+}
+
+.post-an-ad form .mode-switch{
+    
+}
+
+.post-an-ad form .mode-switch > *{
+    padding: 0.8em;
+    outline: 1px solid darkblue;
+    cursor: pointer;
+}
+
+.post-an-ad form input[type="text"]{
+    width: 80%;
+}

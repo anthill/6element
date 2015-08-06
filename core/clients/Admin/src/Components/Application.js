@@ -3,7 +3,7 @@
 var React = require('react');
 var Immutable = require('immutable');
 var Place = React.createFactory(require('./Place.js'));
-var PlaceOrphan = React.createFactory(require('./placeOrphan.js'));
+var PlaceOrphan = React.createFactory(require('./PlaceOrphan.js'));
 var DisplaySensor = React.createFactory(require('./displaySensor.js'));
 
 /*
@@ -99,10 +99,12 @@ var App = React.createClass({
         // For all sensor
         var allSensor = [];
 
-        var placeIDList = new Immutable.Set(placeIDList.id.sort(function(a, b){
-            return a - b;
+        console.log("placeIDList", placeIDList);
+        var placeIDList = new Immutable.List(placeIDList.sort(function(a, b){
+            return a.id - b.id;
         }));
-        
+        console.log("placeIDList 2", placeIDList);
+
         props.sensorMap.forEach(function (sensor) {
             var place = props.placeMap.get(sensor.installed_at);
 

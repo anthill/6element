@@ -11,7 +11,10 @@ var AdStore = require('../Stores/adStore.js');
 
 // UTILS
 var K = require('../Constants/constants.js');
-var adTypes = K.adTypes;
+
+var adTypeClasses = {};
+adTypeClasses[K.adTypes.GIVE] = 'give';
+adTypeClasses[K.adTypes.NEED] = 'need';
 
 /*
 
@@ -34,7 +37,7 @@ interface ActivityItemState{
 
 */
 
-function getStateFromStores(id, otherIds) {
+function makeStateFromStores(id, otherIds) {
 
     if (otherIds){
         var otherAds = otherIds.map(function(otherId){
@@ -55,7 +58,7 @@ module.exports = React.createClass({
     displayName: 'ActivityItem',
 
     getInitialState: function(){
-        var stateFromStores = getStateFromStores(this.props.myAdId);
+        var stateFromStores = makeStateFromStores(this.props.myAdId);
 
         return Object.assign(stateFromStores, {
             openPanel: false
@@ -94,7 +97,7 @@ module.exports = React.createClass({
             React.DOM.span({title: 'delete'}, 'X')
         );
         
-        return React.DOM.li({className: adTypes[props.direction]},
+        return React.DOM.li({className: adTypeClasses[props.direction]},
             header,
             state.openPanel ?
                 React.DOM.section({}, JSON.stringify(props.links))

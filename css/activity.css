@@ -41,10 +41,10 @@
     flex-grow: 100; /* take all the remaining space */
 }
 
-.activity .activity-items li.GIVE{
+.activity .activity-items li.give{
     background-color: hsl(118, 38%, 74%);
 }
-.activity .activity-items li.NEED{
+.activity .activity-items li.need{
     background-color: hsl(204, 38%, 74%);
 }
 

@@ -46,6 +46,9 @@ var Place = React.createClass({
         // var self = this;
         var props = this.props;
         // var state = this.state;
+        if (props.place.id === 1){
+            console.log('place', props.place);
+        }
 
         // console.log('PLACE props', props);
         // console.log('PLACE state', state);

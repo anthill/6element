@@ -68,7 +68,7 @@ var App = React.createClass({
 
         props.placeMap.forEach(function (place) {
 
-            placeIDList.push({id : place.id, name : place.name}); // for DisplaySensor
+            placeIDList.push({'id' : place.id, 'name' : place.name}); // for DisplaySensor
             var mySensors = [];
             // console.log("place", place);
             if (place.sensor_ids.size !== 0) {
@@ -99,11 +99,19 @@ var App = React.createClass({
         // For all sensor
         var allSensor = [];
 
-        console.log("placeIDList", placeIDList);
-        var placeIDList = new Immutable.List(placeIDList.sort(function(a, b){
-            return a.id - b.id;
-        }));
-        console.log("placeIDList 2", placeIDList);
+        // /!\ JE N ARRIVE PAS A SORT PAR NOM DE RC
+        // placeIDList.sort(function(a, b){
+        //     return a.name - b.name;
+        // })
+
+        var map1 = Immutable.Map({'1':'RER', '2':'REZEAE', '3':'TTEGV'});
+
+        var temp = {};
+        placeIDList.forEach(function (placeID) {
+            temp[placeID.name] = placeID.id;
+        })
+
+        var placeIDMap = new Immutable.Map(temp);
 
         props.sensorMap.forEach(function (sensor) {
             var place = props.placeMap.get(sensor.installed_at);
@@ -116,7 +124,7 @@ var App = React.createClass({
                 sensor: sensor,
                 placeName: placeName,
                 placeId: placeId,
-                placeIDList: placeIDList,
+                placeIDMap: placeIDMap.delete(placeName),
                 onChangePlace: props.onChangePlace,
                 onChangeSensor: props.onChangeSensor
             }));

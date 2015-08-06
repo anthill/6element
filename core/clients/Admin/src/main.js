@@ -19,8 +19,7 @@ function render(){
 
 function updatePlaceDb(datas) {
 
-    if (typeof (datas) === 'object')
-        datas = [datas];
+    console.log('PLACE datas', datas);
 
     var objs = datas.map(function (data){
         var delta = {};
@@ -52,6 +51,8 @@ function updatePlaceDb(datas) {
 
 function updateSensorDb(datas) {
 
+    console.log('SENSOR datas', datas);
+
     var objs = datas.map(function (data){
         var delta = {};
         delta[data.field] = data.value;
@@ -62,8 +63,6 @@ function updateSensorDb(datas) {
         };
         return obj;
     });
-
-    console.log('objs dans updateSensorDb', objs);
 
     var queryP = objs.map(function (obj) {
         return serverAPI.updateSensor(obj);

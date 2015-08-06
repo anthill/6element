@@ -34,12 +34,22 @@ interface AppState{
 var DisplaySensor = React.createClass({
     displayName: 'DisplaySensor',
 
+    getInitialState: function(){
+        return {
+            isOpen: false
+        };
+    },
+
+    setOpen: function(isOpen){
+        this.setState({isOpen: isOpen});
+    },
+
     render: function() {
         var self = this;
         var props = this.props;
         var state = this.state;
 
-        console.log('DISPLAYSENSOR props', props);
+        // console.log('DISPLAYSENSOR props', props);
         // console.log('DISPLAYSENSOR state', state);
 
         var classes = [
@@ -66,7 +76,14 @@ var DisplaySensor = React.createClass({
                         },
                         onChange: props.onChangeSensor,
                     }),
+                    React.DOM.div({className: 'DisplaySensorPlace',
+                            onClick: function(){
+                                console.log('onclick DisplaySensorPlace', props.placeName);
+                                self.setOpen(!self.isOpen);
+                            }
+                        },
                     props.sensor.installed_at ? props.placeName : "Add me a place"
+                    )
                 ),
                 React.DOM.li({}, 
                     new Modifiable({

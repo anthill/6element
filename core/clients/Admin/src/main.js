@@ -34,7 +34,7 @@ function updatePlaceDb(datas) {
     });
 
     var queryP = objs.map(function (obj) {
-        return serverAPI.updateRC(obj);
+        return serverAPI.updatePlace(obj);
     });
 
     Promise.all(queryP)

@@ -4,6 +4,7 @@ var React = require('react');
 var Immutable = require('immutable');
 var Place = React.createFactory(require('./Place.js'));
 var PlaceOrphan = React.createFactory(require('./placeOrphan.js'));
+var DisplaySensor = React.createFactory(require('./displaySensor.js'));
 
 /*
 
@@ -93,11 +94,30 @@ var App = React.createClass({
 
         });
         
-        return React.DOM.div({
-            id: 'myApp'
-        },
-            myPlaces,
-            myPlacesOrphan
+        // For all sensor
+        var allSensor = [];
+        props.sensorMap.forEach(function (sensor) {
+            // To find sensor without place
+            var sensorOrphan = 0;
+            if (!sensor.installed_at)
+                sensorOrphan = 1;
+
+            allSensor.push(new DisplaySensor ({
+                key: sensor.id,
+                sensor, sensor,
+                sensorOrphan: sensorOrphan,
+                onChangeSensor: props.onChangeSensor 
+            }));
+        });
+        
+        return React.DOM.div({id: 'myApp'},
+            React.DOM.div({id: 'adminTool'}, 
+                myPlaces,
+                myPlacesOrphan
+            ),
+            React.DOM.div({id: 'panel'}, 
+                allSensor
+            )
         );
     }
 });

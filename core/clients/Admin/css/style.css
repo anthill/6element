@@ -89,6 +89,10 @@ li .modifiable{
 	color: green;
 }
 
+.DisplaySensorPhoneNumber.modifiable.updating {
+	color: green;
+}
+
 /* quipu status */
 
 .place.updating {

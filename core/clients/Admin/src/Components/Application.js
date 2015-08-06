@@ -53,6 +53,7 @@ var App = React.createClass({
         // console.log('APP state', state);
 
         var antIDList = [];
+        var placeIDList = [];
 
         props.sensorMap.forEach(function (sensor){
             antIDList.push(sensor.id);
@@ -66,6 +67,8 @@ var App = React.createClass({
         var myPlacesOrphan = [];
 
         props.placeMap.forEach(function (place) {
+
+            placeIDList.push({id : place.id, name : place.name}); // for DisplaySensor
             var mySensors = [];
             // console.log("place", place);
             if (place.sensor_ids.size !== 0) {
@@ -92,19 +95,28 @@ var App = React.createClass({
                 }));
             }
         });
-        
+
         // For all sensor
         var allSensor = [];
+
+        var placeIDList = new Immutable.Set(placeIDList.id.sort(function(a, b){
+            return a - b;
+        }));
+        
         props.sensorMap.forEach(function (sensor) {
             var place = props.placeMap.get(sensor.installed_at);
 
             var placeName = place ? place.name : null;
+            var placeId = place ? place.id : null;
 
             allSensor.push(new DisplaySensor ({
                 key: sensor.id,
                 sensor: sensor,
                 placeName: placeName,
-                onChangeSensor: props.onChangeSensor 
+                placeId: placeId,
+                placeIDList: placeIDList,
+                onChangePlace: props.onChangePlace,
+                onChangeSensor: props.onChangeSensor
             }));
         });
         

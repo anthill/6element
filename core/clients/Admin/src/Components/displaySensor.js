@@ -20,7 +20,9 @@ interface placeProps{
 	    updated_at: string
 	}],
 	placeName: string,
-    onChangeSensor: function()
+    placeId: placeId,
+    onChangeSensor: function(),
+    onChangePlace: function()
 }
 
 interface AppState{

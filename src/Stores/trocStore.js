@@ -14,9 +14,9 @@ var _trocMap; // Map: id -> Troc
 Interface Troc
 {
     id: string,
-    links: [{
-        userId: integer,
-        adId: integer,
+    myAd: Ad,
+    proposals: [{
+        ad: Ad,
         state: POTENTIAL / INTERESTED / CHOSEN / REFUSED / DISCARDED / COMPLETED 
     }],
     direction: GIVE / NEED
@@ -24,6 +24,17 @@ Interface Troc
 }
 
 */
+
+function _changeTrocStatus(trocId, status){
+    var troc = _trocMap.get(trocId);
+    troc.status = status;
+}
+
+function _changeProposalStatus(trocId, proposalId, status){
+    var troc = _trocMap.get(trocId);
+    var proposal = troc.proposalMap.get(proposalId);
+    proposal.status = status;
+}
 
 var TrocStore = Object.assign({}, EventEmitter.prototype, {
 
@@ -59,6 +70,24 @@ TrocStore.dispatchToken = dispatcher.register(function(action) {
 
         case actionTypes.LOAD_TROCS:
             _trocMap = action.trocMap;
+            TrocStore.emitChange();
+            break;
+
+        case actionTypes.REMOVE_TROC:
+            console.log('removing troc');
+            _trocMap.delete(action.id);
+            TrocStore.emitChange();
+            break;
+
+        case actionTypes.CHANGE_TROC_STATUS:
+            console.log('changing troc status');
+            _changeTrocStatus(action.id, action.status);
+            TrocStore.emitChange();
+            break;
+
+        case actionTypes.CHANGE_PROPOSAL_STATUS:
+            console.log('changing proposal status');
+            _changeProposalStatus(action.trocId, action.proposalId, action.status);
             TrocStore.emitChange();
             break;
 

@@ -23,7 +23,7 @@ Interface Ad
       text: string
     },
     direction: string,
-    state: string
+    status: string
   },
 
 */

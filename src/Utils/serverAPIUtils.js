@@ -21,10 +21,22 @@ module.exports = {
     loadTrocs: function(){
         var trocMap = makeMap(fakeData.trocs, 'id');
         var adMap = makeMap(fakeData.ads, 'id');
-        var userMap = makeMap(fakeData.users, 'id');
+
+        trocMap.forEach(function(troc){
+
+            troc.myAd = adMap.get(troc.myAd);
+
+            var proposalMap = new Map();
+
+            troc.proposalMap.forEach(function(proposal, index){
+                proposalMap.set(index, {
+                    ad: adMap.get(proposal.adId),
+                    status: proposal.status
+                });
+            });
+            troc.proposalMap = proposalMap;
+        });
 
         loadActionCreator.loadTrocs(trocMap);
-        loadActionCreator.loadAds(adMap);
-        loadActionCreator.loadUsers(userMap);
     }
 };

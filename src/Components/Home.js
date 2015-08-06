@@ -18,42 +18,42 @@ module.exports = React.createClass({
         //var props = this.props;
         //var state = this.state;
         
-        return React.DOM.div({className: 'home'}, [
+        return React.DOM.div({className: 'home'},
             
             React.DOM.form({
                 onSubmit: function(e){
                     e.preventDefault();
                 }
-            }, [
+            },
                 // mode switch
-                React.DOM.div({className: 'mode-switch'}, [
-                    React.DOM.label({}, [
+                React.DOM.div({className: 'mode-switch'},
+                    React.DOM.label({},
                         'Je me sépare',
                         React.DOM.input({
                             type: 'radio',
                             id: 'give',
                             name: 'give-need'
                         })
-                    ]),
-                    React.DOM.label({}, [
+                    ),
+                    React.DOM.label({},
                         'Je récupère',
                         React.DOM.input({
                             type: 'radio',
                             id: 'need',
                             name: 'give-need'
                         })
-                    ])
-                ]),
+                    )
+                ),
                 
-                React.DOM.label({}, [
+                React.DOM.label({},
                     'Quoi ?',
                     React.DOM.input({
                         type: 'text',
                         id: 'what'
                     })
-                ]),
+                ),
                 
-                React.DOM.div({className: 'submit-group'}, [
+                React.DOM.div({className: 'submit-group'},
                     React.DOM.button({
                         type: "submit"
                     }, "Aller en déchèterie"),
@@ -66,10 +66,8 @@ module.exports = React.createClass({
                             displayActions.goToScreen(K.screen.AD_POST);
                         }
                     }, "Déposer une annonce")
-                ])
-            ])
-            
-        ])
-        
+                )
+            )    
+        )
     }
 });

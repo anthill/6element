@@ -8,11 +8,11 @@ var ad1 = {
         categories: ['Vetements', 'Veste'],
         location: 'Bordeaux',
         pics: undefined,
-        state: 'Déchiré',
+        status: 'Déchiré',
         text: 'Je donne une veste un peu déchirée sur les côtés'
     },
     direction: 'give',
-    state: 'ongoing'
+    status: 'ongoing'
 };
 
 var ad2 = {
@@ -23,11 +23,11 @@ var ad2 = {
         categories: ['Vetements', 'Veste'],
         location: 'Bordeaux',
         pics: undefined,
-        state: 'Neuf',
+        status: 'Neuf',
         text: 'Je donne ma veste bleue'
     },
     direction: 'give',
-    state: 'ongoing'
+    status: 'ongoing'
 };
 
 var ad3 = {
@@ -38,11 +38,11 @@ var ad3 = {
         categories: ['Transport', 'Vélo'],
         location: 'Bordeaux',
         pics: '../data/Tattoo_Zelda.png',
-        state: 'Bon état',
+        status: 'Bon état',
         text: 'Je donne mon super vélo même si l\'image n\'a rien à voir'
     },
     direction: 'give',
-    state: 'ongoing'
+    status: 'ongoing'
 };
 
 var ad4 = {
@@ -53,11 +53,11 @@ var ad4 = {
         categories: ['Transport', 'Vélo'],
         location: 'Bordeaux',
         pics: '../data/Tattoo_Zelda.png',
-        state: 'Tous',
+        status: 'Tous',
         text: 'Je cherche un vélo'
     },
     direction: 'GIVE',
-    state: 'ongoing'
+    status: 'ongoing'
 };
 
 var ad5 = {
@@ -68,44 +68,44 @@ var ad5 = {
         categories: ['Transport', 'Vélo'],
         location: 'Bordeaux',
         pics: undefined,
-        state: 'Usagé',
+        status: 'Usagé',
         text: 'Je donne mon super vélo de ville'
     },
     direction: 'GIVE',
-    state: 'ongoing'
+    status: 'ongoing'
 };
 
 var troc1 = {
     id: 0,
-    myAdId: 2,
-    links: [
+    myAd: 2,
+    proposalMap: [ // not a map, but easier to call it that way for now
         {
             adId: 1,
-            state: 'potential'
+            status: 'potential'
         },
         {
             adId: 3,
-            state: 'interested'
+            status: 'interested'
         }
     ],
     direction: 'NEED',
-    state: 'ongoing'
+    status: 'ongoing'
 };
 
 var troc2 = {
     id: 1,
-    myAdId: 10,
-    links: [],
+    myAd: 10,
+    proposalMap: [], // not a map, but easier to call it that way for now
     direction: 'GIVE',
-    state: 'ongoing'
+    status: 'ongoing'
 };
 
 var troc3 = {
     id: 2,
-    myAdId: 11,
-    links: [],
+    myAd: 11,
+    proposalMap: [], // not a map, but easier to call it that way for now
     direction: 'GIVE',
-    state: 'ongoing'
+    status: 'ongoing'
 };
 
 var user1 = {

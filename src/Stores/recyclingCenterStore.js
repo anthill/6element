@@ -36,7 +36,7 @@ var RecyclingCenterStore = Object.assign({}, EventEmitter.prototype, {
 });
 
 RecyclingCenterStore.dispatchToken = dispatcher.register(function(action) {
-
+    
     switch(action.type) {
 
         case actionTypes.LOAD_RCS:

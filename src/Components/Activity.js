@@ -93,8 +93,10 @@ module.exports = React.createClass({
         ); // => will be able to trigger filter Action
 
         var trocList = React.DOM.ol({className: "activity-items"}, 
-            state.trocs.map(function(troc){
-                return new ActivityItem(troc);
+            state.trocs.map(function(troc, index){
+                return new ActivityItem(Object.assign(troc, {
+                    key: index
+                }));
             })
         ); 
 

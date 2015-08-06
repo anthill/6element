@@ -53,27 +53,27 @@ module.exports = React.createClass({
                     })
                 ]),
                 
-                React.DOM.label({}, [
+                React.DOM.label({},
                     'Où ?',
                     React.DOM.input({
                         type: 'text',
                         id: 'where'
                     })
-                ]),
+                ),
                 
-                React.DOM.label({}, [
+                React.DOM.label({}, 
                     'Photo',
                     React.DOM.input({
                         type: 'file',
                         id: 'pic'
                     })
-                ]),
+                ),
                 
-                React.DOM.div({className: 'submit-group'}, [
+                React.DOM.div({className: 'submit-group'}, 
                     React.DOM.button({
                         type: "submit"
                     }, "Poster")
-                ])
+                )
             ])
         ])                 
     }

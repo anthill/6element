@@ -70,7 +70,7 @@ module.exports = React.createClass({
                 'Je me sépare',
                 React.DOM.input({
                     type: 'checkbox',
-                    value: 'need',
+                    value: 'give',
                     name: 'give-need'
                 })
             ),

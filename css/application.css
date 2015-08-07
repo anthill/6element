@@ -4,6 +4,11 @@
     
     padding: 0px 20%;
     
-    font-size: 18px;
-    
+    font-size: 18px;    
+}
+
+@media (max-width: 40em) {
+    #app{
+        padding: 0;
+    }
 }

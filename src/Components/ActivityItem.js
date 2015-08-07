@@ -11,11 +11,12 @@ var trocActions = require('../Actions/trocActionCreator.js');
 // STORES
 
 // UTILS
-var adTypes = require('../Constants/adTypes.js');
+var directions = require('../Constants/directions.js');
 
 var adTypeClasses = {};
-adTypeClasses[adTypes.GIVE] = 'give';
-adTypeClasses[adTypes.NEED] = 'need';
+adTypeClasses[directions.GIVE] = 'give';
+adTypeClasses[directions.NEED] = 'need';
+
 
 /*
 
@@ -73,9 +74,6 @@ module.exports = React.createClass({
         var self = this;
         var props = this.props;
         var state = this.state;
-
-        // console.log('AITEM props', props);
-        // console.log('AITEM state', state);
 
         var header = React.DOM.header({},
             React.DOM.span({

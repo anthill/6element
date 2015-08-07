@@ -3,7 +3,11 @@
 var React = require('react');
 
 var displayActions = require('../Actions/displayActionCreator');
+
 var screenTypes = require('../Constants/screenTypes');
+var directions = require('../Constants/directions');
+
+var searchContext = require('../Actions/searchContextActionCreator');
 
 module.exports = React.createClass({
 
@@ -31,28 +35,41 @@ module.exports = React.createClass({
                         'Je me sépare',
                         React.DOM.input({
                             type: 'radio',
-                            id: 'give',
-                            name: 'give-need'
+                            value: directions.GIVE,
+                            name: 'direction',
+                            onChange: function(e){
+                                searchContext.update({
+                                    'direction': e.target.value
+                                })
+                            }
                         })
                     ),
                     React.DOM.label({},
                         'Je récupère',
                         React.DOM.input({
                             type: 'radio',
-                            id: 'need',
-                            name: 'give-need'
+                            value: directions.NEED,
+                            name: 'direction',
+                            onChange: function(e){
+                                searchContext.update({
+                                    'direction': e.target.value
+                                })
+                            }
                         })
                     )
                 ),
-                
                 React.DOM.label({},
                     'Quoi ?',
                     React.DOM.input({
                         type: 'text',
-                        id: 'what'
+                        id: 'what',
+                        onChange: function(e){
+                            searchContext.update({
+                                'what': e.target.value
+                            })
+                        }
                     })
                 ),
-                
                 React.DOM.div({className: 'submit-group'},
                     React.DOM.button({
                         type: "submit"

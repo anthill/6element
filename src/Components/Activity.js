@@ -72,8 +72,8 @@ module.exports = React.createClass({
                 'Je me sépare',
                 React.DOM.input({
                     type: 'checkbox',
-                    id: 'give-away',
-                    name: 'give-search',
+                    value: 'give',
+                    name: 'direction',
                     onChange: function(){
                         trocActions.applyTrocFilter('direction', 'GIVE');
                     }
@@ -83,8 +83,8 @@ module.exports = React.createClass({
                 'Je récupère',
                 React.DOM.input({
                     type: 'checkbox',
-                    id: 'search-for',
-                    name: 'give-search',
+                    value: 'need',
+                    name: 'direction',
                     onChange: function(){
                         trocActions.applyTrocFilter('direction', 'NEED');
                     } 

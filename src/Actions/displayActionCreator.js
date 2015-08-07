@@ -18,12 +18,6 @@ module.exports = {
         });
     },
 
-    toggleRCList: function(){
-        dispatcher.dispatch({
-            type: actionTypes.TOGGLE_RC_LIST
-        });
-    },
-    
     goToScreen: function(screen){
         dispatcher.dispatch({
             type: actionTypes.GO_TO_SCREEN,

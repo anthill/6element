@@ -31,7 +31,7 @@ module.exports = React.createClass({
                         'Je me sépare',
                         React.DOM.input({
                             type: 'radio',
-                            id: 'give',
+                            value: 'give',
                             name: 'give-need'
                         })
                     ]),
@@ -39,7 +39,7 @@ module.exports = React.createClass({
                         'Je récupère',
                         React.DOM.input({
                             type: 'radio',
-                            id: 'need',
+                            value: 'need',
                             name: 'give-need'
                         })
                     ])

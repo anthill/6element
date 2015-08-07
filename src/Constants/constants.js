@@ -31,7 +31,8 @@ module.exports = {
         LOAD_ADS: null,
         LOAD_USERS: null,
         GO_TO_SCREEN: null,
-        GO_BACK: null
+        GO_BACK: null,
+        UPDATE_SEARCH_CONTEXT: null
     }),
 
     screen: keyMirror({
@@ -39,7 +40,7 @@ module.exports = {
         MAIN: null
     }),
     
-    adTypes: keyMirror({
+    direction: keyMirror({
         GIVE: null,
         NEED: null
     })

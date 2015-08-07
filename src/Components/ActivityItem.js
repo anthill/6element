@@ -13,8 +13,8 @@ var AdStore = require('../Stores/adStore.js');
 var K = require('../Constants/constants.js');
 
 var adTypeClasses = {};
-adTypeClasses[K.adTypes.GIVE] = 'give';
-adTypeClasses[K.adTypes.NEED] = 'need';
+adTypeClasses[K.direction.GIVE] = 'give';
+adTypeClasses[K.direction.NEED] = 'need';
 
 /*
 
@@ -69,9 +69,6 @@ module.exports = React.createClass({
         var self = this;
         var props = this.props;
         var state = this.state;
-
-        console.log('AITEM props', props);
-        console.log('AITEM state', state);
 
         var header = React.DOM.header({},
             // React.DOM.span({className: 'private'}, props.ad.private ? 'private' : ''),

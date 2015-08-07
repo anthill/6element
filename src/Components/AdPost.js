@@ -3,6 +3,9 @@
 var React = require('react');
 
 var displayActions = require('../Actions/displayActionCreator');
+var searchContextStore = require('../Stores/searchContextStore');
+
+var K = require('../Constants/constants');
 
 module.exports = React.createClass({
 
@@ -13,8 +16,13 @@ module.exports = React.createClass({
     },
     
     render: function() {
+        
+        var searchContext = searchContextStore.get();
+        
+        console.log('AdPost searchContextStore.get()', searchContext, searchContext.get('direction'), K.direction.GIVE, K.direction.NEED)
+        
         // Do NOT use 'ad-post' as class name since it's blocked by AdBlock
-        return React.DOM.div({className: "post-an-ad"}, [
+        return React.DOM.div({className: "post-an-ad"}, 
             
             React.DOM.button({
                 onClick: displayActions.goBack
@@ -24,34 +32,36 @@ module.exports = React.createClass({
                 onSubmit: function(e){
                     e.preventDefault();
                 }
-            }, [
+            }, 
                 // mode switch
-                React.DOM.div({className: 'mode-switch'}, [
-                    React.DOM.label({}, [
+                React.DOM.div({className: 'mode-switch'}, 
+                    React.DOM.label({}, 
                         'Je me sépare',
                         React.DOM.input({
                             type: 'radio',
-                            id: 'give',
-                            name: 'give-need'
+                            value: 'give',
+                            name: 'direction',
+                            defaultChecked: searchContext.get('direction') === K.direction.GIVE
                         })
-                    ]),
-                    React.DOM.label({}, [
+                    ),
+                    React.DOM.label({}, 
                         'Je récupère',
                         React.DOM.input({
                             type: 'radio',
-                            id: 'need',
-                            name: 'give-need'
+                            value: 'need',
+                            name: 'direction',
+                            defaultChecked: searchContext.get('direction') === K.direction.NEED
                         })
-                    ])
-                ]),
+                    )
+                ),
                 
-                React.DOM.label({}, [
+                React.DOM.label({}, 
                     'Quoi ?',
                     React.DOM.input({
                         type: 'text',
                         id: 'what'
                     })
-                ]),
+                ),
                 
                 React.DOM.label({},
                     'Où ?',
@@ -74,8 +84,8 @@ module.exports = React.createClass({
                         type: "submit"
                     }, "Poster")
                 )
-            ])
-        ])                 
+            )
+        )             
     }
     
 });

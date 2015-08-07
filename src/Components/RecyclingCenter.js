@@ -9,10 +9,9 @@ var Levels = React.createFactory(require('./Levels.js'));
 
 // STORES
 var DisplayedItemStore = require('../Stores/displayedItemStore.js');
-var RecyclingCenterStore = require('../Stores/recyclingCenterStore.js');
+var recyclingCenterStore = require('../Stores/recyclingCenterStore.js');
 
 // ACTIONS
-var _toggleRCList = require('../Actions/displayActionCreator.js').toggleRCList;
 
 // UTILS
 var weekDays = require('../Utils/utils.js').weekDays;
@@ -45,7 +44,7 @@ interface RecyclingCenterState{
 function getStateFromStores() {
     return {
         isListOpen: DisplayedItemStore.isRCListOpen(),
-        recyclingCenter: RecyclingCenterStore.getSelected()
+        recyclingCenter: recyclingCenterStore.getSelected()
     };
 }
 
@@ -58,26 +57,45 @@ var RecyclingCenter = React.createClass({
 
     componentDidMount: function() {
         DisplayedItemStore.on(DisplayedItemStore.events.CHANGE_TAB, this.onChange);
-        RecyclingCenterStore.addChangeListener(this.onChange);
+        recyclingCenterStore.addChangeListener(this.onChange);
     },
 
     componentWillUnmount: function() {
         DisplayedItemStore.removeListener(DisplayedItemStore.events.CHANGE_TAB, this.onChange);
-        RecyclingCenterStore.removeChangeListener(this.onChange);
+        recyclingCenterStore.removeChangeListener(this.onChange);
     },
     
     render: function() {
+        var self = this;
         var state = this.state;
 
         var classes = [
             'recyclingCenter'
         ];
 
-        var name = React.DOM.div({
+        
+        var rcs = [];
+        recyclingCenterStore.getAll().forEach(function(rc){
+            rcs.push(rc);
+        });
+        
+        var name = React.DOM.select({
                 className: 'name',
-                onClick: _toggleRCList
+                onChange: function(e){
+                    self.setState(Object.assign(state, {
+                        recyclingCenter: recyclingCenterStore.getAll().get(Number(e.target.value))
+                    }))
+                }
             },
-            state.recyclingCenter.name
+            rcs.map(function(rc){
+                
+                return React.DOM.option({
+                    key: rc.id,
+                    selected: state.recyclingCenter === rc,
+                    value: rc.id
+                }, rc.name);
+            
+            })  
         );
 
         var list = state.isListOpen ? new RCList({}) : undefined;

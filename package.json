@@ -25,6 +25,7 @@
     "bootstrap": "^3.3.5",
     "browserify": "^10.2.4",
     "flux": "^2.0.3",
+    "immutable": "^3.7.4",
     "keymirror": "^0.1.1",
     "moment": "^2.10.3",
     "react": "^0.13.3"

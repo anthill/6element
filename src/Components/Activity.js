@@ -70,16 +70,16 @@ module.exports = React.createClass({
                 'Je me sépare',
                 React.DOM.input({
                     type: 'checkbox',
-                    id: 'give-away',
-                    name: 'give-search'
+                    value: 'give',
+                    name: 'direction'
                 })
             ),
             React.DOM.label({},
                 'Je récupère',
                 React.DOM.input({
                     type: 'checkbox',
-                    id: 'search-for',
-                    name: 'give-search'
+                    value: 'need',
+                    name: 'direction'
                 })
             )
         ); // => will be able to trigger filter Action

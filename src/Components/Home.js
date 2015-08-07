@@ -3,7 +3,13 @@
 var React = require('react');
 
 var displayActions = require('../Actions/displayActionCreator');
+var searchContext = require('../Actions/searchContextActionCreator')
+var searchContextStore = require('../Stores/searchContextStore');
+
+console.log(searchContextStore);
+
 var K = require('../Constants/constants');
+
 
 module.exports = React.createClass({
 
@@ -27,33 +33,48 @@ module.exports = React.createClass({
             }, [
                 // mode switch
                 React.DOM.div({className: 'mode-switch'}, [
-                    React.DOM.label({}, [
+                    React.DOM.label({}, 
                         'Je me sépare',
                         React.DOM.input({
                             type: 'radio',
-                            id: 'give',
-                            name: 'give-need'
+                            value: K.direction.GIVE,
+                            name: 'direction',
+                            onChange: function(e){
+                                searchContext.update({
+                                    'direction': e.target.value
+                                })
+                            }
                         })
-                    ]),
-                    React.DOM.label({}, [
+                    ),
+                    React.DOM.label({}, 
                         'Je récupère',
                         React.DOM.input({
                             type: 'radio',
-                            id: 'need',
-                            name: 'give-need'
+                            value: K.direction.NEED,
+                            name: 'direction',
+                            onChange: function(e){
+                                searchContext.update({
+                                    'direction': e.target.value
+                                })
+                            }
                         })
-                    ])
+                    )
                 ]),
                 
-                React.DOM.label({}, [
+                React.DOM.label({}, 
                     'Quoi ?',
                     React.DOM.input({
                         type: 'text',
-                        id: 'what'
+                        id: 'what',
+                        onChange: function(e){
+                            searchContext.update({
+                                'what': e.target.value
+                            })
+                        }
                     })
-                ]),
+                ),
                 
-                React.DOM.div({className: 'submit-group'}, [
+                React.DOM.div({className: 'submit-group'}, 
                     React.DOM.button({
                         type: "submit"
                     }, "Aller en déchèterie"),
@@ -66,7 +87,7 @@ module.exports = React.createClass({
                             displayActions.goToScreen(K.screen.AD_POST);
                         }
                     }, "Déposer une annonce")
-                ])
+                )
             ])
             
         ])

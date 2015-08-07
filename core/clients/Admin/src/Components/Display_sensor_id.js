@@ -28,7 +28,7 @@ var Display_sensor_id = React.createClass({
         // console.log('Display_sensor_id props', props);
         // console.log('Display_sensor_id state', state);
 
-        return React.DOM.div({className: 'Display_sensor_id',
+        return React.DOM.div({className: 'display_sensor_id',
             onClick: function(){
                     console.log('onclick Display_sensor_id', props.currentSensorId);
                     // props.onChangeSensor()

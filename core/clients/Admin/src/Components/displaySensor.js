@@ -2,6 +2,7 @@
 
 var React = require('react');
 var Modifiable = React.createFactory(require('./Modifiable.js'));
+var SelectorPlaceId = React.createFactory(require('./SelectorPlaceId.js'));
 
 
 /*
@@ -19,6 +20,7 @@ interface placeProps{
 	    sense_status: string,
 	    updated_at: string
 	}],
+    placeIDMap: Map(),
 	placeName: string,
     placeId: placeId,
     onChangeSensor: function(),
@@ -79,10 +81,19 @@ var DisplaySensor = React.createClass({
                     React.DOM.div({className: 'DisplaySensorPlace',
                             onClick: function(){
                                 console.log('onclick DisplaySensorPlace', props.placeName);
-                                self.setOpen(!self.isOpen);
+                                self.setOpen(!state.isOpen);
                             }
                         },
-                    props.sensor.installed_at ? props.placeName : "Add me a place"
+                        props.sensor.installed_at ? props.placeName : "Add me a place",
+                        new SelectorPlaceId({
+                            placeIDMap: props.placeIDMap,
+                            placeId: props.placeId,
+                            sensorId: props.sensor.id,
+                            isOpen: state.isOpen,
+                            onChange: props.onChangeSensor,
+                            setOpen: self.setOpen
+                        })
+
                     )
                 ),
                 React.DOM.li({}, 

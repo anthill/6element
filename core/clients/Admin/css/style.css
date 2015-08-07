@@ -16,16 +16,16 @@ body{
 #adminTool{
     position: relative;
     height: 100vh;
-    width: 80vw;
+    width: 78vw;
 }
 
 #panel {
 	position: absolute;
 	top: 0;
 	right: 0;
-	background-color: white;
-	border-left: 1px solid black;
-	width: 20vw;
+	background-color: #B4D670;
+	border-left: 1px solid #537908;
+	width: 22vw;
 	height: 100%;
 }
 
@@ -149,14 +149,14 @@ li .modifiable{
 	text-align:center;
 }
 
-.selector .display_sensor_id {
+.display_sensor_id {
 	cursor: pointer;
 	transition: all 0.30s ease-in-out;
 	background:#bfd70e;
 	border-radius:50%;
-	width:2em;
-	height:2em;
-	border:2px solid #679403;
+	width:1.7em;
+	height:1.7em;
+	border:1px solid #679403;
 	box-shadow: 1px 1px 1px black;
 	font: bold;
 	color: white;
@@ -175,6 +175,28 @@ li .modifiable{
 	margin: 0 0.5em;
 }
 
+.listIDSensor ul {
+	background:#bfd70e;
+	border:1px solid #679403;
+	border-radius:10px;
+}
+
+.listIDSensor li {
+	text-align: center;
+	margin: .2em;
+}
+
+.displaySensor{
+	display: inline-block; margin: 1em; padding: .2em;
+	border: 1px solid white;
+}
+
+.listIDPlace ul {
+	background-color: #6A911B;
+	margin-top: 1em;
+	border: 1px solid white; border-radius:7px;
+}
+
 .placeOrphan{
 	display: inline-block; margin: 1em; padding: .5em; width: 30%;
 	border: 1px solid red; border-radius: 5px;
@@ -184,6 +206,14 @@ li .modifiable{
 .placeOrphan .placeOrphanName {
 	display: block; width: 100%; margin: 0 auto;
 	font-weight: bold; font-size: 1.5em;
+}
+
+.placeOrphan .display_sensor_id {
+	border-radius: 10px;
+    width: 6em;
+    height: 1.7em;
+    text-align: center;
+    line-height: 1.7em;
 }
 
 .placeOrphan div{

@@ -7,7 +7,7 @@ var displayActions = require('../Actions/displayActionCreator');
 var screenTypes = require('../Constants/screenTypes');
 var directions = require('../Constants/directions');
 
-var searchContext = require('../Actions/searchContextActionCreator');
+var searchContextAction = require('../Actions/searchContextActionCreator');
 
 module.exports = React.createClass({
 
@@ -24,11 +24,7 @@ module.exports = React.createClass({
         
         return React.DOM.div({className: 'home'},
             
-            React.DOM.form({
-                onSubmit: function(e){
-                    e.preventDefault();
-                }
-            },
+            React.DOM.div({},
                 // mode switch
                 React.DOM.div({className: 'mode-switch'},
                     React.DOM.label({},
@@ -38,7 +34,7 @@ module.exports = React.createClass({
                             value: directions.GIVE,
                             name: 'direction',
                             onChange: function(e){
-                                searchContext.update({
+                                searchContextAction.update({
                                     'direction': e.target.value
                                 })
                             }
@@ -51,7 +47,7 @@ module.exports = React.createClass({
                             value: directions.NEED,
                             name: 'direction',
                             onChange: function(e){
-                                searchContext.update({
+                                searchContextAction.update({
                                     'direction': e.target.value
                                 })
                             }
@@ -64,7 +60,7 @@ module.exports = React.createClass({
                         type: 'text',
                         id: 'what',
                         onChange: function(e){
-                            searchContext.update({
+                            searchContextAction.update({
                                 'what': e.target.value
                             })
                         }

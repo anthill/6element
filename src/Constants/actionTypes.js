@@ -19,5 +19,6 @@ module.exports = keyMirror({
     GO_TO_SCREEN: null,
     GO_BACK: null,
     CHANGE_PROPOSAL_STATUS: null,
-    APPLY_TROC_FILTERS: null
+    APPLY_TROC_FILTERS: null,
+    UPDATE_SEARCH_CONTEXT: null
 });

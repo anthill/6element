@@ -28,6 +28,8 @@ Interface Ad
 
 */
 
+// IN THE END, THIS REPRESENTS THE AD DATABASE. A STORE LIKE THIS MIGHT NOT BE COMPULSORY
+
 var AdStore = Object.assign({}, EventEmitter.prototype, {
 
     emitChange: function() {

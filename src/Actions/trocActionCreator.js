@@ -15,7 +15,7 @@ module.exports = {
             status: status
         });
 
-        // DB UPDATE TO DO
+        // DB UPDATE TO DO => localhost
     },
 
     changeProposalStatus: function(trocId, proposalId, status) {
@@ -26,7 +26,18 @@ module.exports = {
             status: status
         });
 
-        // DB UPDATE TO DO
+        // DB UPDATE TO DO => localhost
+    },
+
+    togglePrivacyStatus: function(trocId){
+        dispatcher.dispatch({
+            type: actionTypes.TOGGLE_PRIVACY_STATUS,
+            trocId: trocId
+        });
+
+        // DB UPDATE TO DO => localhost
+        // here, adId would be needed in order to find the corresponding ad in the DB, since trocs don't exist outside the client
+
     },
 
     removeTroc: function(id){
@@ -34,6 +45,8 @@ module.exports = {
             type: actionTypes.REMOVE_TROC,
             id: id
         });
+
+        // DB UPDATE TO DO => localhost
     }
 
 };

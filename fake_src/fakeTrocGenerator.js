@@ -3,6 +3,7 @@
 var ad1 = {
     id: 10,
     owner: 0,
+    isPrivate: false,
     content: {
         title: 'VESTE ROUGE DECHIREE',
         categories: ['Vetements', 'Veste'],
@@ -18,6 +19,7 @@ var ad1 = {
 var ad2 = {
     id: 11,
     owner: 0,
+    isPrivate: false,
     content: {
         title: 'VESTE BLEUE',
         categories: ['Vetements', 'Veste'],
@@ -33,6 +35,7 @@ var ad2 = {
 var ad3 = {
     id: 1,
     owner: 11,
+    isPrivate: false,
     content: {
         title: 'VELO PEUGEOT',
         categories: ['Transport', 'Vélo'],
@@ -48,6 +51,7 @@ var ad3 = {
 var ad4 = {
     id: 2,
     owner: 0,
+    isPrivate: true,
     content: {
         title: 'VELO BON ETAT',
         categories: ['Transport', 'Vélo'],
@@ -63,6 +67,7 @@ var ad4 = {
 var ad5 = {
     id: 3,
     owner: 12,
+    isPrivate: false,
     content: {
         title: 'VELO DE VILLE',
         categories: ['Transport', 'Vélo'],

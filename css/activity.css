@@ -52,6 +52,7 @@
     margin: 0.2em;
     outline: 1px solid grey;
     min-width: 3em;
+    min-height: 1em;
 }
 .activity .activity-items li .private::before{
     content: ' ';

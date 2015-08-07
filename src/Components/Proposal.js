@@ -31,7 +31,7 @@ module.exports = React.createClass({
         return React.DOM.div({
                 className: 'proposal',
                 onClick: function(e){
-                    e.stopPropagation();
+                    e.stopPropagation(); // don't get why it's happening ...
                     props.changeStatus('NEW PROPOSAL STATUS');
                 }
             },

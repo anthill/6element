@@ -61,6 +61,10 @@ module.exports = React.createClass({
         return changeStatus;
     },
 
+    togglePrivacyStatus: function(){
+        trocActions.togglePrivacyStatus(this.props.id);
+    },
+
     removeTroc: function(){
         trocActions.removeTroc(this.props.id);
     },
@@ -74,7 +78,14 @@ module.exports = React.createClass({
         // console.log('AITEM state', state);
 
         var header = React.DOM.header({},
-            // React.DOM.span({className: 'private'}, props.ad.private ? 'private' : ''),
+            React.DOM.span({
+                    className: 'private',
+                    onClick: function(){
+                        self.togglePrivacyStatus();
+                    }
+                },
+                props.myAd.isPrivate ? 'P' : ''
+            ),
             React.DOM.h1({},
                 props.myAd.content.title
             ),

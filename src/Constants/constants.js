@@ -29,6 +29,7 @@ module.exports = {
         CHANGE_RC: null,
         TOGGLE_RC_LIST: null,
         LOAD_TROCS: null,
+        TOGGLE_PRIVACY_STATUS: null,
         REMOVE_TROC: null,
         LOAD_ADS: null,
         LOAD_USERS: null,

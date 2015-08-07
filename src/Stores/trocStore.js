@@ -36,6 +36,11 @@ function _changeProposalStatus(trocId, proposalId, status){
     proposal.status = status;
 }
 
+function _togglePrivacyStatus(trocId){
+    var troc = _trocMap.get(trocId);
+    troc.myAd.isPrivate = !troc.myAd.isPrivate;
+}
+
 var TrocStore = Object.assign({}, EventEmitter.prototype, {
 
     emitChange: function() {
@@ -88,6 +93,12 @@ TrocStore.dispatchToken = dispatcher.register(function(action) {
         case actionTypes.CHANGE_PROPOSAL_STATUS:
             console.log('changing proposal status');
             _changeProposalStatus(action.trocId, action.proposalId, action.status);
+            TrocStore.emitChange();
+            break;
+
+        case actionTypes.TOGGLE_PRIVACY_STATUS:
+            console.log('toggling privacy status');
+            _togglePrivacyStatus(action.trocId);
             TrocStore.emitChange();
             break;
 

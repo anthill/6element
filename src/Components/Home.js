@@ -37,7 +37,7 @@ module.exports = React.createClass({
                         'Je me sépare',
                         React.DOM.input({
                             type: 'radio',
-                            value: 'give',
+                            value: K.direction.GIVE,
                             name: 'give-need',
                             onChange: function(e){
                                 searchContext.update({
@@ -50,7 +50,7 @@ module.exports = React.createClass({
                         'Je récupère',
                         React.DOM.input({
                             type: 'radio',
-                            value: 'need',
+                            value: K.direction.NEED,
                             name: 'give-need',
                             onChange: function(e){
                                 searchContext.update({

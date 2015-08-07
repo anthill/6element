@@ -29,7 +29,7 @@ var searchContextStore = Object.assign({}, EventEmitter.prototype, {
         
     }),
     
-    get searchContext(){
+    get: function(){
         return _searchContext;
     }
 

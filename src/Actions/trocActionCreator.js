@@ -1,8 +1,7 @@
 'use strict';
 
 var dispatcher = require('../Dispatcher/dispatcher.js');
-var K = require('../Constants/constants.js');
-var actionTypes = K.actionTypes;
+var actionTypes = require('../Constants/actionTypes.js');
 
 // var localAPIUtils = require('../Utils/localAPIUtils.js');
 

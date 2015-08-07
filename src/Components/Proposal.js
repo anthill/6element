@@ -2,7 +2,6 @@
 
 var React = require('react');
 
-
 /*
 
 interface ProposalProps{
@@ -13,7 +12,6 @@ interface ProposalState{
 }
 
 */
-
 
 module.exports = React.createClass({
 

@@ -3,7 +3,7 @@
 var React = require('react');
 
 var displayActions = require('../Actions/displayActionCreator');
-var K = require('../Constants/constants');
+var screenTypes = require('../Constants/screenTypes');
 
 module.exports = React.createClass({
 
@@ -63,7 +63,7 @@ module.exports = React.createClass({
                     React.DOM.button({
                         type: "submit",
                         onClick: function(){
-                            displayActions.goToScreen(K.screen.AD_POST);
+                            displayActions.goToScreen(screenTypes.AD_POST);
                         }
                     }, "Déposer une annonce")
                 )

@@ -11,11 +11,11 @@ var trocActions = require('../Actions/trocActionCreator.js');
 // STORES
 
 // UTILS
-var K = require('../Constants/constants.js');
+var adTypes = require('../Constants/adTypes.js');
 
 var adTypeClasses = {};
-adTypeClasses[K.adTypes.GIVE] = 'give';
-adTypeClasses[K.adTypes.NEED] = 'need';
+adTypeClasses[adTypes.GIVE] = 'give';
+adTypeClasses[adTypes.NEED] = 'need';
 
 /*
 

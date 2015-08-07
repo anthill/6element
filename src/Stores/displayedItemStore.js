@@ -3,9 +3,7 @@
 var dispatcher = require('../Dispatcher/dispatcher.js');
 var EventEmitter = require('events').EventEmitter;
 
-var constants = require('../Constants/constants.js');
-
-var actionTypes = constants.actionTypes;
+var actionTypes = require('../Constants/actionTypes.js');
 
 var _displayed = {
     activeTab: undefined, // K.tabTypes

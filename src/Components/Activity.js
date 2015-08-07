@@ -9,6 +9,8 @@ var ActivityItem = React.createFactory(require('./ActivityItem.js'));
 var TrocStore = require('../Stores/trocStore.js');
 
 // ACTIONS
+var trocActions = require('../Actions/trocActionCreator.js');
+
 
 // UTILS
 
@@ -36,7 +38,7 @@ interface ActivityState{
 
 function getStateFromStores() {
     return {
-        trocs: TrocStore.getAll()
+        trocs: TrocStore.getFromCurrentFilters()
     };
 }
 
@@ -71,7 +73,10 @@ module.exports = React.createClass({
                 React.DOM.input({
                     type: 'checkbox',
                     id: 'give-away',
-                    name: 'give-search'
+                    name: 'give-search',
+                    onChange: function(){
+                        trocActions.applyTrocFilter('direction', 'GIVE');
+                    }
                 })
             ),
             React.DOM.label({},
@@ -79,7 +84,10 @@ module.exports = React.createClass({
                 React.DOM.input({
                     type: 'checkbox',
                     id: 'search-for',
-                    name: 'give-search'
+                    name: 'give-search',
+                    onChange: function(){
+                        trocActions.applyTrocFilter('direction', 'NEED');
+                    } 
                 })
             )
         ); // => will be able to trigger filter Action

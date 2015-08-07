@@ -3,7 +3,12 @@
 var dispatcher = require('../Dispatcher/dispatcher.js');
 var EventEmitter = require('events').EventEmitter;
 
+// CONSTANTS
 var actionTypes = require('../Constants/actionTypes.js');
+
+// STORES
+var TrocFilterStore = require('../Stores/trocFilterStore.js');
+
 
 var CHANGE_EVENT = 'change';
 
@@ -16,10 +21,10 @@ Interface Troc
     myAd: Ad,
     proposals: [{
         ad: Ad,
-        state: POTENTIAL / INTERESTED / CHOSEN / REFUSED / DISCARDED / COMPLETED 
+        status: POTENTIAL / INTERESTED / CHOSEN / REFUSED / DISCARDED / COMPLETED 
     }],
     direction: GIVE / NEED
-    state: DRAFT / PENDING / ONGOING / ACCEPTED / CLOSED / CANCELED
+    status: DRAFT / PENDING / ONGOING / ACCEPTED / FULFILLED / CANCELED
 }
 
 */
@@ -40,6 +45,22 @@ function _togglePrivacyStatus(trocId){
     troc.myAd.isPrivate = !troc.myAd.isPrivate;
 }
 
+function _filter(filters){
+
+    var trocs = [];
+
+    _trocMap.forEach(function(troc){
+
+        if(filters.every(function(filter){
+            return filter(troc);
+        }))
+            trocs.push(troc);
+    });
+
+    console.log('trocs', trocs);
+    return trocs;
+}
+
 var TrocStore = Object.assign({}, EventEmitter.prototype, {
 
     emitChange: function() {
@@ -58,6 +79,18 @@ var TrocStore = Object.assign({}, EventEmitter.prototype, {
         return _trocMap.get(id);
     },
 
+    getFromCurrentFilters: function(){
+        var filterMap = TrocFilterStore.getCurrentFilters();
+
+        var filters = [];
+
+        filterMap.forEach(function(filterFunction){
+            filters.push(filterFunction);
+        });
+
+        return _filter(filters);
+    },
+
     getAll: function(){
         var trocs = [];
         _trocMap.forEach(function(troc){
@@ -69,6 +102,10 @@ var TrocStore = Object.assign({}, EventEmitter.prototype, {
 });
 
 TrocStore.dispatchToken = dispatcher.register(function(action) {
+
+    dispatcher.waitFor([
+        TrocFilterStore.dispatchToken
+    ]);
 
     switch(action.type) {
 
@@ -98,6 +135,12 @@ TrocStore.dispatchToken = dispatcher.register(function(action) {
         case actionTypes.TOGGLE_PRIVACY_STATUS:
             console.log('toggling privacy status');
             _togglePrivacyStatus(action.trocId);
+            TrocStore.emitChange();
+            break;
+
+        case actionTypes.APPLY_TROC_FILTERS:
+            console.log('applying filters');
+            TrocStore.getFromCurrentFilters();
             TrocStore.emitChange();
             break;
 

@@ -46,6 +46,14 @@ module.exports = {
         });
 
         // DB UPDATE TO DO => localhost
+    },
+
+    applyTrocFilter: function(filter, value) {
+        dispatcher.dispatch({
+            type: actionTypes.APPLY_TROC_FILTERS,
+            filter: filter,
+            value: value
+        });
     }
 
 };

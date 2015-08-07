@@ -40,7 +40,7 @@ module.exports = React.createClass({
                         React.DOM.input({
                             type: 'radio',
                             value: 'give',
-                            name: 'give-need',
+                            name: 'direction',
                             defaultChecked: searchContext.get('direction') === K.direction.GIVE
                         })
                     ),
@@ -49,7 +49,7 @@ module.exports = React.createClass({
                         React.DOM.input({
                             type: 'radio',
                             value: 'need',
-                            name: 'give-need',
+                            name: 'direction',
                             defaultChecked: searchContext.get('direction') === K.direction.NEED
                         })
                     )

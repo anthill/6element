@@ -38,7 +38,7 @@ module.exports = React.createClass({
                         React.DOM.input({
                             type: 'radio',
                             value: K.direction.GIVE,
-                            name: 'give-need',
+                            name: 'direction',
                             onChange: function(e){
                                 searchContext.update({
                                     'direction': e.target.value
@@ -51,7 +51,7 @@ module.exports = React.createClass({
                         React.DOM.input({
                             type: 'radio',
                             value: K.direction.NEED,
-                            name: 'give-need',
+                            name: 'direction',
                             onChange: function(e){
                                 searchContext.update({
                                     'direction': e.target.value

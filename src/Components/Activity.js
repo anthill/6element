@@ -71,7 +71,7 @@ module.exports = React.createClass({
                 React.DOM.input({
                     type: 'checkbox',
                     value: 'give',
-                    name: 'give-need'
+                    name: 'direction'
                 })
             ),
             React.DOM.label({},
@@ -79,7 +79,7 @@ module.exports = React.createClass({
                 React.DOM.input({
                     type: 'checkbox',
                     value: 'need',
-                    name: 'give-need'
+                    name: 'direction'
                 })
             )
         ); // => will be able to trigger filter Action

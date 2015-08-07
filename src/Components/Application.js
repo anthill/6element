@@ -14,8 +14,8 @@ var RecyclingCenter = React.createFactory(require('./RecyclingCenter.js'));
 var DisplayedItemStore = require('../Stores/displayedItemStore.js');
 
 // CONSTANTS
-var K = require('../Constants/constants.js');
-var tabTypes = K.tabTypes;
+var tabTypes = require('../Constants/tabTypes.js');
+var screenTypes = require('../Constants/screenTypes.js');
 
 /*
 
@@ -88,7 +88,7 @@ var Application = React.createClass({
         var screen;        
         
         switch(state.screen){
-            case K.screen.MAIN:
+            case screenTypes.MAIN:
                 screen = new AdPost();
                 
                 var tab;
@@ -117,7 +117,7 @@ var Application = React.createClass({
                 ];
                 
                 break;
-            case K.screen.AD_POST:
+            case screenTypes.AD_POST:
                 screen = new AdPost();
                 break;
             default:

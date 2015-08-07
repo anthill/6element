@@ -3,33 +3,34 @@
 var React = require('react');
 
 // COMPONENTS
+var Proposal = React.createFactory(require('./Proposal.js'));
 
 // ACTIONS
+var trocActions = require('../Actions/trocActionCreator.js');
 
 // STORES
-var AdStore = require('../Stores/adStore.js');
 
 // UTILS
-var K = require('../Constants/constants.js');
+var directions = require('../Constants/directions.js');
 
 var adTypeClasses = {};
-adTypeClasses[K.direction.GIVE] = 'give';
-adTypeClasses[K.direction.NEED] = 'need';
+adTypeClasses[directions.GIVE] = 'give';
+adTypeClasses[directions.NEED] = 'need';
+
 
 /*
 
 interface ActivityItemProps{
     id: integer,
-    myAd: integer,
-    links: [
+    myAd: Ad,
+    proposals: [
         {
-            userId: integer,
-            adId: integer,
+            ad: Ad,
             state: string
         }
     ],
     direction: string,
-    state: string
+    status: string
 }
 interface ActivityItemState{
     openPanel: boolean
@@ -37,32 +38,36 @@ interface ActivityItemState{
 
 */
 
-function makeStateFromStores(id, otherIds) {
-
-    if (otherIds){
-        var otherAds = otherIds.map(function(otherId){
-            return AdStore.get(otherId);
-        });
-    }
-
-    var myAd = AdStore.get(id);
-
-    return {
-        myAd: myAd,
-        otherAds: otherAds ? otherAds : undefined
-    };
-}
-
 module.exports = React.createClass({
 
     displayName: 'ActivityItem',
 
     getInitialState: function(){
-        var stateFromStores = makeStateFromStores(this.props.myAdId);
-
-        return Object.assign(stateFromStores, {
+        return {
             openPanel: false
-        });
+        };
+    },
+
+    changeTrocStatus: function(status){
+        trocActions.changeTrocStatus(this.props.id, status);
+    },
+
+    changeProposalStatus: function(proposalId){
+        var self = this;
+
+        var changeStatus = function(status){
+            trocActions.changeProposalStatus(self.props.id, proposalId, status);
+        };
+
+        return changeStatus;
+    },
+
+    togglePrivacyStatus: function(){
+        trocActions.togglePrivacyStatus(this.props.id);
+    },
+
+    removeTroc: function(){
+        trocActions.removeTroc(this.props.id);
     },
     
     render: function() {
@@ -71,9 +76,23 @@ module.exports = React.createClass({
         var state = this.state;
 
         var header = React.DOM.header({},
-            // React.DOM.span({className: 'private'}, props.ad.private ? 'private' : ''),
+            React.DOM.span({
+                    className: 'private',
+                    onClick: function(){
+                        self.togglePrivacyStatus();
+                    }
+                },
+                props.myAd.isPrivate ? 'P' : ''
+            ),
             React.DOM.h1({},
-                state.myAd.content.title
+                props.myAd.content.title
+            ),
+            React.DOM.div({
+                    onClick: function(){
+                        self.changeTrocStatus('NEW TROC STATUS');
+                    }
+                },
+                props.status
             ),
             React.DOM.div({
                     onClick: function(){
@@ -89,15 +108,29 @@ module.exports = React.createClass({
                         });
                     }
                 },
-                'Proposals (' + props.links.length + ')'
+                'Proposals (' + props.proposalMap.size + ')'
             ),
-            React.DOM.span({title: 'delete'}, 'X')
+            React.DOM.span({
+                title: 'delete',
+                onClick: this.removeTroc
+            }, 'X')
         );
+
+        if (state.openPanel){
+            var proposalAds = [];
+            props.proposalMap.forEach(function(proposal, index){
+                proposalAds.push(new Proposal({
+                    proposal: proposal,
+                    changeStatus: self.changeProposalStatus(index),
+                    key: index
+                }));
+            });
+        }
         
         return React.DOM.li({className: adTypeClasses[props.direction]},
             header,
             state.openPanel ?
-                React.DOM.section({}, JSON.stringify(props.links))
+                React.DOM.section({}, proposalAds)
                 : undefined
         );
     }

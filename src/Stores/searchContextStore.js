@@ -5,8 +5,7 @@ var ImmutableMap = require('immutable').Map
 var dispatcher = require('../Dispatcher/dispatcher.js');
 var EventEmitter = require('events').EventEmitter;
 
-var K = require('../Constants/constants.js');
-var actionTypes = K.actionTypes;
+var actionTypes = require('../Constants/actionTypes.js');
 
 /*
 

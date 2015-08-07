@@ -3,8 +3,7 @@
 var dispatcher = require('../Dispatcher/dispatcher.js');
 var EventEmitter = require('events').EventEmitter;
 
-var constants = require('../Constants/constants.js');
-var actionTypes = constants.actionTypes;
+var actionTypes = require('../Constants/actionTypes.js');
 
 var CHANGE_EVENT = 'change';
 
@@ -36,7 +35,7 @@ var RecyclingCenterStore = Object.assign({}, EventEmitter.prototype, {
 });
 
 RecyclingCenterStore.dispatchToken = dispatcher.register(function(action) {
-
+    
     switch(action.type) {
 
         case actionTypes.LOAD_RCS:

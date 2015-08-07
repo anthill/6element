@@ -3,8 +3,7 @@
 var dispatcher = require('../Dispatcher/dispatcher.js');
 var EventEmitter = require('events').EventEmitter;
 
-var constants = require('../Constants/constants.js');
-var actionTypes = constants.actionTypes;
+var actionTypes = require('../Constants/actionTypes.js');
 
 var CHANGE_EVENT = 'change';
 
@@ -23,10 +22,12 @@ Interface Ad
       text: string
     },
     direction: string,
-    state: string
+    status: string
   },
 
 */
+
+// IN THE END, THIS REPRESENTS THE AD DATABASE. A STORE LIKE THIS MIGHT NOT BE COMPULSORY
 
 var AdStore = Object.assign({}, EventEmitter.prototype, {
 

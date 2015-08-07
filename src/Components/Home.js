@@ -3,13 +3,11 @@
 var React = require('react');
 
 var displayActions = require('../Actions/displayActionCreator');
-var searchContext = require('../Actions/searchContextActionCreator')
-var searchContextStore = require('../Stores/searchContextStore');
 
-console.log(searchContextStore);
+var screenTypes = require('../Constants/screenTypes');
+var directions = require('../Constants/directions');
 
-var K = require('../Constants/constants');
-
+var searchContextAction = require('../Actions/searchContextActionCreator');
 
 module.exports = React.createClass({
 
@@ -24,57 +22,51 @@ module.exports = React.createClass({
         //var props = this.props;
         //var state = this.state;
         
-        return React.DOM.div({className: 'home'}, [
+        return React.DOM.div({className: 'home'},
             
-            React.DOM.form({
-                onSubmit: function(e){
-                    e.preventDefault();
-                }
-            }, [
+            React.DOM.div({},
                 // mode switch
-                React.DOM.div({className: 'mode-switch'}, [
-                    React.DOM.label({}, 
+                React.DOM.div({className: 'mode-switch'},
+                    React.DOM.label({},
                         'Je me sépare',
                         React.DOM.input({
                             type: 'radio',
-                            value: K.direction.GIVE,
+                            value: directions.GIVE,
                             name: 'direction',
                             onChange: function(e){
-                                searchContext.update({
+                                searchContextAction.update({
                                     'direction': e.target.value
                                 })
                             }
                         })
                     ),
-                    React.DOM.label({}, 
+                    React.DOM.label({},
                         'Je récupère',
                         React.DOM.input({
                             type: 'radio',
-                            value: K.direction.NEED,
+                            value: directions.NEED,
                             name: 'direction',
                             onChange: function(e){
-                                searchContext.update({
+                                searchContextAction.update({
                                     'direction': e.target.value
                                 })
                             }
                         })
                     )
-                ]),
-                
-                React.DOM.label({}, 
+                ),
+                React.DOM.label({},
                     'Quoi ?',
                     React.DOM.input({
                         type: 'text',
                         id: 'what',
                         onChange: function(e){
-                            searchContext.update({
+                            searchContextAction.update({
                                 'what': e.target.value
                             })
                         }
                     })
                 ),
-                
-                React.DOM.div({className: 'submit-group'}, 
+                React.DOM.div({className: 'submit-group'},
                     React.DOM.button({
                         type: "submit"
                     }, "Aller en déchèterie"),
@@ -84,13 +76,11 @@ module.exports = React.createClass({
                     React.DOM.button({
                         type: "submit",
                         onClick: function(){
-                            displayActions.goToScreen(K.screen.AD_POST);
+                            displayActions.goToScreen(screenTypes.AD_POST);
                         }
                     }, "Déposer une annonce")
                 )
-            ])
-            
-        ])
-        
+            )    
+        )
     }
 });

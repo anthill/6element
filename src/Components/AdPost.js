@@ -5,7 +5,7 @@ var React = require('react');
 var displayActions = require('../Actions/displayActionCreator');
 var searchContextStore = require('../Stores/searchContextStore');
 
-var K = require('../Constants/constants');
+var directions = require('../Constants/directions.js');
 
 module.exports = React.createClass({
 
@@ -19,7 +19,7 @@ module.exports = React.createClass({
         
         var searchContext = searchContextStore.get();
         
-        console.log('AdPost searchContextStore.get()', searchContext, searchContext.get('direction'), K.direction.GIVE, K.direction.NEED)
+        console.log('AdPost searchContextStore.get()', searchContext, searchContext.get('direction'), directions.GIVE, directions.NEED)
         
         // Do NOT use 'ad-post' as class name since it's blocked by AdBlock
         return React.DOM.div({className: "post-an-ad"}, 
@@ -41,7 +41,7 @@ module.exports = React.createClass({
                             type: 'radio',
                             value: 'give',
                             name: 'direction',
-                            defaultChecked: searchContext.get('direction') === K.direction.GIVE
+                            defaultChecked: searchContext.get('direction') === directions.GIVE
                         })
                     ),
                     React.DOM.label({}, 
@@ -50,7 +50,7 @@ module.exports = React.createClass({
                             type: 'radio',
                             value: 'need',
                             name: 'direction',
-                            defaultChecked: searchContext.get('direction') === K.direction.NEED
+                            defaultChecked: searchContext.get('direction') === directions.NEED
                         })
                     )
                 ),

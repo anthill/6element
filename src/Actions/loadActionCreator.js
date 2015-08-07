@@ -1,9 +1,7 @@
 'use strict';
 
 var dispatcher = require('../Dispatcher/dispatcher.js');
-var constants = require('../Constants/constants.js');
-
-var actionTypes = constants.actionTypes;
+var actionTypes = require('../Constants/actionTypes.js');
 
 module.exports = {
     loadDisplayState: function(displayState) {

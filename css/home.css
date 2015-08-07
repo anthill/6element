@@ -2,12 +2,12 @@
     
 }
 
-.home form{
+.home > *{
     display: flex;
     flex-direction: column;
 }
 
-.home form > *{
+.home > * > *{
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -15,21 +15,21 @@
     margin: 1em 0;
 }
 
-.home form .mode-switch{
+.home .mode-switch{
     
 }
 
-.home form .mode-switch > *{
+.home .mode-switch > *{
     padding: 0.8em;
     outline: 1px solid darkblue;
     cursor: pointer;
 }
 
-.home form input[type="text"]{
+.home input[type="text"]{
     width: 80%;
 }
 
-.home form .submit-group button {
+.home .submit-group button {
     width: 10em;
     height: 10em;
     background-color: hsl(0, 0%, 87%);

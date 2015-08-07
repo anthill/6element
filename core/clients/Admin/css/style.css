@@ -228,7 +228,7 @@ li .modifiable{
 CSS PANEL
 */
 .displaySensor div{
-	display: inline-block; margin: 0 1em;
+	display: inline-block; margin: .5em;
 }
 
 .displaySensor li * {

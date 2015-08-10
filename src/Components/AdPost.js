@@ -5,6 +5,7 @@ var React = require('react');
 var displayActions = require('../Actions/displayActions.js');
 var trocActions = require('../Actions/trocActions.js');
 var searchContextStore = require('../Stores/searchContextStore.js');
+var currentUserStore = require('../Stores/currentUserStore.js');
 
 var directions = require('../Constants/directions.js');
 
@@ -70,6 +71,7 @@ module.exports = React.createClass({
                     // do action POST_AD
                     // save it in store & localStorage
 
+                    console.log('ad posted by user', currentUserStore.get());
                 }
             }, 
                 // mode switch

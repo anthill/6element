@@ -3,7 +3,7 @@
 var dispatcher = require('../Dispatcher/dispatcher.js');
 var actionTypes = require('../Constants/actionTypes.js');
 
-var localAPIUtils = require('../Utils/localAPIUtils.js');
+var localStorageUtils = require('../Utils/localStorageUtils.js');
 
 module.exports = {
 
@@ -20,7 +20,7 @@ module.exports = {
             delta: delta
         });
 
-        localAPIUtils.updateUserPrefs(delta);
+        localStorageUtils.updateUserPrefs(delta);
     }
 
 };

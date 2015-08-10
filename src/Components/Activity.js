@@ -7,9 +7,10 @@ var ActivityItem = React.createFactory(require('./ActivityItem.js'));
 
 // STORES
 var TrocStore = require('../Stores/trocStore.js');
+var TrocFilterStore = require('../Stores/trocFilterStore.js');
 
 // ACTIONS
-var trocActions = require('../Actions/trocActionCreator.js');
+var trocActions = require('../Actions/trocActions.js');
 
 
 // UTILS
@@ -38,7 +39,8 @@ interface ActivityState{
 
 function getStateFromStores() {
     return {
-        trocs: TrocStore.getFromCurrentFilters()
+        trocs: TrocStore.getFromCurrentFilters(),
+        trocFilters: TrocFilterStore.getFilterState()
     };
 }
 
@@ -73,9 +75,10 @@ module.exports = React.createClass({
                 React.DOM.input({
                     type: 'checkbox',
                     value: 'give',
-                    name: 'direction',
+                    name: 'directions',
+                    checked: state.trocFilters.directions.has('GIVE'),
                     onChange: function(){
-                        trocActions.applyTrocFilter('direction', 'GIVE');
+                        trocActions.applyTrocFilter('directions', 'GIVE');
                     }
                 })
             ),
@@ -84,9 +87,10 @@ module.exports = React.createClass({
                 React.DOM.input({
                     type: 'checkbox',
                     value: 'need',
-                    name: 'direction',
+                    name: 'directions',
+                    checked: state.trocFilters.directions.has('NEED'),
                     onChange: function(){
-                        trocActions.applyTrocFilter('direction', 'NEED');
+                        trocActions.applyTrocFilter('directions', 'NEED');
                     } 
                 })
             )

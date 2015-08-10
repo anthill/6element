@@ -2,12 +2,15 @@
 
 var dispatcher = require('../Dispatcher/dispatcher.js');
 var EventEmitter = require('events').EventEmitter;
+var Immutable = require('immutable');
 
 var actionTypes = require('../Constants/actionTypes.js');
 
 var CHANGE_EVENT = 'change';
 
-var _adMap; // Map: id -> Ad
+// initial data from local storage
+var _adMap = new Immutable.Map(); // Map: id -> Ad
+
 /*
 
 Interface Ad
@@ -60,6 +63,14 @@ var AdStore = Object.assign({}, EventEmitter.prototype, {
 
     getAll: function(){
         return _adMap;
+    },
+
+    create: function(ad){
+        var id = Math.random();
+
+        _adMap.set(id, Object.assign({
+            id: id
+        }), ad);
     }
 
 });

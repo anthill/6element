@@ -2,25 +2,28 @@
 
 var dispatcher = require('../Dispatcher/dispatcher.js');
 var EventEmitter = require('events').EventEmitter;
+var Immutable = require('immutable');
 
 var actionTypes = require('../Constants/actionTypes.js');
 
 var CHANGE_EVENT = 'change';
 
-var _filterState = {};
+var _filterState = {
+    directions: new Immutable.Set(['NEED', 'GIVE'])
+};
 
 /*
     {
-        direction: NEED / GIVE,
+        directions: Set() NEED / GIVE,
         trocStatus: DRAFT / PENDING / ONGOING / ACCEPTED / FULFILLED / CANCELED,
         keywords: Set(string)
     }
 */
 
-function _makeFilterByDirection(direction){
+function _makeFilterByDirections(directionSet){
 
     return function(troc){
-        return troc.direction === direction;
+        return directionSet.has(troc.direction);
     };
 
 }
@@ -53,7 +56,11 @@ var TrocFilterStore = Object.assign({}, EventEmitter.prototype, {
         this.removeListener(CHANGE_EVENT, callback);
     },
 
-    getCurrentFilters: function(){
+    getFilterState: function(){
+        return _filterState;
+    },
+
+    getFilterFunctions: function(){
     
         var filterMap = new Map();
 
@@ -61,8 +68,8 @@ var TrocFilterStore = Object.assign({}, EventEmitter.prototype, {
 
             var value = _filterState[key];
 
-            if (value)
-                filterMap.set(key, _makeFilterByDirection(value));
+            if (value) // only works for directions for now
+                filterMap.set(key, _makeFilterByDirections(value));
         });
     
         return filterMap;
@@ -75,9 +82,19 @@ TrocFilterStore.dispatchToken = dispatcher.register(function(action) {
     switch(action.type) {
 
         case actionTypes.APPLY_TROC_FILTERS:
-            _filterState[action.filter] = action.value;
-            console.log('filter state', _filterState);
-            TrocFilterStore.emitChange();
+            if (action.filter === 'directions'){
+                var directionSet = _filterState[action.filter];
+                console.log('BORDEL', _filterState);
+                if (directionSet.has(action.value))
+                    directionSet = directionSet.delete(action.value);
+                else
+                    directionSet = directionSet.add(action.value);
+
+                _filterState[action.filter] = directionSet;
+                console.log('filter state', _filterState.directions);
+                TrocFilterStore.emitChange();
+            }
+            
             break;
 
         default:

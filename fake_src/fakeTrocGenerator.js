@@ -2,7 +2,7 @@
 
 var ad1 = {
     id: 10,
-    owner: 0,
+    creator: 0,
     isPrivate: false,
     content: {
         title: 'VESTE ROUGE DECHIREE',
@@ -18,7 +18,7 @@ var ad1 = {
 
 var ad2 = {
     id: 11,
-    owner: 0,
+    creator: 0,
     isPrivate: false,
     content: {
         title: 'VESTE BLEUE',
@@ -34,7 +34,7 @@ var ad2 = {
 
 var ad3 = {
     id: 1,
-    owner: 11,
+    creator: 11,
     isPrivate: false,
     content: {
         title: 'VELO PEUGEOT',
@@ -50,7 +50,7 @@ var ad3 = {
 
 var ad4 = {
     id: 2,
-    owner: 0,
+    creator: 0,
     isPrivate: true,
     content: {
         title: 'VELO BON ETAT',
@@ -66,7 +66,7 @@ var ad4 = {
 
 var ad5 = {
     id: 3,
-    owner: 12,
+    creator: 12,
     isPrivate: false,
     content: {
         title: 'VELO DE VILLE',
@@ -83,7 +83,7 @@ var ad5 = {
 var troc1 = {
     id: 0,
     myAd: 2,
-    proposalMap: [ // not a map, but easier to call it that way for now
+    proposals: [ // not a map, but easier to call it that way for now
         {
             adId: 1,
             status: 'potential'
@@ -100,7 +100,7 @@ var troc1 = {
 var troc2 = {
     id: 1,
     myAd: 10,
-    proposalMap: [], // not a map, but easier to call it that way for now
+    proposals: [], // not a map, but easier to call it that way for now
     direction: 'GIVE',
     status: 'ongoing'
 };
@@ -108,7 +108,7 @@ var troc2 = {
 var troc3 = {
     id: 2,
     myAd: 11,
-    proposalMap: [], // not a map, but easier to call it that way for now
+    proposals: [], // not a map, but easier to call it that way for now
     direction: 'GIVE',
     status: 'ongoing'
 };

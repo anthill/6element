@@ -2,7 +2,7 @@
 
 var ad1 = {
     id: 10,
-    creator: 0,
+    creator: 'Romain',
     isPrivate: false,
     content: {
         title: 'VESTE ROUGE DECHIREE',
@@ -18,7 +18,7 @@ var ad1 = {
 
 var ad2 = {
     id: 11,
-    creator: 0,
+    creator: 'David',
     isPrivate: false,
     content: {
         title: 'VESTE BLEUE',
@@ -34,7 +34,7 @@ var ad2 = {
 
 var ad3 = {
     id: 1,
-    creator: 11,
+    creator: 'Roxane',
     isPrivate: false,
     content: {
         title: 'VELO PEUGEOT',
@@ -50,7 +50,7 @@ var ad3 = {
 
 var ad4 = {
     id: 2,
-    creator: 0,
+    creator: 'Maxime',
     isPrivate: true,
     content: {
         title: 'VELO BON ETAT',
@@ -66,7 +66,7 @@ var ad4 = {
 
 var ad5 = {
     id: 3,
-    creator: 12,
+    creator: 'Armand',
     isPrivate: false,
     content: {
         title: 'VELO DE VILLE',

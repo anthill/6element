@@ -12,6 +12,7 @@ var RecyclingCenter = React.createFactory(require('./RecyclingCenter.js'));
 
 // STORES
 var DisplayedItemStore = require('../Stores/displayedItemStore.js');
+var currentUserStore = require('../Stores/currentUserStore.js');
 
 // CONSTANTS
 var tabTypes = require('../Constants/tabTypes.js');
@@ -82,6 +83,12 @@ var Application = React.createClass({
                 name: 'Déchèteries',
                 type: tabTypes.RECYCLING_CENTER,
                 key: 2
+            }),
+            React.DOM.input({
+                defaultValue: currentUserStore.get() || '',
+                onBlur: function(e){
+                    currentUserStore.changeUser(e.target.value);
+                }
             })
         ];
 

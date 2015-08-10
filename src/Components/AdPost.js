@@ -8,6 +8,8 @@ var searchContextStore = require('../Stores/searchContextStore.js');
 var currentUserStore = require('../Stores/currentUserStore.js');
 
 var directions = require('../Constants/directions.js');
+var tabTypes = require('../Constants/tabTypes.js');
+var screenTypes = require('../Constants/screenTypes.js');
 
 module.exports = React.createClass({
 
@@ -62,16 +64,10 @@ module.exports = React.createClass({
 
                     trocActions.createTroc(newTroc);
 
-                    // get direction
-                    // get what
-                    // get where
-                    // get pic
-
-                    // make an ad
-                    // do action POST_AD
-                    // save it in store & localStorage
-
                     console.log('ad posted by user', currentUserStore.get());
+
+                    displayActions.goToScreen(screenTypes.MAIN);
+                    displayActions.changeTab(tabTypes.ACTIVITY);
                 }
             }, 
                 // mode switch

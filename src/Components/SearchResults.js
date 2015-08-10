@@ -10,14 +10,11 @@ var trocStore = require('../Stores/trocStore.js');
 var searchContext = require('../Stores/searchContextStore.js');
 
 // ACTIONS
-var displayActions = require('../Actions/displayActionCreator');
-var searchContextAction = require('../Actions/searchContextActionCreator');
- 
-
+var displayActions = require('../Actions/displayActions');
+var searchContextAction = require('../Actions/searchContextActions');
 
 // UTILS
 var directions = require('../Constants/directions');
-
 
 
 module.exports = React.createClass({

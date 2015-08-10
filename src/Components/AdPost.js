@@ -4,6 +4,8 @@ var React = require('react');
 
 var displayActions = require('../Actions/displayActionCreator');
 var searchContextStore = require('../Stores/searchContextStore');
+var currentUserStore = require('../Stores/currentUserStore.js');
+
 
 var directions = require('../Constants/directions.js');
 
@@ -31,6 +33,7 @@ module.exports = React.createClass({
             React.DOM.form({
                 onSubmit: function(e){
                     e.preventDefault();
+                    console.log('ad posted by user', currentUserStore.get());
                 }
             }, 
                 // mode switch

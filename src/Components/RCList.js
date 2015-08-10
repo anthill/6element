@@ -6,7 +6,7 @@ var React = require('react');
 var RecyclingCenterStore = require('../Stores/recyclingCenterStore.js');
 
 // ACTIONS
-var _changeRC = require('../Actions/recyclingCenterActionCreator.js').changeRC;
+var _changeRC = require('../Actions/recyclingCenterActions.js').changeRC;
 
 /*
 

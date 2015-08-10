@@ -2,12 +2,12 @@
 
 var React = require('react');
 
-var displayActions = require('../Actions/displayActionCreator');
+var displayActions = require('../Actions/displayActions');
 
 var screenTypes = require('../Constants/screenTypes');
 var directions = require('../Constants/directions');
 
-var searchContextAction = require('../Actions/searchContextActionCreator');
+var searchContextActions = require('../Actions/searchContextActions');
 
 module.exports = React.createClass({
 
@@ -34,7 +34,7 @@ module.exports = React.createClass({
                             value: directions.GIVE,
                             name: 'direction',
                             onChange: function(e){
-                                searchContextAction.update({
+                                searchContextActions.update({
                                     'direction': e.target.value
                                 })
                             }
@@ -47,7 +47,7 @@ module.exports = React.createClass({
                             value: directions.NEED,
                             name: 'direction',
                             onChange: function(e){
-                                searchContextAction.update({
+                                searchContextActions.update({
                                     'direction': e.target.value
                                 })
                             }
@@ -60,7 +60,7 @@ module.exports = React.createClass({
                         type: 'text',
                         id: 'what',
                         onChange: function(e){
-                            searchContextAction.update({
+                            searchContextActions.update({
                                 'what': e.target.value
                             })
                         }

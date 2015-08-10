@@ -37,6 +37,17 @@ function makeMap(objects, expectedKey){
     return myMap;
 }
 
+//CREATE A LIST FROM A MAP
+function makeListFromMap(map){
+    var myList = [];
+
+    map.forEach(function(value){
+        myList.push(value);
+    });
+
+    return myList;
+}
+
 
 //##############################################################################################################################
 // EXPORT
@@ -44,8 +55,9 @@ function makeMap(objects, expectedKey){
 module.exports = {
     weekDays: weekDays,
     months: months,
-    getHoursString : getHoursString,
-    getMinutesString : getMinutesString,
-    getDayNumber : getDayNumber,
-    makeMap : makeMap
+    getHoursString: getHoursString,
+    getMinutesString: getMinutesString,
+    getDayNumber: getDayNumber,
+    makeMap: makeMap,
+    makeListFromMap: makeListFromMap
 };

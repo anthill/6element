@@ -40,7 +40,7 @@ RecyclingCenterStore.dispatchToken = dispatcher.register(function(action) {
 
         case actionTypes.LOAD_RCS:
             _RCMap = action.recyclingCenterMap;
-            console.log('rc map', _RCMap);
+            console.log('[RCStore] loading', _RCMap);
             RecyclingCenterStore.emitChange();
             break;
 
@@ -51,7 +51,7 @@ RecyclingCenterStore.dispatchToken = dispatcher.register(function(action) {
 
         case actionTypes.CHANGE_RC:
             _selectedID = action.selectedRC;
-            console.log('selected RC', _selectedID);
+            console.log('[RCStore] changing RC selection', _selectedID);
             RecyclingCenterStore.emitChange();
             break;
 

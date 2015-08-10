@@ -6,7 +6,7 @@ var React = require('react');
 var Proposal = React.createFactory(require('./Proposal.js'));
 
 // ACTIONS
-var trocActions = require('../Actions/trocActionCreator.js');
+var trocActions = require('../Actions/trocActions.js');
 
 // STORES
 
@@ -108,7 +108,7 @@ module.exports = React.createClass({
                         });
                     }
                 },
-                'Proposals (' + props.proposalMap.size + ')'
+                'Proposals (' + props.proposalMap.length + ')'
             ),
             React.DOM.span({
                 title: 'delete',

@@ -3,7 +3,7 @@
 // var fs = require('fs');
 
 // ACTIONS
-var loadActionCreator = require('../Actions/loadActionCreator.js');
+var loadActions = require('../Actions/loadActions.js');
 var makeMap = require('./utils.js').makeMap;
 
 // i couldn't use RC_FILE as the require parameter :/
@@ -15,7 +15,7 @@ module.exports = {
 
     loadRCs: function(){
         var recyclingCenterMap = makeMap(recyclingCenters, 'id');
-        loadActionCreator.loadRecyclingCenters(recyclingCenterMap);
+        loadActions.loadRecyclingCenters(recyclingCenterMap);
     },
 
     loadTrocs: function(){
@@ -37,6 +37,6 @@ module.exports = {
             troc.proposalMap = proposalMap;
         });
 
-        loadActionCreator.loadTrocs(trocMap);
+        loadActions.loadTrocs(trocMap);
     }
 };

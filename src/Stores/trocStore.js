@@ -2,6 +2,7 @@
 
 var dispatcher = require('../Dispatcher/dispatcher.js');
 var EventEmitter = require('events').EventEmitter;
+var Immutable = require('immutable');
 
 // CONSTANTS
 var actionTypes = require('../Constants/actionTypes.js');
@@ -9,10 +10,10 @@ var actionTypes = require('../Constants/actionTypes.js');
 // STORES
 var TrocFilterStore = require('../Stores/trocFilterStore.js');
 
-
 var CHANGE_EVENT = 'change';
 
-var _trocMap; // Map: id -> Troc
+var _trocMap = new Immutable.Map(); // Map: id -> Troc
+
 /*
 
 Interface Troc
@@ -32,20 +33,26 @@ Interface Troc
 function _changeTrocStatus(trocId, status){
     var troc = _trocMap.get(trocId);
     troc.status = status;
+
+    _trocMap = _trocMap.set(troc.id, troc);
 }
 
 function _changeProposalStatus(trocId, proposalId, status){
     var troc = _trocMap.get(trocId);
     var proposal = troc.proposalMap.get(proposalId);
     proposal.status = status;
+
+    _trocMap = _trocMap.set(troc.id, troc);
 }
 
 function _togglePrivacyStatus(trocId){
     var troc = _trocMap.get(trocId);
     troc.myAd.isPrivate = !troc.myAd.isPrivate;
+
+    _trocMap = _trocMap.set(troc.id, troc);
 }
 
-function _filter(filters){
+function _filterTrocs(filters){
 
     var trocs = [];
 
@@ -57,7 +64,6 @@ function _filter(filters){
             trocs.push(troc);
     });
 
-    console.log('trocs', trocs);
     return trocs;
 }
 
@@ -88,15 +94,15 @@ var TrocStore = Object.assign({}, EventEmitter.prototype, {
             filters.push(filterFunction);
         });
 
-        return _filter(filters);
+        return _filterTrocs(filters);
     },
 
     getAll: function(){
-        var trocs = [];
-        _trocMap.forEach(function(troc){
-            trocs.push(troc);
-        })
-        return trocs;
+        // var trocs = [];
+        // _trocMap.forEach(function(troc){
+        //     trocs.push(troc);
+        // });
+        return _trocMap;
     }
 
 });
@@ -110,36 +116,49 @@ TrocStore.dispatchToken = dispatcher.register(function(action) {
     switch(action.type) {
 
         case actionTypes.LOAD_TROCS:
-            _trocMap = action.trocMap;
+            console.log('[TrocStore] loading trocs from localstorage', action.trocMap);
+            _trocMap = new Immutable.Map(action.trocMap);
+            TrocStore.emitChange();
+            break;
+
+        case actionTypes.CREATE_TROC:
+            console.log('[TrocStore] creating troc');
+            _trocMap = _trocMap.set(action.newTroc.id, action.newTroc);
+            TrocStore.emitChange();
+            break;
+
+        case actionTypes.MODIFY_TROC:
+            console.log('[TrocStore] modifying troc');
+            _trocMap = _trocMap.set(action.troc.id, action.troc);
             TrocStore.emitChange();
             break;
 
         case actionTypes.REMOVE_TROC:
-            console.log('removing troc');
-            _trocMap.delete(action.id);
+            console.log('[TrocStore] removing troc');
+            _trocMap = _trocMap.delete(action.id);
             TrocStore.emitChange();
             break;
 
         case actionTypes.CHANGE_TROC_STATUS:
-            console.log('changing troc status');
+            console.log('[TrocStore] changing troc status');
             _changeTrocStatus(action.id, action.status);
             TrocStore.emitChange();
             break;
 
         case actionTypes.CHANGE_PROPOSAL_STATUS:
-            console.log('changing proposal status');
+            console.log('[TrocStore] changing proposal status');
             _changeProposalStatus(action.trocId, action.proposalId, action.status);
             TrocStore.emitChange();
             break;
 
         case actionTypes.TOGGLE_PRIVACY_STATUS:
-            console.log('toggling privacy status');
+            console.log('[TrocStore] toggling privacy status');
             _togglePrivacyStatus(action.trocId);
             TrocStore.emitChange();
             break;
 
         case actionTypes.APPLY_TROC_FILTERS:
-            console.log('applying filters');
+            console.log('[TrocStore] applying filters');
             TrocStore.getFromCurrentFilters();
             TrocStore.emitChange();
             break;

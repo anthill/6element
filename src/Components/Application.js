@@ -64,9 +64,7 @@ var Application = React.createClass({
         // var self = this;
         // var props = this.props;
         var state = this.state;
-
-        console.log('APP state', state);
-
+        
         var tabs = [
             new Tab({
                 name: 'Accueil',

@@ -2,8 +2,9 @@
 
 var React = require('react');
 
-var displayActions = require('../Actions/displayActionCreator');
-var searchContextStore = require('../Stores/searchContextStore');
+var displayActions = require('../Actions/displayActions.js');
+var trocActions = require('../Actions/trocActions.js');
+var searchContextStore = require('../Stores/searchContextStore.js');
 
 var directions = require('../Constants/directions.js');
 
@@ -31,6 +32,44 @@ module.exports = React.createClass({
             React.DOM.form({
                 onSubmit: function(e){
                     e.preventDefault();
+
+                    console.log('adpost submit', e.target);
+
+                    var newAd = {
+                        id: Math.random(),
+                        owner: 0,
+                        isPrivate: false,
+                        content: {
+                            title: e.target.what.value,
+                            categories: [],
+                            location: e.target.where.value,
+                            pics: undefined,
+                            status: '',
+                            text: ''
+                        },
+                        direction: e.target.direction.value,
+                        status: 'ongoing'
+                    };
+
+                    var newTroc = {
+                        id: Math.random(),
+                        myAd: newAd,
+                        proposalMap: [], // not a Map, but easier to call it that way for now
+                        direction: e.target.direction.value,
+                        status: 'ongoing'
+                    };
+
+                    trocActions.createTroc(newTroc);
+
+                    // get direction
+                    // get what
+                    // get where
+                    // get pic
+
+                    // make an ad
+                    // do action POST_AD
+                    // save it in store & localStorage
+
                 }
             }, 
                 // mode switch
@@ -39,7 +78,7 @@ module.exports = React.createClass({
                         'Je me sépare',
                         React.DOM.input({
                             type: 'radio',
-                            value: 'give',
+                            value: directions.GIVE,
                             name: 'direction',
                             defaultChecked: searchContext.get('direction') === directions.GIVE
                         })
@@ -48,7 +87,7 @@ module.exports = React.createClass({
                         'Je récupère',
                         React.DOM.input({
                             type: 'radio',
-                            value: 'need',
+                            value: directions.NEED,
                             name: 'direction',
                             defaultChecked: searchContext.get('direction') === directions.NEED
                         })
@@ -59,7 +98,7 @@ module.exports = React.createClass({
                     'Quoi ?',
                     React.DOM.input({
                         type: 'text',
-                        id: 'what'
+                        name: 'what'
                     })
                 ),
                 
@@ -67,7 +106,7 @@ module.exports = React.createClass({
                     'Où ?',
                     React.DOM.input({
                         type: 'text',
-                        id: 'where'
+                        name: 'where'
                     })
                 ),
                 
@@ -75,7 +114,7 @@ module.exports = React.createClass({
                     'Photo',
                     React.DOM.input({
                         type: 'file',
-                        id: 'pic'
+                        name: 'pic'
                     })
                 ),
                 

@@ -6,7 +6,7 @@ var React = require('react');
 var DisplayedItemStore = require('../Stores/displayedItemStore.js');
 
 // ACTIONS
-var _changeTab = require('../Actions/displayActionCreator.js').changeTab;
+var _changeTab = require('../Actions/displayActions.js').changeTab;
 
 /*
 

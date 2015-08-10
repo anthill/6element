@@ -9,7 +9,7 @@ var ActivityItem = React.createFactory(require('./ActivityItem.js'));
 var TrocStore = require('../Stores/trocStore.js');
 
 // ACTIONS
-var trocActions = require('../Actions/trocActionCreator.js');
+var trocActions = require('../Actions/trocActions.js');
 
 
 // UTILS

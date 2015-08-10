@@ -7,7 +7,7 @@ var actionTypes = require('../Constants/actionTypes.js');
 
 var CHANGE_EVENT = 'change';
 
-var _userMap; // Map: id -> User
+var _userName; // Map: id -> User
 /*
 
 Interface User
@@ -32,12 +32,8 @@ var UserStore = Object.assign({}, EventEmitter.prototype, {
         this.removeListener(CHANGE_EVENT, callback);
     },
 
-    get: function(id){
-        return _userMap.get(id);
-    },
-
-    getAll: function(){
-        return _userMap;
+    get: function(){
+        return _userName;
     }
 
 });
@@ -47,7 +43,7 @@ UserStore.dispatchToken = dispatcher.register(function(action) {
     switch(action.type) {
 
         case actionTypes.LOAD_USERS:
-            _userMap = action.userMap;
+            _userName = action.userName;
             UserStore.emitChange();
             break;
 

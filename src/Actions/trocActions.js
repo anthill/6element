@@ -3,8 +3,6 @@
 var dispatcher = require('../Dispatcher/dispatcher.js');
 var actionTypes = require('../Constants/actionTypes.js');
 
-// var localAPIUtils = require('../Utils/localAPIUtils.js');
-
 module.exports = {
 
     changeTrocStatus: function(id, status) {
@@ -53,6 +51,24 @@ module.exports = {
             type: actionTypes.APPLY_TROC_FILTERS,
             filter: filter,
             value: value
+        });
+    },
+
+    createTroc: function(troc) {
+        console.log('CREATING TROC', troc);
+
+        dispatcher.dispatch({
+            type: actionTypes.CREATE_TROC,
+            newTroc: troc
+        });
+    },
+
+    modifyTroc: function(troc) {
+        console.log('MODIFYING TROC', troc);
+
+        dispatcher.dispatch({
+            type: actionTypes.MODIFY_TROC,
+            adData: troc
         });
     }
 

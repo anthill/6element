@@ -86,7 +86,7 @@ var TrocStore = Object.assign({}, EventEmitter.prototype, {
     },
 
     getFromCurrentFilters: function(){
-        var filterMap = TrocFilterStore.getCurrentFilters();
+        var filterMap = TrocFilterStore.getFilterFunctions();
 
         var filters = [];
 

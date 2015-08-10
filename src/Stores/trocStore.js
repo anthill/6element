@@ -10,6 +10,8 @@ var actionTypes = require('../Constants/actionTypes.js');
 // STORES
 var TrocFilterStore = require('../Stores/trocFilterStore.js');
 
+var searchContextStore = require('../Stores/searchContextStore.js');
+
 var CHANGE_EVENT = 'change';
 
 var _trocMap = new Immutable.Map(); // Map: id -> Troc
@@ -95,6 +97,20 @@ var TrocStore = Object.assign({}, EventEmitter.prototype, {
         });
 
         return _filterTrocs(filters);
+    },
+    
+    search: function(){
+        var tff = searchContextStore.makeFilter();
+        var trocs = [];
+        
+        _trocMap.forEach(function(troc){
+            if(tff(troc))
+                trocs.push(troc);
+        });
+        
+        console.log('search', _trocMap.size, trocs.length);
+
+        return trocs;
     },
 
     getAll: function(){

@@ -1,5 +1,7 @@
 'use strict';
 
+var directions = require('../src/Constants/directions');
+
 var ad1 = {
     id: 10,
     creator: 'Romain',
@@ -12,7 +14,7 @@ var ad1 = {
         status: 'Déchiré',
         text: 'Je donne une veste un peu déchirée sur les côtés'
     },
-    direction: 'give',
+    direction: directions.GIVE,
     status: 'ongoing'
 };
 
@@ -28,7 +30,7 @@ var ad2 = {
         status: 'Neuf',
         text: 'Je donne ma veste bleue'
     },
-    direction: 'give',
+    direction: directions.GIVE,
     status: 'ongoing'
 };
 
@@ -44,7 +46,7 @@ var ad3 = {
         status: 'Bon état',
         text: 'Je donne mon super vélo même si l\'image n\'a rien à voir'
     },
-    direction: 'give',
+    direction: directions.GIVE,
     status: 'ongoing'
 };
 
@@ -60,7 +62,7 @@ var ad4 = {
         status: 'Tous',
         text: 'Je cherche un vélo'
     },
-    direction: 'GIVE',
+    direction: directions.NEED,
     status: 'ongoing'
 };
 
@@ -76,7 +78,7 @@ var ad5 = {
         status: 'Usagé',
         text: 'Je donne mon super vélo de ville'
     },
-    direction: 'GIVE',
+    direction: directions.GIVE,
     status: 'ongoing'
 };
 

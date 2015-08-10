@@ -72,7 +72,10 @@ module.exports = React.createClass({
                         type: "submit"
                     }, "Aller en déchèterie"),
                     React.DOM.button({
-                        type: "submit"
+                        type: "submit",
+                        onClick: function(){
+                            displayActions.goToScreen(screenTypes.SEARCH_RESULTS);
+                        }
                     }, "Résultats"),
                     React.DOM.button({
                         type: "submit",

@@ -28,7 +28,7 @@ module.exports = {
 
             var proposalMap = new Map();
 
-            troc.proposalMap.forEach(function(proposal, index){
+            troc.proposals.forEach(function(proposal, index){
                 proposalMap.set(index, {
                     ad: adMap.get(proposal.adId),
                     status: proposal.status

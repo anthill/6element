@@ -51,7 +51,7 @@ var searchContextStore = Object.assign({}, EventEmitter.prototype, {
             if(troc.myAd.direction === thisSearchContext.get('direction'))
                 return false;
             
-            if(!troc.myAd.content.title.includes(thisSearchContext.get('what')) && !troc.myAd.content.text.includes(thisSearchContext.get('what')))
+            if(!troc.myAd.content.title.includes(thisSearchContext.get('what') || '') && !troc.myAd.content.text.includes(thisSearchContext.get('what') || ''))
                 return false;
             
             // ignore 'where' for now

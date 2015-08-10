@@ -27,9 +27,10 @@ module.exports = React.createClass({
             React.DOM.div({},
                 // mode switch
                 React.DOM.div({className: 'mode-switch'},
-                    React.DOM.label({},
+                    React.DOM.label({className: 'give'},
                         'Je me sépare',
                         React.DOM.input({
+                            className: 'give',
                             type: 'radio',
                             value: directions.GIVE,
                             name: 'direction',
@@ -40,7 +41,7 @@ module.exports = React.createClass({
                             }
                         })
                     ),
-                    React.DOM.label({},
+                    React.DOM.label({className: 'need'},
                         'Je récupère',
                         React.DOM.input({
                             type: 'radio',
@@ -72,7 +73,7 @@ module.exports = React.createClass({
                     }, "Aller en déchèterie"),
                     React.DOM.button({
                         type: "submit"
-                    }, "Voir les personnes qui cherchent (21)"),
+                    }, "Résultats"),
                     React.DOM.button({
                         type: "submit",
                         onClick: function(){

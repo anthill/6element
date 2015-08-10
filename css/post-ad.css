@@ -24,3 +24,15 @@
 .post-an-ad form input[type="text"]{
     width: 80%;
 }
+
+.post-an-ad .mode-switch label.give{
+    background-color: hsl(118, 38%, 74%);
+}
+
+.post-an-ad .mode-switch label.need{
+    background-color: hsl(208, 38%, 74%);
+}
+
+.post-an-ad button{
+    position: relative; top: 0; left: 1em; width: 5em; height: 2em;
+}

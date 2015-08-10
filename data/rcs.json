@@ -134,7 +134,7 @@
 
         [
             {
-                "type": "Dechets_verts",
+                "type": "Verts",
                 "status": "unavailable"
             },
             {

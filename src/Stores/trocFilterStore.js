@@ -84,7 +84,9 @@ TrocFilterStore.dispatchToken = dispatcher.register(function(action) {
         case actionTypes.APPLY_TROC_FILTERS:
             if (action.filter === 'directions'){
                 var directionSet = _filterState[action.filter];
+
                 console.log('BORDEL', _filterState);
+
                 if (directionSet.has(action.value))
                     directionSet = directionSet.delete(action.value);
                 else

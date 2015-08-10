@@ -29,7 +29,7 @@ module.exports = React.createClass({
         return React.DOM.div({
                 className: 'proposal',
                 onClick: function(){
-                    props.changeStatus('NEW PROPOSAL STATUS');
+                    // props.changeStatus('NEW PROPOSAL STATUS');
                 }
             },
             props.proposal.ad.content.title,

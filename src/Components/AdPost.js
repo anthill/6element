@@ -72,7 +72,7 @@ module.exports = React.createClass({
             }, 
                 // mode switch
                 React.DOM.div({className: 'mode-switch'}, 
-                    React.DOM.label({}, 
+                    React.DOM.label({className: 'give'}, 
                         'Je me sépare',
                         React.DOM.input({
                             type: 'radio',
@@ -81,7 +81,7 @@ module.exports = React.createClass({
                             defaultChecked: searchContext.get('direction') === directions.GIVE
                         })
                     ),
-                    React.DOM.label({}, 
+                    React.DOM.label({className: 'need'}, 
                         'Je récupère',
                         React.DOM.input({
                             type: 'radio',

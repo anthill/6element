@@ -81,14 +81,17 @@ var Application = React.createClass({
                 name: 'Déchèteries',
                 type: tabTypes.RECYCLING_CENTER,
                 key: 2
-            }),
-            React.DOM.input({
-                defaultValue: currentUserStore.get() || '',
-                onBlur: function(e){
-                    currentUserStore.changeUser(e.target.value);
-                }
             })
         ];
+
+        var login = React.DOM.input({
+            className: 'login',
+            defaultValue: currentUserStore.get() || '',
+            placeholder: 'Connectez-vous !',
+            onBlur: function(e){
+                currentUserStore.changeUser(e.target.value);
+            }
+        });
 
         var screen;        
         
@@ -117,6 +120,7 @@ var Application = React.createClass({
                 }
                 
                 screen = [
+                    login,
                     React.DOM.div({className: 'tabs'}, tabs),
                     tab
                 ];

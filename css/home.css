@@ -25,6 +25,14 @@
     cursor: pointer;
 }
 
+.home .mode-switch label.give{
+    background-color: hsl(118, 38%, 74%);
+}
+
+.home .mode-switch label.need{
+    background-color: hsl(208, 38%, 74%);
+}
+
 .home input[type="text"]{
     width: 80%;
 }

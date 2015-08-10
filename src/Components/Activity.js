@@ -70,7 +70,7 @@ module.exports = React.createClass({
         var state = this.state;
         
         var switchButtons = React.DOM.div({className: 'filter'},
-            React.DOM.label({},
+            React.DOM.label({className: 'give'},
                 'Je me sépare',
                 React.DOM.input({
                     type: 'checkbox',
@@ -82,7 +82,7 @@ module.exports = React.createClass({
                     }
                 })
             ),
-            React.DOM.label({},
+            React.DOM.label({className: 'need'},
                 'Je récupère',
                 React.DOM.input({
                     type: 'checkbox',

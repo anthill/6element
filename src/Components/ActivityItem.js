@@ -76,31 +76,31 @@ module.exports = React.createClass({
         var state = this.state;
 
         var header = React.DOM.header({},
-            React.DOM.span({
-                    className: 'private',
-                    onClick: function(){
-                        self.togglePrivacyStatus();
-                    }
-                },
-                props.myAd.isPrivate ? 'P' : ''
-            ),
+            // React.DOM.span({
+            //         className: 'private',
+            //         onClick: function(){
+            //             self.togglePrivacyStatus();
+            //         }
+            //     },
+            //     props.myAd.isPrivate ? 'P' : ''
+            // ),
             React.DOM.h1({},
                 props.myAd.content.title
             ),
-            React.DOM.div({
-                    onClick: function(){
-                        self.changeTrocStatus('NEW TROC STATUS');
-                    }
-                },
-                props.status
-            ),
-            React.DOM.div({
-                    onClick: function(){
-                        console.log('View myAd');
-                    }
-                },
-                'View'
-            ),
+            // React.DOM.div({
+            //         onClick: function(){
+            //             self.changeTrocStatus('NEW TROC STATUS');
+            //         }
+            //     },
+            //     props.status
+            // ),
+            // React.DOM.div({
+            //         onClick: function(){
+            //             console.log('View myAd');
+            //         }
+            //     },
+            //     'View'
+            // ),
             React.DOM.span({
                     onClick: function(){
                         self.setState({
@@ -108,7 +108,7 @@ module.exports = React.createClass({
                         });
                     }
                 },
-                'Proposals (' + props.proposalMap.size + ')'
+                'Intéressés (' + props.proposalMap.size + ')'
             ),
             React.DOM.span({
                 title: 'delete',

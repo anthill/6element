@@ -9,6 +9,14 @@
     cursor: pointer;
 }
 
+.activity .filter label.give{
+    background-color: hsl(118, 38%, 74%);
+}
+
+.activity .filter label.need{
+    background-color: hsl(208, 38%, 74%);
+}
+
 .activity form input[type="search"]{
     width: 100%;
 }
@@ -32,6 +40,10 @@
     
     display: flex;
     align-items: center;
+}
+
+.activity .activity-items li header *{
+    margin: 0 1em;
 }
 
 .activity .activity-items li h1{

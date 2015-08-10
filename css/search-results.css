@@ -1,0 +1,18 @@
+.search-results{
+    
+}
+
+.search-results .results{
+    list-style: none;
+}
+
+.search-results .results li{
+    padding: 1em;
+    background-color: beige;
+    margin: 0.2em 0;
+    
+    cursor: pointer;
+}
+
+
+

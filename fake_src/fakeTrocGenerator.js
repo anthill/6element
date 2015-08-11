@@ -1,8 +1,10 @@
 'use strict';
 
+var directions = require('../src/Constants/directions');
+
 var ad1 = {
     id: 10,
-    creator: 0,
+    creator: 'Romain',
     isPrivate: false,
     content: {
         title: 'VESTE ROUGE DECHIREE',
@@ -12,13 +14,13 @@ var ad1 = {
         status: 'Déchiré',
         text: 'Je donne une veste un peu déchirée sur les côtés'
     },
-    direction: 'give',
+    direction: directions.GIVE,
     status: 'ongoing'
 };
 
 var ad2 = {
     id: 11,
-    creator: 0,
+    creator: 'David',
     isPrivate: false,
     content: {
         title: 'VESTE BLEUE',
@@ -28,13 +30,13 @@ var ad2 = {
         status: 'Neuf',
         text: 'Je donne ma veste bleue'
     },
-    direction: 'give',
+    direction: directions.GIVE,
     status: 'ongoing'
 };
 
 var ad3 = {
     id: 1,
-    creator: 11,
+    creator: 'Roxane',
     isPrivate: false,
     content: {
         title: 'VELO PEUGEOT',
@@ -44,13 +46,13 @@ var ad3 = {
         status: 'Bon état',
         text: 'Je donne mon super vélo même si l\'image n\'a rien à voir'
     },
-    direction: 'give',
+    direction: directions.GIVE,
     status: 'ongoing'
 };
 
 var ad4 = {
     id: 2,
-    creator: 0,
+    creator: 'Maxime',
     isPrivate: true,
     content: {
         title: 'VELO BON ETAT',
@@ -60,13 +62,13 @@ var ad4 = {
         status: 'Tous',
         text: 'Je cherche un vélo'
     },
-    direction: 'GIVE',
+    direction: directions.NEED,
     status: 'ongoing'
 };
 
 var ad5 = {
     id: 3,
-    creator: 12,
+    creator: 'Armand',
     isPrivate: false,
     content: {
         title: 'VELO DE VILLE',
@@ -76,7 +78,7 @@ var ad5 = {
         status: 'Usagé',
         text: 'Je donne mon super vélo de ville'
     },
-    direction: 'GIVE',
+    direction: directions.GIVE,
     status: 'ongoing'
 };
 

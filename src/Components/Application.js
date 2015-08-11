@@ -4,7 +4,8 @@ var React = require('react');
 
 // COMPONENTS
 var AdPost = React.createFactory(require('./AdPost.js'));
-
+var SearchResults = React.createFactory(require('./SearchResults.js'));
+    
 var Home = React.createFactory(require('./Home.js'));
 var Tab = React.createFactory(require('./Tab.js'));
 var Activity = React.createFactory(require('./Activity.js'));
@@ -128,6 +129,9 @@ var Application = React.createClass({
                 break;
             case screenTypes.AD_POST:
                 screen = new AdPost();
+                break;
+            case screenTypes.SEARCH_RESULTS:
+                screen = new SearchResults();
                 break;
             default:
                 console.error('Unknown state.screen', state.screen, state);

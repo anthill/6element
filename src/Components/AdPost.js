@@ -78,7 +78,7 @@ module.exports = React.createClass({
                             type: 'radio',
                             value: directions.GIVE,
                             name: 'direction',
-                            defaultChecked: searchContext.get('direction') === directions.GIVE
+                            defaultChecked: searchContext.get('direction') ? searchContext.get('direction') === directions.GIVE : true
                         })
                     ),
                     React.DOM.label({className: 'need'}, 

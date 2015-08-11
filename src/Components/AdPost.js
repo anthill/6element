@@ -40,7 +40,7 @@ module.exports = React.createClass({
 
                     var newAd = {
                         id: Math.random(),
-                        owner: 0,
+                        creator: currentUserStore.get(),
                         isPrivate: false,
                         content: {
                             title: e.target.what.value,
@@ -57,7 +57,7 @@ module.exports = React.createClass({
                     var newTroc = {
                         id: Math.random(),
                         myAd: newAd,
-                        proposalMap: [], // not a Map, but easier to call it that way for now
+                        proposals: [], // not a Map, but easier to call it that way for now
                         direction: e.target.direction.value,
                         status: 'ongoing'
                     };
@@ -78,7 +78,7 @@ module.exports = React.createClass({
                             type: 'radio',
                             value: directions.GIVE,
                             name: 'direction',
-                            defaultChecked: searchContext.get('direction') === directions.GIVE
+                            defaultChecked: searchContext.get('direction') ? searchContext.get('direction') === directions.GIVE : true
                         })
                     ),
                     React.DOM.label({className: 'need'}, 

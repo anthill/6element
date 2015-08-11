@@ -16,7 +16,7 @@ var _adMap = new Immutable.Map(); // Map: id -> Ad
 Interface Ad
 {
     id: integer,
-    owner: integer,
+    creator: integer,
     content: {
       title: string,
       categories: [string],
@@ -26,7 +26,7 @@ Interface Ad
     },
     direction: string,
     status: string
-  },
+}
 
 */
 

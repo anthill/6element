@@ -7,11 +7,13 @@ var React = require('react');
 
 // STORES
 var trocStore = require('../Stores/trocStore.js');
-var searchContext = require('../Stores/searchContextStore.js');
+var searchContextStore = require('../Stores/searchContextStore.js');
+var currentUserStore = require('../Stores/currentUserStore.js');
 
 // ACTIONS
 var displayActions = require('../Actions/displayActions');
 var searchContextAction = require('../Actions/searchContextActions');
+var trocActions = require('../Actions/trocActions');
 
 // UTILS
 var directions = require('../Constants/directions');
@@ -26,19 +28,21 @@ module.exports = React.createClass({
             trocs: trocStore.search()
         };
     },
-
-    onSearchContextChange: function(){
+    
+    updateResultsStatus: function(){
         this.setState({
             trocs: trocStore.search()
         })
     },
-    
+
     componentDidMount: function() {
-        searchContext.on(searchContext.events.CHANGE, this.onSearchContextChange);
+        trocStore.addChangeListener(this.updateResultsStatus);
+        searchContextStore.on(searchContextStore.events.CHANGE, this.updateResultsStatus);
     },
 
     componentWillUnmount: function() {
-        searchContext.removeListener(searchContext.events.CHANGE, this.onSearchContextChange);
+        trocStore.removeChangeListener(this.updateResultsStatus);
+        searchContextStore.removeListener(searchContextStore.events.CHANGE, this.updateResultsStatus);
     },
 
     
@@ -58,13 +62,13 @@ module.exports = React.createClass({
         }, 
             // mode switch
             React.DOM.div({className: 'mode-switch'}, 
-                React.DOM.label({}, 
+                React.DOM.label({className: 'give'}, 
                     'Je me sépare',
                     React.DOM.input({
                         type: 'radio',
                         value: directions.GIVE,
                         name: 'direction',
-                        defaultChecked: searchContext.get().get('direction') === directions.GIVE,
+                        defaultChecked: searchContextStore.get().get('direction') ? searchContextStore.get().get('direction') === directions.GIVE : true,
                         onChange: function(e){
                             searchContextAction.update({
                                 'direction': e.target.value
@@ -72,13 +76,13 @@ module.exports = React.createClass({
                         }
                     })
                 ),
-                React.DOM.label({}, 
+                React.DOM.label({className: 'need'}, 
                     'Je récupère',
                     React.DOM.input({
                         type: 'radio',
                         value: directions.NEED,
                         name: 'direction',
-                        defaultChecked: searchContext.get().get('direction') === directions.NEED,
+                        defaultChecked: searchContextStore.get().get('direction') === directions.NEED,
                         onChange: function(e){
                             searchContextAction.update({
                                 'direction': e.target.value
@@ -93,7 +97,7 @@ module.exports = React.createClass({
                 React.DOM.input({
                     type: 'text',
                     id: 'what',
-                    defaultValue: searchContext.get().get('what'),
+                    defaultValue: searchContextStore.get().get('what'),
                     onChange: function(e){
                         searchContextAction.update({
                             'what': e.target.value
@@ -107,7 +111,7 @@ module.exports = React.createClass({
                 React.DOM.input({
                     type: 'text',
                     id: 'where',
-                    defaultValue: searchContext.get().get('where'),
+                    defaultValue: searchContextStore.get().get('where'),
                     onChange: function(e){
                         searchContextAction.update({
                             'where': e.target.value
@@ -118,13 +122,33 @@ module.exports = React.createClass({
         );
 
         
-        var results = React.DOM.ol({className: 'results'}, state.trocs.map(function(troc){
-            return React.DOM.li({}, 
-                React.DOM.span({style: {"font-weight": "bold"}}, troc.myAd.content.title),
-                ' ',
-                React.DOM.span({}, troc.myAd.content.location)
-            );
-        }));
+        
+        var results = React.DOM.ol({className: 'results'}, state.trocs
+            .filter(function(t){
+                return t.myAd.creator !== currentUserStore.get()
+            })
+            .map(function(troc){
+                var userAlreadyInterested = trocStore.isUserAlreadyInterested(currentUserStore.get(), troc.myAd);
+
+                return React.DOM.li({}, 
+                    React.DOM.span({style: {"font-weight": "bold"}}, troc.myAd.content.title),
+                    React.DOM.button({
+                        onClick: function(){
+                            trocActions.expressInterestIn(troc);
+                        },
+                        disabled: userAlreadyInterested
+                    },
+                        userAlreadyInterested ? 
+                            'Déjà intéressé' : 
+                            (searchContextStore.get().get('direction') === directions.NEED ?
+                                'Je le veux !' :
+                                "J'en donne un !")
+                    ),
+                    ' '
+                    // React.DOM.span({}, troc.myAd.content.location)
+                );
+            })
+        );
         
         
         

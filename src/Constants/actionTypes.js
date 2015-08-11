@@ -26,6 +26,8 @@ module.exports = keyMirror({
     LOAD_USERS: null,
     CHANGE_PROPOSAL_STATUS: null,
     APPLY_TROC_FILTERS: null,
+    // TODO move this to ads eventually
+    EXPRESS_INTEREST: null,
     // SEARCH
     UPDATE_SEARCH_CONTEXT: null
 });

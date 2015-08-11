@@ -11,8 +11,8 @@ var serverAPIUtils = require('./Utils/serverAPIUtils.js');
 localStorageUtils.loadDisplayState();
 // localStorageUtils.loadAds();
 serverAPIUtils.loadRCs();
-serverAPIUtils.loadTrocs();
-// localStorageUtils.loadTrocs();
+// serverAPIUtils.loadTrocs();
+localStorageUtils.loadTrocs();
 
 // Initial rendering
 React.render(new Application({}), document.body);

@@ -6,9 +6,11 @@ var Immutable = require('immutable');
 
 // CONSTANTS
 var actionTypes = require('../Constants/actionTypes.js');
+var directions = require('../Constants/directions.js');
 
 // STORES
 var TrocFilterStore = require('../Stores/trocFilterStore.js');
+var CurrentUserStore = require('../Stores/currentUserStore.js');
 
 var searchContextStore = require('../Stores/searchContextStore.js');
 
@@ -39,13 +41,15 @@ function _changeTrocStatus(trocId, status){
     _trocMap = _trocMap.set(troc.id, troc);
 }
 
-function _changeProposalStatus(trocId, proposalId, status){
-    var troc = _trocMap.get(trocId);
-    var proposal = troc.proposalMap.get(proposalId);
-    proposal.status = status;
+// function _changeProposalStatus(trocId, proposalId, status){
+//     var troc = _trocMap.get(trocId);
+//     var proposal = troc.proposals.find(function(prop){
+//         return 
+//     });
+//     proposal.status = status;
 
-    _trocMap = _trocMap.set(troc.id, troc);
-}
+//     _trocMap = _trocMap.set(troc.id, troc);
+// }
 
 function _togglePrivacyStatus(trocId){
     var troc = _trocMap.get(trocId);
@@ -119,6 +123,59 @@ var TrocStore = Object.assign({}, EventEmitter.prototype, {
         //     trocs.push(troc);
         // });
         return _trocMap;
+    },
+
+    // eventually, change troc to ad. The current user has no reason to have access to the other person's troc
+    // the current user should be answering to an ad (and corresponding troc is found server-side)
+    apply: function(troc){
+        
+        var ad = {
+            id: Math.random(),
+            creator: CurrentUserStore.get(),
+            content: {
+              title: troc.myAd.content.title,
+              categories: troc.myAd.categories,
+              location: '',
+              state: '',
+              text: ''
+            },
+            direction: troc.myAd.direction === directions.GIVE ? directions.NEED : directions.GIVE,
+            status: ''
+        };
+
+        var newTroc = {
+            id: Math.random(),
+            myAd: ad,
+            proposals: [{
+                ad: troc.myAd,
+                status: ''
+            }],
+            direction: ad.direction,
+            status: ''
+        };
+
+        troc.proposals.push({
+            ad: ad,
+            status: ''
+        });
+
+        _trocMap = _trocMap.set(newTroc.id, newTroc);
+
+    },
+
+    isUserAlreadyInterested: function(user, ad){
+        var res = false;
+
+        _trocMap.forEach(function(t){
+            if(t.myAd.creator === user && t.proposals.some(function(proposal){
+                console.log('prop ad', proposal, ad);
+
+                return proposal.ad.id === ad.id
+            }))
+                res = true;
+        });
+
+        return res;
     }
 
 });
@@ -161,11 +218,11 @@ TrocStore.dispatchToken = dispatcher.register(function(action) {
             TrocStore.emitChange();
             break;
 
-        case actionTypes.CHANGE_PROPOSAL_STATUS:
-            console.log('[TrocStore] changing proposal status');
-            _changeProposalStatus(action.trocId, action.proposalId, action.status);
-            TrocStore.emitChange();
-            break;
+        // case actionTypes.CHANGE_PROPOSAL_STATUS:
+        //     console.log('[TrocStore] changing proposal status');
+        //     _changeProposalStatus(action.trocId, action.proposalId, action.status);
+        //     TrocStore.emitChange();
+        //     break;
 
         case actionTypes.TOGGLE_PRIVACY_STATUS:
             console.log('[TrocStore] toggling privacy status');
@@ -176,6 +233,12 @@ TrocStore.dispatchToken = dispatcher.register(function(action) {
         case actionTypes.APPLY_TROC_FILTERS:
             console.log('[TrocStore] applying filters');
             TrocStore.getFromCurrentFilters();
+            TrocStore.emitChange();
+            break;
+
+        case actionTypes.EXPRESS_INTEREST: 
+            console.log('[TrocStore] expressing interest', action.troc);
+            TrocStore.apply(action.troc);
             TrocStore.emitChange();
             break;
 

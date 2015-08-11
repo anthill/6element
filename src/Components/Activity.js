@@ -8,12 +8,15 @@ var ActivityItem = React.createFactory(require('./ActivityItem.js'));
 // STORES
 var TrocStore = require('../Stores/trocStore.js');
 var TrocFilterStore = require('../Stores/trocFilterStore.js');
+var currentUserStore = require('../Stores/currentUserStore.js');
+
 
 // ACTIONS
 var trocActions = require('../Actions/trocActions.js');
-
+var displayActions = require('../Actions/displayActions.js');
 
 // UTILS
+var screenTypes = require('../Constants/screenTypes.js');
 
 /*
 
@@ -76,7 +79,7 @@ module.exports = React.createClass({
                     type: 'checkbox',
                     value: 'give',
                     name: 'directions',
-                    checked: state.trocFilters.directions.has('GIVE'),
+                    defaultChecked: state.trocFilters.directions.has('GIVE'),
                     onChange: function(){
                         trocActions.applyTrocFilter('directions', 'GIVE');
                     }
@@ -88,7 +91,7 @@ module.exports = React.createClass({
                     type: 'checkbox',
                     value: 'need',
                     name: 'directions',
-                    checked: state.trocFilters.directions.has('NEED'),
+                    defaultChecked: state.trocFilters.directions.has('NEED'),
                     onChange: function(){
                         trocActions.applyTrocFilter('directions', 'NEED');
                     } 
@@ -105,17 +108,30 @@ module.exports = React.createClass({
         ); // => will be able to trigger filter Action
 
         var trocList = React.DOM.ol({className: "activity-items"}, 
-            state.trocs.map(function(troc, index){
-                return new ActivityItem(Object.assign(troc, {
-                    key: index
-                }));
-            })
-        ); 
+            state.trocs
+                .filter(function(t){
+                    return t.myAd.creator === currentUserStore.get()
+                })
+                .map(function(troc){
+                    return new ActivityItem(Object.assign(troc, {
+                        key: troc.id
+                    }));
+                })
+        );
+
+        var backToAdPost = React.DOM.button({
+                onClick: function(){
+                    displayActions.goToScreen(screenTypes.AD_POST);
+                }
+            },
+            'Poster une annonce'
+        );
 
         return React.DOM.div({className: 'activity'},
             switchButtons,
             searchField,
-            trocList
+            trocList,
+            backToAdPost
         );
     }
 });

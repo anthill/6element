@@ -108,7 +108,7 @@ module.exports = React.createClass({
                         });
                     }
                 },
-                'Intéressés (' + props.proposalMap.size + ')'
+                'Intéressés (' + props.proposalMap.length + ')'
             ),
             React.DOM.span({
                 title: 'delete',

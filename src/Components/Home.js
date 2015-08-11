@@ -8,6 +8,7 @@ var screenTypes = require('../Constants/screenTypes');
 var directions = require('../Constants/directions');
 
 var searchContextActions = require('../Actions/searchContextActions');
+var searchContext = require('../Stores/searchContextStore.js');
 
 module.exports = React.createClass({
 
@@ -21,6 +22,11 @@ module.exports = React.createClass({
         //var self = this;
         //var props = this.props;
         //var state = this.state;
+
+        console.log('dir', searchContext.get().get('direction'),
+            searchContext.get().get('direction') ? searchContext.get().get('direction') === directions.GIVE : true,
+            searchContext.get().get('direction') === directions.NEED 
+            )
         
         return React.DOM.div({className: 'home'},
             
@@ -38,7 +44,8 @@ module.exports = React.createClass({
                                 searchContextActions.update({
                                     'direction': e.target.value
                                 })
-                            }
+                            },
+                            defaultChecked: searchContext.get().get('direction') ? searchContext.get().get('direction') === directions.GIVE : true
                         })
                     ),
                     React.DOM.label({className: 'need'},
@@ -51,7 +58,8 @@ module.exports = React.createClass({
                                 searchContextActions.update({
                                     'direction': e.target.value
                                 })
-                            }
+                            },
+                            defaultChecked: searchContext.get().get('direction') === directions.NEED  
                         })
                     )
                 ),

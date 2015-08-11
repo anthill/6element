@@ -7,7 +7,8 @@ var React = require('react');
 
 // STORES
 var trocStore = require('../Stores/trocStore.js');
-var searchContext = require('../Stores/searchContextStore.js');
+var searchContextStore = require('../Stores/searchContextStore.js');
+var currentUserStore = require('../Stores/currentUserStore.js');
 
 // ACTIONS
 var displayActions = require('../Actions/displayActions');
@@ -34,11 +35,11 @@ module.exports = React.createClass({
     },
     
     componentDidMount: function() {
-        searchContext.on(searchContext.events.CHANGE, this.onSearchContextChange);
+        searchContextStore.on(searchContextStore.events.CHANGE, this.onSearchContextChange);
     },
 
     componentWillUnmount: function() {
-        searchContext.removeListener(searchContext.events.CHANGE, this.onSearchContextChange);
+        searchContextStore.removeListener(searchContextStore.events.CHANGE, this.onSearchContextChange);
     },
 
     
@@ -64,7 +65,7 @@ module.exports = React.createClass({
                         type: 'radio',
                         value: directions.GIVE,
                         name: 'direction',
-                        defaultChecked: searchContext.get().get('direction') === directions.GIVE,
+                        defaultChecked: searchContextStore.get().get('direction') ? searchContextStore.get().get('direction') === directions.GIVE : true,
                         onChange: function(e){
                             searchContextAction.update({
                                 'direction': e.target.value
@@ -78,7 +79,7 @@ module.exports = React.createClass({
                         type: 'radio',
                         value: directions.NEED,
                         name: 'direction',
-                        defaultChecked: searchContext.get().get('direction') === directions.NEED,
+                        defaultChecked: searchContextStore.get().get('direction') === directions.NEED,
                         onChange: function(e){
                             searchContextAction.update({
                                 'direction': e.target.value
@@ -93,7 +94,7 @@ module.exports = React.createClass({
                 React.DOM.input({
                     type: 'text',
                     id: 'what',
-                    defaultValue: searchContext.get().get('what'),
+                    defaultValue: searchContextStore.get().get('what'),
                     onChange: function(e){
                         searchContextAction.update({
                             'what': e.target.value
@@ -107,7 +108,7 @@ module.exports = React.createClass({
                 React.DOM.input({
                     type: 'text',
                     id: 'where',
-                    defaultValue: searchContext.get().get('where'),
+                    defaultValue: searchContextStore.get().get('where'),
                     onChange: function(e){
                         searchContextAction.update({
                             'where': e.target.value
@@ -118,13 +119,18 @@ module.exports = React.createClass({
         );
 
         
-        var results = React.DOM.ol({className: 'results'}, state.trocs.map(function(troc){
-            return React.DOM.li({}, 
-                React.DOM.span({style: {"font-weight": "bold"}}, troc.myAd.content.title),
-                ' '
-                // React.DOM.span({}, troc.myAd.content.location)
-            );
-        }));
+        var results = React.DOM.ol({className: 'results'}, state.trocs
+            .filter(function(t){
+                return t.myAd.creator !== currentUserStore.get()
+            })
+            .map(function(troc){
+                return React.DOM.li({}, 
+                    React.DOM.span({style: {"font-weight": "bold"}}, troc.myAd.content.title),
+                    ' '
+                    // React.DOM.span({}, troc.myAd.content.location)
+                );
+            })
+        );
         
         
         

@@ -47,7 +47,6 @@ var DisplaySensor = React.createClass({
     },
 
     render: function() {
-        var self = this;
         var props = this.props;
         var state = this.state;
 
@@ -67,7 +66,7 @@ var DisplaySensor = React.createClass({
             
             React.DOM.ul({},
 
-            	React.DOM.li({}, 
+                React.DOM.li({}, 
                     new Modifiable({
                         className: 'DisplaySensorName',
                         isUpdating: false,
@@ -76,7 +75,7 @@ var DisplaySensor = React.createClass({
                             id: props.sensor.id,
                             field: 'name'
                         },
-                        onChange: props.onChangeSensor,
+                        onChange: props.onChangeSensor
                     }),
                     React.DOM.div({className: 'DisplaySensorPlace',
                             onClick: function(){

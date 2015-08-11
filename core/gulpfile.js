@@ -1,6 +1,7 @@
 "use strict";
 
 require('es6-shim');
+var spawn = require('child_process').spawn;
 
 var fs = require("fs");
 var join = require('path').join;
@@ -93,6 +94,20 @@ gulp.task('serve-admin', function () {
     server.run(['./server/admin.js']);
 });
 
+gulp.task('serve-endpoint', function () {
+    var proc = spawn('node', ['./server/endpoint.js'])
+
+    proc.stdout.on('data', function(buffer) {
+        console.log(buffer.toString().replace('\n', ''));
+    })
+    proc.stderr.on('data', function(buffer) {
+        console.error(buffer.toString().replace('\n', ''));
+    })
+    proc.on('close', function(code) {
+        console.log('process closed with code ' + code)
+    })
+});
+
 gulp.task('build-admin', function(){
     browserifyShare('Admin');
 });
@@ -103,7 +118,7 @@ gulp.task('build-app', function(){
 
 gulp.task('server-stop', function(){
     server.stop();
-})
+});
 
 gulp.task('watch-app', function() {
     console.log('Watching');
@@ -134,7 +149,6 @@ gulp.task('watch-admin', function() {
     });
 
 });
-
 
 function browserifyShare(name){
     var b = browserify({

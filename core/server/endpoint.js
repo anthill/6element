@@ -14,6 +14,7 @@ require('es6-shim');
 var net = require('net');
 var database = require('../database');
 var sixElementUtils = require('./6elementUtils.js');
+var simulateSensorMeasurementArrivalTCP = require('./simulateSensorMeasurementArrivalTCP');
 
 var clients = {};
 //var timeout = 5;
@@ -43,12 +44,14 @@ var monitorIncoming = net.createServer(function(socket) { // Receive data from s
     // Handle messages
     socket.on('data', function(data) {
         console.log('data received : ' + data)
-        handleData(data, clients[getID(socket)]) // handle 6element specific datas
+        data.toString().split("|").forEach(function(message){
+            handleData(message, clients[getID(socket)]); // handle 6element specific datas
+        });
 
 //      if (data.toString() === "timeout?") {
 //          socket.write("timeout"+timeout);
 //      }
-        if (data.toString().match("name=*") && clients[getID(socket)].name === undefined) {
+        if (data.toString().match("name=*")) {
             clients[getID(socket)].name = data.toString().substr(5);
             console.log(socket.remoteAddress + " is now known as " + clients[getID(socket)].name);
             socket.write("nameOK");
@@ -105,6 +108,11 @@ var monitorIncoming = net.createServer(function(socket) { // Receive data from s
     });
 
 });
+
+monitorIncoming.on("listening", function(){
+    // if dev mode simulate data
+    if (process.env.NODE_ENV === "development") simulateSensorMeasurementArrivalTCP();
+})
 
 monitorIncoming.on('error', function(err) {
     console.log("[ERROR] : ", err.message);
@@ -173,7 +181,6 @@ function handleData(dat, client) {
 
     Promise.all([sensorP, messageP])
     .then(function(values) {
-        console.log('id : ' + JSON.stringify(values[0]));
         return ({sensor: values[0], message: values[1]});
     })
 

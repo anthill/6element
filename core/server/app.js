@@ -12,7 +12,6 @@ var bodyParser = require('body-parser');
 var net = require('net');
 
 var database = require('../database');
-// var simulateSensorMeasurementArrival = require('./simulateSensorMeasurementArrival')
 
 var PORT = 4000;
 var DEBUG = process.env.NODE_ENV === "development" ? true : false;

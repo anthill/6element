@@ -137,7 +137,7 @@ module.exports = React.createClass({
         var props = this.props;
         var map = this.map;
 
-        console.log('MAP props', props);
+        // console.log('MAP props', props);
 
         if(map){
             // remove all markers to avoid superposition
@@ -184,7 +184,7 @@ module.exports = React.createClass({
 
         var logo = React.DOM.img({
             id: 'logomap',
-            src: '/Map/images/Logo_marge.png'}
+            src: '/App/images/Logo_marge.png'}
         );
 
         /*var colorLegend = ColorSwatches({

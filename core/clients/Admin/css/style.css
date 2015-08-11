@@ -240,6 +240,29 @@ CSS PANEL
 	text-align: left;
 }
 
+.creator {
+	background-color: black;
+	border-bottom: 1px solid white;
+}
+
+.creator div *{
+	display: inline-block;
+}
+
+.creator ul *{
+	display: inline-block;
+	padding: 0.5em;
+	text-align: center;
+	color: white;
+}
+
+.creator li {
+	margin: 0;
+}
+
+.creator form input {
+	color: black;
+}
 
 .orphan {
 	font-weight: bold;

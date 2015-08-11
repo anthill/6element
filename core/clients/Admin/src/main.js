@@ -80,6 +80,36 @@ function updateSensorDb(datas) {
         });
 }
 
+function createPlaceDb(datas) {
+
+    console.log('createPLACE datas', datas);
+
+    var objs = datas.map(function (data){
+        var delta = {};
+        delta[data.field] = data.value;
+
+        var obj = {
+            id: data.id,
+            delta: delta
+        };
+        return obj;
+    });
+
+    var queryP = objs.map(function (obj) {
+        return serverAPI.updatePlace(obj);
+    });
+
+    Promise.all(queryP)
+    .then(function() {
+        console.log('Places database created successfully (createPlaceDb)');
+        refreshView();
+    })
+    .catch(function(err){
+        console.log('Places database didn\'t create correctly (createPlaceDb)', err);
+        refreshView();
+    });
+}
+
 function refreshView(){
 
     var placesP = serverAPI.getAllPlacesInfos();

@@ -2,6 +2,7 @@
 
 var React = require('react');
 var Immutable = require('immutable');
+var Creator = React.createFactory(require('./Creator.js'));
 var Place = React.createFactory(require('./Place.js'));
 var PlaceOrphan = React.createFactory(require('./PlaceOrphan.js'));
 var DisplaySensor = React.createFactory(require('./displaySensor.js'));
@@ -132,6 +133,9 @@ var App = React.createClass({
         
         return React.DOM.div({id: 'myApp'},
             React.DOM.div({id: 'adminTool'}, 
+                new Creator ({
+                    test: "ceci est un test"
+                }),
                 myPlaces,
                 myPlacesOrphan
             ),

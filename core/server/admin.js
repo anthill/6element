@@ -9,12 +9,31 @@ var app = express();
 var http = require('http');
 var compression = require('compression');
 var bodyParser = require('body-parser');
+var net = require('net');
 
 var database = require('../database');
 
 var PORT = 4001;
 var DEBUG = process.env.NODE_ENV === "development" ? true : false;
 
+function connectEndpoint(internalSocket) {
+    if (internalSocket) {
+    debug('connected to the reception server on '+ internalSocket.remoteHost+':'+internalSocket.remotePort)
+    internalSocket.on('data', function(message) {
+        var packet = JSON.parse(message);
+
+            if (packet.type === 'status') {
+                io.sockets.emit('status', packet.data); // Forwarding data to web clients
+            }
+        })
+    }
+}
+
+var endpointConfig =
+    {
+        host: process.env.ENDPOINT_PORT_4100_TCP_ADDR ? process.env.ENDPOINT_PORT_4100_TCP_ADDR : "127.0.0.1",
+        port: process.env.INTERNAL_PORT ? process.env.INTERNAL_PORT : 55555
+    };
 
 var debug = function() {
     if (DEBUG) {
@@ -24,15 +43,26 @@ var debug = function() {
 }
 
 var server = new http.Server(app);
-// var io = require('socket.io')(server);
 
-// io.set('origins', '*:*');
+var io = require('socket.io')(server);
 
-// var socket = false;
+io.set('origins', '*:*');
 
-// io.on('connection', function(_socket) {
-//     socket = _socket;
-// });
+
+// listening to the reception server
+
+var endpointInterval = setInterval(function() {
+    var endpoint = net.connect(endpointConfig, connectEndpoint);
+
+    endpoint.on('error', function(err) {
+        console.log('[ERROR]: INTERNAL SOCKET : ' + err.message);
+    });
+
+    endpoint.on('connect', function() {
+        console.log('connection')
+        clearInterval(endpointInterval);
+    });
+}, 5000);
 
 
 app.use(compression());
@@ -113,7 +143,7 @@ app.post('/updatePlace', function(req, res){
 app.post('/updateSensor', function(req, res){
     var id = Number(req.body.id);
 
-    database.Sensors.update(id, req.body.delta)
+    database.Sensors.update(id, req.body.delta) // req.body.delta : {name,lat,lon}
     .then(function(data){
         res.send(data);
     })

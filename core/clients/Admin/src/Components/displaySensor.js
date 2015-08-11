@@ -5,21 +5,21 @@ var Modifiable = React.createFactory(require('./Modifiable.js'));
 
 
 /*
-interface placeProps{	
-	Sensors: [{
-		create_at : string,
-		id: int,
-		installed_at: int,
-		isUpdating: boolean,
-		latest_input: string,
-	    latest_output: string,
-	    name: string,
-	    phone_number: string,
-	    quipu_status: string,
-	    sense_status: string,
-	    updated_at: string
-	}],
-	orpha: boolean             // 0 : has place | 1 : No place
+interface placeProps{   
+    Sensors: [{
+        create_at : string,
+        id: int,
+        installed_at: int,
+        isUpdating: boolean,
+        latest_input: string,
+        latest_output: string,
+        name: string,
+        phone_number: string,
+        quipu_status: string,
+        sense_status: string,
+        updated_at: string
+    }],
+    orpha: boolean             // 0 : has place | 1 : No place
     onChangeSensor: function()
 }
 
@@ -33,7 +33,6 @@ var DisplaySensor = React.createClass({
     displayName: 'DisplaySensor',
 
     render: function() {
-        var self = this;
         var props = this.props;
         var state = this.state;
 
@@ -53,7 +52,7 @@ var DisplaySensor = React.createClass({
             
             React.DOM.ul({},
 
-            	React.DOM.li({}, 
+                React.DOM.li({}, 
                     new Modifiable({
                         className: 'DisplaySensorName',
                         isUpdating: false,
@@ -62,7 +61,7 @@ var DisplaySensor = React.createClass({
                             id: props.sensor.id,
                             field: 'name'
                         },
-                        onChange: props.onChangeSensor,
+                        onChange: props.onChangeSensor
                     }),
                     props.sensor.installed_at
                 ),

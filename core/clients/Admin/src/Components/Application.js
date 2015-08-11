@@ -3,7 +3,7 @@
 var React = require('react');
 var Immutable = require('immutable');
 var Place = React.createFactory(require('./Place.js'));
-var PlaceOrphan = React.createFactory(require('./placeOrphan.js'));
+var PlaceOrphan = React.createFactory(require('./PlaceOrphan.js'));
 var DisplaySensor = React.createFactory(require('./displaySensor.js'));
 
 /*
@@ -104,7 +104,7 @@ var App = React.createClass({
 
             allSensor.push(new DisplaySensor ({
                 key: sensor.id,
-                sensor, sensor,
+                sensor: sensor,
                 sensorOrphan: sensorOrphan,
                 onChangeSensor: props.onChangeSensor 
             }));

@@ -4,13 +4,30 @@ app:
    command: npm run start-app-dev
    links:
       - db
+      - endpoint
    ports:
       - "4000:4000"
    environment:
       - VIRTUAL_HOST=6element.ants.builders 
       - VIRTUAL_PORT=4000
+      - INTERNAL_PORT=55555
       - POSTGRES_PASSWORD=elements
       - NODE_ENV=development
+   volumes:
+      - core:/6element/core
+endpoint:
+   build: .
+   dockerfile: core/Dockerfile
+   command: npm run start-endpoint-dev
+   links:
+      - db
+   ports:
+      - "4100:4100"
+   environment:
+      - VIRTUAL_PORT=4100
+      - INTERNAL_PORT=55555
+      - NODE_ENV=development
+      - POSTGRES_PASSWORD=elements
    volumes:
       - core:/6element/core
 admin:
@@ -19,11 +36,13 @@ admin:
    command: npm run start-admin-dev
    links:
       - db
+      - endpoint
    ports:
       - "4001:4001"
    environment:
       - VIRTUAL_HOST=admin.6element.ants.builders 
       - VIRTUAL_PORT=4001
+      - INTERNAL_PORT=55555
       - POSTGRES_PASSWORD=elements
       - NODE_ENV=development
    volumes:
@@ -32,4 +51,3 @@ db:
    image: postgres:9.4
    environment:
       - POSTGRES_PASSWORD=elements
-

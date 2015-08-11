@@ -80,30 +80,11 @@ function updateSensorDb(datas) {
         });
 }
 
-function createPlaceDb(datas) {
+function createPlaceDb(data) {
 
-    console.log('createPLACE datas', datas);
+    console.log('createPLACE data', data);
 
-    var delta = {};
-
-    var objs = datas.map(function (data){
-        delta['name'] = data.name;
-        delta['lat'] = data.lat;
-        delta['lon'] = data.lon;
-
-        var obj = {
-            // id: data.id,
-            delta: delta
-        };
-        return obj;
-    });
-
-    var queryP = objs.map(function (obj) {
-        console.log("test1 + obj", obj );
-    return serverAPI.createPlace(obj);
-    });
-
-    Promise.all(queryP)
+    serverAPI.createPlace(data)
     .then(function() {
         console.log('Places database created successfully (createPlaceDb)');
         refreshView();

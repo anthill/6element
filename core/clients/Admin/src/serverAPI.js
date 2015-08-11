@@ -23,7 +23,6 @@ module.exports = {
         return sendReq('POST', '/updateSensor', data);
     },
     createPlace: function(data){
-        console.log("test2 + data", data);
         return sendReq('POST', '/createPlace', data);
     }
     // updateSensorPlace: function(date){

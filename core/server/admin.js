@@ -123,10 +123,10 @@ app.post('/updateSensor', function(req, res){
     });
 });
 
-app.post('/createPlace', function(req, res){
-    console.log("test4", req, res);
-    // var id = Number(req.body.id);
-    database.Places.create(id, req.body.delta)
+app.post('/createPlace', function(req, res){    
+    console.log('creating place', req.body);
+
+    database.Places.create(req.body)
     .then(function(data){
         res.send(data);
     })

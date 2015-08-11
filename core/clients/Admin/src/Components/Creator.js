@@ -43,11 +43,11 @@ var Creator = React.createClass({
 
                             console.log('Creating Place');
 
-                            props.onCreatePlace([{
+                            props.onCreatePlace({
                                 'name': e.target.placeName.value,
                                 'lat': e.target.latitude.value,
                                 'lon': e.target.longitude.value
-                            }]);
+                            });
                         }
                     },
                         React.DOM.input({

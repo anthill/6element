@@ -40,7 +40,7 @@ module.exports = React.createClass({
 
                     var newAd = {
                         id: Math.random(),
-                        owner: 0,
+                        creator: currentUserStore.get(),
                         isPrivate: false,
                         content: {
                             title: e.target.what.value,

@@ -58,7 +58,7 @@ module.exports = React.createClass({
         }, 
             // mode switch
             React.DOM.div({className: 'mode-switch'}, 
-                React.DOM.label({}, 
+                React.DOM.label({className: 'give'}, 
                     'Je me sépare',
                     React.DOM.input({
                         type: 'radio',
@@ -72,7 +72,7 @@ module.exports = React.createClass({
                         }
                     })
                 ),
-                React.DOM.label({}, 
+                React.DOM.label({className: 'need'}, 
                     'Je récupère',
                     React.DOM.input({
                         type: 'radio',
@@ -121,8 +121,8 @@ module.exports = React.createClass({
         var results = React.DOM.ol({className: 'results'}, state.trocs.map(function(troc){
             return React.DOM.li({}, 
                 React.DOM.span({style: {"font-weight": "bold"}}, troc.myAd.content.title),
-                ' ',
-                React.DOM.span({}, troc.myAd.content.location)
+                ' '
+                // React.DOM.span({}, troc.myAd.content.location)
             );
         }));
         

@@ -13,9 +13,10 @@ var currentUserStore = require('../Stores/currentUserStore.js');
 
 // ACTIONS
 var trocActions = require('../Actions/trocActions.js');
-
+var displayActions = require('../Actions/displayActions.js');
 
 // UTILS
+var screenTypes = require('../Constants/screenTypes.js');
 
 /*
 
@@ -116,12 +117,21 @@ module.exports = React.createClass({
                         key: troc.id
                     }));
                 })
-        ); 
+        );
+
+        var backToAdPost = React.DOM.button({
+                onClick: function(){
+                    displayActions.goToScreen(screenTypes.AD_POST);
+                }
+            },
+            'Poster une annonce'
+        );
 
         return React.DOM.div({className: 'activity'},
             switchButtons,
             searchField,
-            trocList
+            trocList,
+            backToAdPost
         );
     }
 });

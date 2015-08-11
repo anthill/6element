@@ -70,6 +70,15 @@ module.exports = {
             type: actionTypes.MODIFY_TROC,
             adData: troc
         });
+    },
+
+    // eventually, change troc to ad. The current user has no reason to have access to the other person's troc
+    // the current user should be answering to an ad (and corresponding troc is found server-side)
+    expressInterestIn: function(troc){
+        dispatcher.dispatch({
+            type: actionTypes.EXPRESS_INTEREST,
+            troc: troc
+        });
     }
 
 };

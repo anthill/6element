@@ -13,6 +13,7 @@ var currentUserStore = require('../Stores/currentUserStore.js');
 // ACTIONS
 var displayActions = require('../Actions/displayActions');
 var searchContextAction = require('../Actions/searchContextActions');
+var trocActions = require('../Actions/trocActions');
 
 // UTILS
 var directions = require('../Constants/directions');
@@ -27,19 +28,21 @@ module.exports = React.createClass({
             trocs: trocStore.search()
         };
     },
-
-    onSearchContextChange: function(){
+    
+    updateResultsStatus: function(){
         this.setState({
             trocs: trocStore.search()
         })
     },
-    
+
     componentDidMount: function() {
-        searchContextStore.on(searchContextStore.events.CHANGE, this.onSearchContextChange);
+        trocStore.addChangeListener(this.updateResultsStatus);
+        searchContextStore.on(searchContextStore.events.CHANGE, this.updateResultsStatus);
     },
 
     componentWillUnmount: function() {
-        searchContextStore.removeListener(searchContextStore.events.CHANGE, this.onSearchContextChange);
+        trocStore.removeChangeListener(this.updateResultsStatus);
+        searchContextStore.removeListener(searchContextStore.events.CHANGE, this.updateResultsStatus);
     },
 
     
@@ -119,13 +122,28 @@ module.exports = React.createClass({
         );
 
         
+        
         var results = React.DOM.ol({className: 'results'}, state.trocs
             .filter(function(t){
                 return t.myAd.creator !== currentUserStore.get()
             })
             .map(function(troc){
+                var userAlreadyInterested = trocStore.isUserAlreadyInterested(currentUserStore.get(), troc.myAd);
+
                 return React.DOM.li({}, 
                     React.DOM.span({style: {"font-weight": "bold"}}, troc.myAd.content.title),
+                    React.DOM.button({
+                        onClick: function(){
+                            trocActions.expressInterestIn(troc);
+                        },
+                        disabled: userAlreadyInterested
+                    },
+                        userAlreadyInterested ? 
+                            'Déjà intéressé' : 
+                            (searchContextStore.get().get('direction') === directions.NEED ?
+                                'Je le veux !' :
+                                "J'en donne un !")
+                    ),
                     ' '
                     // React.DOM.span({}, troc.myAd.content.location)
                 );

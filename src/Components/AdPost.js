@@ -57,7 +57,7 @@ module.exports = React.createClass({
                     var newTroc = {
                         id: Math.random(),
                         myAd: newAd,
-                        proposalMap: [], // not a Map, but easier to call it that way for now
+                        proposals: [], // not a Map, but easier to call it that way for now
                         direction: e.target.direction.value,
                         status: 'ongoing'
                     };

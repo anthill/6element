@@ -23,12 +23,12 @@ adTypeClasses[directions.NEED] = 'need';
 interface ActivityItemProps{
     id: integer,
     myAd: Ad,
-    proposalMap: Map(id => [
+    proposals: [
         {
             ad: Ad,
             state: string
         }
-    ]),
+    ],
     direction: string,
     status: string
 }
@@ -108,7 +108,7 @@ module.exports = React.createClass({
                         });
                     }
                 },
-                'Intéressés (' + props.proposalMap.length + ')'
+                'Intéressés (' + props.proposals.length + ')'
             ),
             React.DOM.span({
                 title: 'delete',
@@ -118,7 +118,7 @@ module.exports = React.createClass({
 
         if (state.openPanel){
             var proposalAds = [];
-            props.proposalMap.forEach(function(proposal, index){
+            props.proposals.forEach(function(proposal, index){
                 proposalAds.push(new Proposal({
                     proposal: proposal,
                     changeStatus: function(newState){

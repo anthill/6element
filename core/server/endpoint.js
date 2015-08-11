@@ -128,7 +128,7 @@ monitorIncoming.listen(monitorPort);
 var monitorOutgoing = net.createServer(function(socket) {
 
     eventEmitter.on("data", function(data){
-        socket.write(JSON.stringify(data));
+        socket.write(JSON.stringify(data) + "|");
     });
 
     socket.on("error", function(err) {

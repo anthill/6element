@@ -22,7 +22,7 @@ var numbers = [
 
 
 
-module.exports = function(){
+function doIt(){
 
     var endpointConfig = {
         host: "127.0.0.1",
@@ -47,12 +47,12 @@ module.exports = function(){
                         dummyArray.push(Math.floor(Math.random()*40));
                     }
 
-                    var result = {
+                    var measurement = {
                         date: now,
                         signal_strengths: dummyArray
                     };
 
-                    encodeForSMS([result]).then(function(sms){
+                    encodeForSMS([measurement]).then(function(sms){
                         endpoint.write('1' + sms + "|");
                     });
                 }
@@ -61,5 +61,13 @@ module.exports = function(){
         }, 10000);
 
     });
+}
+
+
+module.exports = function(){
+    doIt();
+    
+    // preventing calling twice
+    doIt = undefined;
 }
 

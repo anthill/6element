@@ -16,18 +16,6 @@ var database = require('../database');
 var PORT = 4001;
 var DEBUG = process.env.NODE_ENV === "development" ? true : false;
 
-function connectEndpoint(internalSocket) {
-    if (internalSocket) {
-    debug('connected to the reception server on '+ internalSocket.remoteHost+':'+internalSocket.remotePort)
-    internalSocket.on('data', function(message) {
-        var packet = JSON.parse(message);
-
-            if (packet.type === 'status') {
-                io.sockets.emit('status', packet.data); // Forwarding data to web clients
-            }
-        })
-    }
-}
 
 var endpointConfig =
     {
@@ -52,7 +40,24 @@ io.set('origins', '*:*');
 // listening to the reception server
 
 var endpointInterval = setInterval(function() {
-    var endpoint = net.connect(endpointConfig, connectEndpoint);
+    var endpoint = net.connect(endpointConfig, function(){
+
+        debug('connected to the reception server on '+ endpoint.remoteHost+':'+endpoint.remotePort)
+        endpoint.on('data', function(messages) {
+            messages.toString().split("|").forEach(function(message){
+                try {
+                    var packet = JSON.parse(message);
+
+                    if (packet.type === 'status') {
+                        io.sockets.emit('status', packet.data);
+                    }
+                } catch(err) {
+                    console.log("Error parsing or sending via socket:", err);
+                }
+            })
+        })
+            
+    });
 
     endpoint.on('error', function(err) {
         console.log('[ERROR]: INTERNAL SOCKET : ' + err.message);

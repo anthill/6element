@@ -72,12 +72,22 @@ function decode(message) {
 
 			case 1: // data : 6sense_encoded
 				sixSenseDecoder(message.slice(1).toString())
-				.then (resolve(JSON.stringify(decodedMessage)));
+					.then(function(decodedMessage){
+						resolve(JSON.stringify(decodedMessage));
+					})
+					.catch(function(err){
+						console.log("error in case 1 ", err);
+					})
 				break;
 
 			case 2: // status : generic_encoded
 				genericCodec.decode(message.slice(1).toString())
-				.then (resolve(JSON.stringify(decodedMessage)));
+					.then(function(decodedMessage){
+						resolve(JSON.stringify(decodedMessage));
+					})
+					.catch(function(err){
+						console.log("error in case 2 ", err);
+					})
 				break;
 		}
 

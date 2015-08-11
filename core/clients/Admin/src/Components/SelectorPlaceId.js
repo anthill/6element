@@ -26,7 +26,7 @@ var SelectorPlaceId = React.createClass({
         var props = this.props;
         // var state = this.state;
 
-        console.log('SelectorPlaceId props', props);
+        // console.log('SelectorPlaceId props', props);
         // console.log('SelectorPlaceId state', state);
 
         var listID = [];

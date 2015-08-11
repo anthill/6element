@@ -106,6 +106,14 @@ li .modifiable{
 	background-color: white;
 }
 
+.ant.isSelected{
+	background: rgba(255, 153, 51, 0.4);
+}
+
+.checkboxSelectedAnt {
+	float: right;
+}
+
 .ant.sensorName {
 	font-weight: bold;
 }

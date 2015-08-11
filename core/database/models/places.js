@@ -8,6 +8,7 @@ var places = require('../management/declarations.js').places;
 
 module.exports = {
     create: function (data) {
+        console.log("test4 + data", data);
         return databaseP.then(function (db) {
             
             var query = places

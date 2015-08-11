@@ -30,7 +30,8 @@ interface placeProps{
     }],
     antIDset : Set,
     onChangePlace: function(),
-    onChangeSensor: function()
+    onChangeSensor: function(),
+    OnSelectedAnts: function()
 }
 
 interface AppState{
@@ -46,10 +47,6 @@ var Place = React.createClass({
         // var self = this;
         var props = this.props;
         // var state = this.state;
-        if (props.place.id === 1){
-            console.log('place', props.place);
-        }
-
         // console.log('PLACE props', props);
         // console.log('PLACE state', state);
 
@@ -101,7 +98,8 @@ var Place = React.createClass({
                             ant: ant,
                             antIDset: props.antIDset.remove(ant.id),
                             currentPlaceId: props.place.id,
-                            onChangeSensor: props.onChangeSensor
+                            onChangeSensor: props.onChangeSensor,
+                            onSelectedAnts: props.onSelectedAnts
                         });
                     })
                 )

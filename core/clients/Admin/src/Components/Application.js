@@ -35,23 +35,44 @@ interface AppProps{
         }
     }),
     onChangePlace: function(),
-    onChangeSensor: function()
+    onChangeSensor: function(),
+    onCreatePlace: function(),
 }
 interface AppState{
-    selectedTab: int
+    selectedAntSet: Set(antId)
 }
 
 */
 
 var App = React.createClass({
     displayName: 'App',
+    
+    getInitialState: function(){
+        return {
+            selectedAntSet: new Set()
+        };
+    },
+
+    updateAntSelection: function(antId){
+
+        var selectedAntSet = this.state.selectedAntSet;
+        
+        if (selectedAntSet.has(antId))
+            selectedAntSet.delete(antId);
+        else
+            selectedAntSet.add(antId);
+
+        this.setState({
+            selectedAntSet: selectedAntSet
+        });
+    },
 
     render: function() {
-        //var self = this;
+        var self = this;
         var props = this.props;
 
-        console.log('APP props', props);
-        // console.log('APP state', state);
+        // console.log('APP props', props);
+        // console.log('APP state', this.state);
 
         var antIDList = [];
         var placeIDList = [];
@@ -82,7 +103,8 @@ var App = React.createClass({
                     mySensors: mySensors,
                     antIDset: antIDset,
                     onChangePlace: props.onChangePlace,
-                    onChangeSensor: props.onChangeSensor
+                    onChangeSensor: props.onChangeSensor,
+                    onSelectedAnts: self.updateAntSelection
                 }));
             }
             else {
@@ -134,7 +156,7 @@ var App = React.createClass({
         return React.DOM.div({id: 'myApp'},
             React.DOM.div({id: 'adminTool'}, 
                 new Creator ({
-                    test: "ceci est un test"
+                    onCreatePlace: props.onCreatePlace
                 }),
                 myPlaces,
                 myPlacesOrphan

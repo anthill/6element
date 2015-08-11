@@ -5,7 +5,7 @@ var React = require('react');
 /*
 
 interface SelectorProps{
-    
+    onCreatePlace: function()
 }
 interface SelectorState{
 
@@ -43,11 +43,11 @@ var Creator = React.createClass({
 
                             console.log('Creating Place');
 
-                            props.createPlaceinDB({
-                                name: e.target.name,
-                                latitude: e.target.latitude,
-                                longitude: e.target.longitude
-                            });
+                            props.onCreatePlace([{
+                                'name': e.target.placeName.value,
+                                'lat': e.target.latitude.value,
+                                'lon': e.target.longitude.value
+                            }]);
                         }
                     },
                         React.DOM.input({

@@ -84,19 +84,23 @@ function createPlaceDb(datas) {
 
     console.log('createPLACE datas', datas);
 
+    var delta = {};
+
     var objs = datas.map(function (data){
-        var delta = {};
-        delta[data.field] = data.value;
+        delta['name'] = data.name;
+        delta['lat'] = data.lat;
+        delta['lon'] = data.lon;
 
         var obj = {
-            id: data.id,
+            // id: data.id,
             delta: delta
         };
         return obj;
     });
 
     var queryP = objs.map(function (obj) {
-        return serverAPI.updatePlace(obj);
+        console.log("test1 + obj", obj );
+    return serverAPI.createPlace(obj);
     });
 
     Promise.all(queryP)
@@ -138,12 +142,15 @@ function refreshView(){
     .catch(errlog);
 }
 
+
+
 var topLevelStore = {
     sensorMap: undefined,
     placeMap: undefined,
     // onChange: updateDB,
     onChangePlace: updatePlaceDb,
-    onChangeSensor: updateSensorDb
+    onChangeSensor: updateSensorDb,
+    onCreatePlace: createPlaceDb
 };
 
 // Initial rendering

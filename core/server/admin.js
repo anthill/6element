@@ -123,6 +123,19 @@ app.post('/updateSensor', function(req, res){
     });
 });
 
+app.post('/createPlace', function(req, res){
+    console.log("test4", req, res);
+    // var id = Number(req.body.id);
+    database.Places.create(id, req.body.delta)
+    .then(function(data){
+        res.send(data);
+    })
+    .catch(function(error){
+        res.status(500).send('Couldn\'t create Places database');
+        console.log("error in /createPlace/'+req.params.id: ", error);
+    });
+});
+
 server.listen(PORT, function () {
     console.log('Server running on', [
         'http://localhost:',

@@ -49,7 +49,6 @@ module.exports = {
     },
 
     delete: function(id) {
-        console.log("Dans delete Place.js: id, delta", id);
         return databaseP.then(function (db) {
             
             var query = places

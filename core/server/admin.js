@@ -167,8 +167,6 @@ app.post('/createPlace', function(req, res){
 });
 
 app.post('/deletePlace', function(req, res){    
-    console.log('delete place', req.body.id);
-
     database.Places.delete(req.body.id)
     .then(function(data){
         res.send(data);

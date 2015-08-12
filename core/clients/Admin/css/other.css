@@ -1,0 +1,89 @@
+/*
+	1. boîte
+	2. bordures
+	3. arrière-plan
+	4. texte
+	5. transformations
+	6. transitions
+	7. le reste
+*/
+
+body{
+    position: relative;
+}
+
+.modifiable {
+	cursor: pointer;
+	transition: all 0.30s ease-in-out;
+}
+
+.modifiable.clicked{
+	padding: 0;
+	border: none; outline: 1px solid rgba(81, 203, 238, 1);
+	box-shadow: 0 0 5px rgba(81, 203, 238, 1);
+	cursor: default;
+}
+
+.modifiable:focus{
+	outline-offset: 0;
+}
+
+li .modifiable{
+	width: 20%;
+}
+
+.modifiable.updating {
+	color: orange;
+}
+
+.selector {
+	position: absolute; top: .5em; right: .5em;
+}
+.selector div{
+	margin: 0 auto;
+	padding: 0;
+	text-align:center;
+}
+
+.display_sensor_id {
+	cursor: pointer;
+	transition: all 0.30s ease-in-out;
+	background:#bfd70e;
+	border-radius:50%;
+	width:1.7em;
+	height:1.7em;
+	border:1px solid #679403;
+	box-shadow: 1px 1px 1px black;
+	font: bold;
+	color: white;
+
+}
+
+.display_sensor_id ul {
+	margin: 0;
+	padding: 0;
+	background: #bfd70e;
+	border:2px solid #679403; 
+	border-radius: 1em;
+}
+
+.display_sensor_id li {
+	margin: 0 0.5em;
+}
+
+.listIDSensor ul {
+	background:#bfd70e;
+	border:1px solid #679403;
+	border-radius:10px;
+}
+
+.listIDSensor li {
+	text-align: center;
+	margin: .2em;
+}
+
+.listIDPlace ul {
+	background-color: #6A911B;
+	margin-top: 1em;
+	border: 1px solid white; border-radius:7px;
+}

@@ -21,11 +21,13 @@ interface AntProps{
         phone_number: string,
         quipu_status: string,
         sense_status: string,
-        updated_at: string
+        updated_at: string,
+        isSlected: bool
     },
     antIDset : Set,
     currentPlaceId : int,
-    onChangeSensor: function()
+    onChangeSensor: function(),
+    onSelectedAnts: function()
 }
 interface AppState{
 }
@@ -37,32 +39,55 @@ var Ant = React.createClass({
 
     getInitialState: function(){
         return {
-            isOpen: false
+            isOpen: false,
+            isSelected: false
         };
     },
 
+    setSelected: function(isSelected){
+        this.setState(Object.assign(this.state, {
+            isSelected: isSelected
+        }));
+    },
+
     setOpen: function(isOpen){
-        this.setState({isOpen: isOpen});
+        this.setState(Object.assign(this.state, {
+            isOpen: isOpen
+        }));
     },
 
     render: function() {
-        //var self = this;
+        var self = this;
         var props = this.props;
         var state = this.state;
 
-        // console.log('ANT props', props.ant);
+        // console.log('ANT props', props);
         // console.log('ANT state', state);
 
         var classes = [
             'ant',
-            //isSelected ? 'selected' : '',
-            props.ant.isUpdating ? 'updating' : '',
-            props.ant.quipu_status,
-            props.ant.sense_status
+            state.isSelected ? 'isSelected' : ''
+            // props.ant.isUpdating ? 'updating' : '',
+            // props.ant.quipu_status,
+            // props.ant.sense_status
         ];
 
-
-        return React.DOM.div({className: classes.join(' ')},
+        return React.DOM.div({className: classes.join(' ')
+                // onClick: function(){
+                //     console.log('ant selected', props.ant.id);
+                //     // props.onChangeSensor()
+                //     self.setSelected(!state.isSelected);
+                // }
+            },
+            React.DOM.form({className: 'checkboxSelectedAnt'},
+                React.DOM.input({
+                    onClick: function(){
+                        self.setSelected(!state.isSelected);
+                        props.onSelectedAnts(props.ant.id);
+                    },
+                    type: "checkbox"
+                })
+            ),
             React.DOM.ul({},
                 React.DOM.li({}, 
                     React.DOM.div({}, 'Name'),

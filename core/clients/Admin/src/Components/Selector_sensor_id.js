@@ -72,7 +72,7 @@ var Display_sensor_id = React.createClass({
             listID = React.DOM.ul({}, lis);
         }
 
-        return React.DOM.div({className: 'listID_sensor'},
+        return React.DOM.div({className: 'listIDSensor'},
             listID
         );
     }

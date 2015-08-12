@@ -2,6 +2,7 @@
 
 var React = require('react');
 var Immutable = require('immutable');
+var Creator = React.createFactory(require('./Creator.js'));
 var Place = React.createFactory(require('./Place.js'));
 var PlaceOrphan = React.createFactory(require('./PlaceOrphan.js'));
 var DisplaySensor = React.createFactory(require('./displaySensor.js'));
@@ -34,25 +35,48 @@ interface AppProps{
         }
     }),
     onChangePlace: function(),
-    onChangeSensor: function()
+    onChangeSensor: function(),
+    onCreatePlace: function(),
+    onDeletePlace: function()
 }
 interface AppState{
-    selectedTab: int
+    selectedAntSet: Set(antId)
 }
 
 */
 
 var App = React.createClass({
     displayName: 'App',
+    
+    getInitialState: function(){
+        return {
+            selectedAntSet: new Set()
+        };
+    },
+
+    updateAntSelection: function(antId){
+
+        var selectedAntSet = this.state.selectedAntSet;
+        
+        if (selectedAntSet.has(antId))
+            selectedAntSet.delete(antId);
+        else
+            selectedAntSet.add(antId);
+
+        this.setState({
+            selectedAntSet: selectedAntSet
+        });
+    },
 
     render: function() {
-        //var self = this;
+        var self = this;
         var props = this.props;
 
         // console.log('APP props', props);
-        // console.log('APP state', state);
+        console.log('APP state', this.state);
 
         var antIDList = [];
+        var placeIDList = [];
 
         props.sensorMap.forEach(function (sensor){
             antIDList.push(sensor.id);
@@ -66,6 +90,8 @@ var App = React.createClass({
         var myPlacesOrphan = [];
 
         props.placeMap.forEach(function (place) {
+
+            placeIDList.push({'id' : place.id, 'name' : place.name}); // for DisplaySensor
             var mySensors = [];
             // console.log("place", place);
             if (place.sensor_ids.size !== 0) {
@@ -78,7 +104,9 @@ var App = React.createClass({
                     mySensors: mySensors,
                     antIDset: antIDset,
                     onChangePlace: props.onChangePlace,
-                    onChangeSensor: props.onChangeSensor
+                    onChangeSensor: props.onChangeSensor,
+                    onSelectedAnts: self.updateAntSelection,
+                    onDeletePlace: props.onDeletePlace
                 }));
             }
             else {
@@ -88,30 +116,49 @@ var App = React.createClass({
                     place: place,
                     antIDset: antIDset,
                     onChangePlace: props.onChangePlace,
-                    onChangeSensor: props.onChangeSensor
+                    onChangeSensor: props.onChangeSensor,
+                    onDeletePlace: props.onDeletePlace
                 }));
             }
-
         });
-        
+
         // For all sensor
         var allSensor = [];
+
+        // /!\ JE N ARRIVE PAS A SORT PAR NOM DE RC
+        // placeIDList.sort(function(a, b){
+        //     return a.name - b.name;
+        // })
+
+        var temp = {};
+        placeIDList.forEach(function (placeID) {
+            temp[placeID.name] = placeID.id;
+        })
+
+        var placeIDMap = new Immutable.Map(temp);
+
         props.sensorMap.forEach(function (sensor) {
-            // To find sensor without place
-            var sensorOrphan = 0;
-            if (!sensor.installed_at)
-                sensorOrphan = 1;
+            var place = props.placeMap.get(sensor.installed_at);
+
+            var placeName = place ? place.name : null;
+            var placeId = place ? place.id : null;
 
             allSensor.push(new DisplaySensor ({
                 key: sensor.id,
                 sensor: sensor,
-                sensorOrphan: sensorOrphan,
-                onChangeSensor: props.onChangeSensor 
+                placeName: placeName,
+                placeId: placeId,
+                placeIDMap: placeIDMap.delete(placeName),
+                onChangePlace: props.onChangePlace,
+                onChangeSensor: props.onChangeSensor
             }));
         });
         
         return React.DOM.div({id: 'myApp'},
             React.DOM.div({id: 'adminTool'}, 
+                new Creator ({
+                    onCreatePlace: props.onCreatePlace
+                }),
                 myPlaces,
                 myPlacesOrphan
             ),

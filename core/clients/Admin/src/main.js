@@ -19,8 +19,7 @@ function render(){
 
 function updatePlaceDb(datas) {
 
-    if (typeof (datas) === 'object')
-        datas = [datas];
+    console.log('PLACE datas', datas);
 
     var objs = datas.map(function (data){
         var delta = {};
@@ -52,6 +51,8 @@ function updatePlaceDb(datas) {
 
 function updateSensorDb(datas) {
 
+    console.log('SENSOR datas', datas);
+
     var objs = datas.map(function (data){
         var delta = {};
         delta[data.field] = data.value;
@@ -63,22 +64,59 @@ function updateSensorDb(datas) {
         return obj;
     });
 
-    console.log('objs dans updateSensorDb', objs);
-
     var queryP = objs.map(function (obj) {
         return serverAPI.updateSensor(obj);
     });
     // console.log("queryP", queryP);
-    Promise.all(queryP)
-        .then(function() {
-            // console.log("results", results);
-            console.log('Places database updated successfully (updateSensorDb)');
-            refreshView();
-        })
-        .catch(function(err){
-            console.log('Places database didn\'t update correctly (updateSensorDb)', err);
-            refreshView();
+    return Promise.all(queryP)
+    .then(function() {
+        // console.log("results", results);
+        console.log('Places database updated successfully (updateSensorDb)');
+        refreshView();
+    })
+    .catch(function(err){
+        console.log('Places database didn\'t update correctly (updateSensorDb)', err);
+        refreshView();
+    });
+}
+
+function createPlaceDb(data) {
+
+    console.log('createPLACE data', data);
+
+    serverAPI.createPlace(data)
+    .then(function() {
+        console.log('Places database created successfully (createPlaceDb)');
+        refreshView();
+    })
+    .catch(function(err){
+        console.log('Places database didn\'t create correctly (createPlaceDb)', err);
+        refreshView();
+    });
+}
+
+function deletePlaceDb(data) {
+
+    console.log('deletePlace data', data);
+
+    // Queries to uninstall ants from place
+    var queryP = updateSensorDb(data.ants);
+
+    queryP
+    .then(function() {
+        console.log("Ants uninstall successfull");
+        return serverAPI.deletePlace({
+            id: data.placeId
         });
+    })
+    .then(function() {
+        console.log('Places delete successfully');
+        refreshView();
+    })
+    .catch(function(err){
+        console.log('Places didn\'t delete correctly', err);
+        refreshView();
+    });
 }
 
 function refreshView(){
@@ -109,12 +147,16 @@ function refreshView(){
     .catch(errlog);
 }
 
+
+
 var topLevelStore = {
     sensorMap: undefined,
     placeMap: undefined,
     // onChange: updateDB,
     onChangePlace: updatePlaceDb,
-    onChangeSensor: updateSensorDb
+    onChangeSensor: updateSensorDb,
+    onCreatePlace: createPlaceDb,
+    onDeletePlace: deletePlaceDb
 };
 
 // Initial rendering

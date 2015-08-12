@@ -16,19 +16,18 @@ body{
 #adminTool{
     position: relative;
     height: 100vh;
-    width: 80vw;
+    width: 78vw;
 }
 
 #panel {
 	position: absolute;
 	top: 0;
 	right: 0;
-	background-color: white;
-
-	width: 20vw;
+	background-color: #B4D670;
+	border-left: 1px solid #537908;
+	width: 22vw;
 	height: 100%;
 }
-
 
 .place{
 	display: inline-block; margin: 1em; padding: .5em; width: 30%;
@@ -85,6 +84,15 @@ li .modifiable{
 .sensorPhone_number.modifiable.updating {
 	color: green;
 }
+
+.DisplaySensorName.modifiable.updating {
+	color: green;
+}
+
+.DisplaySensorPhoneNumber.modifiable.updating {
+	color: green;
+}
+
 /* quipu status */
 
 .place.updating {
@@ -96,6 +104,14 @@ li .modifiable{
 	display: inline-block; margin: 1em; padding: .5em; position: relative;
 	border: 1px solid green; border-radius: 5px;
 	background-color: white;
+}
+
+.ant.isSelected{
+	background: rgba(255, 153, 51, 0.4);
+}
+
+.checkboxSelectedAnt {
+	float: right;
 }
 
 .ant.sensorName {
@@ -141,14 +157,14 @@ li .modifiable{
 	text-align:center;
 }
 
-.selector .display_sensor_id {
+.display_sensor_id {
 	cursor: pointer;
 	transition: all 0.30s ease-in-out;
 	background:#bfd70e;
 	border-radius:50%;
-	width:2em;
-	height:2em;
-	border:2px solid #679403;
+	width:1.7em;
+	height:1.7em;
+	border:1px solid #679403;
 	box-shadow: 1px 1px 1px black;
 	font: bold;
 	color: white;
@@ -167,6 +183,28 @@ li .modifiable{
 	margin: 0 0.5em;
 }
 
+.listIDSensor ul {
+	background:#bfd70e;
+	border:1px solid #679403;
+	border-radius:10px;
+}
+
+.listIDSensor li {
+	text-align: center;
+	margin: .2em;
+}
+
+.displaySensor{
+	display: inline-block; margin: 1em; padding: .2em;
+	border: 1px solid white;
+}
+
+.listIDPlace ul {
+	background-color: #6A911B;
+	margin-top: 1em;
+	border: 1px solid white; border-radius:7px;
+}
+
 .placeOrphan{
 	display: inline-block; margin: 1em; padding: .5em; width: 30%;
 	border: 1px solid red; border-radius: 5px;
@@ -176,6 +214,14 @@ li .modifiable{
 .placeOrphan .placeOrphanName {
 	display: block; width: 100%; margin: 0 auto;
 	font-weight: bold; font-size: 1.5em;
+}
+
+.placeOrphan .display_sensor_id {
+	border-radius: 10px;
+    width: 6em;
+    height: 1.7em;
+    text-align: center;
+    line-height: 1.7em;
 }
 
 .placeOrphan div{
@@ -190,7 +236,7 @@ li .modifiable{
 CSS PANEL
 */
 .displaySensor div{
-	display: inline-block; margin: 0 1em;
+	display: inline-block; margin: .5em;
 }
 
 .displaySensor li * {
@@ -202,6 +248,29 @@ CSS PANEL
 	text-align: left;
 }
 
+.creator {
+	background-color: black;
+	border-bottom: 1px solid white;
+}
+
+.creator div *{
+	display: inline-block;
+}
+
+.creator ul *{
+	display: inline-block;
+	padding: 0.5em;
+	text-align: center;
+	color: white;
+}
+
+.creator li {
+	margin: 0;
+}
+
+.creator form input {
+	color: black;
+}
 
 .orphan {
 	font-weight: bold;

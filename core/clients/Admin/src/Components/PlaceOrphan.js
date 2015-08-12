@@ -20,7 +20,8 @@ interface placeProps{
     },
     antIDset : Set,
     onChangePlace: function(),
-    onChangeSensor: function()
+    onChangeSensor: function(),
+    onDeletePlace: functtion()
 }
 
 interface AppState{
@@ -47,8 +48,8 @@ var PlaceOrphan = React.createClass({
         var props = this.props;
         var state = this.state;
 
-        console.log('PLACE Orphan props', props);
-        console.log('PLACE Orphan state', state);
+        // console.log('PLACE Orphan props', props);
+        // console.log('PLACE Orphan state', state);
 
         var classes = [
             'placeOrphan'

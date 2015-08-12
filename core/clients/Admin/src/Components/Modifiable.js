@@ -35,7 +35,8 @@ var Modifiable = React.createClass({
 
     componentWillReceiveProps: function(newProps){
         this.setState({
-            isUpdating: newProps.isUpdating
+            isUpdating: newProps.isUpdating,
+            text: newProps.text
         });
     },
 

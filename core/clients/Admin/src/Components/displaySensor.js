@@ -2,6 +2,7 @@
 
 var React = require('react');
 var Modifiable = React.createFactory(require('./Modifiable.js'));
+var SelectorPlaceId = React.createFactory(require('./SelectorPlaceId.js'));
 
 
 /*
@@ -19,8 +20,11 @@ interface placeProps{
         sense_status: string,
         updated_at: string
     }],
-    orpha: boolean             // 0 : has place | 1 : No place
-    onChangeSensor: function()
+    placeIDMap: Map(),
+    placeName: string,
+    placeId: placeId,
+    onChangeSensor: function(),
+    onChangePlace: function()
 }
 
 interface AppState{
@@ -32,12 +36,22 @@ interface AppState{
 var DisplaySensor = React.createClass({
     displayName: 'DisplaySensor',
 
+    getInitialState: function(){
+        return {
+            isOpen: false
+        };
+    },
+
+    setOpen: function(isOpen){
+        this.setState({isOpen: isOpen});
+    },
+
     render: function() {
         var props = this.props;
         var state = this.state;
 
-        console.log('DISPLAYSENSOR props', props);
-        console.log('DISPLAYSENSOR state', state);
+        // console.log('DISPLAYSENSOR props', props);
+        // console.log('DISPLAYSENSOR state', state);
 
         var classes = [
             'displaySensor',
@@ -63,7 +77,23 @@ var DisplaySensor = React.createClass({
                         },
                         onChange: props.onChangeSensor
                     }),
-                    props.sensor.installed_at
+                    React.DOM.div({className: 'DisplaySensorPlace',
+                            onClick: function(){
+                                console.log('onclick DisplaySensorPlace', props.placeName);
+                                self.setOpen(!state.isOpen);
+                            }
+                        },
+                        props.sensor.installed_at ? props.placeName : "Add me a place",
+                        new SelectorPlaceId({
+                            placeIDMap: props.placeIDMap,
+                            placeId: props.placeId,
+                            sensorId: props.sensor.id,
+                            isOpen: state.isOpen,
+                            onChange: props.onChangeSensor,
+                            setOpen: self.setOpen
+                        })
+
+                    )
                 ),
                 React.DOM.li({}, 
                     new Modifiable({

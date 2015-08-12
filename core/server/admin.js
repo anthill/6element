@@ -113,7 +113,7 @@ app.get('/place/:id', function(req, res){
 app.get('/allPlacesInfos', function(req, res){
     database.complexQueries.getAllPlacesInfos()
     .then(function(data){
-        debug('All places infos', data);
+        // debug('All places infos', data);
         res.send(data);
     })
     .catch(function(error){
@@ -124,7 +124,7 @@ app.get('/allPlacesInfos', function(req, res){
 app.get('/allSensors', function(req, res){
     database.Sensors.getAllSensors()
     .then(function(data){
-        debug('All sensors', data);
+        // debug('All sensors', data);
         res.send(data);
     })
     .catch(function(error){
@@ -155,6 +155,32 @@ app.post('/updateSensor', function(req, res){
     .catch(function(error){
         res.status(500).send('Couldn\'t update Sensors database');
         console.log("error in /updateSensors/'+req.params.id: ", error);
+    });
+});
+
+app.post('/createPlace', function(req, res){    
+    console.log('creating place', req.body);
+
+    database.Places.create(req.body)
+    .then(function(data){
+        res.send(data);
+    })
+    .catch(function(error){
+        res.status(500).send('Couldn\'t create Places database');
+        console.log("error in /createPlace/'+req.params.id: ", error);
+    });
+});
+
+app.post('/deletePlace', function(req, res){    
+    console.log('delete place', req.body.id);
+
+    database.Places.delete(req.body.id)
+    .then(function(data){
+        res.send(data);
+    })
+    .catch(function(error){
+        res.status(500).send('Couldn\'t delete Places database');
+        console.log("error in /deletePlace/'+req.params.id: ", error);
     });
 });
 

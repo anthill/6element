@@ -31,7 +31,8 @@ interface placeProps{
     antIDset : Set,
     onChangePlace: function(),
     onChangeSensor: function(),
-    OnSelectedAnts: function()
+    OnSelectedAnts: function(),
+    onDeletePlace: function()
 }
 
 interface AppState{
@@ -59,6 +60,27 @@ var Place = React.createClass({
         ];
 
         return React.DOM.div({className: classes.join(' ')},
+            React.DOM.div({
+                onClick: function(){
+                        var obj = {};
+                        
+                        console.log('onclick delete Place', props.place.id);
+                        var ants = props.mySensors.map(function (ant) {
+                            return {
+                                'field': "installed_at",
+                                'id': ant.id,
+                                'value': null
+                            };
+                        });
+
+                        obj.ants = ants;
+                        obj['placeId'] = props.place.id;
+
+                        props.onDeletePlace(obj);
+                    }
+                },
+                "X"
+            ),
             new Modifiable({
                 className: 'placeName',
                 isUpdating: false,

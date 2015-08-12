@@ -37,6 +37,7 @@ interface AppProps{
     onChangePlace: function(),
     onChangeSensor: function(),
     onCreatePlace: function(),
+    onDeletePlace: function()
 }
 interface AppState{
     selectedAntSet: Set(antId)
@@ -72,7 +73,7 @@ var App = React.createClass({
         var props = this.props;
 
         // console.log('APP props', props);
-        // console.log('APP state', this.state);
+        console.log('APP state', this.state);
 
         var antIDList = [];
         var placeIDList = [];
@@ -104,7 +105,8 @@ var App = React.createClass({
                     antIDset: antIDset,
                     onChangePlace: props.onChangePlace,
                     onChangeSensor: props.onChangeSensor,
-                    onSelectedAnts: self.updateAntSelection
+                    onSelectedAnts: self.updateAntSelection,
+                    onDeletePlace: props.onDeletePlace
                 }));
             }
             else {
@@ -114,7 +116,8 @@ var App = React.createClass({
                     place: place,
                     antIDset: antIDset,
                     onChangePlace: props.onChangePlace,
-                    onChangeSensor: props.onChangeSensor
+                    onChangeSensor: props.onChangeSensor,
+                    onDeletePlace: props.onDeletePlace
                 }));
             }
         });
@@ -126,8 +129,6 @@ var App = React.createClass({
         // placeIDList.sort(function(a, b){
         //     return a.name - b.name;
         // })
-
-        var map1 = Immutable.Map({'1':'RER', '2':'REZEAE', '3':'TTEGV'});
 
         var temp = {};
         placeIDList.forEach(function (placeID) {

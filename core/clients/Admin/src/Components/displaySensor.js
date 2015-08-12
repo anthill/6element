@@ -6,22 +6,22 @@ var SelectorPlaceId = React.createFactory(require('./SelectorPlaceId.js'));
 
 
 /*
-interface placeProps{	
-	Sensors: [{
-		create_at : string,
-		id: int,
-		installed_at: int,
-		isUpdating: boolean,
-		latest_input: string,
-	    latest_output: string,
-	    name: string,
-	    phone_number: string,
-	    quipu_status: string,
-	    sense_status: string,
-	    updated_at: string
-	}],
+interface placeProps{   
+    Sensors: [{
+        create_at : string,
+        id: int,
+        installed_at: int,
+        isUpdating: boolean,
+        latest_input: string,
+        latest_output: string,
+        name: string,
+        phone_number: string,
+        quipu_status: string,
+        sense_status: string,
+        updated_at: string
+    }],
     placeIDMap: Map(),
-	placeName: string,
+    placeName: string,
     placeId: placeId,
     onChangeSensor: function(),
     onChangePlace: function()

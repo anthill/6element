@@ -19,13 +19,12 @@ module.exports = {
         return sendReq('POST', '/updatePlace', data);
     },
     updateSensor: function(data){
-        console.log("update test", data);
         return sendReq('POST', '/updateSensor', data);
     },
     createPlace: function(data){
         return sendReq('POST', '/createPlace', data);
+    },
+    deletePlace: function(data){
+        return sendReq('POST', '/deletePlace', data);
     }
-    // updateSensorPlace: function(date){
-    //     return sendReq('POST', '/updateSensorPlace', data);
-    // }
 };

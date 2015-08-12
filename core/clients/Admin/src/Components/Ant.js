@@ -72,7 +72,7 @@ var Ant = React.createClass({
             // props.ant.sense_status
         ];
 
-        return React.DOM.div({className: classes.join(' '),
+        return React.DOM.div({className: classes.join(' ')
                 // onClick: function(){
                 //     console.log('ant selected', props.ant.id);
                 //     // props.onChangeSensor()

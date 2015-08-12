@@ -60,6 +60,20 @@ var PlaceOrphan = React.createClass({
         ];
 
         return React.DOM.div({className: classes.join(' ')},
+            React.DOM.div({
+                onClick: function(){
+                        var obj = {};
+                        
+                        console.log('onclick delete Place', props.place.id);
+
+                        obj.ants = []; // no ant in an orphan
+                        obj['placeId'] = props.place.id;
+
+                        props.onDeletePlace(obj);
+                    }
+                },
+                "X"
+            ),
             React.DOM.ul({},
                 React.DOM.li({}, 
                     new Modifiable({

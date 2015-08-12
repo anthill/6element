@@ -26,5 +26,8 @@ module.exports = {
     },
     deletePlace: function(data){
         return sendReq('POST', '/deletePlace', data);
+    },
+    deleteSensor: function(data){
+        return sendReq('POST', '/deleteSensor', data);
     }
 };

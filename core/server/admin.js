@@ -177,6 +177,17 @@ app.post('/deletePlace', function(req, res){
     });
 });
 
+app.post('/deleteSensor', function(req, res){    
+    database.Sensors.delete(req.body.antsId)
+    .then(function(data){
+        res.send(data);
+    })
+    .catch(function(error){
+        res.status(500).send('Couldn\'t delete Sensor database');
+        console.log("error in /deleteSensor/'+req.params.id: ", error);
+    });
+});
+
 server.listen(PORT, function () {
     console.log('Server running on', [
         'http://localhost:',

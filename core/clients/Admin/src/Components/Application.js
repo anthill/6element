@@ -150,7 +150,8 @@ var App = React.createClass({
                 placeId: placeId,
                 placeIDMap: placeIDMap.delete(placeName),
                 onChangePlace: props.onChangePlace,
-                onChangeSensor: props.onChangeSensor
+                onChangeSensor: props.onChangeSensor,
+                onDeleteSensor: props.onDeleteSensor    
             }));
         });
         

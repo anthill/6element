@@ -24,7 +24,8 @@ interface placeProps{
     placeName: string,
     placeId: placeId,
     onChangeSensor: function(),
-    onChangePlace: function()
+    onChangePlace: function(),
+    onDeleteSensor: function()
 }
 
 interface AppState{
@@ -64,9 +65,19 @@ var DisplaySensor = React.createClass({
         ];
 
         return React.DOM.div({className: classes.join(' ')},
-            
-            React.DOM.ul({},
+            React.DOM.div({
+                onClick: function(){
+                        var obj = {};
+                        
+                        console.log('onclick delete Sensor', props.sensor.id);
+                        obj['antsId'] = props.sensor.id;
 
+                        props.onDeleteSensor(obj);
+                    }
+                },
+                "X"
+            ),
+            React.DOM.ul({},
                 React.DOM.li({}, 
                     new Modifiable({
                         className: 'DisplaySensorName',

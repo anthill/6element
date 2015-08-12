@@ -23,6 +23,7 @@ interface AntProps{
         updated_at: string,
         isSelected: bool
     },
+    isSelected: boolean,
     antIDset : Set,
     currentPlaceId : int,
     onChangeSensor: function(),
@@ -39,16 +40,15 @@ var Ant = React.createClass({
 
     getInitialState: function(){
         return {
-            isOpen: false,
-            isSelected: false
+            isOpen: false
         };
     },
 
-    setSelected: function(isSelected){
-        this.setState(Object.assign(this.state, {
-            isSelected: isSelected
-        }));
-    },
+    // setSelected: function(isSelected){
+    //     this.setState(Object.assign(this.state, {
+    //         isSelected: isSelected
+    //     }));
+    // },
 
     toggleList: function(){
         this.setState(Object.assign(this.state, {
@@ -61,12 +61,15 @@ var Ant = React.createClass({
         var props = this.props;
         var state = this.state;
 
+        if (props.isSelected){
+            console.log('selected !!');
+        }
         // console.log('ANT props', props);
         // console.log('ANT state', state);
 
         var classes = [
             'ant',
-            state.isSelected ? 'isSelected' : ''
+            props.isSelected ? 'isSelected' : ''
             // props.ant.isUpdating ? 'updating' : '',
             // props.ant.quipu_status,
             // props.ant.sense_status
@@ -76,10 +79,11 @@ var Ant = React.createClass({
             React.DOM.form({className: 'ant-selector'},
                 React.DOM.input({
                     onClick: function(){
-                        self.setSelected(!state.isSelected);
+                        // self.setSelected(!state.isSelected);
                         props.onSelectedAnts(props.ant.id);
                     },
-                    type: "checkbox"
+                    type: "checkbox",
+                    checked: props.isSelected
                 })
             ),
             React.DOM.ul({},
@@ -96,7 +100,7 @@ var Ant = React.createClass({
                         onChange: props.onChangeSensor
                     }),
                     React.DOM.div({
-                        className: 'ant-id',
+                        className: 'ant-id clickable',
                         onClick: function(){
                                 console.log('open ant list');
                                 self.toggleList();

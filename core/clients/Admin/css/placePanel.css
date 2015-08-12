@@ -8,10 +8,6 @@
 	7. le reste
 */
 
-input {
-	width: 100%;
-}
-
 #placePanel{
     position: relative;
     width: 78vw;
@@ -121,4 +117,28 @@ input {
 
 .placeOrphan li * {
 	display: inline-block; margin: 0 1em;
+}
+
+.command-manager {
+	position: fixed; padding: .5em; bottom: -6em; height: 5em; width: 100%;
+	color: #DDD;
+	background-color: #222;
+	transition: bottom .5s ease-in-out;
+}
+
+.command-manager.open {
+	bottom: 0;
+}
+
+.command-manager > * {
+	margin: 2px;
+}
+
+.command-manager input {
+	color: black;
+}
+
+.clear {
+	display: inline;
+	color: red;
 }

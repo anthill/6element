@@ -46,7 +46,7 @@ var PlaceOrphan = React.createClass({
     },
 
     render: function() {
-        // var self = this;
+        var self = this;
         var props = this.props;
         var state = this.state;
 
@@ -77,6 +77,7 @@ var PlaceOrphan = React.createClass({
                     React.DOM.div({
                         className: 'ant-id',
                         onClick: function(){
+                                console.log('HEYYYYY');
                                 self.toggleList();
                             }
                         },

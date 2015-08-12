@@ -12,9 +12,16 @@ body{
     position: relative;
 }
 
-.modifiable {
+.clickable {
 	cursor: pointer;
-	transition: all 0.30s ease-in-out;
+}
+
+.clickable:hover{
+	color: blue;
+}
+
+.modifiable {
+	transition: all 0.2s ease-in-out;
 }
 
 .modifiable.clicked{

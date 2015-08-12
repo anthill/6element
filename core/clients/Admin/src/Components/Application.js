@@ -6,6 +6,7 @@ var Creator = React.createFactory(require('./Creator.js'));
 var Place = React.createFactory(require('./Place.js'));
 var PlaceOrphan = React.createFactory(require('./PlaceOrphan.js'));
 var Sensor = React.createFactory(require('./Sensor.js'));
+var CommandManager = React.createFactory(require('./CommandManager.js'));
 
 /*
 
@@ -68,12 +69,19 @@ var App = React.createClass({
         });
     },
 
+    clearAntSelection: function(){
+        this.setState({
+            selectedAntSet: new Set()
+        });
+    },
+
     render: function() {
         var self = this;
         var props = this.props;
+        var state = this.state;
 
         // console.log('APP props', props);
-        console.log('APP state', this.state);
+        // console.log('APP state', this.state);
 
 
         // Initializing sensorIDSet
@@ -106,6 +114,7 @@ var App = React.createClass({
                     place: place,
                     mySensors: mySensors,
                     antIDset: antIDset,
+                    selectedAntSet: state.selectedAntSet,
                     onChangePlace: props.onChangePlace,
                     onChangeSensor: props.onChangeSensor,
                     onSelectedAnts: self.updateAntSelection,
@@ -160,10 +169,20 @@ var App = React.createClass({
         });
 
         // Creating Command Typer
-        var commandTyper = React.DOM.input({
-            placeholder: 'Type command'
+        var selectedAntStrings = [];
+        state.selectedAntSet.forEach(function(sensorId){
+            selectedAntStrings.push(props.sensorMap.get(sensorId).name);
         });
-        
+
+        var commandTyper = new CommandManager({
+            ants: selectedAntStrings,
+            isOpen: state.selectedAntSet.size > 0,
+            clearSelection: this.clearAntSelection,
+            sendCommand: function(){
+                console.log('sending command');
+            }
+        });
+
         return React.DOM.div({id: 'myApp'},
             React.DOM.div({id: 'placePanel'}, 
                 new Creator ({

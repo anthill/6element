@@ -47,6 +47,7 @@ var DisplaySensor = React.createClass({
     },
 
     render: function() {
+        var self = this;
         var props = this.props;
         var state = this.state;
 

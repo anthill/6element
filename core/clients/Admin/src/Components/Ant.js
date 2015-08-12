@@ -44,12 +44,6 @@ var Ant = React.createClass({
         };
     },
 
-    // setSelected: function(isSelected){
-    //     this.setState(Object.assign(this.state, {
-    //         isSelected: isSelected
-    //     }));
-    // },
-
     toggleList: function(){
         this.setState(Object.assign(this.state, {
             isListOpen: !this.state.isListOpen
@@ -79,7 +73,6 @@ var Ant = React.createClass({
             React.DOM.form({className: 'ant-selector'},
                 React.DOM.input({
                     onClick: function(){
-                        // self.setSelected(!state.isSelected);
                         props.onSelectedAnts(props.ant.id);
                     },
                     type: "checkbox",

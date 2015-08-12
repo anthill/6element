@@ -248,29 +248,47 @@ CSS PANEL
 	text-align: left;
 }
 
-.creator {
+.creatorPlace {
 	background-color: black;
 	border-bottom: 1px solid white;
 }
 
-.creator div *{
+.creatorPlace div *{
 	display: inline-block;
 }
 
-.creator ul *{
+.creatorPlace ul *{
 	display: inline-block;
 	padding: 0.5em;
 	text-align: center;
 	color: white;
 }
 
-.creator li {
+.creatorPlace li {
 	margin: 0;
 }
 
-.creator form input {
+.creatorPlace form input {
 	color: black;
 }
+
+.creatorSensor {
+	background-color: black;
+	border-bottom: 1px solid white;
+}
+.creatorSensor ul *{
+	text-align: center;
+	color: white;
+}
+
+.creatorSensor li {
+	margin: 0;
+}
+
+.creatorSensor form input {
+	color: black;
+}
+
 
 .orphan {
 	font-weight: bold;

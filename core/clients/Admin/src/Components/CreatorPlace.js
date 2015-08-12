@@ -14,29 +14,22 @@ interface SelectorState{
 
 */
 
-var Creator = React.createClass({
-    displayName: 'Creator',
-    
-    getInitialState: function(){
-        return {
-           placeNameInput: "",
-           latitudeInput: "",
-           longitudeInput: ""
-        };
-    },
+var CreatorPlace = React.createClass({
+    displayName: 'CreatorPlace',
+
     
     render: function() {
         // var self = this;
         var props = this.props;
         // var state = this.state;
 
-        // console.log('Creator props', props);
-        // console.log('Creator state', state);
+        // console.log('CreatorPlace props', props);
+        // console.log('CreatorPlace state', state);
 
-        return React.DOM.div({className: 'creator'},
+        return React.DOM.div({className: 'creatorPlace'},
             React.DOM.ul({},
                 React.DOM.li({}, 
-                    React.DOM.div({}, "Adding a place"),
+                    React.DOM.div({}, "New place"),
                     React.DOM.form({
                         onSubmit: function(e){
                             e.preventDefault();
@@ -77,4 +70,4 @@ var Creator = React.createClass({
     }
 });
 
-module.exports = Creator;
+module.exports = CreatorPlace;

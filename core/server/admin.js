@@ -188,6 +188,19 @@ app.post('/deleteSensor', function(req, res){
     });
 });
 
+app.post('/createSensor', function(req, res){    
+    console.log('creating sensor', req.body);
+
+    database.Sensors.create(req.body)
+    .then(function(data){
+        res.send(data);
+    })
+    .catch(function(error){
+        res.status(500).send('Couldn\'t create Sensor database');
+        console.log("error in /createSensor/'+req.params.id: ", error);
+    });
+});
+
 server.listen(PORT, function () {
     console.log('Server running on', [
         'http://localhost:',

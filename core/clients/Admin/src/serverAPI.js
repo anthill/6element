@@ -29,5 +29,8 @@ module.exports = {
     },
     deleteSensor: function(data){
         return sendReq('POST', '/deleteSensor', data);
+    },
+    createSensor: function(data){
+        return sendReq('POST', '/createSensor', data);
     }
 };

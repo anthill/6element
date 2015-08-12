@@ -130,6 +130,21 @@ function deleteSensorDb(data) {
     });
 }
 
+function createSensorDb(data) {
+
+    console.log('createSensor data', data);
+
+    serverAPI.createSensor(data)
+    .then(function() {
+        console.log('Sensor database created successfully (createSensorDb)');
+        refreshView();
+    })
+    .catch(function(err){
+        console.log('Sensor database didn\'t create correctly (createSensorDb)', err);
+        refreshView();
+    });
+}
+
 function refreshView(){
 
     var placesP = serverAPI.getAllPlacesInfos();
@@ -168,7 +183,8 @@ var topLevelStore = {
     onChangeSensor: updateSensorDb,
     onCreatePlace: createPlaceDb,
     onDeletePlace: deletePlaceDb,
-    onDeleteSensor: deleteSensorDb
+    onDeleteSensor: deleteSensorDb,
+    onCreateSensor: createSensorDb
 };
 
 // Initial rendering

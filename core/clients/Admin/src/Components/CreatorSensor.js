@@ -25,7 +25,7 @@ var CreatorSensor = React.createClass({
         // console.log('CreatorSensor props', props);
         // console.log('CreatorSensor state', state);
 
-        return React.DOM.div({className: 'creatorSensor'},
+        return React.DOM.div({className: 'creator'},
             React.DOM.ul({},
                 React.DOM.li({}, 
                     React.DOM.div({}, "New sensor"),

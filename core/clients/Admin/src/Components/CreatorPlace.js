@@ -26,7 +26,7 @@ var CreatorPlace = React.createClass({
         // console.log('CreatorPlace props', props);
         // console.log('CreatorPlace state', state);
 
-        return React.DOM.div({className: 'creatorPlace'},
+        return React.DOM.div({className: 'creator'},
             React.DOM.ul({},
                 React.DOM.li({}, 
                     React.DOM.div({}, "New place"),

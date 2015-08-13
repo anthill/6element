@@ -64,11 +64,11 @@ function updateSensorDb(datas) {
         return obj;
     });
 
-    var queryP = objs.map(function (obj) {
+    var queryPs = objs.map(function (obj) {
         return serverAPI.updateSensor(obj);
     });
     // console.log("queryP", queryP);
-    return Promise.all(queryP)
+    return Promise.all(queryPs)
     .then(function() {
         // console.log("results", results);
         console.log('Places database updated successfully (updateSensorDb)');

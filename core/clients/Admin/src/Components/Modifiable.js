@@ -100,6 +100,7 @@ var Modifiable = React.createClass({
 
         var classes = [
             'modifiable',
+            'clickable',
             state.inputMode ? 'clicked' : '',
             // isSelected ? 'selected' : '',
             state.isUpdating ? 'updating' : '',

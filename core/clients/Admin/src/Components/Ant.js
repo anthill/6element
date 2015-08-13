@@ -104,7 +104,7 @@ var Ant = React.createClass({
                 React.DOM.li({}, 
                     React.DOM.div({}, 'Phone'),
                     new Modifiable({
-                        className: 'sensorPhone_number',
+                        className: 'phone-number',
                         isUpdating: false,
                         text: props.ant.phone_number,
                         dbLink: {

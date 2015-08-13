@@ -24,10 +24,6 @@
 	font-weight: bold; font-size: 1.5em;
 }
 
-.place div{
-	display: inline-block; margin: 0 1em;
-}
-
 .place li * {
 	display: inline-block; margin: 0 1em;
 }
@@ -92,6 +88,24 @@
 	color: black;
 }
 
+.ant-picker{
+	position: block;
+	 /*padding: .5em;*/
+	/*bottom: -6em; */
+	/*height: 5em; width: 100%;*/
+	color: #DDD;
+	background-color: green;
+}
+.ant-picker ul{
+	display: block;
+}
+
+.ant-picker li{
+	display: inline-block;
+	margin: .1em;
+	padding: .1em;
+}
+
 .placeOrphan{
 	display: inline-block; margin: 1em; padding: .5em; width: 30%;
 	border: 1px solid red; border-radius: 5px;
@@ -111,9 +125,6 @@
     line-height: 1.7em;
 }
 
-.placeOrphan div{
-	display: inline-block; margin: 0 1em;
-}
 
 .placeOrphan li * {
 	display: inline-block; margin: 0 1em;

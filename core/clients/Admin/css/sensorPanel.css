@@ -23,9 +23,6 @@
 	border: 1px solid white;
 }
 
-.sensor div{
-	display: inline-block; margin: .5em;
-}
 
 .sensor li * {
 	display: inline-block; margin: 0 1em;

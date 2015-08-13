@@ -219,15 +219,15 @@ var topLevelStore = {
 refreshView();
 
 // THIS WILL BE NEEDED WHEN QUIPU SIGNAL IS INCORPORATED INTO DATA MSGS
-// socket.on('data', function (msg){
-//     var id = msg.socketMessage.sensor_id;
-//     var signal = msg.socketMessage.quipu.signal;
+socket.on('data', function (msg){
+    var id = msg.socketMessage.sensor_id;
+    var signal = msg.socketMessage.quipu.signal;
 
-//     var updatingAnt = topLevelStore.ants.get(id);
-//     updatingAnt.signal = signal;
+    var updatingAnt = topLevelStore.ants.get(id);
+    updatingAnt.signal = signal;
 
-//     render();
-// });
+    render();
+});
 
 socket.on('status', function (msg) {
 

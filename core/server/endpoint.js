@@ -138,7 +138,7 @@ var monitorOutgoing = net.createServer(function(socket) {
 
 monitorOutgoing.listen(process.env.INTERNAL_PORT ? process.env.INTERNAL_PORT : 55555);
 
-monitorOutgoing.on('connection', function() {console.log('SOMEONE CONNECTED, WOOHOO !!!')});
+monitorOutgoing.on('connection', function() {debug('connection on the interval socket')});
 
 // function getLastItem(array) {
 //  if (!array || !array.length)

@@ -18,7 +18,7 @@ var simulateSensorMeasurementArrivalTCP = require('./simulateSensorMeasurementAr
 
 var clients = {};
 //var timeout = 5;
-var monitorPort = 4100;
+var monitorPort = 5100;
 var eventEmitter = new EventEmitter();
 
 var DEBUG = process.env.NODE_ENV === "development" ? true : false;

@@ -4,20 +4,19 @@ var React = require('react');
 
 /*
 
-interface SelectorProps{
+interface AntPickerProps{
     antIDSet: Set(antID),
     currentSensorId: int,
-    currentPlaceId, int
-    onClick: function(),
+    currentPlaceId, int,
     onChangeSensor: function()
 }
-interface SelectorState{
+interface AntPickerState{
 }
 
 */
 
-var Display_sensor_id = React.createClass({
-    displayName: 'Selector_sensor_id',
+var AntPicker = React.createClass({
+    displayName: 'AntPicker',
 
     render: function() {
         // var self = this;
@@ -60,9 +59,8 @@ var Display_sensor_id = React.createClass({
                 lis.push(React.DOM.li({
                     key: antID,
                     onClick: function(){
-                        console.log('onclick listID_sensor', antID);
-                        props.onChange(objDb);
-                        props.setOpen(!props.isOpen);
+                            console.log('onclick listID_sensor', antID);
+                            props.onChange(objDb);
                         }
                     },
                     antID
@@ -72,10 +70,10 @@ var Display_sensor_id = React.createClass({
             listID = React.DOM.ul({}, lis);
         }
 
-        return React.DOM.div({className: 'listIDSensor'},
+        return React.DOM.div({className: 'ant-picker'},
             listID
         );
     }
 });
 
-module.exports = Display_sensor_id;
+module.exports = AntPicker;

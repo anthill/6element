@@ -2,8 +2,7 @@
 
 var React = require('react');
 var Modifiable = React.createFactory(require('./Modifiable.js'));
-var Display_sensor_id = React.createFactory(require('./Display_sensor_id.js'));
-var Selector_sensor_id = React.createFactory(require('./Selector_sensor_id.js'));
+var AntPicker = React.createFactory(require('./AntPicker.js'));
 
 var moment = require('moment');
 
@@ -22,14 +21,16 @@ interface AntProps{
         quipu_status: string,
         sense_status: string,
         updated_at: string,
-        isSlected: bool
+        isSelected: bool
     },
+    isSelected: boolean,
     antIDset : Set,
     currentPlaceId : int,
     onChangeSensor: function(),
     onSelectedAnts: function()
 }
-interface AppState{
+interface AntState{
+    isListOpen: boolean
 }
 
 */
@@ -39,20 +40,13 @@ var Ant = React.createClass({
 
     getInitialState: function(){
         return {
-            isOpen: false,
-            isSelected: false
+            isOpen: false
         };
     },
 
-    setSelected: function(isSelected){
+    toggleList: function(){
         this.setState(Object.assign(this.state, {
-            isSelected: isSelected
-        }));
-    },
-
-    setOpen: function(isOpen){
-        this.setState(Object.assign(this.state, {
-            isOpen: isOpen
+            isListOpen: !this.state.isListOpen
         }));
     },
 
@@ -61,37 +55,33 @@ var Ant = React.createClass({
         var props = this.props;
         var state = this.state;
 
+        if (props.isSelected){
+            console.log('selected !!');
+        }
         // console.log('ANT props', props);
         // console.log('ANT state', state);
 
         var classes = [
             'ant',
-            state.isSelected ? 'isSelected' : ''
+            props.isSelected ? 'isSelected' : ''
             // props.ant.isUpdating ? 'updating' : '',
             // props.ant.quipu_status,
             // props.ant.sense_status
         ];
 
-        return React.DOM.div({className: classes.join(' ')
-                // onClick: function(){
-                //     console.log('ant selected', props.ant.id);
-                //     // props.onChangeSensor()
-                //     self.setSelected(!state.isSelected);
-                // }
-            },
-            React.DOM.form({className: 'checkboxSelectedAnt'},
+        return React.DOM.div({className: classes.join(' ')},
+            React.DOM.form({className: 'ant-selector'},
                 React.DOM.input({
                     onClick: function(){
-                        self.setSelected(!state.isSelected);
                         props.onSelectedAnts(props.ant.id);
                     },
-                    type: "checkbox"
+                    type: "checkbox",
+                    checked: props.isSelected
                 })
             ),
             React.DOM.ul({},
                 React.DOM.li({}, 
                     React.DOM.div({}, 'Name'),
-                    // React.DOM.div({}, props.ant.id)
                     new Modifiable({
                         className: 'sensorName',
                         isUpdating: false,
@@ -102,18 +92,24 @@ var Ant = React.createClass({
                         },
                         onChange: props.onChangeSensor
                     }),
-                    new Display_sensor_id({
-                        currentSensorId: props.ant.id,
-                        isOpen: state.isOpen,
-                        setOpen: this.setOpen
-                    }),
-                    new Selector_sensor_id({
+                    React.DOM.div({
+                        className: 'ant-id clickable',
+                        onClick: function(){
+                                console.log('open ant list');
+                                self.toggleList();
+                            }
+                        },
+                        props.ant.id
+                    ),
+                    new AntPicker({
                         antIDset: props.antIDset.remove(props.ant.id),
                         currentSensorId: props.ant.id,
-                        isOpen: state.isOpen,
+                        isOpen: state.isListOpen,
                         currentPlaceId: props.currentPlaceId,
-                        onChange: props.onChangeSensor,
-                        setOpen: this.setOpen
+                        onChange: function(dbData){
+                            self.toggleList();
+                            props.onChangeSensor(dbData);
+                        }
                     })
                 ),
                 
@@ -127,7 +123,6 @@ var Ant = React.createClass({
                 ),
                 React.DOM.li({}, 
                     React.DOM.div({}, 'Phone'),
-                    // React.DOM.div({}, props.ant.phone_number)
                     new Modifiable({
                         className: 'sensorPhone_number',
                         isUpdating: false,

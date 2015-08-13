@@ -29,6 +29,7 @@ interface placeProps{
         updated_at: string
     }],
     antIDset : Set,
+    selectedAntSet: Set(id),
     onChangePlace: function(),
     onChangeSensor: function(),
     OnSelectedAnts: function(),
@@ -118,6 +119,7 @@ var Place = React.createClass({
                         return new Ant({
                             key: ant.id,
                             ant: ant,
+                            isSelected: props.selectedAntSet.has(ant.id),
                             antIDset: props.antIDset.remove(ant.id),
                             currentPlaceId: props.place.id,
                             onChangeSensor: props.onChangeSensor,

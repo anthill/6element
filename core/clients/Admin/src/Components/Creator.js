@@ -28,10 +28,10 @@ var Creator = React.createClass({
     render: function() {
         // var self = this;
         var props = this.props;
-        var state = this.state;
+        // var state = this.state;
 
-        console.log('Creator props', props);
-        console.log('Creator state', state);
+        // console.log('Creator props', props);
+        // console.log('Creator state', state);
 
         return React.DOM.div({className: 'creator'},
             React.DOM.ul({},

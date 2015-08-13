@@ -1,0 +1,144 @@
+/*
+	1. boîte
+	2. bordures
+	3. arrière-plan
+	4. texte
+	5. transformations
+	6. transitions
+	7. le reste
+*/
+
+#placePanel{
+    position: relative;
+    width: 78vw;
+}
+
+.place{
+	display: inline-block; margin: 1em; padding: .5em; width: 30%;
+	border: 1px solid orange; border-radius: 5px;
+	background-color: white;
+}
+
+.place .placeName {
+	display: block; width: 100%; margin: 0 auto;
+	font-weight: bold; font-size: 1.5em;
+}
+
+.place div{
+	display: inline-block; margin: 0 1em;
+}
+
+.place li * {
+	display: inline-block; margin: 0 1em;
+}
+
+.place.updating {
+	background-color: red;
+	transition: background-color 1s;
+}
+
+.place.updating {
+	background-color: red;
+	transition: background-color 1s;
+}
+
+.ant{
+	display: inline-block; margin: 1em; padding: .5em; position: relative;
+	border: 1px solid green; border-radius: 5px;
+	background-color: white;
+}
+
+.ant.isSelected{
+	background: rgba(255, 153, 51, 0.4);
+}
+
+.ant-selector {
+	float: right;
+}
+
+.ant.sensorName {
+	font-weight: bold;
+}
+
+/* quipu status */
+
+.ant.uninitialized .quipu {
+	color: orange;
+}
+
+.ant.initialized .quipu {
+	color: black;
+}
+
+.ant.3Gconnected .quipu {
+	color: green;
+}
+
+.ant.tunnelling .quipu {
+	color: blue;
+}
+
+/* 6sense status */
+
+.ant.sleeping .6sense {
+	color: #DDD;
+}
+
+.ant.monitoring .6sense {
+	color: #888;
+}
+
+.ant.recording .6sense {
+	color: black;
+}
+
+.placeOrphan{
+	display: inline-block; margin: 1em; padding: .5em; width: 30%;
+	border: 1px solid red; border-radius: 5px;
+	background-color: white;
+}
+
+.placeOrphan .placeOrphanName {
+	display: block; width: 100%; margin: 0 auto;
+	font-weight: bold; font-size: 1.5em;
+}
+
+.placeOrphan .ant-id {
+	border-radius: 10px;
+    width: 6em;
+    height: 1.7em;
+    text-align: center;
+    line-height: 1.7em;
+}
+
+.placeOrphan div{
+	display: inline-block; margin: 0 1em;
+}
+
+.placeOrphan li * {
+	display: inline-block; margin: 0 1em;
+}
+
+.command-manager {
+	position: fixed; padding: .5em; bottom: -6em; height: 5em; width: 100%;
+	color: #DDD;
+	background-color: #222;
+	transition: bottom .5s ease-in-out;
+}
+
+.command-manager.open {
+	bottom: 0;
+}
+
+.command-manager > * {
+	margin: 2px;
+}
+
+.command-manager input {
+	color: black;
+}
+
+.clear {
+	display: inline;
+	color: red;
+}

@@ -24,8 +24,12 @@
 	font-weight: bold; font-size: 1.5em;
 }
 
-.place li * {
-	display: inline-block; margin: 0 1em;
+.place li {
+	display: block; margin: 0;
+}
+
+.place li div {
+	display: inline-block;; margin: 0 0.2rem;
 }
 
 .place.updating {
@@ -39,7 +43,7 @@
 }
 
 .ant{
-	display: inline-block; margin: 1em; padding: .5em; position: relative;
+	display: block; margin: 1em 0; padding: .5em; position: relative;
 	border: 1px solid green; border-radius: 5px;
 	background-color: white;
 }
@@ -54,6 +58,11 @@
 
 .ant.sensorName {
 	font-weight: bold;
+}
+
+.ant-unistalling {
+    text-align: center;
+    margin-top: 0.5rem;
 }
 
 /* quipu status */
@@ -88,6 +97,21 @@
 	color: black;
 }
 
+.ant-picker{
+	position: block;
+	color: #DDD;
+	background-color: green;
+}
+.ant-picker ul{
+	display: block;
+}
+
+.ant-picker li{
+	display: inline-block;
+	margin: .1em;
+	padding: .1em;
+}
+
 .place.orphan .name {
 	display: block; width: 100%; margin: 0 auto;
 	font-weight: bold; font-size: 1.5em;
@@ -99,14 +123,6 @@
     height: 1.7em;
     text-align: center;
     line-height: 1.7em;
-}
-
-.place.orphan div{
-	display: inline-block; margin: 0 1em;
-}
-
-.place.orphan li * {
-	display: inline-block; margin: 0 1em;
 }
 
 .command-manager {
@@ -131,4 +147,9 @@
 .clear {
 	display: inline;
 	color: red;
+}
+
+.low-importance {
+	color: #999999;
+	font-size: small;
 }

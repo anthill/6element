@@ -97,8 +97,6 @@ function createPlaceInDb(data) {
 
 function removePlaceFromDb(data) {
 
-    console.log('deletePlace data', data);
-
     // Queries to uninstall ants from place
     var queryP = updateSensorInDb(data.ants);
 
@@ -132,6 +130,21 @@ function removeSensorFromDb(data) {
     })
     .catch(function(err){
         console.log('Sensor didn\'t remove correctly', err);
+        refreshView();
+    });
+}
+
+function createSensorInDb(data) {
+
+    console.log('createSensor data', data);
+
+    serverAPI.createSensor(data)
+    .then(function() {
+        console.log('Sensor database created successfully (createSensorDb)');
+        refreshView();
+    })
+    .catch(function(err){
+        console.log('Sensor database didn\'t create correctly (createSensorDb)', err);
         refreshView();
     });
 }
@@ -186,12 +199,12 @@ function sendCommand(command, selectedAntSet){
 var topLevelStore = {
     sensorMap: undefined,
     placeMap: undefined,
-    // onChange: updateDB,
     onChangePlace: updatePlaceInDb,
     onChangeSensor: updateSensorInDb,
     onCreatePlace: createPlaceInDb,
     onRemovePlace: removePlaceFromDb,
     onRemoveSensor: removeSensorFromDb,
+    onCreateSensor: createSensorInDb,
     sendCommand: sendCommand
 };
 

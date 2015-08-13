@@ -37,7 +37,15 @@ body{
 }
 
 li .modifiable{
-	width: 20%;
+	width: 23%;
+}
+
+.modifiable.phone-number{
+	width: 50%;
+}
+
+.modifiable.sensorName{
+	width: 40%;
 }
 
 .modifiable.updating {

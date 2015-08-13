@@ -114,7 +114,7 @@ var Sensor = React.createClass({
                     id: props.sensor.id,
                     field: 'phone_number'
                 },
-                onChange: props.onChangeSensor
+            onChange: props.onChangeSensor
             })
         );
 

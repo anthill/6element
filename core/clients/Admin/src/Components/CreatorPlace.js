@@ -13,8 +13,8 @@ interface SelectorState{
 
 */
 
-var Creator = React.createClass({
-    displayName: 'Creator',
+var CreatorPlace = React.createClass({
+    displayName: 'CreatorPlace',
 
     clearInputs: function(){
         var nameInput = React.findDOMNode(this.refs.myNameInput);
@@ -36,13 +36,13 @@ var Creator = React.createClass({
         var props = this.props;
         // var state = this.state;
 
-        // console.log('Creator props', props);
-        // console.log('Creator state', state);
+        // console.log('CreatorPlace props', props);
+        // console.log('CreatorPlace state', state);
 
         return React.DOM.div({className: 'creator'},
             React.DOM.ul({},
                 React.DOM.li({}, 
-                    React.DOM.div({}, "Adding a place"),
+                    React.DOM.div({}, "New place"),
                     React.DOM.form({
                         onSubmit: function(e){
                             e.preventDefault();
@@ -92,4 +92,4 @@ var Creator = React.createClass({
     }
 });
 
-module.exports = Creator;
+module.exports = CreatorPlace;

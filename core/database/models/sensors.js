@@ -111,8 +111,9 @@ module.exports = {
             });
         })
         .catch(function(err){
-            console.log('ERROR in delete', err);
+            console.log('ERROR in delete sensors', err);
         });        
     }
+
 
 };

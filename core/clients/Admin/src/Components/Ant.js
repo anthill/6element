@@ -88,18 +88,18 @@ var Ant = React.createClass({
                     })
                 ),
                 
-                React.DOM.li({}, 
+                React.DOM.li({className: 'low-importance'}, 
                     React.DOM.div({}, 'Created'),
-                    React.DOM.div({}, moment(props.ant.created_at).format("MMMM Do YYYY, h:mm:ss a"))
+                    React.DOM.div({}, moment(props.ant.created_at).format("DD/MM/YYYY HH:mm:ss"))
                 ),
-                React.DOM.li({}, 
+                React.DOM.li({className: 'low-importance'}, 
                     React.DOM.div({}, 'Updated'),
                     React.DOM.div({}, moment(props.ant.updated_at).fromNow())
                 ),
                 React.DOM.li({}, 
                     React.DOM.div({}, 'Phone'),
                     new Modifiable({
-                        className: 'sensorPhone_number',
+                        className: 'phone-number',
                         isUpdating: false,
                         text: props.ant.phone_number,
                         dbLink: {
@@ -123,6 +123,20 @@ var Ant = React.createClass({
                     React.DOM.div({}, props.ant.latest_input),
                     React.DOM.div({}, props.ant.latest_output)
                 )
+            ),
+            React.DOM.div({
+                    className: 'ant-unistalling clickable',
+                    onClick: function(){
+                        console.log('Uninstalling');
+                        var dbData = {
+                            'field': 'installed_at',
+                            'id': props.ant.id,
+                            'value': null
+                        };
+                        props.onChangeSensor([dbData]);
+                    }
+                },
+                'Uninstall'
             )
         );
     }

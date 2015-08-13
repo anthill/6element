@@ -56,6 +56,10 @@
 	color: black;
 }
 
+#sensorPanel .creator ul * {
+	display: block;
+}
+
 .sensor.orphan {
 	font-weight: bold;
     color: white;

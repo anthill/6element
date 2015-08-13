@@ -89,10 +89,8 @@ var PlaceOrphan = React.createClass({
                         onChange: props.onChangePlace
                     }),
                     React.DOM.div({
-                        className: 'ant-id clickable',
-                        onClick: function(){
-                                self.toggleList();
-                            }
+                            className: 'ant-id clickable',
+                            onClick: self.toggleList
                         },
                         'Add Ant'
                     ),

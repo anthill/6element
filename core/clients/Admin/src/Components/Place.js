@@ -4,6 +4,7 @@ var React = require('react');
 var Modifiable = React.createFactory(require('./Modifiable.js'));
 var Ant = React.createFactory(require('./Ant.js'));
 var DeleteButton = React.createFactory(require('./DeleteButton.js'));
+var AntPicker = React.createFactory(require('./AntPicker.js'));
 
 /*
 interface placeProps{
@@ -14,7 +15,6 @@ interface placeProps{
         lon: int,
         name: string,
         sensor_ids: array
-
     },  
     mySensors: [{
         create_at : string,
@@ -38,6 +38,7 @@ interface placeProps{
 }
 
 interface AppState{
+    isListOpen: boolean
 }
 
 */
@@ -45,6 +46,18 @@ interface AppState{
 
 var Place = React.createClass({
     displayName: 'Place',
+
+    getInitialState: function(){
+        return {
+            isListOpen: false
+        };
+    },
+
+    toggleList: function(){
+        this.setState(Object.assign(this.state, {
+            isListOpen: !this.state.isListOpen
+        }));
+    },
 
     removePlace: function(){
         var props = this.props;
@@ -66,9 +79,9 @@ var Place = React.createClass({
     },
 
     render: function() {
-        // var self = this;
+        var self = this;
         var props = this.props;
-        // var state = this.state;
+        var state = this.state;
         // console.log('PLACE props', props);
         // console.log('PLACE state', state);
 
@@ -129,7 +142,23 @@ var Place = React.createClass({
                             onSelectedAnts: props.onSelectedAnts
                         });
                     })
-                )
+                ),
+                React.DOM.div({
+                        className: 'ant-id clickable',
+                        onClick: self.toggleList
+                    },
+                    'Add Ant'
+                ),
+                new AntPicker({
+                    antFromNameMap: props.antFromNameMap,
+                    currentSensorId: null,
+                    isOpen: state.isListOpen,
+                    currentPlaceId: props.place.id,
+                    onChange: function(dbData){
+                        self.toggleList();
+                        props.onChangeSensor(dbData);
+                    }
+                })
             )
         )
     }

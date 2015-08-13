@@ -66,7 +66,7 @@ module.exports = {
             });
         })
         .catch(function(err){
-            console.log('ERROR in delete place', err);
+            console.log('ERROR in delete places', err);
         });        
     }
 };

@@ -83,9 +83,7 @@ var App = React.createClass({
             antIDList.push(sensor.id);
         });
 
-        var antIDset = new Immutable.Set(antIDList.sort(function(a, b){
-            return a - b;
-        }));
+        var antIDset = new Immutable.Set(antIDList);
 
         var myPlaces = [];
         var myPlacesOrphan = [];
@@ -103,7 +101,7 @@ var App = React.createClass({
                     key: place.id,
                     place: place,
                     mySensors: mySensors,
-                    antIDset: antIDset,
+                    antIDset: antIDset, 
                     onChangePlace: props.onChangePlace,
                     onChangeSensor: props.onChangeSensor,
                     onSelectedAnts: self.updateAntSelection,

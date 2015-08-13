@@ -30,6 +30,7 @@ var Display_sensor_id = React.createClass({
         var listID = [];
 
         if (props.isOpen) {
+
             var lis = [];
             props.antIDset.forEach(function (antID) {
                 var objDb = [];

@@ -23,6 +23,7 @@ interface AntProps{
         isSelected: bool
     },
     isSelected: boolean,
+    isUpdating: boolean,
     currentPlaceId: int,
     onChangeSensor: function(),
     onSelectedAnts: function()
@@ -56,10 +57,10 @@ var Ant = React.createClass({
 
         var classes = [
             'ant',
-            props.isSelected ? 'isSelected' : ''
-            // props.ant.isUpdating ? 'updating' : '',
-            // props.ant.quipu_status,
-            // props.ant.sense_status
+            props.isSelected ? 'isSelected' : '',
+            props.ant.isUpdating ? 'updating' : '',
+            props.ant.quipu_status,
+            props.ant.sense_status
         ];
 
         return React.DOM.div({className: classes.join(' ')},

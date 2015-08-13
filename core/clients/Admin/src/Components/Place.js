@@ -87,10 +87,6 @@ var Place = React.createClass({
 
         var classes = [
             'place'
-            // isSelected ? 'selected' : '',
-            // props.ant.isUpdating ? 'updating' : '',
-            // props.ant.quipu_status,
-            // props.ant.sense_status
         ];
 
         // Delete Button
@@ -136,9 +132,10 @@ var Place = React.createClass({
 
         // List of installed Sensors
         var availableSensorMap = props.antFromNameMap;
+
         var installedSensors = props.mySensors.map(function (ant){
 
-            availableSensorMap = props.antFromNameMap.delete(ant.name);
+            availableSensorMap = availableSensorMap.delete(ant.name);
 
             return new Ant({
                 key: ant.id,
@@ -150,21 +147,19 @@ var Place = React.createClass({
             });
         });
 
+        console.log('nb available', props.place.name, availableSensorMap.size);
+
         // Button to install Sensor
-        // Ant picker
         var antPicker = state.isListOpen ? new AntPicker({
             antFromNameMap: availableSensorMap,
             currentSensorId: null,
             currentPlaceId: props.place.id,
-            onChange: function(dbData){
-                self.toggleList();
-                props.onChangeSensor(dbData);
-            }
+            onChange: props.onChangeSensor
         })
         : undefined;
 
         var addAntButton = React.DOM.div({
-                className: 'ant-id clickable',
+                className: 'add-ant-button clickable',
                 onClick: self.toggleList
             },
             'Add Ant',
@@ -177,8 +172,7 @@ var Place = React.createClass({
             placeName,
             coords,
             installedSensors,
-            addAntButton,
-            antPicker
+            addAntButton
         );
     }
 });

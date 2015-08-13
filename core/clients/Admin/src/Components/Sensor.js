@@ -53,8 +53,6 @@ var Sensor = React.createClass({
         var dbData = {
             sensorId: props.sensor.id 
         };
-                        
-        console.log('onclick remove Sensor', props.sensor.id);
 
         props.onRemoveSensor(dbData);
     },

@@ -94,7 +94,7 @@
 }
 
 .ant-picker{
-	position: absolute; padding: .2rem;
+	position: absolute; padding: .2rem; top: 0; left: 100%;
 	color: #DDD;
 	background-color: green;
 	z-index: 2;
@@ -104,9 +104,12 @@
 }
 
 .ant-picker li{
-	display: inline-block;
-	margin: .1em;
-	padding: .1em;
+	display: block; margin: .1em; padding: .1em;
+}
+
+.add-ant-button {
+	position: relative; margin: 0 auto; width: 70px; border-radius: 10px;
+    text-align: center; line-height: 1.7em;
 }
 
 .place.orphan .name {
@@ -114,13 +117,6 @@
 	font-weight: bold; font-size: 1.5em;
 }
 
-.place.orphan .ant-id {
-	border-radius: 10px;
-    width: 6em;
-    height: 1.7em;
-    text-align: center;
-    line-height: 1.7em;
-}
 
 .command-manager {
 	position: fixed; padding: .5em; bottom: -6em; height: 5em; width: 100%;

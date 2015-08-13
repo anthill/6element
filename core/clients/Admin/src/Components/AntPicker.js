@@ -26,8 +26,6 @@ var AntPicker = React.createClass({
         // console.log('AntPicker props', props);
         // console.log('AntPicker state', state);
 
-        var listID = [];
-
         var lis = [];
         props.antFromNameMap.forEach(function (antId, antName) {
             var objDb = [];
@@ -65,10 +63,9 @@ var AntPicker = React.createClass({
                 }, antName
             ));
         });
-        listID = React.DOM.ul({}, lis);
 
         return React.DOM.div({className: 'ant-picker'},
-            listID
+            lis
         );
     }
 });

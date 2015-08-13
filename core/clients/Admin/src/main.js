@@ -147,6 +147,15 @@ function refreshView(){
     .catch(errlog);
 }
 
+function sendCommand(command, selectedAntSet){
+    var antNames = [];
+    selectedAntSet.forEach(function(id){
+        antNames.push(topLevelStore.sensorMap.get(id).name);
+    });
+
+    console.log('Sending command', command, ' to ', antNames.join(' '));
+}
+
 
 
 var topLevelStore = {
@@ -156,7 +165,8 @@ var topLevelStore = {
     onChangePlace: updatePlaceDb,
     onChangeSensor: updateSensorDb,
     onCreatePlace: createPlaceDb,
-    onDeletePlace: deletePlaceDb
+    onDeletePlace: deletePlaceDb,
+    sendCommand: sendCommand
 };
 
 // Initial rendering

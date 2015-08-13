@@ -55,9 +55,6 @@ var Ant = React.createClass({
         var props = this.props;
         var state = this.state;
 
-        if (props.isSelected){
-            console.log('selected !!');
-        }
         // console.log('ANT props', props);
         // console.log('ANT state', state);
 

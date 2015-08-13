@@ -20,7 +20,7 @@ interface AppProps{
         sensor_ids : list[],
         type, string,
         updated_at, string
-        }
+    })
     sensorMap: Map (id => sensor{
         created_at: string,
         id: int,
@@ -33,12 +33,12 @@ interface AppProps{
         quipu_status: string,
         sense_status: string,
         updated_at: string
-        }
     }),
     onChangePlace: function(),
     onChangeSensor: function(),
     onCreatePlace: function(),
-    onDeletePlace: function()
+    onDeletePlace: function(),
+    sendCommand: function()
 }
 interface AppState{
     selectedAntSet: Set(antId)
@@ -169,17 +169,17 @@ var App = React.createClass({
         });
 
         // Creating Command Typer
-        var selectedAntStrings = [];
-        state.selectedAntSet.forEach(function(sensorId){
-            selectedAntStrings.push(props.sensorMap.get(sensorId).name);
+        var selectedAntMap = new Map();
+        state.selectedAntSet.forEach(function(id){
+            selectedAntMap.set(id, props.sensorMap.get(id).name);
         });
 
         var commandTyper = new CommandManager({
-            ants: selectedAntStrings,
+            antMap: selectedAntMap,
             isOpen: state.selectedAntSet.size > 0,
             clearSelection: this.clearAntSelection,
-            sendCommand: function(){
-                console.log('sending command');
+            sendCommand: function(command){
+                props.sendCommand(command, state.selectedAntSet);
             }
         });
 

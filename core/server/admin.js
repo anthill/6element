@@ -11,6 +11,7 @@ var compression = require('compression');
 var bodyParser = require('body-parser');
 var net = require('net');
 var spawn = require('child_process').spawn;
+var endpoint;
 
 var fs = require('fs');
 var database = require('../database');
@@ -40,11 +41,20 @@ var io = require('socket.io')(server);
 
 io.set('origins', '*:*');
 
+io.on('connection', function(socket) {
+    socket.on('cmd', function(cmd) {
+        console.log('admin client data received');
+        if (endpoint) {
+            console.log("let's send");
+            endpoint.write(JSON.stringify(cmd));
+        }
+    })
+})
 
 // listening to the reception server
 
 var endpointInterval = setInterval(function() {
-    var endpoint = net.connect(endpointConfig, function(){
+    endpoint = net.connect(endpointConfig, function(){
 
         debug('connected to the reception server on '+ endpoint.remoteAddress+':'+endpoint.remotePort)
         endpoint.on('data', function(messages) {

@@ -195,9 +195,15 @@ function refreshView(){
 function sendCommand(command, selectedAntSet){
     var antNames = [];
     selectedAntSet.forEach(function(id){
-        antNames.push(topLevelStore.sensorMap.get(id).name);
+        antNames.push(topLevelStore.sensorMap.get(id).phone_number);
     });
 
+    socket.emit('cmd', 
+        {
+            type:'cmd',
+            command:command,
+            to:antNames
+        });
     console.log('Sending command', command, ' to ', antNames.join(' '));
 }
 

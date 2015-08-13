@@ -138,7 +138,19 @@ var monitorOutgoing = net.createServer(function(socket) {
 
 monitorOutgoing.listen(process.env.INTERNAL_PORT ? process.env.INTERNAL_PORT : 55555);
 
-monitorOutgoing.on('connection', function() {debug('connection on the interval socket')});
+monitorOutgoing.on('connection', function(socket) {
+    socket.on('data', function(buffer) {
+        var data = JSON.parse(buffer.toString());
+        if (data.type === 'cmd') {
+            Object.keys(clients).forEach(function(key) {
+                if (data.to.indexOf(clients[key].name) > -1 && clients[key].socket) {
+                    sendCommand(clients[key].socket, data.command)
+                }
+            })
+        }
+    });
+    debug('connection on the internal socket')
+});
 
 // function getLastItem(array) {
 //  if (!array || !array.length)

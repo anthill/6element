@@ -181,7 +181,7 @@ gulp.task('admin-dev', ['serve-admin', 'build-admin', 'watch-admin'], function()
 
 gulp.task('admin-prod', ['serve-admin', 'build-admin']);
 
-gulp.task('app-dev', ['init', 'serve-app', 'build-app', 'watch-app'], function(){
+gulp.task('app-dev', ['serve-app', 'build-app', 'watch-app'], function(){
     console.log('Starting app in dev');
 });
 

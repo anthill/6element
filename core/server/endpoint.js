@@ -43,7 +43,6 @@ var monitorIncoming = net.createServer(function(socket) { // Receive data from s
 
     // Handle messages
     socket.on('data', function(data) {
-        console.log('data received : ' + data)
         data.toString().split("|").forEach(function(message){
             handleData(message, clients[getID(socket)]); // handle 6element specific datas
         });

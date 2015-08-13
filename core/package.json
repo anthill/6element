@@ -49,6 +49,7 @@
     "immutable": "^3.7.4",
     "leaflet": "^0.7.3",
     "moment": "^2.10.3",
+    "node-schedule": "^0.2.9",
     "pg": "^4.3.0",
     "quipu": "^0.1.0",
     "react": "^0.13.3",

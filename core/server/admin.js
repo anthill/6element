@@ -10,8 +10,12 @@ var http = require('http');
 var compression = require('compression');
 var bodyParser = require('body-parser');
 var net = require('net');
+var spawn = require('child_process').spawn;
 
+var fs = require('fs');
 var database = require('../database');
+var schedule = require('node-schedule');
+var zlib = require('zlib');
 
 var PORT = 4001;
 var DEBUG = process.env.NODE_ENV === "development" ? true : false;
@@ -42,7 +46,7 @@ io.set('origins', '*:*');
 var endpointInterval = setInterval(function() {
     var endpoint = net.connect(endpointConfig, function(){
 
-        debug('connected to the reception server on '+ endpoint.remoteHost+':'+endpoint.remotePort)
+        debug('connected to the reception server on '+ endpoint.remoteAddress+':'+endpoint.remotePort)
         endpoint.on('data', function(messages) {
             messages.toString().split("|").forEach(function(message){
                 try {
@@ -70,6 +74,22 @@ var endpointInterval = setInterval(function() {
 }, 5000);
 
 
+// Backup database everyday at 3AM
+schedule.scheduleJob('*/1 * * * *', function(){
+    console.log("Backup database");
+    var gzip = zlib.createGzip();
+    var today = new Date();
+    var wstream = fs.createWriteStream('/6element/app/data/backups/' + today.getDay() + '.txt.gz');
+    var proc = spawn('pg_dump', ['-p', process.env.DB_PORT_5432_TCP_PORT, '-h', process.env.DB_PORT_5432_TCP_ADDR, '-U', process.env.POSTGRES_USER, '-d', process.env.POSTGRES_USER, '-w']);
+    proc.stdout
+        .pipe(gzip)
+        .pipe(wstream);
+    proc.stderr.on('data', function(buffer) {
+        console.log(buffer.toString().replace('\n', ''));
+    })
+});
+
+// Admin API
 app.use(compression());
 app.use(bodyParser.json());
 

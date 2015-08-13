@@ -23,7 +23,7 @@ var DEBUG = process.env.NODE_ENV === "development" ? true : false;
 
 var endpointConfig =
     {
-        host: process.env.ENDPOINT_PORT_4100_TCP_ADDR ? process.env.ENDPOINT_PORT_4100_TCP_ADDR : "127.0.0.1",
+        host: process.env.ENDPOINT_PORT_5100_TCP_ADDR ? process.env.ENDPOINT_PORT_5100_TCP_ADDR : "127.0.0.1",
         port: process.env.INTERNAL_PORT ? process.env.INTERNAL_PORT : 55555
     };
 

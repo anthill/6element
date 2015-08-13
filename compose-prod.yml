@@ -23,9 +23,9 @@ endpoint:
    links:
       - db
    ports:
-      - "4100:4100"
+      - "5100:5100"
    environment:
-      - VIRTUAL_PORT=4100
+      - VIRTUAL_PORT=5100
       - INTERNAL_PORT=55555
       - NODE_ENV=production
       - POSTGRES_PASSWORD=elements
@@ -42,7 +42,7 @@ admin:
    ports:
       - "4001:4001"
    environment:
-      - VIRTUAL_HOST=admin.6element.ants.builders 
+      - VIRTUAL_HOST=sensors.ants.builders 
       - VIRTUAL_PORT=4001
       - INTERNAL_PORT=55555
       - POSTGRES_USER=postgres

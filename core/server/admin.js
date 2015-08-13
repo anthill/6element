@@ -75,7 +75,7 @@ var endpointInterval = setInterval(function() {
 
 
 // Backup database everyday at 3AM
-schedule.scheduleJob('*/1 * * * *', function(){
+schedule.scheduleJob('0 3 * * *', function(){
     console.log("Backup database");
     var gzip = zlib.createGzip();
     var today = new Date();

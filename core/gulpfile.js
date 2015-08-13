@@ -21,6 +21,18 @@ var sqlOptions = {
     omitComments: true
 };
 
+var generateDefinitions = function() {
+    return new Promise(function(resolve, reject) {
+        generateSqlDefinition(sqlOptions, function(err, stats) {
+            if (err) {
+                console.error(err);
+                reject(err);
+            }
+            fs.writeFileSync("./database/management/declarations.js", stats.buffer);
+            resolve();
+        });
+    });
+}
 
 gulp.task('init', function () {                                 
 
@@ -42,24 +54,25 @@ gulp.task('init', function () {
             .then(function(){
                 createTables()
                 .then(function(){
-                    hardCodedSensors()
-                    .then(function(){
-
-                        console.log("Dropped and created the tables.")
-
-                        // regeneate the declarations
-                        generateSqlDefinition(sqlOptions, function(err, stats) {
-                            if (err) {
-                                console.error(err);
-                                return;
-                            }
-                            fs.writeFileSync("./database/management/declarations.js", stats.buffer);
+                    if (!process.env.BACKUP) {
+                        console.log('no backup file');
+                        generateDefinitions()
+                        .then(function(){
+                            console.log("Dropped and created the tables.")
+                            hardCodedSensors();
+                        })
+                        .catch(function(err){
+                            console.error("Couldn't write the schema", err);
                         });
-                    })
-                    .catch(function(err){
-                        console.error("Couldn't write the schema", err);
-                    });
-                    
+                    }
+                    else {
+                        generateDefinitions()
+                        .then(console.log('definitions generated'))
+                        .catch(function(err){
+                            console.error("Couldn't write the schema", err);
+                        });
+                    }
+
                 }).catch(function(err){
                     console.error("Couldn't create tables", err);
                 });
@@ -67,7 +80,7 @@ gulp.task('init', function () {
                 console.error("Couldn't drop tables", err);
             });         
 
-                })
+        })
         .catch(function(err){
             console.error("Couldn't connect tables", err);
         });

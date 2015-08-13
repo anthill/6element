@@ -23,7 +23,7 @@ var AntPicker = React.createClass({
         var props = this.props;
         // var state = this.state;
 
-        console.log('AntPicker props', props);
+        // console.log('AntPicker props', props);
         // console.log('AntPicker state', state);
 
         var listID = [];

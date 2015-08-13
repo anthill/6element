@@ -8,10 +8,10 @@
       - POSTGRES_USER=postgres
       - PGPASSWORD=elements
       - POSTGRES_PASSWORD=elements
-      - BACKUP=backups/save.txt.gz
+      # - BACKUP=backups/save.txt.gz
    volumes:
-      - core:/6element/core
-      - app:/6element/app
+      - ./core:/6element/core
+      - ./app:/6element/app
       - /data/6element:/6element/app/data
       - /data/6element/backups:/6element/app/data/backups
 

@@ -14,7 +14,7 @@ app:
       - POSTGRES_PASSWORD=elements
       - NODE_ENV=development
    volumes:
-      - core:/6element/core
+      - ./core:/6element/core
 endpoint:
    build: .
    dockerfile: core/Dockerfile
@@ -29,7 +29,7 @@ endpoint:
       - NODE_ENV=development
       - POSTGRES_PASSWORD=elements
    volumes:
-      - core:/6element/core
+      - ./core:/6element/core
 admin:
    build: .
    dockerfile: core/Dockerfile
@@ -48,7 +48,7 @@ admin:
       - PGPASSWORD=elements
       - NODE_ENV=development
    volumes:
-      - core:/6element/core
+      - ./core:/6element/core
       - /data/6element:/6element/app/data
 db:
    image: postgres:9.4

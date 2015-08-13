@@ -11,7 +11,7 @@
    - VIRTUAL_PORT=4000
    - DEBUG=true
   volumes:
-   - app:/6element/app
+   - ./app:/6element/app
 db:
   image: postgres:9.4
   environment:
@@ -24,4 +24,4 @@ tests:
    - 6element
   command: node ./src/index.js
   volumes:
-   - tests:/tests/src
+   - ./tests:/tests/src

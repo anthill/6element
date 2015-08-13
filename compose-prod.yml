@@ -14,7 +14,7 @@ app:
       - POSTGRES_PASSWORD=elements
       - NODE_ENV=production
    volumes:
-      - core:/6element/core
+      - ./core:/6element/core
    restart: always
 endpoint:
    build: .
@@ -30,7 +30,7 @@ endpoint:
       - NODE_ENV=production
       - POSTGRES_PASSWORD=elements
    volumes:
-      - core:/6element/core
+      - ./core:/6element/core
    restart: always
 admin:
    build: .
@@ -50,7 +50,7 @@ admin:
       - PGPASSWORD=elements
       - NODE_ENV=production
    volumes:
-      - core:/6element/core
+      - ./core:/6element/core
       - /data/6element:/6element/app/data
    restart: always
 db:

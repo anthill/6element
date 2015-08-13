@@ -35,20 +35,18 @@ var CommandManager = React.createClass({
         this.props.clearSelection();
     },
 
-    componentDidMount: function(){
-        var clearButton = React.findDOMNode(this.refs.myClearButton);
-        clearButton.addEventListener('click', this.clearInput);
-    },
+    // componentDidMount: function(){
+    //     var clearButton = React.findDOMNode(this.refs.myClearButton);
+    //     clearButton.addEventListener('click', this.clearInput);
+    // },
 
-    componentDidUnmount: function(){
-        var clearButton = React.findDOMNode(this.refs.myClearButton);
-        clearButton.removeEventListener('click', this.clearInput);
-    },
+    // componentDidUnmount: function(){
+    //     var clearButton = React.findDOMNode(this.refs.myClearButton);
+    //     clearButton.removeEventListener('click', this.clearInput);
+    // },
 
     render: function() {
         var props = this.props;
-
-        console.log('CommandManager props', props);
 
         var classes = [
             'command-manager',
@@ -61,8 +59,6 @@ var CommandManager = React.createClass({
         props.antMap.forEach(function(antName){
             antNames.push(antName);
         });
-
-        console.log('antNames', antNames);
 
         var header = React.DOM.div({}, 'Send command to: ' + antNames.join(' '));
         
@@ -86,7 +82,8 @@ var CommandManager = React.createClass({
 
         var clearButton = React.DOM.div({
                 className: 'clear clickable',
-                ref: 'myClearButton'
+                ref: 'myClearButton',
+                onClick: self.clearInput
             },
             'clear'
         );

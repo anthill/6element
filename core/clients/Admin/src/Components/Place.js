@@ -3,6 +3,7 @@
 var React = require('react');
 var Modifiable = React.createFactory(require('./Modifiable.js'));
 var Ant = React.createFactory(require('./Ant.js'));
+var DeleteButton = React.createFactory(require('./DeleteButton.js'));
 
 /*
 interface placeProps{
@@ -28,12 +29,12 @@ interface placeProps{
         sense_status: string,
         updated_at: string
     }],
-    antIDset : Set,
+    antFromNameMap: Immutable Map,
     selectedAntSet: Set(id),
     onChangePlace: function(),
     onChangeSensor: function(),
-    OnSelectedAnts: function(),
-    onDeletePlace: function()
+    onSelectedAnts: function(),
+    onRemovePlace: function()
 }
 
 interface AppState{
@@ -44,6 +45,25 @@ interface AppState{
 
 var Place = React.createClass({
     displayName: 'Place',
+
+    removePlace: function(){
+        var props = this.props;
+        var obj = {};
+                        
+        console.log('onclick remove Place', props.place.id);
+        var ants = props.mySensors.map(function (ant) {
+            return {
+                'field': "installed_at",
+                'id': ant.id,
+                'value': null
+            };
+        });
+
+        obj.ants = ants;
+        obj['placeId'] = props.place.id;
+
+        props.onRemovePlace(obj);
+    },
 
     render: function() {
         // var self = this;
@@ -61,27 +81,10 @@ var Place = React.createClass({
         ];
 
         return React.DOM.div({className: classes.join(' ')},
-            React.DOM.div({
-                onClick: function(){
-                        var obj = {};
-                        
-                        console.log('onclick delete Place', props.place.id);
-                        var ants = props.mySensors.map(function (ant) {
-                            return {
-                                'field': "installed_at",
-                                'id': ant.id,
-                                'value': null
-                            };
-                        });
-
-                        obj.ants = ants;
-                        obj['placeId'] = props.place.id;
-
-                        props.onDeletePlace(obj);
-                    }
-                },
-                "X"
-            ),
+            new DeleteButton({
+                askForConfirmation: true,
+                onConfirm: this.removePlace
+            }),
             new Modifiable({
                 className: 'placeName',
                 isUpdating: false,
@@ -120,7 +123,7 @@ var Place = React.createClass({
                             key: ant.id,
                             ant: ant,
                             isSelected: props.selectedAntSet.has(ant.id),
-                            antIDset: props.antIDset.remove(ant.id),
+                            antFromNameMap: props.antFromNameMap.remove(ant.name),
                             currentPlaceId: props.place.id,
                             onChangeSensor: props.onChangeSensor,
                             onSelectedAnts: props.onSelectedAnts

@@ -17,7 +17,7 @@ function render(){
 }
 
 
-function updatePlaceDb(datas) {
+function updatePlaceInDb(datas) {
 
     console.log('PLACE datas', datas);
 
@@ -49,7 +49,7 @@ function updatePlaceDb(datas) {
 
 
 
-function updateSensorDb(datas) {
+function updateSensorInDb(datas) {
 
     console.log('SENSOR datas', datas);
 
@@ -80,7 +80,7 @@ function updateSensorDb(datas) {
     });
 }
 
-function createPlaceDb(data) {
+function createPlaceInDb(data) {
 
     console.log('createPLACE data', data);
 
@@ -95,26 +95,43 @@ function createPlaceDb(data) {
     });
 }
 
-function deletePlaceDb(data) {
+function removePlaceFromDb(data) {
 
     console.log('deletePlace data', data);
 
     // Queries to uninstall ants from place
-    var queryP = updateSensorDb(data.ants);
+    var queryP = updateSensorInDb(data.ants);
 
     queryP
     .then(function() {
         console.log("Ants uninstall successfull");
-        return serverAPI.deletePlace({
+        return serverAPI.removePlace({
             id: data.placeId
         });
     })
     .then(function() {
-        console.log('Places delete successfully');
+        console.log('Place removed successfully');
         refreshView();
     })
     .catch(function(err){
-        console.log('Places didn\'t delete correctly', err);
+        console.log('Place didn\'t remove correctly', err);
+        refreshView();
+    });
+}
+
+function removeSensorFromDb(data) {
+
+    console.log('deleteSensor data', data);
+
+    serverAPI.removeSensor({
+        id: data.sensorId
+    })
+    .then(function() {
+        console.log('Sensor removed successfully');
+        refreshView();
+    })
+    .catch(function(err){
+        console.log('Sensor didn\'t remove correctly', err);
         refreshView();
     });
 }
@@ -127,8 +144,16 @@ function refreshView(){
     Promise.all([placesP, sensorsP])
     .then(function(results){
 
-        // console.log('places', results[0]);
-        // console.log('sensors', results[1]);
+        results[0].sort(function(a, b){
+            return a.name > b.name ? 1 : -1;
+        });
+
+        results[1].sort(function(a, b){
+            return a.id > b.id ? 1 : -1;
+        });
+
+        console.log('places', results[0]);
+        console.log('sensors', results[1]);
 
         topLevelStore.placeMap = makeMap(results[0], 'id');
         topLevelStore.sensorMap = makeMap(results[1], 'id');
@@ -162,10 +187,11 @@ var topLevelStore = {
     sensorMap: undefined,
     placeMap: undefined,
     // onChange: updateDB,
-    onChangePlace: updatePlaceDb,
-    onChangeSensor: updateSensorDb,
-    onCreatePlace: createPlaceDb,
-    onDeletePlace: deletePlaceDb,
+    onChangePlace: updatePlaceInDb,
+    onChangeSensor: updateSensorInDb,
+    onCreatePlace: createPlaceInDb,
+    onRemovePlace: removePlaceFromDb,
+    onRemoveSensor: removeSensorFromDb,
     sendCommand: sendCommand
 };
 

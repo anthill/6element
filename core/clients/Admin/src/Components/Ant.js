@@ -24,8 +24,8 @@ interface AntProps{
         isSelected: bool
     },
     isSelected: boolean,
-    antIDset : Set,
-    currentPlaceId : int,
+    antFromNameMap: Map(string -> integer),
+    currentPlaceId: int,
     onChangeSensor: function(),
     onSelectedAnts: function()
 }
@@ -88,25 +88,6 @@ var Ant = React.createClass({
                             field: 'name'
                         },
                         onChange: props.onChangeSensor
-                    }),
-                    React.DOM.div({
-                        className: 'ant-id clickable',
-                        onClick: function(){
-                                console.log('open ant list');
-                                self.toggleList();
-                            }
-                        },
-                        props.ant.id
-                    ),
-                    new AntPicker({
-                        antIDset: props.antIDset.remove(props.ant.id),
-                        currentSensorId: props.ant.id,
-                        isOpen: state.isListOpen,
-                        currentPlaceId: props.currentPlaceId,
-                        onChange: function(dbData){
-                            self.toggleList();
-                            props.onChangeSensor(dbData);
-                        }
                     })
                 ),
                 

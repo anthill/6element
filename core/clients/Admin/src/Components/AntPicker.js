@@ -5,7 +5,7 @@ var React = require('react');
 /*
 
 interface AntPickerProps{
-    antIDSet: Set(antID),
+    antFromNameMap: Map(name -> antID),
     currentSensorId: int,
     currentPlaceId, int,
     onChangeSensor: function()
@@ -38,34 +38,32 @@ var AntPicker = React.createClass({
                 //                                    Transform a place to an orphan plance (with no sensor)
                 if (props.currentSensorId) {
                     objDb = [{
-                                'field': "installed_at",
-                                'id': antID,
-                                'value': props.currentPlaceId
-                            },
-                            {
-                                'field': "installed_at",
-                                'id': props.currentSensorId,
-                                'value': null
-                            }]
+                            'field': "installed_at",
+                            'id': antID,
+                            'value': props.currentPlaceId
+                        },
+                        {
+                            'field': "installed_at",
+                            'id': props.currentSensorId,
+                            'value': null
+                        }];
                 }
                 else {
                     objDb = [{
-                                'field': "installed_at",
-                                'id': antID,
-                                'value': props.currentPlaceId
-                            }]
+                        'field': "installed_at",
+                        'id': antID,
+                        'value': props.currentPlaceId
+                    }];
                 }
 
                 lis.push(React.DOM.li({
-                    key: antID,
-                    onClick: function(){
+                        key: antID,
+                        onClick: function(){
                             console.log('onclick listID_sensor', antID);
                             props.onChange(objDb);
                         }
-                    },
-                    antID
-                    )
-                );
+                    }, antID
+                ));
             });
             listID = React.DOM.ul({}, lis);
         }

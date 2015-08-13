@@ -37,7 +37,8 @@ interface AppProps{
     onChangePlace: function(),
     onChangeSensor: function(),
     onCreatePlace: function(),
-    onDeletePlace: function(),
+    onRemovePlace: function(),
+    onRemoveSensor: function(),
     sendCommand: function()
 }
 interface AppState{
@@ -96,6 +97,16 @@ var App = React.createClass({
             return a - b;
         }));
 
+
+
+        var tempMap = new Map();
+
+        props.sensorMap.forEach(function(sensor){
+            tempMap.set(sensor.name, sensor.id);
+        });
+
+        var antFromNameMap = new Immutable.Map(tempMap);
+
         // Creating Place panel
         var myPlaces = [];
         var myPlacesOrphan = [];
@@ -113,12 +124,12 @@ var App = React.createClass({
                     key: place.id,
                     place: place,
                     mySensors: mySensors,
-                    antIDset: antIDset,
+                    antFromNameMap: antFromNameMap,
                     selectedAntSet: state.selectedAntSet,
                     onChangePlace: props.onChangePlace,
                     onChangeSensor: props.onChangeSensor,
                     onSelectedAnts: self.updateAntSelection,
-                    onDeletePlace: props.onDeletePlace
+                    onRemovePlace: props.onRemovePlace
                 }));
             }
             else {
@@ -126,10 +137,10 @@ var App = React.createClass({
                 myPlacesOrphan.push(new PlaceOrphan ({
                     key: place.id,
                     place: place,
-                    antIDset: antIDset,
+                    antFromNameMap: antFromNameMap,
                     onChangePlace: props.onChangePlace,
                     onChangeSensor: props.onChangeSensor,
-                    onDeletePlace: props.onDeletePlace
+                    onRemovePlace: props.onRemovePlace
                 }));
             }
         });
@@ -164,7 +175,8 @@ var App = React.createClass({
                 placeId: placeId,
                 placeIDMap: placeIDMap.delete(placeName),
                 onChangePlace: props.onChangePlace,
-                onChangeSensor: props.onChangeSensor
+                onChangeSensor: props.onChangeSensor,
+                onRemoveSensor: props.onRemoveSensor
             }));
         });
 

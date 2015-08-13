@@ -3,11 +3,12 @@
 var React = require('react');
 var Modifiable = React.createFactory(require('./Modifiable.js'));
 var PlacePicker = React.createFactory(require('./PlacePicker.js'));
+var DeleteButton = React.createFactory(require('./DeleteButton.js'));
 
 /*
 interface SensorProps{   
-    Sensors: [{
-        create_at : string,
+    Sensor: {
+        created_at : string,
         id: int,
         installed_at: int,
         isUpdating: boolean,
@@ -18,12 +19,13 @@ interface SensorProps{
         quipu_status: string,
         sense_status: string,
         updated_at: string
-    }],
+    },
     placeIDMap: Map(),
     placeName: string,
     placeId: placeId,
     onChangeSensor: function(),
     onChangePlace: function()
+    onRemoveSensor: function()
 }
 
 interface SensorState{
@@ -44,6 +46,17 @@ var Sensor = React.createClass({
 
     toggleList: function(){
         this.setState({isListOpen: !this.state.isListOpen});
+    },
+
+    removeSensor: function(){
+        var props = this.props;
+        var dbData = {
+            sensorId: props.sensor.id 
+        };
+                        
+        console.log('onclick remove Sensor', props.sensor.id);
+
+        props.onRemoveSensor(dbData);
     },
 
     render: function() {
@@ -106,6 +119,10 @@ var Sensor = React.createClass({
         );
 
         return React.DOM.div({className: classes.join(' ')},
+            new DeleteButton({
+                askForConfirmation: true,
+                onConfirm: this.removeSensor
+            }),
             React.DOM.ul({},
                 sensorName,
                 sensorPlace,

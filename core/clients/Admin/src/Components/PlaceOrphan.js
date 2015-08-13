@@ -3,8 +3,7 @@
 var React = require('react');
 var Modifiable = React.createFactory(require('./Modifiable.js'));
 var AntPicker = React.createFactory(require('./AntPicker.js'));
-
-
+var DeleteButton = React.createFactory(require('./DeleteButton.js'));
 
 /*
 interface placeProps{
@@ -17,10 +16,10 @@ interface placeProps{
         sensor_ids: array
 
     },
-    antIDset : Set,
+    antFromNameMap : Map,
     onChangePlace: function(),
     onChangeSensor: function(),
-    onDeletePlace: functtion()
+    onRemovePlace: functtion()
 }
 
 interface AppState{
@@ -35,7 +34,7 @@ var PlaceOrphan = React.createClass({
 
     getInitialState: function(){
         return {
-            isOpen: false
+            isListOpen: false
         };
     },
 
@@ -43,6 +42,16 @@ var PlaceOrphan = React.createClass({
         this.setState(Object.assign(this.state, {
             isListOpen: !this.state.isListOpen
         }));
+    },
+
+    removePlace: function(){
+        var props = this.props;
+        var dbData = {
+            ants: [],
+            placeId: props.place.id
+        };
+
+        props.onRemovePlace(dbData);
     },
 
     render: function() {
@@ -54,7 +63,8 @@ var PlaceOrphan = React.createClass({
         // console.log('PLACE Orphan state', state);
 
         var classes = [
-            'placeOrphan'
+            'place',
+            'orphan',
             // isSelected ? 'selected' : '',
             // props.ant.isUpdating ? 'updating' : '',
             // props.ant.quipu_status,
@@ -62,10 +72,14 @@ var PlaceOrphan = React.createClass({
         ];
 
         return React.DOM.div({className: classes.join(' ')},
+            new DeleteButton({
+                askForConfirmation: true,
+                onConfirm: this.removePlace
+            }),
             React.DOM.ul({},
                 React.DOM.li({}, 
                     new Modifiable({
-                        className: 'placeOrphanName',
+                        className: 'name',
                         isUpdating: false,
                         text: props.place.name,
                         dbLink: {
@@ -75,18 +89,17 @@ var PlaceOrphan = React.createClass({
                         onChange: props.onChangePlace
                     }),
                     React.DOM.div({
-                        className: 'ant-id',
+                        className: 'ant-id clickable',
                         onClick: function(){
-                                console.log('HEYYYYY');
                                 self.toggleList();
                             }
                         },
                         'Add Ant'
                     ),
                     new AntPicker({
-                        antIDset: props.antIDset,
+                        antFromNameMap: props.antFromNameMap,
                         currentSensorId: null,
-                        isOpen: state.isOpen,
+                        isOpen: state.isListOpen,
                         currentPlaceId: props.place.id,
                         onChange: function(dbData){
                             self.toggleList();

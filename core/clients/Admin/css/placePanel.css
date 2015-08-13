@@ -14,7 +14,7 @@
 }
 
 .place{
-	display: inline-block; margin: 1em; padding: .5em; width: 30%;
+	display: inline-block; margin: 1em; padding: .5em; width: 30%; position: relative;
 	border: 1px solid orange; border-radius: 5px;
 	background-color: white;
 }
@@ -22,10 +22,6 @@
 .place .placeName {
 	display: block; width: 100%; margin: 0 auto;
 	font-weight: bold; font-size: 1.5em;
-}
-
-.place div{
-	display: inline-block; margin: 0 1em;
 }
 
 .place li * {
@@ -92,18 +88,12 @@
 	color: black;
 }
 
-.placeOrphan{
-	display: inline-block; margin: 1em; padding: .5em; width: 30%;
-	border: 1px solid red; border-radius: 5px;
-	background-color: white;
-}
-
-.placeOrphan .placeOrphanName {
+.place.orphan .name {
 	display: block; width: 100%; margin: 0 auto;
 	font-weight: bold; font-size: 1.5em;
 }
 
-.placeOrphan .ant-id {
+.place.orphan .ant-id {
 	border-radius: 10px;
     width: 6em;
     height: 1.7em;
@@ -111,11 +101,11 @@
     line-height: 1.7em;
 }
 
-.placeOrphan div{
+.place.orphan div{
 	display: inline-block; margin: 0 1em;
 }
 
-.placeOrphan li * {
+.place.orphan li * {
 	display: inline-block; margin: 0 1em;
 }
 

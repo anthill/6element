@@ -23,7 +23,6 @@ interface AntProps{
         isSelected: bool
     },
     isSelected: boolean,
-    antFromNameMap: Map(string -> integer),
     currentPlaceId: int,
     onChangeSensor: function(),
     onSelectedAnts: function()

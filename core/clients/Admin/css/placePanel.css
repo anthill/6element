@@ -24,12 +24,8 @@
 	font-weight: bold; font-size: 1.5em;
 }
 
-.place li {
-	display: block; margin: 0;
-}
-
-.place li div {
-	display: inline-block;; margin: 0 0.2rem;
+.place li div, .place .coords *{
+	display: inline-block;; margin: 0 .3rem;
 }
 
 .place.updating {
@@ -98,9 +94,10 @@
 }
 
 .ant-picker{
-	position: block;
+	position: absolute; padding: .2rem;
 	color: #DDD;
 	background-color: green;
+	z-index: 2;
 }
 .ant-picker ul{
 	display: block;

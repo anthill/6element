@@ -93,14 +93,6 @@ var Ant = React.createClass({
                     })
                 ),
                 
-                React.DOM.li({className: 'low-importance'}, 
-                    React.DOM.div({}, 'Created'),
-                    React.DOM.div({}, moment(props.ant.created_at).format("DD/MM/YYYY HH:mm:ss"))
-                ),
-                React.DOM.li({className: 'low-importance'}, 
-                    React.DOM.div({}, 'Updated'),
-                    React.DOM.div({}, moment(props.ant.updated_at).fromNow())
-                ),
                 React.DOM.li({}, 
                     React.DOM.div({}, 'Phone'),
                     new Modifiable({
@@ -127,6 +119,14 @@ var Ant = React.createClass({
                     React.DOM.div({}, 'Latest Command'),
                     React.DOM.div({}, props.ant.latest_input),
                     React.DOM.div({}, props.ant.latest_output)
+                ),
+                React.DOM.li({className: 'low-importance'}, 
+                    React.DOM.div({}, 'Created'),
+                    React.DOM.div({}, moment(props.ant.created_at).format("DD/MM/YYYY HH:mm:ss"))
+                ),
+                React.DOM.li({className: 'low-importance'}, 
+                    React.DOM.div({}, 'Updated'),
+                    React.DOM.div({}, moment(props.ant.updated_at).fromNow())
                 )
             ),
             React.DOM.div({

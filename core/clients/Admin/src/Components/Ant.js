@@ -2,7 +2,6 @@
 
 var React = require('react');
 var Modifiable = React.createFactory(require('./Modifiable.js'));
-var AntPicker = React.createFactory(require('./AntPicker.js'));
 
 var moment = require('moment');
 
@@ -51,9 +50,9 @@ var Ant = React.createClass({
     },
 
     render: function() {
-        var self = this;
+        // var self = this;
         var props = this.props;
-        var state = this.state;
+        // var state = this.state;
 
         if (props.isSelected){
             console.log('selected !!');
@@ -91,25 +90,6 @@ var Ant = React.createClass({
                             field: 'name'
                         },
                         onChange: props.onChangeSensor
-                    }),
-                    React.DOM.div({
-                        className: 'ant-id clickable',
-                        onClick: function(){
-                                console.log('open ant list');
-                                self.toggleList();
-                            }
-                        },
-                        props.ant.id
-                    ),
-                    new AntPicker({
-                        antIDset: props.antIDset.remove(props.ant.id),
-                        currentSensorId: props.ant.id,
-                        isOpen: state.isListOpen,
-                        currentPlaceId: props.currentPlaceId,
-                        onChange: function(dbData){
-                            self.toggleList();
-                            props.onChangeSensor(dbData);
-                        }
                     })
                 ),
                 
@@ -148,6 +128,20 @@ var Ant = React.createClass({
                     React.DOM.div({}, props.ant.latest_input),
                     React.DOM.div({}, props.ant.latest_output)
                 )
+            ),
+            React.DOM.div({
+                    className: 'ant-unistalling clickable',
+                    onClick: function(){
+                        console.log('Uninstalling');
+                        var dbData = {
+                            'field': 'installed_at',
+                            'id': props.ant.id,
+                            'value': null
+                        };
+                        props.onChangeSensor([dbData]);
+                    }
+                },
+                'Uninstall'
             )
         );
     }

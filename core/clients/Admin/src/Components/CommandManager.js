@@ -4,8 +4,9 @@ var React = require('react');
 
 /*
 interface CommandManagerProps{   
-    ants: [Ant],
+    antMap: Map (integer -> string),
     sendCommand: function,
+    clearSelection: function,
     isOpen: boolean
 }
 
@@ -19,50 +20,70 @@ interface CommandManagerState{
 var CommandManager = React.createClass({
     displayName: 'CommandManager',
 
-    getInitialState: function(){
-        return {
-            command: undefined
-        };
+    // getInitialState: function(){
+    //     return {
+    //         command: 'TEST'
+    //     };
+    // },
+
+    clearInput: function(){
+        var textInput = React.findDOMNode(this.refs.myTextInput);
+        
+        textInput.blur();
+        textInput.value = ''; 
+
+        this.props.clearSelection();
     },
 
-    render: function() {
-        var self = this;
-        var props = this.props;
+    // componentDidMount: function(){
+    //     var clearButton = React.findDOMNode(this.refs.myClearButton);
+    //     clearButton.addEventListener('click', this.clearInput);
+    // },
 
-        // console.log('CommandManager props', props);
-        console.log('CommandManager state', this.state.value);
+    // componentDidUnmount: function(){
+    //     var clearButton = React.findDOMNode(this.refs.myClearButton);
+    //     clearButton.removeEventListener('click', this.clearInput);
+    // },
+
+    render: function() {
+        var props = this.props;
 
         var classes = [
             'command-manager',
             props.isOpen ? 'open' : ''
         ];
 
-        var header = React.DOM.div({}, 'Send command to: ' + props.ants.join(' '));
+        // Display of selected Ant names
+        // In the future, maybe create a Deselector component instead
+        var antNames = [];
+        props.antMap.forEach(function(antName){
+            antNames.push(antName);
+        });
+
+        var header = React.DOM.div({}, 'Send command to: ' + antNames.join(' '));
         
         var input = React.DOM.input({  
                 placeholder: 'Type command',
-                value: self.state.command,
+                ref: 'myTextInput',
                 onKeyUp: function(event){
 
                     var key = (event.which) ? event.which : 
                         ((event.charCode) ? event.charCode : 
                             ((event.keyCode) ? event.keyCode : 0));
 
-                    if (key === 13)
-                        console.log('command: ', event.target.value);
+                    if (key === 13){
+                        props.sendCommand(event.target.value);
+                        event.target.value = '';
+                    }
+                        
                 }
             }
         );
 
         var clearButton = React.DOM.div({
-            className: 'clear clickable',
-                onClick: function(){
-                    props.clearSelection();
-                    self.setState({
-                        command: undefined
-                    });
-                    
-                }
+                className: 'clear clickable',
+                ref: 'myClearButton',
+                onClick: self.clearInput
             },
             'clear'
         );

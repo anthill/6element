@@ -2,7 +2,6 @@
 
 var React = require('react');
 var Modifiable = React.createFactory(require('./Modifiable.js'));
-var AntPicker = React.createFactory(require('./AntPicker.js'));
 
 var moment = require('moment');
 
@@ -24,8 +23,8 @@ interface AntProps{
         isSelected: bool
     },
     isSelected: boolean,
-    antIDset : Set,
-    currentPlaceId : int,
+    antFromNameMap: Map(string -> integer),
+    currentPlaceId: int,
     onChangeSensor: function(),
     onSelectedAnts: function()
 }
@@ -51,13 +50,8 @@ var Ant = React.createClass({
     },
 
     render: function() {
-        var self = this;
         var props = this.props;
-        var state = this.state;
 
-        if (props.isSelected){
-            console.log('selected !!');
-        }
         // console.log('ANT props', props);
         // console.log('ANT state', state);
 
@@ -91,40 +85,13 @@ var Ant = React.createClass({
                             field: 'name'
                         },
                         onChange: props.onChangeSensor
-                    }),
-                    React.DOM.div({
-                        className: 'ant-id clickable',
-                        onClick: function(){
-                                console.log('open ant list');
-                                self.toggleList();
-                            }
-                        },
-                        props.ant.id
-                    ),
-                    new AntPicker({
-                        antIDset: props.antIDset.remove(props.ant.id),
-                        currentSensorId: props.ant.id,
-                        isOpen: state.isListOpen,
-                        currentPlaceId: props.currentPlaceId,
-                        onChange: function(dbData){
-                            self.toggleList();
-                            props.onChangeSensor(dbData);
-                        }
                     })
                 ),
                 
                 React.DOM.li({}, 
-                    React.DOM.div({}, 'Created'),
-                    React.DOM.div({}, moment(props.ant.created_at).format("MMMM Do YYYY, h:mm:ss a"))
-                ),
-                React.DOM.li({}, 
-                    React.DOM.div({}, 'Updated'),
-                    React.DOM.div({}, moment(props.ant.updated_at).fromNow())
-                ),
-                React.DOM.li({}, 
                     React.DOM.div({}, 'Phone'),
                     new Modifiable({
-                        className: 'sensorPhone_number',
+                        className: 'phone-number',
                         isUpdating: false,
                         text: props.ant.phone_number,
                         dbLink: {
@@ -147,7 +114,29 @@ var Ant = React.createClass({
                     React.DOM.div({}, 'Latest Command'),
                     React.DOM.div({}, props.ant.latest_input),
                     React.DOM.div({}, props.ant.latest_output)
+                ),
+                React.DOM.li({className: 'low-importance'}, 
+                    React.DOM.div({}, 'Created'),
+                    React.DOM.div({}, moment(props.ant.created_at).format("DD/MM/YYYY HH:mm:ss"))
+                ),
+                React.DOM.li({className: 'low-importance'}, 
+                    React.DOM.div({}, 'Updated'),
+                    React.DOM.div({}, moment(props.ant.updated_at).fromNow())
                 )
+            ),
+            React.DOM.div({
+                    className: 'ant-unistalling clickable',
+                    onClick: function(){
+                        console.log('Uninstalling');
+                        var dbData = {
+                            'field': 'installed_at',
+                            'id': props.ant.id,
+                            'value': null
+                        };
+                        props.onChangeSensor([dbData]);
+                    }
+                },
+                'Uninstall'
             )
         );
     }

@@ -3,6 +3,8 @@
 var React = require('react');
 var Modifiable = React.createFactory(require('./Modifiable.js'));
 var Ant = React.createFactory(require('./Ant.js'));
+var DeleteButton = React.createFactory(require('./DeleteButton.js'));
+var AntPicker = React.createFactory(require('./AntPicker.js'));
 
 /*
 interface placeProps{
@@ -13,7 +15,6 @@ interface placeProps{
         lon: int,
         name: string,
         sensor_ids: array
-
     },  
     mySensors: [{
         create_at : string,
@@ -28,15 +29,16 @@ interface placeProps{
         sense_status: string,
         updated_at: string
     }],
-    antIDset : Set,
+    antFromNameMap: Immutable Map,
     selectedAntSet: Set(id),
     onChangePlace: function(),
     onChangeSensor: function(),
-    OnSelectedAnts: function(),
-    onDeletePlace: function()
+    onSelectedAnts: function(),
+    onRemovePlace: function()
 }
 
 interface AppState{
+    isListOpen: boolean
 }
 
 */
@@ -45,10 +47,41 @@ interface AppState{
 var Place = React.createClass({
     displayName: 'Place',
 
-    render: function() {
-        // var self = this;
+    getInitialState: function(){
+        return {
+            isListOpen: false
+        };
+    },
+
+    toggleList: function(){
+        this.setState(Object.assign(this.state, {
+            isListOpen: !this.state.isListOpen
+        }));
+    },
+
+    removePlace: function(){
         var props = this.props;
-        // var state = this.state;
+        var obj = {};
+                        
+        console.log('onclick remove Place', props.place.id);
+        var ants = props.mySensors.map(function (ant) {
+            return {
+                'field': "installed_at",
+                'id': ant.id,
+                'value': null
+            };
+        });
+
+        obj.ants = ants;
+        obj['placeId'] = props.place.id;
+
+        props.onRemovePlace(obj);
+    },
+
+    render: function() {
+        var self = this;
+        var props = this.props;
+        var state = this.state;
         // console.log('PLACE props', props);
         // console.log('PLACE state', state);
 
@@ -61,27 +94,10 @@ var Place = React.createClass({
         ];
 
         return React.DOM.div({className: classes.join(' ')},
-            React.DOM.div({
-                onClick: function(){
-                        var obj = {};
-                        
-                        console.log('onclick delete Place', props.place.id);
-                        var ants = props.mySensors.map(function (ant) {
-                            return {
-                                'field': "installed_at",
-                                'id': ant.id,
-                                'value': null
-                            };
-                        });
-
-                        obj.ants = ants;
-                        obj['placeId'] = props.place.id;
-
-                        props.onDeletePlace(obj);
-                    }
-                },
-                "X"
-            ),
+            new DeleteButton({
+                askForConfirmation: true,
+                onConfirm: this.removePlace
+            }),
             new Modifiable({
                 className: 'placeName',
                 isUpdating: false,
@@ -120,13 +136,29 @@ var Place = React.createClass({
                             key: ant.id,
                             ant: ant,
                             isSelected: props.selectedAntSet.has(ant.id),
-                            antIDset: props.antIDset.remove(ant.id),
+                            antFromNameMap: props.antFromNameMap.remove(ant.name),
                             currentPlaceId: props.place.id,
                             onChangeSensor: props.onChangeSensor,
                             onSelectedAnts: props.onSelectedAnts
                         });
                     })
-                )
+                ),
+                React.DOM.div({
+                        className: 'ant-id clickable',
+                        onClick: self.toggleList
+                    },
+                    'Add Ant'
+                ),
+                new AntPicker({
+                    antFromNameMap: props.antFromNameMap,
+                    currentSensorId: null,
+                    isOpen: state.isListOpen,
+                    currentPlaceId: props.place.id,
+                    onChange: function(dbData){
+                        self.toggleList();
+                        props.onChangeSensor(dbData);
+                    }
+                })
             )
         )
     }

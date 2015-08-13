@@ -49,16 +49,13 @@ module.exports = {
     },
 
     delete: function(id) {
-        console.log("Dans delete Place.js: id, delta", id);
         return databaseP.then(function (db) {
             
             var query = places
                 .delete()
                 .where(places.id.equals(id))
-                // .returning("*")
                 .toQuery();
 
-            //console.log('sensors findByPhoneNumber query', query);
             return new Promise(function (resolve, reject) {
                 db.query(query, function (err, result) {
                     if (err) reject(err);
@@ -67,7 +64,7 @@ module.exports = {
             });
         })
         .catch(function(err){
-            console.log('ERROR in delete', err);
+            console.log('ERROR in delete places', err);
         });        
     }
 };

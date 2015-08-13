@@ -1,0 +1,53 @@
+.delete {
+    position: absolute; top: 0.2em; right: 0.2em; padding: 0.2em; margin: 0; width: 12px; height: 12px;
+    border: 0; border-radius: 50%;
+    font-size: .9em; color: red;    
+    background-color: red;
+    z-index: 1;
+    cursor: pointer;
+}
+
+.delete div:first-child{
+    width: 100%; height: 100%;
+}
+
+.delete .confirmation-box{
+    position: absolute;
+    text-align: center;
+    
+    top: 0.2em;
+    right: -5em;
+    width: 10em;
+    
+    border: 1px solid red;
+    background-color: white;
+
+    z-index: 11;
+}
+
+.delete .confirmation-box h1{
+    font-size: .8em;
+    color: black;
+}
+
+.delete .confirmation-box .button-group{
+    display: flex;
+    justify-content: space-around;
+}
+
+
+.delete .confirmation-box button.confirm{
+    color: green;
+}
+
+.delete .confirmation-box button.cancel{
+    color: red;
+}
+
+.sensor .delete {
+    right: 0.2em; left: auto;
+}
+
+.sensor .delete .confirmation-box{
+    top: 0.2em; right: 0em;
+}

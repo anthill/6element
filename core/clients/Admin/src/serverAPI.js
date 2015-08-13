@@ -24,7 +24,13 @@ module.exports = {
     createPlace: function(data){
         return sendReq('POST', '/createPlace', data);
     },
-    deletePlace: function(data){
-        return sendReq('POST', '/deletePlace', data);
+    removePlace: function(data){
+        return sendReq('POST', '/removePlace', data);
+    },
+    removeSensor: function(data){
+        return sendReq('POST', '/removeSensor', data);
+    },
+    createSensor: function(data){
+        return sendReq('POST', '/createSensor', data);
     }
 };

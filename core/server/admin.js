@@ -186,21 +186,48 @@ app.post('/createPlace', function(req, res){
         res.send(data);
     })
     .catch(function(error){
-        res.status(500).send('Couldn\'t create Places database');
+        res.status(500).send('Couldn\'t create Place in database');
         console.log("error in /createPlace/'+req.params.id: ", error);
     });
 });
 
-app.post('/deletePlace', function(req, res){    
-    console.log('delete place', req.body.id);
+app.post('/removePlace', function(req, res){    
+    console.log('remove place', req.body.id);
 
     database.Places.delete(req.body.id)
     .then(function(data){
         res.send(data);
     })
     .catch(function(error){
-        res.status(500).send('Couldn\'t delete Places database');
+        res.status(500).send('Couldn\'t delete Place from database');
         console.log("error in /deletePlace/'+req.params.id: ", error);
+    });
+});
+
+app.post('/removeSensor', function(req, res){    
+    console.log('remove sensor', req.body.id);
+
+    database.Sensors.delete(req.body.id)
+
+    .then(function(data){
+        res.send(data);
+    })
+    .catch(function(error){
+        res.status(500).send('Couldn\'t delete Sensor from database');
+        console.log("error in /deleteSensor/'+req.params.id: ", error);
+    });
+});
+
+app.post('/createSensor', function(req, res){    
+    console.log('creating sensor', req.body);
+
+    database.Sensors.create(req.body)
+    .then(function(data){
+        res.send(data);
+    })
+    .catch(function(error){
+        res.status(500).send('Couldn\'t create Sensor in database');
+        console.log("error in /createSensor/'+req.params.id: ", error);
     });
 });
 

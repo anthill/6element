@@ -19,12 +19,8 @@
 }
 
 .sensor{
-	display: block; margin: 1em; padding: .2em;
+	display: block; margin: 1em; padding: .2em; position: relative;
 	border: 1px solid white;
-}
-
-.sensor div{
-	display: inline-block; margin: .5em;
 }
 
 .sensor li * {
@@ -60,7 +56,11 @@
 	color: black;
 }
 
-.orphan {
+#sensorPanel .creator ul * {
+	display: block;
+}
+
+.sensor.orphan {
 	font-weight: bold;
     color: white;
     background-color: orange;

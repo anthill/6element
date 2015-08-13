@@ -5,7 +5,7 @@ var React = require('react');
 /*
 
 interface AntPickerProps{
-    antIDSet: Set(antID),
+    antFromNameMap: Map(name -> antID),
     currentSensorId: int,
     currentPlaceId, int,
     onChangeSensor: function()
@@ -23,14 +23,15 @@ var AntPicker = React.createClass({
         var props = this.props;
         // var state = this.state;
 
-        // console.log('Selector_sensor_id props', props);
-        // console.log('Selector_sensor_id state', state);
+        // console.log('AntPicker props', props);
+        // console.log('AntPicker state', state);
 
         var listID = [];
 
         if (props.isOpen) {
+
             var lis = [];
-            props.antIDset.forEach(function (antID) {
+            props.antFromNameMap.forEach(function (antId, antName) {
                 var objDb = [];
                 // To build different database request
                 // If currentSensorId is NULL ==> Add a sensor to an orphan Place
@@ -38,34 +39,33 @@ var AntPicker = React.createClass({
                 //                                    Transform a place to an orphan plance (with no sensor)
                 if (props.currentSensorId) {
                     objDb = [{
-                                'field': "installed_at",
-                                'id': antID,
-                                'value': props.currentPlaceId
-                            },
-                            {
-                                'field': "installed_at",
-                                'id': props.currentSensorId,
-                                'value': null
-                            }]
+                            'field': "installed_at",
+                            'id': antId,
+                            'value': props.currentPlaceId
+                        },
+                        {
+                            'field': "installed_at",
+                            'id': props.currentSensorId,
+                            'value': null
+                        }];
                 }
                 else {
                     objDb = [{
-                                'field': "installed_at",
-                                'id': antID,
-                                'value': props.currentPlaceId
-                            }]
+                        'field': "installed_at",
+                        'id': antId,
+                        'value': props.currentPlaceId
+                    }];
                 }
 
                 lis.push(React.DOM.li({
-                    key: antID,
-                    onClick: function(){
-                            console.log('onclick listID_sensor', antID);
+                        key: antId,
+                        className: 'clickable',
+                        onClick: function(){
+                            console.log('onclick listID_sensor', antId);
                             props.onChange(objDb);
                         }
-                    },
-                    antID
-                    )
-                );
+                    }, antName
+                ));
             });
             listID = React.DOM.ul({}, lis);
         }

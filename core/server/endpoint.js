@@ -43,7 +43,6 @@ var monitorIncoming = net.createServer(function(socket) { // Receive data from s
 
     // Handle messages
     socket.on('data', function(data) {
-        console.log('data received : ' + data)
         data.toString().split("|").forEach(function(message){
             handleData(message, clients[getID(socket)]); // handle 6element specific datas
         });
@@ -139,7 +138,7 @@ var monitorOutgoing = net.createServer(function(socket) {
 
 monitorOutgoing.listen(process.env.INTERNAL_PORT ? process.env.INTERNAL_PORT : 55555);
 
-monitorOutgoing.on('connection', function() {console.log('SOMEONE CONNECTED, WOOHOO !!!')});
+monitorOutgoing.on('connection', function() {debug('connection on the interval socket')});
 
 // function getLastItem(array) {
 //  if (!array || !array.length)

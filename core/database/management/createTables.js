@@ -22,9 +22,13 @@ module.exports = function(){
                     .pipe(gzip)
                     .pipe(proc.stdin);
 
-                readStream.on("close", function(){
-                    resolve();
-                })
+                // This code doesn't work because gzip is too slow
+                // readStream.on("close", function(){
+                //     resolve();
+                // })
+
+                setTimeout(resolve, 3000); // <-- not a beautiful patch, but it works
+                
             } else {
                 console.log("== Resetting the database ==")
                 var createTableScript = fs.readFileSync( require.resolve('./createTables.sql') ).toString();

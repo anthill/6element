@@ -2,8 +2,7 @@
 
 var React = require('react');
 var Modifiable = React.createFactory(require('./Modifiable.js'));
-var Display_sensor_id = React.createFactory(require('./Display_sensor_id.js'));
-var Selector_sensor_id = React.createFactory(require('./Selector_sensor_id.js'));
+var AntPicker = React.createFactory(require('./AntPicker.js'));
 
 
 
@@ -25,6 +24,7 @@ interface placeProps{
 }
 
 interface AppState{
+    isListOpen: boolean
 }
 
 */
@@ -39,12 +39,14 @@ var PlaceOrphan = React.createClass({
         };
     },
 
-    setOpen: function(isOpen){
-        this.setState({isOpen: isOpen});
+    toggleList: function(){
+        this.setState(Object.assign(this.state, {
+            isListOpen: !this.state.isListOpen
+        }));
     },
 
     render: function() {
-        // var self = this;
+        var self = this;
         var props = this.props;
         var state = this.state;
 
@@ -72,18 +74,24 @@ var PlaceOrphan = React.createClass({
                         },
                         onChange: props.onChangePlace
                     }),
-                    new Display_sensor_id({
-                        currentSensorId: 'Add sensor',
-                        isOpen: state.isOpen,
-                        setOpen: this.setOpen
-                    }),
-                    new Selector_sensor_id({
+                    React.DOM.div({
+                        className: 'ant-id',
+                        onClick: function(){
+                                console.log('HEYYYYY');
+                                self.toggleList();
+                            }
+                        },
+                        'Add Ant'
+                    ),
+                    new AntPicker({
                         antIDset: props.antIDset,
                         currentSensorId: null,
                         isOpen: state.isOpen,
                         currentPlaceId: props.place.id,
-                        onChange: props.onChangeSensor,
-                        setOpen: this.setOpen
+                        onChange: function(dbData){
+                            self.toggleList();
+                            props.onChangeSensor(dbData);
+                        }
                     })
                 ),
                 React.DOM.li({}, 

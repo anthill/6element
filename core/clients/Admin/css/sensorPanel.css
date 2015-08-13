@@ -1,0 +1,67 @@
+/*
+	1. boîte
+	2. bordures
+	3. arrière-plan
+	4. texte
+	5. transformations
+	6. transitions
+	7. le reste
+*/
+
+#sensorPanel {
+	position: absolute;
+	top: 0;
+	right: 0;
+	background-color: #B4D670;
+	border-left: 1px solid #537908;
+	width: 22vw;
+	height: 100%;
+}
+
+.sensor{
+	display: block; margin: 1em; padding: .2em;
+	border: 1px solid white;
+}
+
+.sensor div{
+	display: inline-block; margin: .5em;
+}
+
+.sensor li * {
+	display: inline-block; margin: 0 1em;
+	text-align: left;
+}
+
+.sensor .sensorPhoneNumber {
+	text-align: left;
+}
+
+.creator {
+	background-color: black;
+	border-bottom: 1px solid white;
+}
+
+.creator div *{
+	display: inline-block;
+}
+
+.creator ul *{
+	display: inline-block;
+	padding: 0.5em;
+	text-align: center;
+	color: white;
+}
+
+.creator li {
+	margin: 0;
+}
+
+.creator form input {
+	color: black;
+}
+
+.orphan {
+	font-weight: bold;
+    color: white;
+    background-color: orange;
+}

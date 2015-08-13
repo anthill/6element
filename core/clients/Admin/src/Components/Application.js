@@ -84,21 +84,9 @@ var App = React.createClass({
         // console.log('APP props', props);
         // console.log('APP state', this.state);
 
-
-        // Initializing sensorIDSet
-        var antIDList = [];
         var placeIDList = [];
 
-        props.sensorMap.forEach(function (sensor){
-            antIDList.push(sensor.id);
-        });
-
-        var antIDset = new Immutable.Set(antIDList.sort(function(a, b){
-            return a - b;
-        }));
-
-
-
+        // Initializing antFromNameMap
         var tempMap = new Map();
 
         props.sensorMap.forEach(function(sensor){

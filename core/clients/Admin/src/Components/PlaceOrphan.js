@@ -28,7 +28,7 @@ interface AppState{
 
 */
 
-
+// MAYBE THIS COMPONENT SHOULD BE MERGED WITH PLACE
 var PlaceOrphan = React.createClass({
     displayName: 'PlaceOrphan',
 
@@ -64,7 +64,7 @@ var PlaceOrphan = React.createClass({
 
         var classes = [
             'place',
-            'orphan',
+            'orphan'
             // isSelected ? 'selected' : '',
             // props.ant.isUpdating ? 'updating' : '',
             // props.ant.quipu_status,

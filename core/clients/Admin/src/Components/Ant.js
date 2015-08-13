@@ -2,7 +2,6 @@
 
 var React = require('react');
 var Modifiable = React.createFactory(require('./Modifiable.js'));
-var AntPicker = React.createFactory(require('./AntPicker.js'));
 
 var moment = require('moment');
 
@@ -51,9 +50,7 @@ var Ant = React.createClass({
     },
 
     render: function() {
-        var self = this;
         var props = this.props;
-        var state = this.state;
 
         // console.log('ANT props', props);
         // console.log('ANT state', state);

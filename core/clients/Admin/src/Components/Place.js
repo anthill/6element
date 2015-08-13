@@ -62,8 +62,7 @@ var Place = React.createClass({
     removePlace: function(){
         var props = this.props;
         var obj = {};
-                        
-        console.log('onclick remove Place', props.place.id);
+
         var ants = props.mySensors.map(function (ant) {
             return {
                 'field': "installed_at",
@@ -146,7 +145,7 @@ var Place = React.createClass({
                 onSelectedAnts: props.onSelectedAnts
             });
         });
-        
+
         // Button to install Sensor
         var antPicker = state.isListOpen ? new AntPicker({
             antFromNameMap: availableSensorMap,

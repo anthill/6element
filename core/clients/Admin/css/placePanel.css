@@ -9,13 +9,13 @@
 */
 
 #placePanel{
-    position: relative;
-    width: 78vw;
+    position: relative; width: 78vw;
+    background-color: #cbc6e1;
 }
 
 .place{
 	display: inline-block; margin: 1em; padding: .5em; width: 30%; position: relative;
-	border: 1px solid orange; border-radius: 5px;
+	border: 1px solid #AAA; border-radius: 5px;
 	background-color: white;
 }
 

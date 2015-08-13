@@ -28,7 +28,7 @@ var AntPicker = React.createClass({
 
         var lis = [];
         props.antFromNameMap.forEach(function (antId, antName) {
-            var objDb = [];
+            var objDb;
             // To build different database request
             // If currentSensorId is NULL ==> Add a sensor to an orphan Place
             // If currentSensorId is not NULL ==> Add a sensor to a place (who had already a sensor)
@@ -57,7 +57,6 @@ var AntPicker = React.createClass({
                     key: antId,
                     className: 'clickable',
                     onClick: function(){
-                        console.log('onclick listID_sensor', antId);
                         props.onChange(objDb);
                     }
                 }, antName

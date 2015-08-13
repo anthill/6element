@@ -12,20 +12,24 @@
 	position: absolute;
 	top: 0;
 	right: 0;
-	background-color: #B4D670;
-	border-left: 1px solid #537908;
+	background-color: #e5bdbd;
+	border-left: 1px solid #EEE;
 	width: 22vw;
 	height: 100%;
 }
 
 .sensor{
-	display: block; margin: 1em; padding: .2em; position: relative;
-	border: 1px solid white;
+	display: block; margin: 1em; padding: .2em; position: relative; border: 1px solid #DDD;
+	background-color: white;
 }
 
 .sensor li * {
 	display: inline-block; margin: 0 1em;
 	text-align: left;
+}
+
+.sensor .name{
+	font-weight: bold;
 }
 
 .sensor .sensorPhoneNumber {

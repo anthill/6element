@@ -50,8 +50,6 @@ var PlacePicker = React.createClass({
                 ));
             });
             listID = React.DOM.ul({}, lis);
-            console.log('PLACEPICKER props', props);
-            console.log('PLACEPICKER lis', lis);
         }
 
         return React.DOM.div({className: 'place-selector'},

@@ -73,7 +73,7 @@ var Sensor = React.createClass({
         // Sensor Name, is a Modifiable
         var sensorName = React.DOM.li({}, 
             new Modifiable({
-                className: 'sensorName',
+                className: 'name',
                 isUpdating: false,
                 text: props.sensor.name,
                 dbLink: {

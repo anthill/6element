@@ -146,9 +146,7 @@ var Place = React.createClass({
                 onSelectedAnts: props.onSelectedAnts
             });
         });
-
-        console.log('nb available', props.place.name, availableSensorMap.size);
-
+        
         // Button to install Sensor
         var antPicker = state.isListOpen ? new AntPicker({
             antFromNameMap: availableSensorMap,
@@ -160,7 +158,10 @@ var Place = React.createClass({
 
         var addAntButton = React.DOM.div({
                 className: 'add-ant-button clickable',
-                onClick: self.toggleList
+                onClick: function(){
+                    document.querySelector('body').classList.toggle('noscroll');
+                    self.toggleList();
+                }
             },
             'Add Ant',
             antPicker

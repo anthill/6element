@@ -94,8 +94,9 @@
 }
 
 .ant-picker{
-	position: absolute; padding: .2rem; top: 0; left: 100%;
+	position: absolute; height: 100px; padding: .2rem; top: 0; left: 100%;
 	color: #DDD;
+	overflow-y: scroll;
 	background-color: green;
 	z-index: 2;
 }

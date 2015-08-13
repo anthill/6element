@@ -12,6 +12,10 @@ body{
     position: relative;
 }
 
+body.noscroll{
+	overflow: hidden;
+}
+
 .clickable {
 	cursor: pointer;
 }

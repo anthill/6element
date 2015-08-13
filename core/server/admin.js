@@ -56,7 +56,7 @@ var endpointInterval = setInterval(function() {
                         io.sockets.emit('status', packet.data);
                     }
                 } catch(err) {
-                    console.log("Error parsing or sending via socket:", err);
+                    debug("Error parsing or sending via socket:", err);
                 }
             })
         })

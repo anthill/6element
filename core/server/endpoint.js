@@ -53,7 +53,8 @@ var monitorIncoming = net.createServer(function(socket) { // Receive data from s
         if (data.toString().match("name=*")) {
             clients[getID(socket)].name = data.toString().substr(5);
             console.log(socket.remoteAddress + " is now known as " + clients[getID(socket)].name);
-            socket.write("nameOK");
+            var date = new Date();
+            sendCommand(socket, 'date ' + date.toISOString())
         }
 
 //      var network = 1; // network connection (GPRS, EDGE, 3G, 3G+)

@@ -134,10 +134,10 @@ tcpServerToAdminApp.on('connection', function(tcpSocketAdminApp) {
 //  return array[array.length - 1];
 // }
 
-function getID(socket) {
+// function getID(socket) {
 
-    return (socket.remoteAddress + ":" + socket.remotePort);
-}
+//     return (socket.remoteAddress + ":" + socket.remotePort);
+// }
 
 // function getClientName(client) {
 

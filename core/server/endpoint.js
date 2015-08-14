@@ -14,11 +14,10 @@ require('es6-shim');
 var net = require('net');
 var database = require('../database');
 var sixElementUtils = require('./6elementUtils.js');
-// var simulateSensorMeasurementArrivalTCP = require('./simulateSensorMeasurementArrivalTCP');
+var simulateSensorMeasurementArrivalTCP = require('./simulateSensorMeasurementArrivalTCP');
 
-var clients = {};
-//var timeout = 5;
-var monitorPort = 4100;
+var phoneNumber2socket = {};
+var monitorPort = 5100;
 var eventEmitter = new EventEmitter();
 
 var DEBUG = process.env.NODE_ENV === "development" ? true : false;
@@ -30,91 +29,57 @@ var debug = function() {
     }
 }
 
-var monitorIncoming = net.createServer(function(socket) { // Receive data from sensors
 
-//  var interval;
-    var save;
 
-    console.log('Server listening on port ' + monitorPort)
-    clients[getID(socket)] = {name: undefined, log: [], lastMsgDate: 0, connected: false, socket: socket};
-    save = {client: clients[getID(socket)], id: getID(socket)};
+var tcpServerForSensors = net.createServer(function(tcpSocketSensor) {
 
-//  interval = setInterval(detectDeadClient, timeout * 1000, clients[getID(socket)]); // initialize heartbeat
+    console.log("New socket to sensor.");
+    var phoneNumber;
+    
+    tcpSocketSensor.on('data', function(data) {
 
-    // Handle messages
-    socket.on('data', function(data) {
-        console.log('data received : ' + data)
-        data.toString().split("|").forEach(function(message){
-            handleData(message, clients[getID(socket)]); // handle 6element specific datas
-        });
-
-//      if (data.toString() === "timeout?") {
-//          socket.write("timeout"+timeout);
-//      }
-        if (data.toString().match("name=*")) {
-            clients[getID(socket)].name = data.toString().substr(5);
-            console.log(socket.remoteAddress + " is now known as " + clients[getID(socket)].name);
-            socket.write("nameOK");
+        // register the phonenumber corresponding to the socket
+        if (data.toString().match("phoneNumber=*")) {
+            phoneNumber = data.toString().substr(12);
+            phoneNumber2socket[phoneNumber] = tcpSocketSensor;
+            console.log(tcpSocketSensor.remoteAddress + " is now known as " + phoneNumber);
+            var date = new Date();
+            sendCommand(tcpSocketSensor, 'date ' + date.toISOString())
         }
 
-//      var network = 1; // network connection (GPRS, EDGE, 3G, 3G+)
-//
-//      if (clients[getID(socket)] !== undefined) {
-//
-//          if (data.toString().match(/^net(\d)$/)) {
-//              network = parseInt(data.toString().match(/^net(\d)$/)[1]);
-//          }
-//          else if (getLastItem(clients[getID(socket)].log) && getLastItem(clients[getID(socket)].log).network)
-//              network = getLastItem(clients[getID(socket)].log).network;
-//
-//          if (clients[getID(socket)].connected === false ||
-//              getLastItem(clients[getID(socket)].log).network !== network) {
-//
-//              if (clients[getID(socket)].connected === false)
-//                  console.log(getClientName(clients[getID(socket)]) + " connected");
-//
-//              clients[getID(socket)].log.push( // update logs
-//                  {timestamp: (new Date()).getTime(), event: "connected", network: network});
-//              eventEmitter.emit("data",
-//                  {type: "connection", data: clients[getID(socket)], network: network});
-//
-//              clients[getID(socket)].connected = true;
-//          }
-//          clients[getID(socket)].lastMsgDate = (new Date()).getTime();
-//
-//          clearInterval(interval); // reset heartbeat
-//          interval = setInterval(detectDeadClient, timeout * 1000, clients[getID(socket)]);
+        // handle data
+        if (phoneNumber) {
+            data.toString().split("|").forEach(function(message){
+                handleData(message, phoneNumber2socket[phoneNumber], phoneNumber);
+            });
+        }
 
-//      }
     });
 
-    // When client close the connection (we use the save here because socket == undefined)
-
-    var endConnection = function() {
-        if (save.client !== undefined) {
-            save.client.connected = false;
-//          save.client.log.push({timestamp: (new Date()).getTime(), event: "disconnected", network: 0});
-//          eventEmitter.emit("data", {type: "disconnection", data: save.client, network: 0});
-        }
-//      clearInterval(interval);
+    tcpSocketSensor.on('close', function() {
         console.log("connection closed");
-        delete clients[save.id];
-    }
+        if (phoneNumber) {
+            console.log("Removing from phoneNumber2socket");
+            delete phoneNumber2socket[phoneNumber];
+        }
+    });
 
-    socket.on('end', endConnection);
-
-    socket.on('error', function(err) {
+    tcpSocketSensor.on('error', function(err) {
         console.log("[ERROR] " + (err ? err.code : "???") + " : " + (err ? err : "unknown"));
+        if (phoneNumber) {
+            console.log("Removing from phoneNumber2socket");
+            delete phoneNumber2socket[phoneNumber];
+        }
     });
 
 });
 
-monitorIncoming.on("listening", function(){
+tcpServerForSensors.on("listening", function(){
     // if dev mode simulate data
-    // if (process.env.NODE_ENV === "development") simulateSensorMeasurementArrivalTCP();
+    if (process.env.NODE_ENV === "development") simulateSensorMeasurementArrivalTCP();
 })
 
-monitorIncoming.on('error', function(err) {
+tcpServerForSensors.on('error', function(err) {
     console.log("[ERROR] : ", err.message);
     if (err.code.toString() === 'EADDRINUSE') {
         console.log("address in use, please retry later ...");
@@ -122,24 +87,46 @@ monitorIncoming.on('error', function(err) {
     }
 });
 
-monitorIncoming.listen(monitorPort);
+tcpServerForSensors.listen(monitorPort);
+
+
+
+
+
+
+
+
 
 // Send datas to app and admin servers
-var monitorOutgoing = net.createServer(function(socket) {
+var tcpServerToAdminApp = net.createServer(function(tcpSocketAdminApp) {
 
     eventEmitter.on("data", function(data){
-        socket.write(JSON.stringify(data) + "|");
+        tcpSocketAdminApp.write(JSON.stringify(data) + "|");
     });
 
-    socket.on("error", function(err) {
+    tcpSocketAdminApp.on("error", function(err) {
         console.log("[ERROR] : ", err.message);
     });
 
 });
 
-monitorOutgoing.listen(process.env.INTERNAL_PORT ? process.env.INTERNAL_PORT : 55555);
+tcpServerToAdminApp.listen(process.env.INTERNAL_PORT ? process.env.INTERNAL_PORT : 55555);
 
-monitorOutgoing.on('connection', function() {console.log('SOMEONE CONNECTED, WOOHOO !!!')});
+tcpServerToAdminApp.on('connection', function(tcpSocketAdminApp) {
+    tcpSocketAdminApp.on('data', function(buffer) {
+        var data = JSON.parse(buffer.toString());
+        if (data.type === 'cmd') {
+
+            data.to.forEach(function(antPhone){
+                if (phoneNumber2socket[antPhone]){
+                    sendCommand(phoneNumber2socket[antPhone], data.command);
+                }
+            });
+
+        }
+    });
+    debug('connection on the internal socket')
+});
 
 // function getLastItem(array) {
 //  if (!array || !array.length)
@@ -154,7 +141,7 @@ function getID(socket) {
 
 // function getClientName(client) {
 
-//  return (client === undefined ? undefined : client.name);
+//  return (client === undefined ? undefined : client.phoneNumber);
 // }
 
 // function detectDeadClient(client) { // TCP heartbeat
@@ -173,11 +160,11 @@ function sendCommand(socket, cmd) {
 }
 
 // decode, print, stock, and send data for 6element
-function handleData(dat, client) {
+function handleData(dat, socket, phoneNumber) {
 
-    var sensorP = database.Sensors.findByPhoneNumber(client.name);
+    var sensorP = database.Sensors.findByPhoneNumber(phoneNumber);
 
-    var messageP = sixElementUtils.printMsg(dat, client);
+    var messageP = sixElementUtils.printMsg(dat, phoneNumber);
 
     Promise.all([sensorP, messageP])
     .then(function(values) {
@@ -190,7 +177,7 @@ function handleData(dat, client) {
             case 'message':
                 if (data.message.decoded === 'init') {
                     var date = new Date();
-                    sendCommand(client.socket, 'date ' + date.toISOString())
+                    sendCommand(socket, 'date ' + date.toISOString())
                 }
                 break;
 

@@ -1,0 +1,23 @@
+6element:
+   build: .
+   dockerfile: core/Dockerfile
+   command: npm run init-db
+   links:
+      - db
+   environment:
+      - POSTGRES_USER=postgres
+      - PGPASSWORD=elements
+      - POSTGRES_PASSWORD=elements
+      # - BACKUP=backups/save.txt.gz
+   volumes:
+      - ./core:/6element/core
+      - ./app:/6element/app
+      - /data/6element:/6element/app/data
+      - /data/6element/backups:/6element/app/data/backups
+
+db:
+   image: postgres:9.4
+   environment:
+      - POSTGRES_USER=postgres
+      - PGPASSWORD=elements # don't change the name of the variable for pg_dump
+      - POSTGRES_PASSWORD=elements

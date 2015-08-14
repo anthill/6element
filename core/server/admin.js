@@ -10,8 +10,13 @@ var http = require('http');
 var compression = require('compression');
 var bodyParser = require('body-parser');
 var net = require('net');
+var spawn = require('child_process').spawn;
+var endpoint;
 
+var fs = require('fs');
 var database = require('../database');
+var schedule = require('node-schedule');
+var zlib = require('zlib');
 
 var PORT = 4001;
 var DEBUG = process.env.NODE_ENV === "development" ? true : false;
@@ -19,7 +24,7 @@ var DEBUG = process.env.NODE_ENV === "development" ? true : false;
 
 var endpointConfig =
     {
-        host: process.env.ENDPOINT_PORT_4100_TCP_ADDR ? process.env.ENDPOINT_PORT_4100_TCP_ADDR : "127.0.0.1",
+        host: process.env.ENDPOINT_PORT_5100_TCP_ADDR ? process.env.ENDPOINT_PORT_5100_TCP_ADDR : "127.0.0.1",
         port: process.env.INTERNAL_PORT ? process.env.INTERNAL_PORT : 55555
     };
 
@@ -36,13 +41,22 @@ var io = require('socket.io')(server);
 
 io.set('origins', '*:*');
 
+io.on('connection', function(socket) {
+    socket.on('cmd', function(cmd) {
+        console.log('admin client data received');
+        if (endpoint) {
+            console.log("let's send");
+            endpoint.write(JSON.stringify(cmd));
+        }
+    })
+})
 
 // listening to the reception server
 
 var endpointInterval = setInterval(function() {
-    var endpoint = net.connect(endpointConfig, function(){
+    endpoint = net.connect(endpointConfig, function(){
 
-        debug('connected to the reception server on '+ endpoint.remoteHost+':'+endpoint.remotePort)
+        debug('connected to the reception server on '+ endpoint.remoteAddress+':'+endpoint.remotePort)
         endpoint.on('data', function(messages) {
             messages.toString().split("|").forEach(function(message){
                 try {
@@ -52,7 +66,7 @@ var endpointInterval = setInterval(function() {
                         io.sockets.emit('status', packet.data);
                     }
                 } catch(err) {
-                    console.log("Error parsing or sending via socket:", err);
+                    debug("Error parsing or sending via socket:", err);
                 }
             })
         })
@@ -70,6 +84,22 @@ var endpointInterval = setInterval(function() {
 }, 5000);
 
 
+// Backup database everyday at 3AM
+schedule.scheduleJob('0 3 * * *', function(){
+    console.log("Backup database");
+    var gzip = zlib.createGzip();
+    var today = new Date();
+    var wstream = fs.createWriteStream('/6element/app/data/backups/' + today.getDay() + '.txt.gz');
+    var proc = spawn('pg_dump', ['-p', process.env.DB_PORT_5432_TCP_PORT, '-h', process.env.DB_PORT_5432_TCP_ADDR, '-U', process.env.POSTGRES_USER, '-d', process.env.POSTGRES_USER, '-w']);
+    proc.stdout
+        .pipe(gzip)
+        .pipe(wstream);
+    proc.stderr.on('data', function(buffer) {
+        console.log(buffer.toString().replace('\n', ''));
+    })
+});
+
+// Admin API
 app.use(compression());
 app.use(bodyParser.json());
 

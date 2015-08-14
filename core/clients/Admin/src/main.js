@@ -157,29 +157,36 @@ function refreshView(){
     Promise.all([placesP, sensorsP])
     .then(function(results){
 
-        results[0].sort(function(a, b){
-            return a.name > b.name ? 1 : -1;
-        });
+        var places = results[0];
+        var sensors = results[1];
+        if (places){
+            results[0].sort(function(a, b){
+                return a.name > b.name ? 1 : -1;
+            });
+            console.log('places', results[0]);
 
-        results[1].sort(function(a, b){
-            return a.id > b.id ? 1 : -1;
-        });
+            topLevelStore.placeMap = makeMap(results[0], 'id');
 
-        console.log('places', results[0]);
-        console.log('sensors', results[1]);
+            topLevelStore.placeMap.forEach(function (place){
+                if (place.sensor_ids[0] !== null)
+                    place.sensor_ids = new Set(place.sensor_ids);
+                else
+                    place.sensor_ids = new Set()
+            });
 
-        topLevelStore.placeMap = makeMap(results[0], 'id');
-        topLevelStore.sensorMap = makeMap(results[1], 'id');
-
-        topLevelStore.placeMap.forEach(function (place){
-            if (place.sensor_ids[0] !== null)
-                place.sensor_ids = new Set(place.sensor_ids);
-            else
-                place.sensor_ids = new Set()
-        });
-
-        resetUpdate(topLevelStore.sensorMap);
-        // console.log('topLevelStore', topLevelStore.placeMap);
+        }
+        
+        if (sensors){
+            results[1].sort(function(a, b){
+                return a.id > b.id ? 1 : -1;
+            });
+            
+            console.log('sensors', results[1]);
+            
+            topLevelStore.sensorMap = makeMap(results[1], 'id');
+            resetUpdate(topLevelStore.sensorMap);
+        }
+        
         render();
     })
     .catch(errlog);
@@ -188,9 +195,15 @@ function refreshView(){
 function sendCommand(command, selectedAntSet){
     var antNames = [];
     selectedAntSet.forEach(function(id){
-        antNames.push(topLevelStore.sensorMap.get(id).name);
+        antNames.push(topLevelStore.sensorMap.get(id).phone_number);
     });
 
+    socket.emit('cmd', 
+        {
+            type:'cmd',
+            command:command,
+            to:antNames
+        });
     console.log('Sending command', command, ' to ', antNames.join(' '));
 }
 

@@ -26,7 +26,7 @@ function doIt(){
 
     var endpointConfig = {
         host: "127.0.0.1",
-        port: 4100
+        port: 5100
     };
     var endpoint = net.connect(endpointConfig, function(){
 

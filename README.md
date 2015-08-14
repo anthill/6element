@@ -44,8 +44,10 @@ docker-compose -f compose-dev.yml up
 If you want to clear (and lose all the data) because you changed the schema or for whatever reason you can drop and create the db as well as rewrite the `declaration.js`:
 
 ```
-docker-compose -f compose-init.yml up
+docker-compose -f rebuild-db.yml up
 ```
+
+To load some data at initialisation just specify, in the `rebuild-db.yml`, the path of the dump placed in the `app/data/backups` folder (it will automatically do the job).
 
 When you only want to restart the service use:
 

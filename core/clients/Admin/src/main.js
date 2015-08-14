@@ -149,6 +149,8 @@ function createSensorInDb(data) {
     });
 }
 
+var updatingID;
+
 function refreshView(){
 
     var placesP = serverAPI.getAllPlacesInfos();
@@ -160,12 +162,12 @@ function refreshView(){
         var places = results[0];
         var sensors = results[1];
         if (places){
-            results[0].sort(function(a, b){
+            places.sort(function(a, b){
                 return a.name > b.name ? 1 : -1;
             });
-            console.log('places', results[0]);
+            // console.log('places', results[0]);
 
-            topLevelStore.placeMap = makeMap(results[0], 'id');
+            topLevelStore.placeMap = makeMap(places, 'id');
 
             topLevelStore.placeMap.forEach(function (place){
                 if (place.sensor_ids[0] !== null)
@@ -177,14 +179,25 @@ function refreshView(){
         }
         
         if (sensors){
-            results[1].sort(function(a, b){
+            sensors.sort(function(a, b){
                 return a.id > b.id ? 1 : -1;
             });
             
-            console.log('sensors', results[1]);
+            // console.log('sensors', results[1]);
             
-            topLevelStore.sensorMap = makeMap(results[1], 'id');
-            resetUpdate(topLevelStore.sensorMap);
+            topLevelStore.sensorMap = makeMap(sensors, 'id');
+            if (updatingID) {
+                var updatingAnt = topLevelStore.sensorMap.get(updatingID);
+                updatingAnt.isUpdating = true;
+
+                updatingID = undefined;
+
+                setTimeout(function(){
+                    resetUpdate(updatingAnt);
+                    render();
+                }, 500);
+
+            }
         }
         
         render();
@@ -225,43 +238,46 @@ var topLevelStore = {
 refreshView();
 
 // THIS WILL BE NEEDED WHEN QUIPU SIGNAL IS INCORPORATED INTO DATA MSGS
-socket.on('data', function (msg){
-    var id = msg.socketMessage.sensor_id;
-    var signal = msg.socketMessage.quipu.signal;
+// socket.on('data', function (msg){
+//     var id = msg.socketMessage.sensor_id;
+//     var signal = msg.socketMessage.quipu.signal;
 
-    var updatingAnt = topLevelStore.ants.get(id);
-    updatingAnt.signal = signal;
+//     var updatingAnt = topLevelStore.ants.get(id);
+//     updatingAnt.signal = signal;
 
-    render();
-});
+//     render();
+// });
 
 socket.on('status', function (msg) {
 
     // GET DATA
     var id = msg.sensorId;
-    var status = msg.socketMessage;
+    console.log('UPDATING STATUS', id);
+    // var status = msg.socketMessage;
 
-    resetUpdate(topLevelStore.sensorMap);
+    // resetUpdate(topLevelStore.sensorMap);
 
-    var updatingSensorMap = topLevelStore.sensorMap.get(id);
-    updatingSensorMap.quipu_status = status.quipu.state;
-    updatingSensorMap.signal = status.quipu.signal;
-    updatingSensorMap.sense_status = status.sense;
-    if (status.info){
-        updatingSensorMap.latest_input = status.info.command;
-        updatingSensorMap.latest_output = status.info.result;
-    }
+    // var updatingSensor = topLevelStore.sensorMap.get(id);
+    // updatingSensor.quipu_status = status.quipu.state;
+    // updatingSensor.signal = status.quipu.signal;
+    // updatingSensor.sense_status = status.sense;
+    // if (status.info){
+    //     updatingSensor.latest_input = status.info.command;
+    //     updatingSensor.latest_output = status.info.result;
+    // }
     
-    updatingSensorMap.isUpdating = true;
+    updatingID = id;
+
+    // console.log('updatingSensor', updatingSensor);
     
     // console.log('sensors', updatingSensors);
+    // render();
+    refreshView();
 
-    render();
-
-    setTimeout(function(){
-        resetUpdate(topLevelStore.sensorMap);
-        render();
-    }, 200);
+    // setTimeout(function(){
+    //     resetUpdate(topLevelStore.sensorMap);
+    //     render();
+    // }, 200);
 
 });
 

@@ -1,7 +1,5 @@
 'use strict';
 
-module.exports = function (map){
-	map.forEach(function(element){
-		element.isUpdating = false;
-	});
+module.exports = function (element){
+	element.isUpdating = false;
 };

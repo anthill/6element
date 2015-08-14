@@ -14,7 +14,7 @@ require('es6-shim');
 var net = require('net');
 var database = require('../database');
 var sixElementUtils = require('./6elementUtils.js');
-var simulateSensorMeasurementArrivalTCP = require('./simulateSensorMeasurementArrivalTCP');
+var simulateSensorStatusArrivalTCP = require('./simulateSensorStatusArrivalTCP');
 
 var phoneNumber2socket = {};
 var monitorPort = 5100;
@@ -76,7 +76,7 @@ var tcpServerForSensors = net.createServer(function(tcpSocketSensor) {
 
 tcpServerForSensors.on("listening", function(){
     // if dev mode simulate data
-    if (process.env.NODE_ENV === "development") simulateSensorMeasurementArrivalTCP();
+    if (process.env.NODE_ENV === "development") simulateSensorStatusArrivalTCP();
 })
 
 tcpServerForSensors.on('error', function(err) {

@@ -97,7 +97,6 @@ var Place = React.createClass({
         // Name
         var placeName = new Modifiable({
             className: 'placeName',
-            isUpdating: false,
             text: props.place.name,
             dbLink: {
                 id: props.place.id,

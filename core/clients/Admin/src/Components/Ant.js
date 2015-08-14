@@ -57,10 +57,10 @@ var Ant = React.createClass({
 
         var classes = [
             'ant',
-            props.isSelected ? 'isSelected' : '',
-            props.ant.isUpdating ? 'updating' : '',
             props.ant.quipu_status,
-            props.ant.sense_status
+            props.ant.sense_status,
+            props.isSelected ? 'isSelected' : '',
+            props.ant.isUpdating ? 'updating' : ''
         ];
 
         return React.DOM.div({className: classes.join(' ')},

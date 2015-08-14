@@ -4,15 +4,11 @@ var sixSenseDecoder = require('6sense/src/codec/decodeFromSMS.js');
 var genericCodec = require('quipu/parser.js');
 require('es6-shim');
 
-function getClientName(client) {
-
-	return (client === undefined ? undefined : client.name);
-}
 
 function getDataType(data) {
 	if (data.toString().match(/^net(\d)$/))
 		return 'network'
-	else if (data.toString() === 'timeout?' || data.toString().match("name=*"))
+	else if (data.toString().match("phoneNumber=*"))
 		return 'request'
 	else if (data.toString().slice(0, 1) === '0')
 		return 'message'
@@ -24,30 +20,29 @@ function getDataType(data) {
 		return 'other'
 }
 
-function printMsg(msg, client) {
+function printMsg(msg, phoneNumber) {
 	return new Promise(function(resolve) {
 		decode(msg)
 		.then(function(decoded) {
 			var type = getDataType(msg);
-			var clientName = getClientName(client);
 			switch (type) {
 				case 'network':
-					console.log('['+clientName+']'+"[NETWORK]>" + decoded.toString());
+					console.log('['+phoneNumber+']'+"[NETWORK]>" + decoded.toString());
 					break;
 				case 'request':
-					console.log('['+clientName+']'+"[REQUEST]>" + decoded.toString());
+					console.log('['+phoneNumber+']'+"[REQUEST]>" + decoded.toString());
 					break;
 				case 'message':
-					console.log('['+clientName+']'+"[MESSAGE]>" + decoded.toString());
+					console.log('['+phoneNumber+']'+"[MESSAGE]>" + decoded.toString());
 					break;
 				case 'data':
-					console.log('['+clientName+']'+"[DATA]   >" + decoded.toString());
+					console.log('['+phoneNumber+']'+"[DATA]   >" + decoded.toString());
 					break;
 				case 'status':
-					console.log('['+clientName+']'+"[STATUS] >" + decoded.toString());
+					console.log('['+phoneNumber+']'+"[STATUS] >" + decoded.toString());
 					break;
 				default:
-					console.log('['+clientName+']'+"[OTHER]  >" + decoded.toString());
+					console.log('['+phoneNumber+']'+"[OTHER]  >" + decoded.toString());
 					break;
 			}
 

@@ -123,6 +123,7 @@
 	position: fixed; padding: .5em; bottom: -6em; height: 5em; width: 100%;
 	color: #DDD;
 	background-color: #222;
+	z-index: 3;
 	transition: bottom .5s ease-in-out;
 }
 

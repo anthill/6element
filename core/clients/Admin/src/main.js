@@ -234,8 +234,11 @@ socket.on('status', function (msg) {
     updatingSensorMap.quipu_status = status.quipu.state;
     updatingSensorMap.signal = status.quipu.signal;
     updatingSensorMap.sense_status = status.sense;
-    updatingSensorMap.latest_input = status.info.command;
-    updatingSensorMap.latest_output = status.info.result;
+    if (status.info){
+        updatingSensorMap.latest_input = status.info.command;
+        updatingSensorMap.latest_output = status.info.result;
+    }
+    
     updatingSensorMap.isUpdating = true;
     
     // console.log('sensors', updatingSensors);

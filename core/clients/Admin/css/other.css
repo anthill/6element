@@ -16,6 +16,10 @@ body.noscroll{
 	overflow: hidden;
 }
 
+input.modifiable:hover{
+	color:black;
+}
+
 .clickable {
 	cursor: pointer;
 }

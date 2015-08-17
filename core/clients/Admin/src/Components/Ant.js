@@ -60,7 +60,7 @@ var Ant = React.createClass({
             'ant',
             props.ant.quipu_status ? props.ant.quipu_status.toLowerCase() : '',
             props.ant.sense_status ? props.ant.sense_status.toLowerCase() : '',
-            props.isSelected ? 'isSelected' : '',
+            props.isSelected ? 'selected' : '',
             props.ant.isUpdating ? 'updating' : ''
         ];
 

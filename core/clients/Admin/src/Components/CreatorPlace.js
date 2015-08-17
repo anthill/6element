@@ -16,6 +16,23 @@ interface SelectorState{
 var CreatorPlace = React.createClass({
     displayName: 'CreatorPlace',
 
+    componentDidMount: function(){
+        var button = React.findDOMNode(this.refs.openButton);
+        button.addEventListener('click', this.toggleOpen);
+    },
+
+    componentWillUnmount: function(){
+        var button = React.findDOMNode(this.refs.openButton);
+        button.addEventListener('click', this.toggleOpen);
+    },
+
+    toggleOpen: function(){
+        console.log('click');
+        var panel = React.findDOMNode(this);
+        console.log('panel', panel);
+        panel.classList.toggle('open');
+    },
+
     clearInputs: function(){
         var nameInput = React.findDOMNode(this.refs.myNameInput);
         var latInput = React.findDOMNode(this.refs.myLatInput);
@@ -40,28 +57,29 @@ var CreatorPlace = React.createClass({
         // console.log('CreatorPlace state', state);
 
         return React.DOM.div({className: 'creator'},
-            React.DOM.div({}, "New place"),
+            // React.DOM.div({}, "New place"),
             React.DOM.form({
-                onSubmit: function(e){
-                    e.preventDefault();
-            
-                    console.log('Creating Place');
+                    onSubmit: function(e){
+                        e.preventDefault();
+                
+                        console.log('Creating Place');
 
-                    props.onCreatePlace({
-                        'name': e.target.placeName.value,
-                        'lat': e.target.latitude.value,
-                        'lon': e.target.longitude.value
-                    });
+                        props.onCreatePlace({
+                            'name': e.target.placeName.value,
+                            'lat': e.target.latitude.value,
+                            'lon': e.target.longitude.value
+                        });
 
-                    self.clearInputs();
-                }
-            },
+                        self.clearInputs();
+                        self.toggleOpen();
+                    }
+                },
                 React.DOM.input({
                     type: 'text',
                     ref: 'myNameInput',
                     name: 'placeName',
                     // value: self.state.placeNameInput,
-                    placeholder: "Place's name"//,
+                    placeholder: "Name"//,
                 }),
                 React.DOM.input({
                     type: 'text',
@@ -81,8 +99,14 @@ var CreatorPlace = React.createClass({
                     type: 'submit',
                     ref: 'mySubmitButton',
                     name: 'submit',
-                    value: "Créer"
+                    value: "Add"
                 })
+            ),
+            React.DOM.div({
+                    ref: 'openButton',
+                    className: 'clickable'
+                },  
+                'New place'
             )
         );
     }

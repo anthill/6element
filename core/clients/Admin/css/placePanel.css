@@ -9,7 +9,7 @@
 */
 
 #placePanel{
-    position: relative; width: 78vw;
+    display: inline-block; position: relative; width: 78vw;
     background-color: #cbc6e1;
 }
 
@@ -35,10 +35,6 @@
 
 .coords div:first-child > * {
 	font-size: .7em;
-}
-
-.ant.updating {
-	background-color: red;
 }
 
 .ant{
@@ -80,8 +76,12 @@
 	background-color: #DDD;
 }
 
-.ant.isSelected{
-	background: rgba(255, 153, 51, 0.4);
+.ant.selected{
+	background-color: #555;
+}
+
+.ant.updating {
+	background-color: red;
 }
 
 .ant-selector {

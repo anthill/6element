@@ -143,12 +143,6 @@ var App = React.createClass({
         props.sensorMap.forEach(function (sensor) {
             var place = props.placeMap.get(sensor.installed_at);
 
-            if (sensor.id === 1){
-                placeIDMap.forEach(function(id, name){
-                    console.log('place in APP', id, name);
-                })
-            }
-
             var placeName = place ? place.name : null;
             var placeId = place ? place.id : null;
 

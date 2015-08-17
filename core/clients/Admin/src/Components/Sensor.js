@@ -70,12 +70,6 @@ var Sensor = React.createClass({
             props.sensor.installed_at ? '' : 'orphan'
         ];
 
-        if (props.sensor.id === 1){
-            props.placeIDMap.forEach(function(id, name){
-                console.log('place in SENSOR', id, name);
-            })
-        }
-
         // Sensor Name, is a Modifiable
         var sensorName = React.DOM.li({}, 
             new Modifiable({

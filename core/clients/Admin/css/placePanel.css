@@ -43,7 +43,7 @@
 
 .ant{
 	display: block; margin: 1em 0; padding: .2rem; position: relative;
-	border: 1px solid green; border-radius: 5px;
+	border: 1px solid #444; border-radius: 5px;
 	background-color: white;
 	transition: background-color 1s;
 }

@@ -49,7 +49,11 @@ exports.sensors = sql.define({
 		{ name: 'quipu_status' },
 		{ name: 'sense_status' },
 		{ name: 'latest_input' },
-		{ name: 'latest_output' }
+		{ name: 'latest_output' },
+		{ name: 'signal' },
+		{ name: 'data_period' },
+		{ name: 'start_time' },
+		{ name: 'stop_time' }
 	]
 });
 

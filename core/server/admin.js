@@ -10,8 +10,9 @@ var http = require('http');
 var compression = require('compression');
 var bodyParser = require('body-parser');
 var net = require('net');
+var makeTcpReceiver = require('./makeTcpReceiver');
 var spawn = require('child_process').spawn;
-var endpoint;
+var tcpSocketEndpoint;
 
 var fs = require('fs');
 var database = require('../database');
@@ -44,9 +45,8 @@ io.set('origins', '*:*');
 io.on('connection', function(socket) {
     socket.on('cmd', function(cmd) {
         console.log('admin client data received');
-        if (endpoint) {
-            console.log("let's send");
-            endpoint.write(JSON.stringify(cmd));
+        if (tcpSocketEndpoint) {
+            tcpSocketEndpoint.write(JSON.stringify(cmd) + "\n");
         }
     })
 })
@@ -54,30 +54,27 @@ io.on('connection', function(socket) {
 // listening to the reception server
 
 var endpointInterval = setInterval(function() {
-    endpoint = net.connect(endpointConfig, function(){
+    tcpSocketEndpoint = net.connect(endpointConfig, function(){
 
-        debug('connected to the reception server on '+ endpoint.remoteAddress+':'+endpoint.remotePort)
-        endpoint.on('data', function(messages) {
-            messages.toString().split("|").forEach(function(message){
-                try {
-                    var packet = JSON.parse(message);
+        debug('connected to the reception server on '+ tcpSocketEndpoint.remoteAddress+':'+tcpSocketEndpoint.remotePort)
+        
+        var tcpSocketEndpointReceiver = makeTcpReceiver(tcpSocketEndpoint, "\n");
 
-                    if (packet.type === 'status') {
-                        io.sockets.emit('status', packet.data);
-                    }
-                } catch(err) {
-                    debug("Error parsing or sending via socket:", err);
-                }
-            })
+        tcpSocketEndpointReceiver.on('message', function(message) {
+            var packet = JSON.parse(message);
+
+            if (packet.type === 'status') {
+                io.sockets.emit('status', packet.data);
+            }
         })
             
     });
 
-    endpoint.on('error', function(err) {
+    tcpSocketEndpoint.on('error', function(err) {
         console.log('[ERROR]: INTERNAL SOCKET : ' + err.message);
     });
 
-    endpoint.on('connect', function() {
+    tcpSocketEndpoint.on('connect', function() {
         console.log('connection')
         clearInterval(endpointInterval);
     });

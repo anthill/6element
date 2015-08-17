@@ -10,6 +10,7 @@ var http = require('http');
 var compression = require('compression');
 var bodyParser = require('body-parser');
 var net = require('net');
+var makeTcpReceiver = require('./makeTcpReceiver');
 
 var database = require('../database');
 
@@ -38,32 +39,29 @@ io.set('origins', '*:*');
 
 // listening to the reception server
 var endpointInterval = setInterval(function() {
-    var endpoint = net.connect(endpointConfig, function(){
+    var tcpSocketEnpoint = net.connect(endpointConfig, function(){
 
-        debug('connected to the reception server on '+ endpoint.remoteHost+':'+endpoint.remotePort)
-        endpoint.on('data', function(messages) {
-            messages.toString().split("|").forEach(function(message){
-                try {
-                    var packet = JSON.parse(message);
+        debug('connected to the reception server on '+ tcpSocketEnpoint.remoteHost+':'+tcpSocketEnpoint.remotePort);
 
-                    if (packet.type === 'data') {
-                        io.sockets.emit('data', packet.data); // Forwarding data to web clients
-                    }
-                } catch(err) {
-                    debug("Error parsing or sending via socket:", err);
-                }
-            })
+        var tcpSocketEndpointReceiver = makeTcpReceiver(tcpSocketEnpoint, "\n");
+
+        tcpSocketEndpointReceiver.on('message', function(message) {
+            
+            var packet = JSON.parse(message);
+
+            if (packet.type === 'data') {
+                io.sockets.emit('data', packet.data); // Forwarding data to web clients
+            }
+
         })
             
     });
 
-
-
-    endpoint.on('error', function(err) {
+    tcpSocketEnpoint.on('error', function(err) {
         console.log('[ERROR]: INTERNAL SOCKET : ' + err.message);
     });
 
-    endpoint.on('connect', function() {
+    tcpSocketEnpoint.on('connect', function() {
         console.log('connection')
         clearInterval(endpointInterval);
     });

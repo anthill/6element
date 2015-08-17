@@ -4,17 +4,17 @@
 ** This is the reception server for 6element.
 ** This code handle
 **      -TCP connection with sensors
-**      -connection monitoring (connected/disconnected) (commented)
-**      -sensor's network monitoring (2G, EDGE, 3G ...) (commented)
+**      -sensor's network monitoring (2G, EDGE, 3G ...)
 **      -data reception, decoding, saving and forwarding to app/admin server
 */
 
 var EventEmitter = require('events').EventEmitter;
 require('es6-shim');
 var net = require('net');
+var makeTcpReceiver = require('./makeTcpReceiver');
 var database = require('../database');
 var sixElementUtils = require('./6elementUtils.js');
-var simulateSensorStatusArrivalTCP = require('./simulateSensorStatusArrivalTCP');
+// var simulateSensorStatusArrivalTCP = require('./simulateSensorStatusArrivalTCP');
 
 var phoneNumber2socket = {};
 var monitorPort = 5100;
@@ -35,12 +35,16 @@ var tcpServerForSensors = net.createServer(function(tcpSocketSensor) {
 
     console.log("New socket to sensor.");
     var phoneNumber;
+
+    var tcpSocketSensorReceiver = makeTcpReceiver(tcpSocketSensor, "\n");
     
-    tcpSocketSensor.on('data', function(data) {
+    tcpSocketSensorReceiver.on('message', function(message) {
+
+        console.log("received tcp data: ", message);
 
         // register the phonenumber corresponding to the socket
-        if (data.toString().match("phoneNumber=*")) {
-            phoneNumber = data.toString().substr(12);
+        if (message.match("phoneNumber=*")) {
+            phoneNumber = message.substr(12);
             phoneNumber2socket[phoneNumber] = tcpSocketSensor;
             console.log(tcpSocketSensor.remoteAddress + " is now known as " + phoneNumber);
             var date = new Date();
@@ -48,10 +52,8 @@ var tcpServerForSensors = net.createServer(function(tcpSocketSensor) {
         }
 
         // handle data
-        if (phoneNumber) {
-            data.toString().split("|").forEach(function(message){
-                handleData(message, phoneNumber2socket[phoneNumber], phoneNumber);
-            });
+        else if (phoneNumber) {
+            handleData(message, phoneNumber2socket[phoneNumber], phoneNumber);
         }
 
     });
@@ -59,7 +61,7 @@ var tcpServerForSensors = net.createServer(function(tcpSocketSensor) {
     tcpSocketSensor.on('close', function() {
         console.log("connection closed");
         if (phoneNumber) {
-            console.log("Removing from phoneNumber2socket");
+            debug("Removing from phoneNumber2socket");
             delete phoneNumber2socket[phoneNumber];
         }
     });
@@ -67,17 +69,17 @@ var tcpServerForSensors = net.createServer(function(tcpSocketSensor) {
     tcpSocketSensor.on('error', function(err) {
         console.log("[ERROR] " + (err ? err.code : "???") + " : " + (err ? err : "unknown"));
         if (phoneNumber) {
-            console.log("Removing from phoneNumber2socket");
+            debug("Removing from phoneNumber2socket");
             delete phoneNumber2socket[phoneNumber];
         }
     });
 
 });
 
-tcpServerForSensors.on("listening", function(){
-    // if dev mode simulate data
-    if (process.env.NODE_ENV === "development") simulateSensorStatusArrivalTCP();
-})
+// tcpServerForSensors.on("listening", function(){
+//     // if dev mode simulate data
+//     if (process.env.NODE_ENV === "development") simulateSensorStatusArrivalTCP();
+// })
 
 tcpServerForSensors.on('error', function(err) {
     console.log("[ERROR] : ", err.message);
@@ -101,7 +103,7 @@ tcpServerForSensors.listen(monitorPort);
 var tcpServerToAdminApp = net.createServer(function(tcpSocketAdminApp) {
 
     eventEmitter.on("data", function(data){
-        tcpSocketAdminApp.write(JSON.stringify(data) + "|");
+        tcpSocketAdminApp.write(JSON.stringify(data) + "\n");
     });
 
     tcpSocketAdminApp.on("error", function(err) {
@@ -113,8 +115,11 @@ var tcpServerToAdminApp = net.createServer(function(tcpSocketAdminApp) {
 tcpServerToAdminApp.listen(process.env.INTERNAL_PORT ? process.env.INTERNAL_PORT : 55555);
 
 tcpServerToAdminApp.on('connection', function(tcpSocketAdminApp) {
-    tcpSocketAdminApp.on('data', function(buffer) {
-        var data = JSON.parse(buffer.toString());
+
+    var tcpSocketAdminAppReceiver = makeTcpReceiver(tcpSocketAdminApp, "\n");
+
+    tcpSocketAdminAppReceiver.on('message', function(message) {
+        var data = JSON.parse(message);
         if (data.type === 'cmd') {
 
             data.to.forEach(function(antPhone){
@@ -155,7 +160,7 @@ tcpServerToAdminApp.on('connection', function(tcpSocketAdminApp) {
 
 // send a command to a sensor by TCP
 function sendCommand(socket, cmd) {
-    socket.write('cmd:' + cmd);
+    socket.write('cmd:' + cmd + "\n");
     console.log('CMD-> ' + cmd)
 }
 
@@ -174,6 +179,17 @@ function handleData(dat, socket, phoneNumber) {
     .then(function(data) {
 
         switch (data.message.type) {
+            case 'network':
+                var signal = data.message.decoded.substr(3);
+                database.Sensors.update(data.sensor.id, {signal: signal})
+                .then(function() {
+                    eventEmitter.emit('data', {type: 'status', data: {quipu: {signal: signal}}})
+                })
+                .catch(function(err) {
+                    console.log('error : cannot store signal in DB :', err)
+                })
+                break;
+
             case 'message':
                 if (data.message.decoded === 'init') {
                     var date = new Date();
@@ -183,12 +199,48 @@ function handleData(dat, socket, phoneNumber) {
 
             case 'status':
                 var msgStatus = JSON.parse(data.message.decoded);
-                database.Sensors.update(data.sensor.id, {
-                    latest_input: msgStatus.info.command,
-                    latest_output: msgStatus.info.result,
-                    quipu_status: msgStatus.quipu.state,
-                    sense_status: msgStatus.sense
+                var cmd = msgStatus.info.command.toLowerCase();
+
+                new Promise(function (resolve, reject) {
+                    switch (cmd) {
+                        case 'changestarttime' :
+                            if (msgStatus.info.result === 'KO')
+                                reject('KO');
+                            database.Sensors.update(data.sensor.id, {start_time: parseInt(msgStatus.info.result)})
+                            .then(resolve());
+                            break;
+                        case 'changestoptime' :
+                            if (msgStatus.info.result === 'KO')
+                                reject('KO');
+                            database.Sensors.update(data.sensor.id, {stop_time: parseInt(msgStatus.info.result)})
+                            .then(resolve());
+                            break;
+                        case 'changeperiod' :
+                            if (msgStatus.info.result === 'KO')
+                                reject('KO');
+                            database.Sensors.update(data.sensor.id, {data_period: parseInt(msgStatus.info.result)})
+                            .then(resolve());
+                            break;
+                    }
                 })
+                .then(function() {
+                    debug(cmd + ' result successfully stored in database');
+                })
+                .catch(function(err) {
+                    console.log('error : ' + 'cannot store result of ' + cmd + 'in database ('+err+')')
+                });
+
+                database.Sensors.update(data.sensor.id, (msgStatus.info.command !== 'null') ?
+                    { // If status + command result
+                        latest_input: msgStatus.info.command,
+                        latest_output: msgStatus.info.result,
+                        quipu_status: msgStatus.quipu.state,
+                        sense_status: msgStatus.sense
+                    } : 
+                    { // If only status
+                        quipu_status: msgStatus.quipu.state,
+                        sense_status: msgStatus.sense
+                    })
                 .then(function(){
                     debug('id', data.sensor.id);
                     debug('Storage Success');

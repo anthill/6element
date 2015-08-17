@@ -51,7 +51,7 @@
 	font-weight: bold;
 }
 
-.ant-unistalling {
+.ant .uninstall {
     text-align: center;
     margin-top: 0.5rem;
 }
@@ -66,8 +66,8 @@
 	color: black;
 }
 
-.ant.connected3G .quipu {
-	color: green;
+.ant.connected3g .quipu {
+	color: #0B0;
 }
 
 .ant.tunnelling .quipu {

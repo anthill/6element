@@ -47,6 +47,7 @@
     "gulp-livereload": "~2.1.1",
     "gulp-plumber": "^1.0.1",
     "immutable": "^3.7.4",
+    "keymirror": "^0.1.1",
     "leaflet": "^0.7.3",
     "moment": "^2.10.3",
     "node-schedule": "^0.2.9",

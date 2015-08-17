@@ -49,10 +49,10 @@ function doIt(){
             
                 var status = {
                     quipu: {
-                        state: quipuStatus[Math.floor(Math.random()*3)],
+                        state: quipuStatus[Math.floor(Math.random()*4)],
                         signal: '3G'
                     },
-                    sense: senseStatus[Math.floor(Math.random()*2)],
+                    sense: senseStatus[Math.floor(Math.random()*3)],
                     info: {
                         command: 'myCommand',
                         result: 'OK'

@@ -8,6 +8,8 @@ var makeMap = require('../../_common/js/makeMap.js');
 var resetUpdate = require('../../_common/js/resetUpdate.js');
 var serverAPI = require('./serverAPI.js');
 
+var dbStatusMap = require('./dbStatusMap.js');
+
 var socket = io();
 
 var errlog = console.error.bind(console);
@@ -161,31 +163,47 @@ function refreshView(){
 
         var places = results[0];
         var sensors = results[1];
+
         if (places){
+            // sorting places alphabetically
             places.sort(function(a, b){
                 return a.name > b.name ? 1 : -1;
             });
             // console.log('places', results[0]);
 
-            topLevelStore.placeMap = makeMap(places, 'id');
+            var placeMap = makeMap(places, 'id');
 
-            topLevelStore.placeMap.forEach(function (place){
+            // establish set of sensors id
+            placeMap.forEach(function(place){
                 if (place.sensor_ids[0] !== null)
                     place.sensor_ids = new Set(place.sensor_ids);
                 else
                     place.sensor_ids = new Set()
             });
 
+            topLevelStore.placeMap = placeMap;
+
         }
         
         if (sensors){
+            // sorting sensors by id
             sensors.sort(function(a, b){
                 return a.id > b.id ? 1 : -1;
             });
             
             // console.log('sensors', results[1]);
             
-            topLevelStore.sensorMap = makeMap(sensors, 'id');
+            var sensorMap = makeMap(sensors, 'id');
+
+            // transform dbStatus to constants
+            sensorMap.forEach(function(sensor){
+                sensor.quipu_status = dbStatusMap.get(sensor.quipu_status);
+                sensor.sense_status = dbStatusMap.get(sensor.sense_status);
+                console.log('sensor', sensor);
+            });
+
+            topLevelStore.sensorMap = sensorMap;
+
             if (updatingID) {
                 var updatingAnt = topLevelStore.sensorMap.get(updatingID);
                 updatingAnt.isUpdating = true;

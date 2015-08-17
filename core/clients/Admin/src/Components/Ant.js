@@ -57,8 +57,8 @@ var Ant = React.createClass({
 
         var classes = [
             'ant',
-            props.ant.quipu_status,
-            props.ant.sense_status,
+            props.ant.quipu_status ? props.ant.quipu_status.toLowerCase() : '',
+            props.ant.sense_status ? props.ant.sense_status.toLowerCase() : '',
             props.isSelected ? 'isSelected' : '',
             props.ant.isUpdating ? 'updating' : ''
         ];
@@ -106,9 +106,12 @@ var Ant = React.createClass({
                     React.DOM.div({}, props.ant.quipu_status),
                     React.DOM.div({}, props.ant.signal) // Pas de signal ???
                 ),
-                React.DOM.li({className: '6sense'},
+                React.DOM.li({className: 'sense'},
                     React.DOM.div({}, '6sense Status'),
-                    React.DOM.div({}, props.ant.sense_status)
+                    React.DOM.div({}, props.ant.sense_status),
+                    React.DOM.div({}, props.ant.sense_freq ? props.ant.sense_freq : '1 min'),
+                    React.DOM.div({}, props.ant.sense_start ? props.ant.sense_start : '9h'),
+                    React.DOM.div({}, props.ant.sense_end ? props.ant.sense_start : '18h')
                 ),
                 React.DOM.li({className: 'command'},
                     React.DOM.div({}, 'Latest Command'),
@@ -125,7 +128,7 @@ var Ant = React.createClass({
                 )
             ),
             React.DOM.div({
-                    className: 'ant-unistalling clickable',
+                    className: 'uninstall clickable',
                     onClick: function(){
                         console.log('Uninstalling');
                         var dbData = {

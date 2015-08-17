@@ -56,16 +56,12 @@ function decode(message) {
 
 	return new Promise(function(resolve){
 
-		switch ('012'.indexOf(message.toString().charAt(0))) {
-			case -1: // not a message, data or status
-				resolve(message);
-				break;
-
-			case 0: // message : not encoded
+		switch (message[0]) {
+			case '0': // message : not encoded
 				resolve(message.slice(1));
 				break;
 
-			case 1: // data : 6sense_encoded
+			case '1': // data : 6sense_encoded
 				sixSenseDecoder(message.slice(1).toString())
 					.then(function(decodedMessage){
 						resolve(JSON.stringify(decodedMessage));
@@ -75,7 +71,7 @@ function decode(message) {
 					})
 				break;
 
-			case 2: // status : generic_encoded
+			case '2': // status : generic_encoded
 				genericCodec.decode(message.slice(1).toString())
 					.then(function(decodedMessage){
 						resolve(JSON.stringify(decodedMessage));
@@ -83,6 +79,10 @@ function decode(message) {
 					.catch(function(err){
 						console.log("error in case 2 ", err);
 					})
+				break;
+				
+			default :
+				resolve(message); // not a message, data or status (can be a network, phoneNumber, etc...)
 				break;
 		}
 

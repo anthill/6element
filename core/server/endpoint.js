@@ -49,6 +49,18 @@ var tcpServerForSensors = net.createServer(function(tcpSocketSensor) {
             console.log(tcpSocketSensor.remoteAddress + " is now known as " + phoneNumber);
             var date = new Date();
             sendCommand(tcpSocketSensor, 'date ' + date.toISOString())
+
+            // Send config to the sensor
+            database.Sensors.findByPhoneNumber(phoneNumber)
+            .then(function(sensor) {
+                console.log('sending config')
+                sendCommand(tcpSocketSensor, 'changeperiod '+ sensor.data_period);
+                sendCommand(tcpSocketSensor, 'changestarttime '+ sensor.start_time);
+                sendCommand(tcpSocketSensor, 'changestoptime '+ sensor.stop_time);
+            })
+            .catch(function(err) {
+                console.log("[ERROR] Couldn't get sensor's config in DB :", err);
+            })
         }
 
         // handle data
@@ -227,7 +239,7 @@ function handleData(dat, socket, phoneNumber) {
                     debug(cmd + ' result successfully stored in database');
                 })
                 .catch(function(err) {
-                    console.log('error : ' + 'cannot store result of ' + cmd + 'in database ('+err+')')
+                    console.log('error : ' + 'cannot store result of ' + cmd + ' in database ('+err+')')
                 });
 
                 database.Sensors.update(data.sensor.id, (msgStatus.info.command !== 'null') ?

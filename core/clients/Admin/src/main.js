@@ -200,7 +200,6 @@ function refreshView(){
             sensorMap.forEach(function(sensor){
                 sensor.quipu_status = dbStatusMap.get(sensor.quipu_status);
                 sensor.sense_status = dbStatusMap.get(sensor.sense_status);
-                sensor.signal = '2G';
             });
 
             topLevelStore.sensorMap = sensorMap;

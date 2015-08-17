@@ -133,11 +133,6 @@ tcpServerToAdminApp.on('connection', function(tcpSocketAdminApp) {
 //  return array[array.length - 1];
 // }
 
-function getID(socket) {
-
-    return (socket.remoteAddress + ":" + socket.remotePort);
-}
-
 // function getClientName(client) {
 
 //  return (client === undefined ? undefined : client.phoneNumber);

@@ -24,6 +24,19 @@
 	font-weight: bold; font-size: 1.5em;
 }
 
+.coords > * {
+	display: block; margin: 0 .5rem;
+}
+
+.coords > * > *{
+	display: inline-block; width: 50%; 
+	text-align: center;
+}
+
+.coords div:first-child > * {
+	font-size: .7em;
+}
+
 .ant.updating {
 	background-color: red;
 }

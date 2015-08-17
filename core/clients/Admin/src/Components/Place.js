@@ -107,25 +107,30 @@ var Place = React.createClass({
 
         // Coordinates
         var coords = React.DOM.div({className: 'coords'}, 
-            React.DOM.div({}, 'Coords'),
-            new Modifiable({
-                isUpdating: false,
-                text: props.place.lat,
-                dbLink: {
-                    id: props.place.id,
-                    field: 'lat'
-                },
-                onChange: props.onChangePlace
-            }),
-            new Modifiable({
-                isUpdating: false,
-                text: props.place.lon,
-                dbLink: {
-                    id: props.place.id,
-                    field: 'lon'
-                },
-                onChange: props.onChangePlace
-            })
+            React.DOM.div({},
+                React.DOM.div({}, 'Latitude '),
+                React.DOM.div({}, 'Longitude')
+            ),
+            React.DOM.div({},
+                new Modifiable({
+                    isUpdating: false,
+                    text: props.place.lat,
+                    dbLink: {
+                        id: props.place.id,
+                        field: 'lat'
+                    },
+                    onChange: props.onChangePlace
+                }),
+                new Modifiable({
+                    isUpdating: false,
+                    text: props.place.lon,
+                    dbLink: {
+                        id: props.place.id,
+                        field: 'lon'
+                    },
+                    onChange: props.onChangePlace
+                })
+            )
         );
 
         // List of installed Sensors

@@ -42,34 +42,35 @@ function doIt(){
     };
     var endpoint = net.connect(endpointConfig, function(){
 
-        setInterval(function(){
 
+        endpoint.on("data", function(buffer){
+
+            if (buffer.toString().match("cmd:date*")){
+            
+                var status = {
+                    quipu: {
+                        state: quipuStatus[Math.floor(Math.random()*3)],
+                        signal: '3G'
+                    },
+                    sense: senseStatus[Math.floor(Math.random()*2)],
+                    info: {
+                        command: 'myCommand',
+                        result: 'OK'
+                    }
+                };
+
+                console.log('Sending status to ant');
+
+                encode(status).then(function(sms){
+                    endpoint.write('2' + sms + "|");
+                });
+            }
+        });
+
+
+        setInterval(function(){
             // choose sensor
             endpoint.write("phoneNumber=" + numbers[Math.floor(Math.random()*11)]);
-
-            endpoint.on("data", function(buffer){
-
-                if (buffer.toString().match("cmd:date*")){
-                
-                    var status = {
-                        quipu: {
-                            state: quipuStatus[Math.floor(Math.random()*3)],
-                            signal: '3G'
-                        },
-                        sense: senseStatus[Math.floor(Math.random()*2)],
-                        info: {
-                            command: 'myCommand',
-                            result: 'OK'
-                        }
-                    };
-
-                    console.log('Sending status to ant');
-
-                    encode(status).then(function(sms){
-                        endpoint.write('2' + sms + "|");
-                    });
-                }
-            })
 
         }, 10000);
 

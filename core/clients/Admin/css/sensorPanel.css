@@ -12,48 +12,28 @@
 	position: absolute;
 	top: 0;
 	right: 0;
-	background-color: #B4D670;
-	border-left: 1px solid #537908;
+	background-color: #cfea99;
+	border-left: 1px solid #EEE;
 	width: 22vw;
 	height: 100%;
 }
 
 .sensor{
-	display: block; margin: 1em; padding: .2em; position: relative;
-	border: 1px solid white;
+	display: block; margin: 1em; padding: .2em; position: relative; border: 1px solid #DDD; position: relative;
+	background-color: white;
 }
 
-.sensor li * {
-	display: inline-block; margin: 0 1em;
+.sensor li {
+	margin: 0 1em;
 	text-align: left;
+}
+
+.sensor .name{
+	font-weight: bold;
 }
 
 .sensor .sensorPhoneNumber {
 	text-align: left;
-}
-
-.creator {
-	background-color: black;
-	border-bottom: 1px solid white;
-}
-
-.creator div *{
-	display: inline-block;
-}
-
-.creator ul *{
-	display: inline-block;
-	padding: 0.5em;
-	text-align: center;
-	color: white;
-}
-
-.creator li {
-	margin: 0;
-}
-
-.creator form input {
-	color: black;
 }
 
 #sensorPanel .creator ul * {
@@ -65,3 +45,15 @@
     color: white;
     background-color: orange;
 }
+
+/* Place Selector */
+
+/*.place-picker{
+	position: absolute; background-color: white;
+	z-index: 3;
+}
+
+.place-picker * {
+	display: block;
+	color: black;
+}*/

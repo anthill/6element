@@ -30,33 +30,32 @@ function doIt(){
     };
     var endpoint = net.connect(endpointConfig, function(){
 
-        setInterval(function(){
+        endpoint.on("data", function(buffer){
 
+            if (buffer.toString() === "nameOK"){
+        
+                var now = new Date().toISOString();
+
+                var nbMeasurements = Math.floor(Math.random()*10);
+                var dummyArray = [];
+                for (var i = 0; i < nbMeasurements; i++) { 
+                    dummyArray.push(Math.floor(Math.random()*40));
+                }
+
+                var measurement = {
+                    date: now,
+                    signal_strengths: dummyArray
+                };
+
+                encodeForSMS([measurement]).then(function(sms){
+                    endpoint.write('1' + sms + "|");
+                });
+            }
+        });
+
+        setInterval(function(){
             // choose sensor
             endpoint.write("name=" + numbers[Math.floor(Math.random()*11)]);
-
-            endpoint.on("data", function(buffer){
-
-                if (buffer.toString() === "nameOK"){
-            
-                    var now = new Date().toISOString();
-
-                    var nbMeasurements = Math.floor(Math.random()*10);
-                    var dummyArray = [];
-                    for (var i = 0; i < nbMeasurements; i++) { 
-                        dummyArray.push(Math.floor(Math.random()*40));
-                    }
-
-                    var measurement = {
-                        date: now,
-                        signal_strengths: dummyArray
-                    };
-
-                    encodeForSMS([measurement]).then(function(sms){
-                        endpoint.write('1' + sms + "|");
-                    });
-                }
-            })
 
         }, 10000);
 

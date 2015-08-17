@@ -46,6 +46,7 @@ var CommandManager = React.createClass({
     // },
 
     render: function() {
+        var self = this;
         var props = this.props;
 
         var classes = [

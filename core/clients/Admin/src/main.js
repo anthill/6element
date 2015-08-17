@@ -8,6 +8,8 @@ var makeMap = require('../../_common/js/makeMap.js');
 var resetUpdate = require('../../_common/js/resetUpdate.js');
 var serverAPI = require('./serverAPI.js');
 
+var dbStatusMap = require('./dbStatusMap.js');
+
 var socket = io();
 
 var errlog = console.error.bind(console);
@@ -149,6 +151,8 @@ function createSensorInDb(data) {
     });
 }
 
+var updatingID;
+
 function refreshView(){
 
     var placesP = serverAPI.getAllPlacesInfos();
@@ -159,32 +163,59 @@ function refreshView(){
 
         var places = results[0];
         var sensors = results[1];
+
         if (places){
-            results[0].sort(function(a, b){
+            // sorting places alphabetically
+            places.sort(function(a, b){
                 return a.name > b.name ? 1 : -1;
             });
-            console.log('places', results[0]);
+            // console.log('places', results[0]);
 
-            topLevelStore.placeMap = makeMap(results[0], 'id');
+            var placeMap = makeMap(places, 'id');
 
-            topLevelStore.placeMap.forEach(function (place){
+            // establish set of sensors id
+            placeMap.forEach(function(place){
                 if (place.sensor_ids[0] !== null)
                     place.sensor_ids = new Set(place.sensor_ids);
                 else
                     place.sensor_ids = new Set()
             });
 
+            topLevelStore.placeMap = placeMap;
+
         }
         
         if (sensors){
-            results[1].sort(function(a, b){
+            // sorting sensors by id
+            sensors.sort(function(a, b){
                 return a.id > b.id ? 1 : -1;
             });
             
-            console.log('sensors', results[1]);
+            // console.log('sensors', results[1]);
             
-            topLevelStore.sensorMap = makeMap(results[1], 'id');
-            resetUpdate(topLevelStore.sensorMap);
+            var sensorMap = makeMap(sensors, 'id');
+
+            // transform dbStatus to constants
+            sensorMap.forEach(function(sensor){
+                sensor.quipu_status = dbStatusMap.get(sensor.quipu_status);
+                sensor.sense_status = dbStatusMap.get(sensor.sense_status);
+                console.log('sensor', sensor);
+            });
+
+            topLevelStore.sensorMap = sensorMap;
+
+            // change updating status
+            if (updatingID) {
+                var updatingAnt = topLevelStore.sensorMap.get(updatingID);
+                updatingAnt.isUpdating = true;
+
+                updatingID = undefined;
+
+                setTimeout(function(){
+                    resetUpdate(updatingAnt);
+                    render();
+                }, 500);
+            }
         }
         
         render();
@@ -225,74 +256,24 @@ var topLevelStore = {
 refreshView();
 
 // THIS WILL BE NEEDED WHEN QUIPU SIGNAL IS INCORPORATED INTO DATA MSGS
-socket.on('data', function (msg){
-    var id = msg.socketMessage.sensor_id;
-    var signal = msg.socketMessage.quipu.signal;
+// socket.on('data', function (msg){
+//     var id = msg.socketMessage.sensor_id;
+//     var signal = msg.socketMessage.quipu.signal;
 
-    var updatingAnt = topLevelStore.ants.get(id);
-    updatingAnt.signal = signal;
+//     var updatingAnt = topLevelStore.ants.get(id);
+//     updatingAnt.signal = signal;
 
-    render();
-});
+//     render();
+// });
 
 socket.on('status', function (msg) {
 
-    // GET DATA
+    // GET UPDATING SENSOR ID
     var id = msg.sensorId;
-    var status = msg.socketMessage;
-
-    resetUpdate(topLevelStore.sensorMap);
-
-    var updatingSensorMap = topLevelStore.sensorMap.get(id);
-    updatingSensorMap.quipu_status = status.quipu.state;
-    updatingSensorMap.signal = status.quipu.signal;
-    updatingSensorMap.sense_status = status.sense;
-    updatingSensorMap.latest_input = status.info.command;
-    updatingSensorMap.latest_output = status.info.result;
-    updatingSensorMap.isUpdating = true;
+    console.log('UPDATING STATUS', id);
     
-    // console.log('sensors', updatingSensors);
-
-    render();
-
-    setTimeout(function(){
-        resetUpdate(topLevelStore.sensorMap);
-        render();
-    }, 200);
-
+    updatingID = id;
+    refreshView();
 });
 
-
-
-// // USE TO SIMULATE A STATUS SENDING TO SERVER FROM SENSOR
-
-// var quipu = require('quipu/parser.js');
-// var sendReq = require('../../_common/js/sendReq.js');
-
-// setInterval(function(){
-
-// 	var id = Math.floor(Math.random() * 28);
-
-// 	quipu.encode({
-// 		info: {
-// 			command: 'connect3G',
-// 			result: 'OK'
-// 		},
-// 		quipu: '3G_connected',
-// 		sense: 'recording'
-// 	})
-// 	.then(function(msg){
-// 		var toSend = {
-// 			From: 'xxx' + id,
-// 			Body: '2' + msg
-// 		};
-
-// 		console.log('Sending', toSend);
-// 		sendReq('POST', '/twilio', toSend);
-// 	})
-// 	.catch(function(err){
-// 		console.log(err);
-// 	});
-
-// }, 3000);
 

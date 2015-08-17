@@ -62,8 +62,7 @@ var Place = React.createClass({
     removePlace: function(){
         var props = this.props;
         var obj = {};
-                        
-        console.log('onclick remove Place', props.place.id);
+
         var ants = props.mySensors.map(function (ant) {
             return {
                 'field': "installed_at",
@@ -87,80 +86,98 @@ var Place = React.createClass({
 
         var classes = [
             'place'
-            // isSelected ? 'selected' : '',
-            // props.ant.isUpdating ? 'updating' : '',
-            // props.ant.quipu_status,
-            // props.ant.sense_status
         ];
 
-        return React.DOM.div({className: classes.join(' ')},
-            new DeleteButton({
-                askForConfirmation: true,
-                onConfirm: this.removePlace
-            }),
-            new Modifiable({
-                className: 'placeName',
-                isUpdating: false,
-                text: props.place.name,
-                dbLink: {
-                    id: props.place.id,
-                    field: 'name'
-                },
-                onChange: props.onChangePlace
-            }),
-            React.DOM.ul({},
-                React.DOM.li({}, 
-                    React.DOM.div({}, 'Coords'),
-                    new Modifiable({
-                        isUpdating: false,
-                        text: props.place.lat,
-                        dbLink: {
-                            id: props.place.id,
-                            field: 'lat'
-                        },
-                        onChange: props.onChangePlace
-                    }),
-                    new Modifiable({
-                        isUpdating: false,
-                        text: props.place.lon,
-                        dbLink: {
-                            id: props.place.id,
-                            field: 'lon'
-                        },
-                        onChange: props.onChangePlace
-                    })
-                ),
-                React.DOM.div({}, 
-                    props.mySensors.map(function (ant){
-                        return new Ant({
-                            key: ant.id,
-                            ant: ant,
-                            isSelected: props.selectedAntSet.has(ant.id),
-                            antFromNameMap: props.antFromNameMap.remove(ant.name),
-                            currentPlaceId: props.place.id,
-                            onChangeSensor: props.onChangeSensor,
-                            onSelectedAnts: props.onSelectedAnts
-                        });
-                    })
-                ),
-                React.DOM.div({
-                        className: 'ant-id clickable',
-                        onClick: self.toggleList
+        // Delete Button
+        var deleteButton = new DeleteButton({
+            askForConfirmation: true,
+            onConfirm: this.removePlace
+        });
+
+        // Name
+        var placeName = new Modifiable({
+            className: 'placeName',
+            text: props.place.name,
+            dbLink: {
+                id: props.place.id,
+                field: 'name'
+            },
+            onChange: props.onChangePlace
+        });
+
+        // Coordinates
+        var coords = React.DOM.div({className: 'coords'}, 
+            React.DOM.div({},
+                React.DOM.div({}, 'Latitude '),
+                React.DOM.div({}, 'Longitude')
+            ),
+            React.DOM.div({},
+                new Modifiable({
+                    isUpdating: false,
+                    text: props.place.lat,
+                    dbLink: {
+                        id: props.place.id,
+                        field: 'lat'
                     },
-                    'Add Ant'
-                ),
-                new AntPicker({
-                    antFromNameMap: props.antFromNameMap,
-                    currentSensorId: null,
-                    isOpen: state.isListOpen,
-                    currentPlaceId: props.place.id,
-                    onChange: function(dbData){
-                        self.toggleList();
-                        props.onChangeSensor(dbData);
-                    }
+                    onChange: props.onChangePlace
+                }),
+                new Modifiable({
+                    isUpdating: false,
+                    text: props.place.lon,
+                    dbLink: {
+                        id: props.place.id,
+                        field: 'lon'
+                    },
+                    onChange: props.onChangePlace
                 })
             )
-        )
+        );
+
+        // List of installed Sensors
+        var availableSensorMap = props.antFromNameMap;
+
+        var installedSensors = props.mySensors.map(function (ant){
+
+            availableSensorMap = availableSensorMap.delete(ant.name);
+
+            return new Ant({
+                key: ant.id,
+                ant: ant,
+                isSelected: props.selectedAntSet.has(ant.id),
+                currentPlaceId: props.place.id,
+                onChangeSensor: props.onChangeSensor,
+                onSelectedAnts: props.onSelectedAnts
+            });
+        });
+
+        // Button to install Sensor
+        var antPicker = state.isListOpen ? new AntPicker({
+            antFromNameMap: availableSensorMap,
+            currentSensorId: null,
+            currentPlaceId: props.place.id,
+            onChange: props.onChangeSensor
+        })
+        : undefined;
+
+        var addAntButton = React.DOM.div({
+                className: 'add-ant-button clickable',
+                onClick: function(){
+                    document.querySelector('body').classList.toggle('noscroll');
+                    self.toggleList();
+                }
+            },
+            'Add Ant',
+            antPicker
+        );
+
+
+        return React.DOM.div({className: classes.join(' ')},
+            deleteButton,
+            placeName,
+            coords,
+            installedSensors,
+            addAntButton
+        );
     }
 });
 

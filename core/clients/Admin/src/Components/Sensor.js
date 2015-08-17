@@ -53,8 +53,6 @@ var Sensor = React.createClass({
         var dbData = {
             sensorId: props.sensor.id 
         };
-                        
-        console.log('onclick remove Sensor', props.sensor.id);
 
         props.onRemoveSensor(dbData);
     },
@@ -75,7 +73,7 @@ var Sensor = React.createClass({
         // Sensor Name, is a Modifiable
         var sensorName = React.DOM.li({}, 
             new Modifiable({
-                className: 'sensorName',
+                className: 'name',
                 isUpdating: false,
                 text: props.sensor.name,
                 dbLink: {
@@ -89,6 +87,7 @@ var Sensor = React.createClass({
         // Sensor Place, can be toggled
         var sensorPlace = React.DOM.li({className: 'sensorPlace clickable',
                 onClick: function(){
+                    document.querySelector('body').classList.toggle('noscroll');
                     self.toggleList();
                 }
             },

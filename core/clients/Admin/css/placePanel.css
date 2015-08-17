@@ -9,13 +9,13 @@
 */
 
 #placePanel{
-    position: relative;
-    width: 78vw;
+    position: relative; width: 78vw;
+    background-color: #cbc6e1;
 }
 
 .place{
 	display: inline-block; margin: 1em; padding: .5em; width: 30%; position: relative;
-	border: 1px solid orange; border-radius: 5px;
+	border: 1px solid #AAA; border-radius: 5px;
 	background-color: white;
 }
 
@@ -24,28 +24,60 @@
 	font-weight: bold; font-size: 1.5em;
 }
 
-.place li {
-	display: block; margin: 0;
+.coords > * {
+	display: block; margin: 0 .5rem;
 }
 
-.place li div {
-	display: inline-block;; margin: 0 0.2rem;
+.coords > * > *{
+	display: inline-block; width: 50%; 
+	text-align: center;
 }
 
-.place.updating {
+.coords div:first-child > * {
+	font-size: .7em;
+}
+
+.ant.updating {
 	background-color: red;
-	transition: background-color 1s;
-}
-
-.place.updating {
-	background-color: red;
-	transition: background-color 1s;
 }
 
 .ant{
-	display: block; margin: 1em 0; padding: .5em; position: relative;
-	border: 1px solid green; border-radius: 5px;
+	display: block; margin: 1em 0; padding: .2rem; position: relative;
+	border: 1px solid #444; border-radius: 5px;
 	background-color: white;
+	transition: background-color 1s;
+}
+
+.ant li {
+	margin: 0; padding: .3rem .5em;
+}
+
+.ant li:first-child{
+	border-radius: 5px 5px 0 0;
+}
+
+.ant li > * {
+	display: block;
+}
+
+.ant li div > * {
+	display: inline-block; margin: 0 .3rem;
+}
+
+.ant li div div:first-child{
+	font-weight: 600;
+}
+
+.ant .sense > *{
+	display: block;
+}
+
+.light{
+	background-color: #EEE;
+}
+
+.dark{
+	background-color: #DDD;
 }
 
 .ant.isSelected{
@@ -53,14 +85,14 @@
 }
 
 .ant-selector {
-	float: right;
+	position: absolute; top: 3px; right: 3px;
 }
 
 .ant.sensorName {
 	font-weight: bold;
 }
 
-.ant-unistalling {
+.ant .uninstall {
     text-align: center;
     margin-top: 0.5rem;
 }
@@ -75,8 +107,8 @@
 	color: black;
 }
 
-.ant.3Gconnected .quipu {
-	color: green;
+.ant.connected3g .quipu {
+	color: #0B0;
 }
 
 .ant.tunnelling .quipu {
@@ -85,31 +117,25 @@
 
 /* 6sense status */
 
-.ant.sleeping .6sense {
-	color: #DDD;
+.ant .sense div.status,  .ant .sense div.settings{
+	display: block; margin: 0 2rem;
 }
 
-.ant.monitoring .6sense {
+.ant.sleeping .sense {
+	color: #CCC;
+}
+
+.ant.monitoring .sense {
 	color: #888;
 }
 
-.ant.recording .6sense {
+.ant.recording .sense {
 	color: black;
 }
 
-.ant-picker{
-	position: block;
-	color: #DDD;
-	background-color: green;
-}
-.ant-picker ul{
-	display: block;
-}
-
-.ant-picker li{
-	display: inline-block;
-	margin: .1em;
-	padding: .1em;
+.add-ant-button {
+	position: relative; margin: 0 auto; width: 70px; border-radius: 10px;
+    text-align: center;
 }
 
 .place.orphan .name {
@@ -117,18 +143,12 @@
 	font-weight: bold; font-size: 1.5em;
 }
 
-.place.orphan .ant-id {
-	border-radius: 10px;
-    width: 6em;
-    height: 1.7em;
-    text-align: center;
-    line-height: 1.7em;
-}
 
 .command-manager {
 	position: fixed; padding: .5em; bottom: -6em; height: 5em; width: 100%;
 	color: #DDD;
 	background-color: #222;
+	z-index: 3;
 	transition: bottom .5s ease-in-out;
 }
 
@@ -150,6 +170,5 @@
 }
 
 .low-importance {
-	color: #999999;
-	font-size: small;
+	color: #999999; font-size: small; font-style: italic;
 }

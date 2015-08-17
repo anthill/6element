@@ -158,7 +158,7 @@ tcpServerToAdminApp.on('connection', function(tcpSocketAdminApp) {
 
 // send a command to a sensor by TCP
 function sendCommand(socket, cmd) {
-    socket.write('cmd:' + cmd);
+    socket.write('cmd:' + cmd + "\n");
     console.log('CMD-> ' + cmd)
 }
 

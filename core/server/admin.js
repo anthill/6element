@@ -46,7 +46,6 @@ io.on('connection', function(socket) {
     socket.on('cmd', function(cmd) {
         console.log('admin client data received');
         if (tcpSocketEndpoint) {
-            debug("let's send");
             tcpSocketEndpoint.write(JSON.stringify(cmd) + "\n");
         }
     })

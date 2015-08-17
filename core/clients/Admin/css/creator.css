@@ -1,0 +1,49 @@
+
+.creator {
+	background-color: black; margin-top: -2.2rem; border-bottom: 1px solid white;
+	color: #EEE;
+	transition: margin-top .5s ease-in-out;
+}
+
+.creator div:last-child{
+	padding: .2rem;
+	text-align: center;
+}
+
+.creator.open {
+	margin-top: 0;
+}
+
+.creator div *{
+	display: inline-block;
+}
+
+.creator ul *{
+	display: inline-block;
+	padding: 0.5em;
+	text-align: center;
+	color: white;
+}
+
+.creator li {
+	margin: 0;
+}
+
+.creator form {
+	padding: .3rem;
+}
+
+.creator input {
+	padding: .1rem .5rem; margin: .1rem;
+	color: black;
+}
+
+#sensorPanel .creator input:first-child{
+	width: 30%;
+}
+
+#sensorPanel .creator input:nth-child(2){
+	width: 50%;
+}
+
+

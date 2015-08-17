@@ -18,6 +18,7 @@ interface AntProps{
         name: string,
         phone_number: string,
         quipu_status: string,
+        signal: string,
         sense_status: string,
         updated_at: string,
         isSelected: bool
@@ -59,7 +60,7 @@ var Ant = React.createClass({
             'ant',
             props.ant.quipu_status ? props.ant.quipu_status.toLowerCase() : '',
             props.ant.sense_status ? props.ant.sense_status.toLowerCase() : '',
-            props.isSelected ? 'isSelected' : '',
+            props.isSelected ? 'selected' : '',
             props.ant.isUpdating ? 'updating' : ''
         ];
 

@@ -92,7 +92,7 @@ var Sensor = React.createClass({
                 }
             },
             props.sensor.installed_at ? props.placeName : "Add me a place",
-            new PlacePicker({
+            state.isListOpen ? new PlacePicker({
                 placeIDMap: props.placeIDMap,
                 placeId: props.placeId,
                 sensorId: props.sensor.id,
@@ -101,7 +101,7 @@ var Sensor = React.createClass({
                     self.toggleList();
                     props.onChangeSensor(data);
                 }
-            })
+            }) : undefined
         );
 
         var sensorPhoneNumber = React.DOM.li({}, 

@@ -8,8 +8,7 @@ interface PlacePickerProps{
     placeIDMap: Map(),
     placeId: int,
     sensorId: int,
-    currentPlaceId: int,
-    isOpen: bool,
+    currentPlaceId: int
     onChange: function()
 }
 interface PlacePickerState{
@@ -30,27 +29,25 @@ var PlacePicker = React.createClass({
 
         var listID = [];
 
-        if (props.isOpen) {
-            var lis = [];
-            props.placeIDMap.forEach(function (value, key) {
+        var lis = [];
+        props.placeIDMap.forEach(function (value, key) {
 
-                var objDb = [{
-                    'field': "installed_at",
-                    'id': props.sensorId,
-                    'value': value
-                }];
-                
-                lis.push(React.DOM.li({
-                        key: key,
-                        onClick: function(){
-                            props.onChange(objDb)
-                        }
-                    },
-                    key
-                ));
-            });
-            listID = React.DOM.ul({}, lis);
-        }
+            var objDb = [{
+                'field': "installed_at",
+                'id': props.sensorId,
+                'value': value
+            }];
+            
+            lis.push(React.DOM.li({
+                    key: key,
+                    onClick: function(){
+                        props.onChange(objDb)
+                    }
+                },
+                key
+            ));
+        });
+        listID = React.DOM.ul({}, lis);
 
         return React.DOM.div({className: 'place-picker selector'},
             listID

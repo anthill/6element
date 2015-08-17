@@ -18,6 +18,7 @@ interface AntProps{
         name: string,
         phone_number: string,
         quipu_status: string,
+        signal: string,
         sense_status: string,
         updated_at: string,
         isSelected: bool

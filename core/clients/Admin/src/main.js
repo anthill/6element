@@ -194,12 +194,13 @@ function refreshView(){
             // console.log('sensors', results[1]);
             
             var sensorMap = makeMap(sensors, 'id');
+            console.log('sensorMap', sensorMap);
 
             // transform dbStatus to constants
             sensorMap.forEach(function(sensor){
                 sensor.quipu_status = dbStatusMap.get(sensor.quipu_status);
                 sensor.sense_status = dbStatusMap.get(sensor.sense_status);
-                console.log('sensor', sensor);
+                sensor.signal = '2G';
             });
 
             topLevelStore.sensorMap = sensorMap;

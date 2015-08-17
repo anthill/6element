@@ -65,7 +65,7 @@ li .modifiable{
 }
 
 .selector {
-	position: absolute;
+	position: absolute; border: 1px solid #222;
 	color: #666; line-height: 1.7em;
 	overflow-y: scroll;
 	background-color: #DDD;
@@ -86,15 +86,10 @@ li .modifiable{
 }
 
 .ant-picker{
-	height: 200px; top: 0; left: 100%;
+	height: 200px; top: -4px; left: 100%;
 	overflow-y: scroll;
 }
 
-/*.selector {
-	position: absolute; top: .5em; right: .5em;
+#placePanel .place:nth-last-child(-n+3) .ant-picker{
+	top: auto; bottom: 0;
 }
-.selector div{
-	margin: 0 auto;
-	padding: 0;
-	text-align: center;
-}*/

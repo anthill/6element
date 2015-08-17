@@ -40,53 +40,49 @@ var CreatorPlace = React.createClass({
         // console.log('CreatorPlace state', state);
 
         return React.DOM.div({className: 'creator'},
-            React.DOM.ul({},
-                React.DOM.li({}, 
-                    React.DOM.div({}, "New place"),
-                    React.DOM.form({
-                        onSubmit: function(e){
-                            e.preventDefault();
-                    
-                            console.log('Creating Place');
+            React.DOM.div({}, "New place"),
+            React.DOM.form({
+                onSubmit: function(e){
+                    e.preventDefault();
+            
+                    console.log('Creating Place');
 
-                            props.onCreatePlace({
-                                'name': e.target.placeName.value,
-                                'lat': e.target.latitude.value,
-                                'lon': e.target.longitude.value
-                            });
+                    props.onCreatePlace({
+                        'name': e.target.placeName.value,
+                        'lat': e.target.latitude.value,
+                        'lon': e.target.longitude.value
+                    });
 
-                            self.clearInputs();
-                        }
-                    },
-                        React.DOM.input({
-                            type: 'text',
-                            ref: 'myNameInput',
-                            name: 'placeName',
-                            // value: self.state.placeNameInput,
-                            placeholder: "Place's name"//,
-                        }),
-                        React.DOM.input({
-                            type: 'text',
-                            ref: 'myLatInput',
-                            name: 'latitude',
-                            // value: self.state.latitudeInput,
-                            placeholder: "Latitude"
-                        }),
-                        React.DOM.input({
-                            type: 'text',
-                            ref: 'myLongInput',
-                            name: 'longitude',
-                            // value: self.state.longitudeInput,
-                            placeholder: "longitude"
-                        }),
-                        React.DOM.input({
-                            type: 'submit',
-                            ref: 'mySubmitButton',
-                            name: 'submit',
-                            value: "Créer"
-                        })
-                    )
-                )
+                    self.clearInputs();
+                }
+            },
+                React.DOM.input({
+                    type: 'text',
+                    ref: 'myNameInput',
+                    name: 'placeName',
+                    // value: self.state.placeNameInput,
+                    placeholder: "Place's name"//,
+                }),
+                React.DOM.input({
+                    type: 'text',
+                    ref: 'myLatInput',
+                    name: 'latitude',
+                    // value: self.state.latitudeInput,
+                    placeholder: "Latitude"
+                }),
+                React.DOM.input({
+                    type: 'text',
+                    ref: 'myLongInput',
+                    name: 'longitude',
+                    // value: self.state.longitudeInput,
+                    placeholder: "longitude"
+                }),
+                React.DOM.input({
+                    type: 'submit',
+                    ref: 'mySubmitButton',
+                    name: 'submit',
+                    value: "Créer"
+                })
             )
         );
     }

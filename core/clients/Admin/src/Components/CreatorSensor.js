@@ -26,38 +26,34 @@ var CreatorSensor = React.createClass({
         // console.log('CreatorSensor state', state);
 
         return React.DOM.div({className: 'creator'},
-            React.DOM.ul({},
-                React.DOM.li({}, 
-                    React.DOM.div({}, "New sensor"),
-                    React.DOM.form({
-                        onSubmit: function(e){
-                            e.preventDefault();
+            React.DOM.div({}, "New sensor"),
+            React.DOM.form({
+                onSubmit: function(e){
+                    e.preventDefault();
 
-                            console.log('Creating Sensor');
+                    console.log('Creating Sensor');
 
-                            props.onCreateSensor({
-                                'name': e.target.sensorName.value,
-                                'phone_number': e.target.Phone.value
-                            });
-                        }
-                    },
-                        React.DOM.input({
-                            type: 'text',
-                            name: 'sensorName',
-                            placeholder: "Sensor's name"//,
-                        }),
-                        React.DOM.input({
-                          type: 'text',
-                          name: 'Phone',
-                          placeholder: "Phone"
-                        }),
-                        React.DOM.input({
-                          type: 'submit',
-                          name: 'submit',
-                          value: "Créer"
-                        })
-                    )
-                )
+                    props.onCreateSensor({
+                        'name': e.target.sensorName.value,
+                        'phone_number': e.target.Phone.value
+                    });
+                }
+            },
+                React.DOM.input({
+                    type: 'text',
+                    name: 'sensorName',
+                    placeholder: "Sensor's name"//,
+                }),
+                React.DOM.input({
+                  type: 'text',
+                  name: 'Phone',
+                  placeholder: "Phone"
+                }),
+                React.DOM.input({
+                  type: 'submit',
+                  name: 'submit',
+                  value: "Créer"
+                })
             )
         );
     }

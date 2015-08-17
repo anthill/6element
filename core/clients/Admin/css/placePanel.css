@@ -24,32 +24,47 @@
 	font-weight: bold; font-size: 1.5em;
 }
 
-.place li div, .place .coords *{
-	display: inline-block;; margin: 0 .3rem;
-}
-
 .ant.updating {
 	background-color: red;
 }
 
 .ant{
-	display: block; margin: 1em 0; padding: .5em; position: relative;
+	display: block; margin: 1em 0; padding: .2rem; position: relative;
 	border: 1px solid green; border-radius: 5px;
 	background-color: white;
 	transition: background-color 1s;
 }
 
 .ant li {
-	margin: 2px;
+	margin: 0; padding: .3rem .5em;
+}
+
+.ant li:first-child{
+	border-radius: 5px 5px 0 0;
+}
+
+.ant li > * {
+	display: block;
+}
+
+.ant li div > * {
+	display: inline-block; margin: 0 .3rem;
+}
+
+.ant li div div:first-child{
+	font-weight: 600;
 }
 
 .ant .sense > *{
 	display: block;
 }
 
+.light{
+	background-color: #EEE;
+}
 
-.ant .sense div.status,  .ant .sense div.settings{
-	display: block;
+.dark{
+	background-color: #DDD;
 }
 
 .ant.isSelected{
@@ -57,7 +72,7 @@
 }
 
 .ant-selector {
-	float: right;
+	position: absolute; top: 3px; right: 3px;
 }
 
 .ant.sensorName {
@@ -89,8 +104,12 @@
 
 /* 6sense status */
 
+.ant .sense div.status,  .ant .sense div.settings{
+	display: block; margin: 0 2rem;
+}
+
 .ant.sleeping .sense {
-	color: #DDD;
+	color: #CCC;
 }
 
 .ant.monitoring .sense {

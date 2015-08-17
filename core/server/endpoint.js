@@ -11,6 +11,7 @@
 var EventEmitter = require('events').EventEmitter;
 require('es6-shim');
 var net = require('net');
+var makeTcpReceiver = require('./makeTcpReceiver');
 var database = require('../database');
 var sixElementUtils = require('./6elementUtils.js');
 var simulateSensorMeasurementArrivalTCP = require('./simulateSensorMeasurementArrivalTCP');
@@ -34,14 +35,16 @@ var tcpServerForSensors = net.createServer(function(tcpSocketSensor) {
 
     console.log("New socket to sensor.");
     var phoneNumber;
-    
-    tcpSocketSensor.on('data', function(data) {
 
-        console.log("received tcp data: ", data.toString());
+    var tcpSocketSensorReceiver = makeTcpReceiver(tcpSocketSensor, "\n");
+    
+    tcpSocketSensorReceiver.on('message', function(message) {
+
+        console.log("received tcp data: ", message);
 
         // register the phonenumber corresponding to the socket
-        if (data.toString().match("phoneNumber=*")) {
-            phoneNumber = data.toString().substr(12);
+        if (message.match("phoneNumber=*")) {
+            phoneNumber = message.substr(12);
             phoneNumber2socket[phoneNumber] = tcpSocketSensor;
             console.log(tcpSocketSensor.remoteAddress + " is now known as " + phoneNumber);
             var date = new Date();
@@ -49,10 +52,8 @@ var tcpServerForSensors = net.createServer(function(tcpSocketSensor) {
         }
 
         // handle data
-        if (phoneNumber) {
-            data.toString().split("|").forEach(function(message){
-                handleData(message, phoneNumber2socket[phoneNumber], phoneNumber);
-            });
+        else if (phoneNumber) {
+            handleData(message, phoneNumber2socket[phoneNumber], phoneNumber);
         }
 
     });
@@ -102,7 +103,7 @@ tcpServerForSensors.listen(monitorPort);
 var tcpServerToAdminApp = net.createServer(function(tcpSocketAdminApp) {
 
     eventEmitter.on("data", function(data){
-        tcpSocketAdminApp.write(JSON.stringify(data) + "|");
+        tcpSocketAdminApp.write(JSON.stringify(data) + "\n");
     });
 
     tcpSocketAdminApp.on("error", function(err) {
@@ -114,8 +115,11 @@ var tcpServerToAdminApp = net.createServer(function(tcpSocketAdminApp) {
 tcpServerToAdminApp.listen(process.env.INTERNAL_PORT ? process.env.INTERNAL_PORT : 55555);
 
 tcpServerToAdminApp.on('connection', function(tcpSocketAdminApp) {
-    tcpSocketAdminApp.on('data', function(buffer) {
-        var data = JSON.parse(buffer.toString());
+
+    var tcpSocketAdminAppReceiver = makeTcpReceiver(tcpSocketAdminApp, "\n");
+
+    tcpSocketAdminAppReceiver.on('message', function(message) {
+        var data = JSON.parse(message);
         if (data.type === 'cmd') {
 
             data.to.forEach(function(antPhone){

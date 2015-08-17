@@ -23,8 +23,8 @@
 	background-color: white;
 }
 
-.sensor li * {
-	display: inline-block; margin: 0 1em;
+.sensor li {
+	margin: 0 1em;
 	text-align: left;
 }
 
@@ -72,6 +72,12 @@
 
 /* Place Selector */
 
-.place-selector{
-	position: absolute;
+/*.place-picker{
+	position: absolute; background-color: white;
+	z-index: 3;
 }
+
+.place-picker * {
+	display: block;
+	color: black;
+}*/

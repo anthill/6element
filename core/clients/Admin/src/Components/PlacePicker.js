@@ -52,7 +52,7 @@ var PlacePicker = React.createClass({
             listID = React.DOM.ul({}, lis);
         }
 
-        return React.DOM.div({className: 'place-selector'},
+        return React.DOM.div({className: 'place-picker selector'},
             listID
         );
     }

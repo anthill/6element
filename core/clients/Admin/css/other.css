@@ -61,10 +61,36 @@ li .modifiable{
 }
 
 .selector {
+	position: absolute;
+	color: #666; line-height: 1.7em;
+	overflow-y: scroll;
+	background-color: #DDD;
+	z-index: 3;
+}
+
+.selector ul{
+	display: block; margin: 0;
+}
+
+.selector li{
+	display: block; margin: 0; padding: 0 1em;
+}
+
+.selector li:hover{
+	color: #EEE;
+	background-color: #222;
+}
+
+.ant-picker{
+	height: 200px; top: 0; left: 100%;
+	overflow-y: scroll;
+}
+
+/*.selector {
 	position: absolute; top: .5em; right: .5em;
 }
 .selector div{
 	margin: 0 auto;
 	padding: 0;
-	text-align:center;
-}
+	text-align: center;
+}*/

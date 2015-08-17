@@ -87,6 +87,7 @@ var Sensor = React.createClass({
         // Sensor Place, can be toggled
         var sensorPlace = React.DOM.li({className: 'sensorPlace clickable',
                 onClick: function(){
+                    document.querySelector('body').classList.toggle('noscroll');
                     self.toggleList();
                 }
             },

@@ -43,8 +43,13 @@
 	margin: 2px;
 }
 
-.ant .sense:nth-child(2) {
-	padding: 1em;
+.ant .sense > *{
+	display: block;
+}
+
+
+.ant .sense div.status,  .ant .sense div.settings{
+	display: block;
 }
 
 .ant.isSelected{
@@ -96,24 +101,9 @@
 	color: black;
 }
 
-.ant-picker{
-	position: absolute; height: 100px; padding: .2rem; top: 0; left: 100%;
-	color: #DDD;
-	overflow-y: scroll;
-	background-color: green;
-	z-index: 2;
-}
-.ant-picker ul{
-	display: block;
-}
-
-.ant-picker li{
-	display: block; margin: .1em; padding: .1em;
-}
-
 .add-ant-button {
 	position: relative; margin: 0 auto; width: 70px; border-radius: 10px;
-    text-align: center; line-height: 1.7em;
+    text-align: center;
 }
 
 .place.orphan .name {

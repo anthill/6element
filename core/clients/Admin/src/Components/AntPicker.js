@@ -63,7 +63,7 @@ var AntPicker = React.createClass({
             ));
         });
 
-        return React.DOM.div({className: 'ant-picker'},
+        return React.DOM.div({className: 'ant-picker selector'},
             lis
         );
     }

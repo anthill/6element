@@ -30,13 +30,13 @@
 
 .ant.updating {
 	background-color: red;
-	transition: background-color 1s;
 }
 
 .ant{
 	display: block; margin: 1em 0; padding: .5em; position: relative;
 	border: 1px solid green; border-radius: 5px;
 	background-color: white;
+	transition: background-color 1s;
 }
 
 .ant.isSelected{
@@ -66,11 +66,7 @@
 	color: black;
 }
 
-.3G_connected{
-	color:purple;
-}
-
-.ant.3G_connected .quipu {
+.ant.connected3G .quipu {
 	color: green;
 }
 
@@ -80,15 +76,15 @@
 
 /* 6sense status */
 
-.ant.sleeping .6sense {
+.ant.sleeping .sense {
 	color: #DDD;
 }
 
-.ant.monitoring .6sense {
+.ant.monitoring .sense {
 	color: #888;
 }
 
-.ant.recording .6sense {
+.ant.recording .sense {
 	color: black;
 }
 

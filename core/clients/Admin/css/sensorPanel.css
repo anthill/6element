@@ -19,7 +19,7 @@
 }
 
 .sensor{
-	display: block; margin: 1em; padding: .2em; position: relative; border: 1px solid #DDD;
+	display: block; margin: 1em; padding: .2em; position: relative; border: 1px solid #DDD; position: relative;
 	background-color: white;
 }
 
@@ -68,4 +68,10 @@
 	font-weight: bold;
     color: white;
     background-color: orange;
+}
+
+/* Place Selector */
+
+.place-selector{
+	position: absolute;
 }

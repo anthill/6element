@@ -117,9 +117,9 @@ var Ant = React.createClass({
                         ),
                         React.DOM.div({className: 'settings'},
                             React.DOM.div({}, 'Settings: '),
-                            React.DOM.div({}, props.ant.sense_freq ? props.ant.sense_freq : '1 min'),
-                            React.DOM.div({}, props.ant.sense_start ? props.ant.sense_start : '9h'),
-                            React.DOM.div({}, props.ant.sense_end ? props.ant.sense_start : '18h')
+                            React.DOM.div({}, props.ant.data_period ? props.ant.data_period : 'ND'),
+                            React.DOM.div({}, props.ant.start_time ? props.ant.start_time : 'ND'),
+                            React.DOM.div({}, props.ant.stop_time ? props.ant.stop_time : 'ND')
                         )
                     )
                 ),

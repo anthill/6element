@@ -93,7 +93,7 @@ var App = React.createClass({
             tempMap.set(sensor.name, sensor.id);
         });
 
-        var antFromNameMap = new Immutable.Map(tempMap);
+        var antFromNameMap = new Immutable.OrderedMap(tempMap);
         // console.log('APP tempMap', tempMap);
         // console.log('APP antFromNameMap', antFromNameMap);
 
@@ -135,14 +135,19 @@ var App = React.createClass({
             temp[placeID.name] = placeID.id;
         })
 
-        var placeIDMap = new Immutable.Map(temp);
-    
+        var placeIDMap = new Immutable.OrderedMap(temp);
 
         // Creating Sensor panel
         var allSensors = [];
 
         props.sensorMap.forEach(function (sensor) {
             var place = props.placeMap.get(sensor.installed_at);
+
+            if (sensor.id === 1){
+                placeIDMap.forEach(function(id, name){
+                    console.log('place in APP', id, name);
+                })
+            }
 
             var placeName = place ? place.name : null;
             var placeId = place ? place.id : null;

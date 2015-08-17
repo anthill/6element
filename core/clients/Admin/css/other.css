@@ -60,6 +60,10 @@ li .modifiable{
 	color: orange;
 }
 
+.sensor .modifiable{
+	width: auto;
+}
+
 .selector {
 	position: absolute;
 	color: #666; line-height: 1.7em;

@@ -37,6 +37,8 @@ var tcpServerForSensors = net.createServer(function(tcpSocketSensor) {
     
     tcpSocketSensor.on('data', function(data) {
 
+        console.log("received tcp data: ", data.toString());
+
         // register the phonenumber corresponding to the socket
         if (data.toString().match("phoneNumber=*")) {
             phoneNumber = data.toString().substr(12);
@@ -58,7 +60,7 @@ var tcpServerForSensors = net.createServer(function(tcpSocketSensor) {
     tcpSocketSensor.on('close', function() {
         console.log("connection closed");
         if (phoneNumber) {
-            console.log("Removing from phoneNumber2socket");
+            debug("Removing from phoneNumber2socket");
             delete phoneNumber2socket[phoneNumber];
         }
     });
@@ -66,7 +68,7 @@ var tcpServerForSensors = net.createServer(function(tcpSocketSensor) {
     tcpSocketSensor.on('error', function(err) {
         console.log("[ERROR] " + (err ? err.code : "???") + " : " + (err ? err : "unknown"));
         if (phoneNumber) {
-            console.log("Removing from phoneNumber2socket");
+            debug("Removing from phoneNumber2socket");
             delete phoneNumber2socket[phoneNumber];
         }
     });

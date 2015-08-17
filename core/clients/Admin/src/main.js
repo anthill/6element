@@ -204,6 +204,7 @@ function refreshView(){
 
             topLevelStore.sensorMap = sensorMap;
 
+            // change updating status
             if (updatingID) {
                 var updatingAnt = topLevelStore.sensorMap.get(updatingID);
                 updatingAnt.isUpdating = true;
@@ -214,7 +215,6 @@ function refreshView(){
                     resetUpdate(updatingAnt);
                     render();
                 }, 500);
-
             }
         }
         
@@ -268,68 +268,12 @@ refreshView();
 
 socket.on('status', function (msg) {
 
-    // GET DATA
+    // GET UPDATING SENSOR ID
     var id = msg.sensorId;
     console.log('UPDATING STATUS', id);
-    // var status = msg.socketMessage;
-
-    // resetUpdate(topLevelStore.sensorMap);
-
-    // var updatingSensor = topLevelStore.sensorMap.get(id);
-    // updatingSensor.quipu_status = status.quipu.state;
-    // updatingSensor.signal = status.quipu.signal;
-    // updatingSensor.sense_status = status.sense;
-    // if (status.info){
-    //     updatingSensor.latest_input = status.info.command;
-    //     updatingSensor.latest_output = status.info.result;
-    // }
     
     updatingID = id;
-
-    // console.log('updatingSensor', updatingSensor);
-    
-    // console.log('sensors', updatingSensors);
-    // render();
     refreshView();
-
-    // setTimeout(function(){
-    //     resetUpdate(topLevelStore.sensorMap);
-    //     render();
-    // }, 200);
-
 });
 
-
-
-// // USE TO SIMULATE A STATUS SENDING TO SERVER FROM SENSOR
-
-// var quipu = require('quipu/parser.js');
-// var sendReq = require('../../_common/js/sendReq.js');
-
-// setInterval(function(){
-
-// 	var id = Math.floor(Math.random() * 28);
-
-// 	quipu.encode({
-// 		info: {
-// 			command: 'connect3G',
-// 			result: 'OK'
-// 		},
-// 		quipu: '3G_connected',
-// 		sense: 'recording'
-// 	})
-// 	.then(function(msg){
-// 		var toSend = {
-// 			From: 'xxx' + id,
-// 			Body: '2' + msg
-// 		};
-
-// 		console.log('Sending', toSend);
-// 		sendReq('POST', '/twilio', toSend);
-// 	})
-// 	.catch(function(err){
-// 		console.log(err);
-// 	});
-
-// }, 3000);
 

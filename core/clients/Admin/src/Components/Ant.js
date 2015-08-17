@@ -107,11 +107,19 @@ var Ant = React.createClass({
                     React.DOM.div({}, props.ant.signal) // Pas de signal ???
                 ),
                 React.DOM.li({className: 'sense'},
-                    React.DOM.div({}, '6sense Status'),
-                    React.DOM.div({}, props.ant.sense_status),
-                    React.DOM.div({}, props.ant.sense_freq ? props.ant.sense_freq : '1 min'),
-                    React.DOM.div({}, props.ant.sense_start ? props.ant.sense_start : '9h'),
-                    React.DOM.div({}, props.ant.sense_end ? props.ant.sense_start : '18h')
+                    React.DOM.div({}, '6sense'),
+                    React.DOM.div({}, 
+                        React.DOM.div({className: 'status'},
+                            React.DOM.div({}, 'Status: '),
+                            React.DOM.div({}, props.ant.sense_status)
+                        ),
+                        React.DOM.div({className: 'settings'},
+                            React.DOM.div({}, 'Settings: '),
+                            React.DOM.div({}, props.ant.sense_freq ? props.ant.sense_freq : '1 min'),
+                            React.DOM.div({}, props.ant.sense_start ? props.ant.sense_start : '9h'),
+                            React.DOM.div({}, props.ant.sense_end ? props.ant.sense_start : '18h')
+                        )
+                    )
                 ),
                 React.DOM.li({className: 'command'},
                     React.DOM.div({}, 'Latest Command'),

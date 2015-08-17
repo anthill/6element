@@ -39,6 +39,14 @@
 	transition: background-color 1s;
 }
 
+.ant li {
+	margin: 2px;
+}
+
+.ant .sense:nth-child(2) {
+	padding: 1em;
+}
+
 .ant.isSelected{
 	background: rgba(255, 153, 51, 0.4);
 }
@@ -140,6 +148,5 @@
 }
 
 .low-importance {
-	color: #999999;
-	font-size: small;
+	color: #999999; font-size: small; font-style: italic;
 }

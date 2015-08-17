@@ -6,7 +6,7 @@ require('es6-shim');
 
 
 function getDataType(data) {
-	if (data.toString().match(/^net(\d)$/))
+	if (data.toString().match(/^net(NODATA|GPRS|EDGE|3G|H\/H+)$/))
 		return 'network'
 	else if (data.toString().match("phoneNumber=*"))
 		return 'request'

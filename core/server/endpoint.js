@@ -4,8 +4,7 @@
 ** This is the reception server for 6element.
 ** This code handle
 **      -TCP connection with sensors
-**      -connection monitoring (connected/disconnected) (commented)
-**      -sensor's network monitoring (2G, EDGE, 3G ...) (commented)
+**      -sensor's network monitoring (2G, EDGE, 3G ...)
 **      -data reception, decoding, saving and forwarding to app/admin server
 */
 
@@ -174,6 +173,17 @@ function handleData(dat, socket, phoneNumber) {
     .then(function(data) {
 
         switch (data.message.type) {
+            case 'network':
+                var signal = data.message.decoded.substr(3);
+                database.Sensors.update(data.sensor.id, {signal: signal})
+                .then(function() {
+                    eventEmitter.emit('data', {type: 'status', data: {quipu: {signal: signal}}})
+                })
+                .catch(function(err) {
+                    console.log('error : cannot store signal in DB :', err)
+                })
+                break;
+
             case 'message':
                 if (data.message.decoded === 'init') {
                     var date = new Date();
@@ -183,12 +193,48 @@ function handleData(dat, socket, phoneNumber) {
 
             case 'status':
                 var msgStatus = JSON.parse(data.message.decoded);
-                database.Sensors.update(data.sensor.id, {
-                    latest_input: msgStatus.info.command,
-                    latest_output: msgStatus.info.result,
-                    quipu_status: msgStatus.quipu.state,
-                    sense_status: msgStatus.sense
+                var cmd = msgStatus.info.command.toLowerCase();
+
+                new Promise(function (resolve, reject) {
+                    switch (cmd) {
+                        case 'changestarttime' :
+                            if (msgStatus.info.result === 'KO')
+                                reject('KO');
+                            database.Sensors.update(data.sensor.id, {start_time: parseInt(msgStatus.info.result)})
+                            .then(resolve());
+                            break;
+                        case 'changestoptime' :
+                            if (msgStatus.info.result === 'KO')
+                                reject('KO');
+                            database.Sensors.update(data.sensor.id, {stop_time: parseInt(msgStatus.info.result)})
+                            .then(resolve());
+                            break;
+                        case 'changeperiod' :
+                            if (msgStatus.info.result === 'KO')
+                                reject('KO');
+                            database.Sensors.update(data.sensor.id, {data_period: parseInt(msgStatus.info.result)})
+                            .then(resolve());
+                            break;
+                    }
                 })
+                .then(function() {
+                    debug(cmd + ' result successfully stored in database');
+                })
+                .catch(function(err) {
+                    console.log('error : ' + 'cannot store result of ' + cmd + 'in database ('+err+')')
+                });
+
+                database.Sensors.update(data.sensor.id, (msgStatus.info.command !== 'null') ?
+                    { // If status + command result
+                        latest_input: msgStatus.info.command,
+                        latest_output: msgStatus.info.result,
+                        quipu_status: msgStatus.quipu.state,
+                        sense_status: msgStatus.sense
+                    } : 
+                    { // If only status
+                        quipu_status: msgStatus.quipu.state,
+                        sense_status: msgStatus.sense
+                    })
                 .then(function(){
                     debug('id', data.sensor.id);
                     debug('Storage Success');

@@ -54,9 +54,7 @@ var tcpServerForSensors = net.createServer(function(tcpSocketSensor) {
             database.Sensors.findByPhoneNumber(phoneNumber)
             .then(function(sensor) {
                 console.log('sending config')
-                sendCommand(tcpSocketSensor, 'changeperiod '+ sensor.data_period);
-                sendCommand(tcpSocketSensor, 'changestarttime '+ sensor.start_time);
-                sendCommand(tcpSocketSensor, 'changestoptime '+ sensor.stop_time);
+                sendCommand(tcpSocketSensor, 'init '+ [sensor.data_period, sensor.start_time, sensor.stop_time].join(" "));
             })
             .catch(function(err) {
                 console.log("[ERROR] Couldn't get sensor's config in DB :", err);

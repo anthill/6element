@@ -215,30 +215,39 @@ function handleData(dat, socket, phoneNumber) {
                 new Promise(function (resolve, reject) {
                     switch (cmd) {
                         case 'changestarttime' :
-                            if (msgStatus.info.result === 'KO')
+                            if (msgStatus.info.result === 'KO') {
                                 reject('KO');
+                                return 'KO';
+                            }
                             database.Sensors.update(data.sensor.id, {start_time: parseInt(msgStatus.info.result)})
                             .then(resolve());
                             break;
                         case 'changestoptime' :
-                            if (msgStatus.info.result === 'KO')
+                            if (msgStatus.info.result === 'KO') {
                                 reject('KO');
+                                return 'KO';
+                            }
                             database.Sensors.update(data.sensor.id, {stop_time: parseInt(msgStatus.info.result)})
                             .then(resolve());
                             break;
                         case 'changeperiod' :
-                            if (msgStatus.info.result === 'KO')
+                            if (msgStatus.info.result === 'KO') {
                                 reject('KO');
+                                return 'KO';
+                            }
                             database.Sensors.update(data.sensor.id, {data_period: parseInt(msgStatus.info.result)})
                             .then(resolve());
                             break;
+                        default:
+                            reject(null)
                     }
                 })
                 .then(function() {
                     debug(cmd + ' result successfully stored in database');
                 })
                 .catch(function(err) {
-                    console.log('error : ' + 'cannot store result of ' + cmd + ' in database ('+err+')')
+                    if (err)
+                        console.log('error : ' + 'cannot store result of ' + cmd + ' in database ('+err+')')
                 });
 
                 database.Sensors.update(data.sensor.id, (msgStatus.info.command !== 'null') ?

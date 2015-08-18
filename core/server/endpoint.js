@@ -47,14 +47,13 @@ var tcpServerForSensors = net.createServer(function(tcpSocketSensor) {
             phoneNumber = message.substr(12);
             phoneNumber2socket[phoneNumber] = tcpSocketSensor;
             console.log(tcpSocketSensor.remoteAddress + " is now known as " + phoneNumber);
-            var date = new Date();
-            sendCommand(tcpSocketSensor, 'date ' + date.toISOString())
-
+            
             // Send config to the sensor
             database.Sensors.findByPhoneNumber(phoneNumber)
             .then(function(sensor) {
-                console.log('sending config')
-                sendCommand(tcpSocketSensor, 'init '+ [sensor.data_period, sensor.start_time, sensor.stop_time].join(" "));
+                console.log('sending config');
+                var date = new Date();
+                sendCommand(tcpSocketSensor, 'init '+ [sensor.data_period, sensor.start_time, sensor.stop_time, date.toISOString()].join(" "));
             })
             .catch(function(err) {
                 console.log("[ERROR] Couldn't get sensor's config in DB :", err);

@@ -135,6 +135,8 @@ tcpServerToAdminApp.on('connection', function(tcpSocketAdminApp) {
                 if (phoneNumber2socket[antPhone]){
                     sendCommand(phoneNumber2socket[antPhone], data.command);
                 }
+                else
+                    console.log('phoneNumber2socket[antPhone] undefined !')
             });
 
         }

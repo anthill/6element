@@ -126,7 +126,7 @@ var Ant = React.createClass({
                 ),
                 React.DOM.li({className: 'command dark'},
                     React.DOM.div({},
-                        React.DOM.div({}, 'Latest Command'),
+                        React.DOM.div({}, 'Last Command'),
                         React.DOM.div({}, props.ant.latest_input),
                         React.DOM.div({}, props.ant.latest_output)
                     )

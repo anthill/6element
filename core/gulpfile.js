@@ -53,7 +53,7 @@ gulp.task('init', function () {
             dropAllTables()
             .then(function(){
                 createTables()
-                .then(function(){
+                .then(function(){   
                     if (!process.env.BACKUP) {
                         console.log('no backup file');
                         generateDefinitions()

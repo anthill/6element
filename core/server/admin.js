@@ -21,7 +21,7 @@ var zlib = require('zlib');
 
 var PORT = 4001;
 var DEBUG = process.env.NODE_ENV === "development" ? true : false;
-var secret = "99htdl5wBQIyVVScSEoHdqiR18eFu9EnVHAAwW6Z";
+var secret = require("../PRIVATE.json");
 
 var endpointConfig =
     {
@@ -105,7 +105,7 @@ app.use("/Admin", express.static(path.join(__dirname, '../clients/Admin')));
 app.use("/_common", express.static(path.join(__dirname, '../clients/_common')));
 
 app.get('/', function(req, res){
-    if(req.query.s === secret)
+    if(req.query.s === secret || DEBUG === true)
         res.sendFile(path.join(__dirname, '../clients/Admin/index.html'));
     else
         res.status(403).sendFile(path.join(__dirname, '../clients/Admin/403.html'));

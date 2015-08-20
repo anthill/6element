@@ -108,7 +108,7 @@ app.get('/', function(req, res){
     if(req.query.s === secret)
         res.sendFile(path.join(__dirname, '../clients/Admin/index.html'));
     else
-        res.status(404).sendFile(path.join(__dirname, '../clients/Admin/403.html'));
+        res.status(403).sendFile(path.join(__dirname, '../clients/Admin/403.html'));
 });
 
 

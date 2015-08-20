@@ -1,61 +1,93 @@
-# Scope
+# 6element
 
-6element is a open innovation project of waste optimisation.
-[Learn more](http://ants.builders/pages/6element.html)
+6element is a open innovation project of waste optimisation. **[Learn more](http://ants.builders/pages/6element.html)**
 
-### Getting started
 
-#### Preambule
+## Getting started :
 
-````
+* Install [docker](https://docs.docker.com/) and [docker-compose](http://docs.docker.com/compose/install/)
+
+* Make sure to have the port 5100 opened.
+
+* clone the repository :
+
+```
 git clone git@github.com:anthill/6element.git
 cd 6element
-````
+```
 
-Copy/create the missing file `PRIVATE.json` situated in the `core` folder containing:
+* Copy / Create the file core/PRIVATE.json containing
 
-````
+```
 {
-    "twiliossi": "...",
-    "twiliopwd": "...",
+	"secret": "...", // Key for the admin url
     "mapbox_token": "...",
     "mapId": "..."
 }
-````
+```
 
-Install dependencies locally (this is mainly to enable automated lint functionality)
+* Install dependencies locally (this is mainly to enable automated lint functionality)
+
 ````
 cd core
 npm install
 ````
 
-
-## Running in dev mode
-
-To have automatic reload of the server and rebuild of the frontend use as well as fake data automatically populated:
+* build the docker containers : 
 
 ```
-docker-compose -f compose-dev.yml build
-docker-compose -f compose-dev.yml up
+docker-compose -f rebuild-db.yml build
+docker-compose -f compose-prod.yml build
 ```
 
-## Pushing to production
+* Build the database : ```docker-compose -f rebuild-db.yml up```
 
-If you want to clear (and lose all the data) because you changed the schema or for whatever reason you can drop and create the db as well as rewrite the `declaration.js`:
+	*When it says you that the database has been reseted, you can stop it.*
 
-```
-docker-compose -f rebuild-db.yml up
-```
-
-To load some data at initialisation just specify, in the `rebuild-db.yml`, the path of the dump placed in the `app/data/backups` folder (it will automatically do the job).
-
-When you only want to restart the service use:
-
-```
-docker-compose -f compose-prod.yml up -d
-```
+* Start the server : ```docker-compose -f compose-prod.yml up -d```
 
 
+## Server Architecture :
+
+The 6element server's goal is to receive data from distant sensors, to store it and to provide interfaces for data visualisation and sensor-administration.
+
+*You can find the source code for sensors in [6brain](https://github.com/anthill/6brain)*
+
+In order to do so, the server is composed of 4 docker containers communicating with each other.
+
+### The database.
+
+This is the memory of the server. It stores every places informations, what sensors are attached to them, but also measurements and status from theses sensors.
+
+### The reception server (or TCP endpoint).
+
+Its role is to act as a door between internal containers and distant sensors.
+
+It receives data from sensors, stores it into the database, and then send it to the appropriate web-server (admin or map).
+
+It can also receive some commands to send to a sensor from the admin server.
+
+### The Map server.
+
+It's the web server wich handle the measurement visualisation through a map.
+
+### The Admin server.
+
+It's the web server which provide an administration interface for sensors. Admins can add/delete places, add/delete sensors, send commands, see sensors status...
 
 
 
+### In short :
+
+Here's a schema showing the server architecture, with technologies and port used for communication.
+
+![Image Alt](https://docs.google.com/drawings/d/11Lo_nfxXwXgdULOm_AK2A0_dp0pDNQIAllBRFUpYLJ8/pub?w=960&h=720)
+
+
+## Contribute :
+
+* Clone the repository
+
+* Create a new branch to work in
+
+* Make a pull request explaining why and what you changed

@@ -3,52 +3,6 @@
 6element is a open innovation project of waste optimisation. **[Learn more](http://ants.builders/pages/6element.html)**
 
 
-## Getting started :
-
-* Install [docker](https://docs.docker.com/) and [docker-compose](http://docs.docker.com/compose/install/)
-
-* Make sure to have the port 5100 opened.
-
-* clone the repository :
-
-```
-git clone git@github.com:anthill/6element.git
-cd 6element
-```
-
-* Copy / Create the file core/PRIVATE.json containing
-
-```
-{
-	"secret": "...", // Key for the admin url
-    "mapbox_token": "...",
-    "mapId": "..."
-}
-```
-
-* Install dependencies locally (this is mainly to enable automated lint functionality)
-
-````
-cd core
-npm install
-````
-
-* build the docker containers : 
-
-```
-docker-compose -f rebuild-db.yml build
-docker-compose -f compose-prod.yml build
-```
-
-* Build the database : ```docker-compose -f rebuild-db.yml up```
-
-	*When it says you that the database has been reseted, you can stop it.*
-
-* Start the server : ```docker-compose -f compose-prod.yml up -d```
-
-
-## Server Architecture :
-
 The 6element server's goal is to receive data from distant sensors, to store it and to provide interfaces for data visualisation and sensor-administration.
 
 *You can find the source code for sensors in [6brain](https://github.com/anthill/6brain)*
@@ -76,12 +30,56 @@ It's the web server wich handle the measurement visualisation through a map.
 It's the web server which provide an administration interface for sensors. Admins can add/delete places, add/delete sensors, send commands, see sensors status...
 
 
-
 ### In short :
 
 Here's a schema showing the server architecture, with technologies and port used for communication.
 
 ![Image Alt](https://docs.google.com/drawings/d/11Lo_nfxXwXgdULOm_AK2A0_dp0pDNQIAllBRFUpYLJ8/pub?w=960&h=720)
+
+
+
+## Getting started :
+
+* Install [docker](https://docs.docker.com/) and [docker-compose](http://docs.docker.com/compose/install/)
+
+* Make sure to have the port 5100 opened.
+
+* clone the repository :
+
+```
+git clone git@github.com:anthill/6element.git
+cd 6element
+```
+
+* Copy / Create the file `core/PRIVATE.json` containing
+
+```
+{
+	"secret": "...", // Key for the admin url
+    "mapbox_token": "...",
+    "mapId": "..."
+}
+```
+
+* Install dependencies locally (this is mainly to enable automated lint functionality)
+
+````
+cd core
+npm install
+````
+
+* build the docker containers : 
+
+```
+docker-compose -f rebuild-db.yml build
+docker-compose -f compose-prod.yml build
+```
+
+* Build the database : `docker-compose -f rebuild-db.yml up`
+
+	*When it says you that the database has been reseted, you can stop it.*
+
+* Start the server : `docker-compose -f compose-prod.yml up -d`
 
 
 ## Contribute :

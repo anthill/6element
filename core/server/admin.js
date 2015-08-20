@@ -20,8 +20,8 @@ var schedule = require('node-schedule');
 var zlib = require('zlib');
 
 var PORT = 4001;
-var DEBUG = process.env.NODE_ENV === "development" ? true : false;
-var secret = require("../PRIVATE.json");
+var DEBUG = process.env.NODE_ENV === "development";
+var secret = require("../PRIVATE.json").secret;
 
 var endpointConfig =
     {
@@ -105,7 +105,7 @@ app.use("/Admin", express.static(path.join(__dirname, '../clients/Admin')));
 app.use("/_common", express.static(path.join(__dirname, '../clients/_common')));
 
 app.get('/', function(req, res){
-    if(req.query.s === secret || DEBUG === true)
+    if(req.query.s === secret || DEBUG)
         res.sendFile(path.join(__dirname, '../clients/Admin/index.html'));
     else
         res.status(403).sendFile(path.join(__dirname, '../clients/Admin/403.html'));

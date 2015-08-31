@@ -14,7 +14,13 @@ var PRIVATE = require('../../../PRIVATE.json');
 
 var BORDEAUX_COORDS = [44.84, -0.57];
 
+// Get the day in the URL
+var day = location.search.match(/[\? | \?.*&+]day=(\d\d)\/(\d\d)\/(\d\d\d\d)/);
+day = day ? day[2] + '/' + day[1] + '/' + day[3] : undefined;
+day = new Date(day).toString() !== 'Invalid Date' ? day : undefined;
+
 var topLevelStore = {
+    day: day,
     mapBoxToken: PRIVATE.mapbox_token,
     mapId: PRIVATE.map_id,
     mapCenter: BORDEAUX_COORDS,

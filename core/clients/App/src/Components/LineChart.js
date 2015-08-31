@@ -4,7 +4,8 @@ var React = require("react");
 
 /*
 interface LineChart Props{
-    measurements: [{id: 18, measurement: 18, measurement_date: "2015-07-09T12:45:53.629Z"}]
+    measurements: [{id: 18, measurement: 18, measurement_date: "2015-07-09T12:45:53.629Z"}],
+    day: string
 }
 interface LineChart State{
 }
@@ -41,6 +42,17 @@ var LineChart = React.createClass({
             return [date, x.measurement];
         });
 
+        var beginDay;
+        var endDay;
+
+        if (props.day) {
+            beginDay = new Date(props.day); // The day
+            endDay = new Date(beginDay.getTime() + (1000 * 60 * 60 * 24 * 2)); // +48h
+        } else {
+            endDay = new Date(); // Now
+            beginDay = new Date(endDay - (1000 * 60 * 60 * 24 * 2)); // -48h
+        }
+
         // this part is super awkward, not very React-y.
         var chart = new Dygraph(
             React.findDOMNode(this.refs[CHART_DIV_REF]),
@@ -48,7 +60,8 @@ var LineChart = React.createClass({
             {
                 labels: [ "time", "Traces wifi" ],
                 legend: "onmouseover",
-                strokeWidth: 2
+                strokeWidth: 2,
+                dateWindow: [beginDay, endDay]
             }
         );
         console.log(chart)

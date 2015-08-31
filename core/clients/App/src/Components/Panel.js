@@ -7,7 +7,8 @@ var Detail = React.createFactory(require('./Detail.js'));
 /*
 
 interface PanelProps{
-    placeMap: Map ( id => Place )
+    placeMap: Map ( id => Place ),
+    day: string
 }
 
 */
@@ -41,7 +42,8 @@ var Panel = React.createClass({
 
             props.placeMap.forEach(function (rc){
                 details.push(new Detail({
-                    place: rc
+                    place: rc,
+                    day : props.day
                 }));
             });
         }

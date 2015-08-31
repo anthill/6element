@@ -29,7 +29,8 @@ interface ApplicationProps{
     mapCenter,
     placeMap: Map (placeId => Place),
     getPlaceMeasurements: (placeId) => Promise<AffluenceHistory[]>,
-    updatingIDs: [int]
+    updatingIDs: [int],
+    day: string
 }
 
 interface ApplicationState{
@@ -56,7 +57,8 @@ module.exports = React.createClass({
         var state = this.state;
         
         var panel = new Panel({
-            placeMap: state.selectedPlaceMap
+            placeMap: state.selectedPlaceMap,
+            day: props.day
         });
 
 

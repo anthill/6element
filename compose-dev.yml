@@ -15,6 +15,7 @@ app:
       - NODE_ENV=development
    volumes:
       - ./core:/6element/core
+      - /data/6element:/6element/data
 endpoint:
    build: .
    dockerfile: core/Dockerfile

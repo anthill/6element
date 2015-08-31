@@ -16,3 +16,4 @@ PRIVATE.json
 npm-debug.log
 
 backups/
+data

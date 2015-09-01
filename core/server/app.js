@@ -18,7 +18,14 @@ var datasetParser = require('./readDataset.js')
 var PORT = 4000;
 var DEBUG = process.env.NODE_ENV === "development" ? true : false;
 
-// var realDatas; // Set in the promise.all at the end of the file.
+var SECOND = 1000;
+var MINUTE = SECOND * 60;
+var HOUR = MINUTE * 60;
+var DAY = HOUR * 24;
+
+var realDatas; // Set by loadDataSet().
+
+var measurementNormalizer = {}; // Set in app.get(/place/:id)
 
 var endpointConfig =
     {
@@ -39,6 +46,10 @@ var io = require('socket.io')(server);
 
 io.set('origins', '*:*');
 
+
+// Load the real-data dataset
+loadDataset();
+
 // listening to the reception server
 var endpointInterval = setInterval(function() {
     var tcpSocketEnpoint = net.connect(endpointConfig, function(){
@@ -52,7 +63,7 @@ var endpointInterval = setInterval(function() {
             var packet = JSON.parse(message);
 
             if (packet.type === 'data') {
-                io.sockets.emit('data', packet.data); // Forwarding data to web clients
+                io.sockets.emit('data', packet.data); // Forwarding data to web clients, TODO : delete useless signals
             }
 
         })
@@ -103,7 +114,63 @@ app.get('/place/:id', function(req, res){
     
     database.complexQueries.getPlaceMeasurements(id)
     .then(function(data){
-        res.send(data);
+
+        if (!measurementNormalizer[id]) {
+            var sum = 0;
+            var nbMeasurements = 0;
+            data.forEach(function (measurement) {
+                console.log('measurement :', measurement)
+                var hourOfDay = measurement.measurement_date.getTime() % DAY;
+                if (hourOfDay >= 12*HOUR+15*MINUTE && hourOfDay < 13*HOUR+45*MINUTE) {
+                    sum += measurement.signal_strengths.reduce(function(prev, current) {
+                        return prev + current;
+                    });
+                    nbMeasurements += measurement.signal_strengths.length;
+                }
+            })
+            measurementNormalizer[id] = sum / nbMeasurements;
+            console.log('measurementNormalizer for id = ' + id + ' :', measurementNormalizer[id])
+        }
+
+        if (!realDatas || !realDatas[id])
+            res.send(data);
+        else {
+            var toSend = [];
+
+            data = data.concat(realDatas[id]);
+            data.sort(function (data1, data2) {
+                return data1.measurement_date.getTime() - data2.measurement_date.getTime();
+            })
+
+            var i = 0;
+            var lastMeasurementDate = new Date(0);
+            data.forEach(function (measurement) {
+                if (!measurement.real) { // measurement
+                    lastMeasurementDate = measurement.measurement_date;
+                    toSend.push({
+                        id: id,
+                        measurement_date: measurement.measurement_date,
+                        measurement: getMeasurementLength(id, measurement),
+                        realMeasurement: i
+                    });
+                    i = 0;
+                }
+                else { // real value
+                    if (measurement.measurement_date - lastMeasurementDate >= 10 * MINUTE) {  // 10 minutes without measurement
+                        toSend.push({
+                            id: id, 
+                            measurement_date: measurement.measurement_date, 
+                            measurement: null,
+                            realMeasurement: i
+                        });
+                        lastMeasurementDate = measurement.measurement_date;
+                        i = 0;
+                    }
+                    ++i;
+                }
+            })
+            res.send(toSend);
+        }
     })
     .catch(function(error){
         console.log("error in /recycling-center/'+req.params.id: ", error);
@@ -121,6 +188,16 @@ app.get('/sensors', function(req, res){
     });
 });
 
+app.get('/reloadDataset', function(req, res) {
+    loadDataset()
+    .then(function () {
+        res.send('done');
+    })
+    .catch(function (err) {
+        res.send('error : ', err)
+    })
+})
+
 server.listen(PORT, function () {
     console.log('Server running on', [
         'http://localhost:',
@@ -130,56 +207,76 @@ server.listen(PORT, function () {
 
 
 
-
-
-
-
 // Load the real dataset.
-
-var PCsv = datasetParser.readDataset()
-.catch(function (err) {
-    console.log('ERROR in dataset parsing:', err)
-})
-
-// return all the places in the DB in order to create a map name->id
-var PPlaces = database.complexQueries.getAllPlacesInfos()
-.catch(function (err) {
-    console.log('ERROR in database retrieving:', err)
-})
-
-Promise.all([PCsv, PPlaces])
-.then(function(results) {
-    debug('DB and dataset retrieved')
-    var dataset = results[0];
-    var places = results[1];
-
-    var nameToID = {};
-
-    places.forEach(function (place) {
-        nameToID[datasetParser.removeAccents(place.name.toLowerCase())] = place.id;
-    })
-
-    // Cut the dataset into little arrays by place ID
+function loadDataset() {
     var datasByID = {};
-    dataset.forEach(function(data) {
-        if (!data) return;
-        if (!data.place || !nameToID[data.place] || datasByID[nameToID[data.place]] === undefined) {
-            datasByID[nameToID[data.place]] = [];
-        }
-        datasByID[nameToID[data.place]].push(data.date);
-    })
 
-    // Sort each array by date
-    Object.keys(datasByID).forEach(function (key) {
-        datasByID[key].sort(function (data1, data2) {
-            return data1.getTime() - data2.getTime();
-        })
+    var PCsv = datasetParser.readDataset()
+    .catch(function (err) {
+        console.log('ERROR in dataset parsing:', err)
     })
-    //realDatas = datasByID;
-})
-.catch(function (err) {
-    console.log('ERROR :', err)
-})
+    
+    // return all the places in the DB in order to create a map name->id
+    var PPlaces = database.complexQueries.getAllPlacesInfos()
+    .catch(function (err) {
+        console.log('Error while retrieving the database :', err)
+    })
+    
+    return Promise.all([PCsv, PPlaces])
+    .then(function(results) {
+        debug('DB and dataset retrieved')
+        var dataset = results[0];
+        var places = results[1];
+    
+        var nameToID = {};
+    
+        places.forEach(function (place) {
+            nameToID[datasetParser.removeAccents(place.name.toLowerCase())] = place.id;
+        })
+    
+        var lastData;
+
+        // Cut the dataset into little arrays by place ID
+        dataset.forEach(function(data) {
+            if (!data) return;
+            if (!lastData || lastData.md5 !== data.md5) {
+                if (!data.place || !nameToID[data.place] || datasByID[nameToID[data.place]] === undefined) {
+                    datasByID[nameToID[data.place]] = [];
+                }
+                datasByID[nameToID[data.place]].push(
+                    {
+                        measurement_date: new Date(data.date.getTime() - 2 * HOUR), // Convert to UTC
+                        real: true
+                    });
+                lastData = data;
+            }
+        })
+    
+        // Sort each array by date
+        Object.keys(datasByID).forEach(function (key) {
+            datasByID[key].sort(function (data1, data2) {
+                return data1.measurement_date.getTime() - data2.measurement_date.getTime();
+            })
+        })
+        realDatas = datasByID; // Change the global variable ... Erk ...
+        debug('dataset loaded')
+    })
+    .catch(function (err) {
+        console.log('ERROR :', err)
+    })
+}
+
+function getMeasurementLength(id, measurement) {
+    var length = 0;
+
+    if (!measurementNormalizer[id])
+        return (measurement.measurement);
+    measurement.signal_strengths.forEach(function (signal) {
+        if (signal > measurementNormalizer[id])
+            ++length;
+    })
+    return length;
+}
 
 // In dev, there are usually no sensor pushing.
 // Let's simulate that part

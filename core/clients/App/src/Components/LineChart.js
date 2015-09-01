@@ -39,7 +39,7 @@ var LineChart = React.createClass({
     
         var data = props.measurements.map(function(x){
             var date = new Date(x.measurement_date);
-            return [date, x.measurement];
+            return [date, x.measurement, x.realMeasurement];
         });
 
         var beginDay;
@@ -58,7 +58,7 @@ var LineChart = React.createClass({
             React.findDOMNode(this.refs[CHART_DIV_REF]),
             data,
             {
-                labels: [ "time", "Traces wifi" ],
+                labels: [ "time", "Traces wifi", "real datas" ],
                 legend: "onmouseover",
                 strokeWidth: 2,
                 dateWindow: [beginDay, endDay]

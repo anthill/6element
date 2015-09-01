@@ -37,7 +37,7 @@ function parseCSVSync(csv, format, callback) {
         return obj;
     })
     if (callback && typeof (callback) === "function")
-        callback(null, objArray);
+        return callback(null, objArray);
     return objArray;
 }
 
@@ -51,10 +51,10 @@ function readDataset() {
             }
 
             console.log('file', file)
-            var dataset = parseCSVSync(file, ['place', 'date', 'who', 'what', 'quantity', 'unit'])
+            var dataset = parseCSVSync(file, ['place', 'date', 'who', 'what', 'quantity', 'unit', 'md5'])
             .map(function (object) {
                 if (object)
-                    return {place: object.place.replace('ST ', 'Saint-').toLowerCase(), date: new Date(object.date)};
+                    return {place: object.place.replace('ST ', 'Saint-').toLowerCase(), date: new Date(object.date), md5: object.md5};
                 else
                     return (null);
             });

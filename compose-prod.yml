@@ -15,6 +15,7 @@ app:
       - NODE_ENV=production
    volumes:
       - ./core:/6element/core
+      - /data/6element:/6element/data
    restart: always
 endpoint:
    build: .

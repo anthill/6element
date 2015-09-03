@@ -11,9 +11,12 @@ var compression = require('compression');
 var bodyParser = require('body-parser');
 var net = require('net');
 var makeTcpReceiver = require('./makeTcpReceiver');
+var EventEmitter = require('events').EventEmitter;
 
 var database = require('../database');
 var datasetParser = require('./readDataset.js')
+
+var model = require('./appModel.js');
 
 var PORT = 4000;
 var DEBUG = process.env.NODE_ENV === "development" ? true : false;
@@ -21,11 +24,10 @@ var DEBUG = process.env.NODE_ENV === "development" ? true : false;
 var SECOND = 1000;
 var MINUTE = SECOND * 60;
 var HOUR = MINUTE * 60;
-var DAY = HOUR * 24;
+
+var eventEmitter = new EventEmitter();
 
 var realDatas; // Set by loadDataSet().
-
-var measurementNormalizer = {}; // Set in app.get(/place/:id)
 
 var endpointConfig =
     {
@@ -49,6 +51,11 @@ io.set('origins', '*:*');
 
 // Load the real-data dataset
 loadDataset();
+
+// train the model
+eventEmitter.on('datasetLoaded', function() {
+    model.train(realDatas);
+});
 
 // listening to the reception server
 var endpointInterval = setInterval(function() {
@@ -111,64 +118,22 @@ app.get('/live-affluence', function(req, res){
 
 app.get('/place/:id', function(req, res){
     var id = Number(req.params.id);
-    
+
     database.complexQueries.getPlaceMeasurements(id)
-    .then(function(data){
+    .then(function(measurements){
 
-        if (!measurementNormalizer[id]) {
-            var sum = 0;
-            var nbMeasurements = 0;
-            data.forEach(function (measurement) {
-                console.log('measurement :', measurement)
-                var hourOfDay = measurement.measurement_date.getTime() % DAY;
-                if (hourOfDay >= 12*HOUR+15*MINUTE && hourOfDay < 13*HOUR+45*MINUTE) {
-                    sum += measurement.signal_strengths.reduce(function(prev, current) {
-                        return prev + current;
-                    });
-                    nbMeasurements += measurement.signal_strengths.length;
-                }
-            })
-            measurementNormalizer[id] = sum / nbMeasurements;
-            console.log('measurementNormalizer for id = ' + id + ' :', measurementNormalizer[id])
+        if (!realDatas || !realDatas[id]) {
+            debug('no entries for id', id, 'in the dataset. Sending only measurements')
+            res.send(measurements);
         }
-
-        if (!realDatas || !realDatas[id])
-            res.send(data);
         else {
-            var toSend = [];
+            var toSend = mixMeasurementsAndRealValues(measurements, realDatas[id], id);
 
-            data = data.concat(realDatas[id]);
-            data.sort(function (data1, data2) {
-                return data1.measurement_date.getTime() - data2.measurement_date.getTime();
+            toSend.forEach(function (data) {
+                data.measurement = model.forward(data);
+                //data.measurement = data.signal_strengths ? data.signal_strengths.length : null;
             })
 
-            var i = 0;
-            var lastMeasurementDate = new Date(0);
-            data.forEach(function (measurement) {
-                if (!measurement.real) { // measurement
-                    lastMeasurementDate = measurement.measurement_date;
-                    toSend.push({
-                        id: id,
-                        measurement_date: measurement.measurement_date,
-                        measurement: getMeasurementLength(id, measurement),
-                        realMeasurement: i
-                    });
-                    i = 0;
-                }
-                else { // real value
-                    if (measurement.measurement_date - lastMeasurementDate >= 10 * MINUTE) {  // 10 minutes without measurement
-                        toSend.push({
-                            id: id, 
-                            measurement_date: measurement.measurement_date, 
-                            measurement: null,
-                            realMeasurement: i
-                        });
-                        lastMeasurementDate = measurement.measurement_date;
-                        i = 0;
-                    }
-                    ++i;
-                }
-            })
             res.send(toSend);
         }
     })
@@ -206,12 +171,67 @@ server.listen(PORT, function () {
 });
 
 
+// mix measurements and real values from the dataset for one place ID
+function mixMeasurementsAndRealValues(measurements, realValues, id) {
+    var toSend = [];
+    var everything = [];
+
+    // Make an array with everything
+    everything = everything.concat(measurements);
+    everything = everything.concat(realValues);
+
+    // Sort by date
+    everything.sort(function (data1, data2) {
+        return data1.measurement_date.getTime() - data2.measurement_date.getTime();
+    })
+
+    var nbRealValues = 0;
+    var lastMeasurementDate = new Date(0);
+
+    // Pass throught this array
+    everything.forEach(function (data) {
+        if (!data) return;
+        if (!data.real) { // If the data is a measurement
+            lastMeasurementDate = data.measurement_date;
+            // Add to the final array
+            toSend.push({
+                id: id,
+                measurement_date: data.measurement_date,
+                measurement: data.signal_strengths.length,
+                signal_strengths: data.signal_strengths,
+                realMeasurement: nbRealValues
+            });
+            nbRealValues = 0;
+        }
+        else { // If the data is a real value
+            if (data.measurement_date - lastMeasurementDate >= 10 * MINUTE) {  // 10 minutes without measurement
+                toSend.push({
+                    id: id, 
+                    measurement_date: data.measurement_date, 
+                    measurement: null, // Not 0, because dygraphs handle null as 'no data'
+                    realMeasurement: nbRealValues
+                });
+                lastMeasurementDate = data.measurement_date;
+                nbRealValues = 0;
+            }
+            ++nbRealValues;
+        }
+    })
+
+    return (toSend) 
+    // Array of Objects : [{id, measurementDate, measurement, signal_strengths, realMeasurement}, ...]
+}
+
+
+
 
 // Load the real dataset.
-function loadDataset() {
+function loadDataset(_path) {
     var datasByID = {};
 
-    var PCsv = datasetParser.readDataset()
+    _path = _path || '/6element/data/all_data.csv';
+
+    var PCsv = datasetParser.readDataset(_path)
     .catch(function (err) {
         console.log('ERROR in dataset parsing:', err)
     })
@@ -238,9 +258,10 @@ function loadDataset() {
 
         // Cut the dataset into little arrays by place ID
         dataset.forEach(function(data) {
-            if (!data) return;
+            if (!data || !data.place || nameToID[data.place] === undefined) return;
+            // Don't save two adjacent datas with the same md5 hash 
             if (!lastData || lastData.md5 !== data.md5) {
-                if (!data.place || !nameToID[data.place] || datasByID[nameToID[data.place]] === undefined) {
+                if (datasByID[nameToID[data.place]] === undefined) {
                     datasByID[nameToID[data.place]] = [];
                 }
                 datasByID[nameToID[data.place]].push(
@@ -258,24 +279,13 @@ function loadDataset() {
                 return data1.measurement_date.getTime() - data2.measurement_date.getTime();
             })
         })
-        realDatas = datasByID; // Change the global variable ... Erk ...
+        realDatas = datasByID; // Change the global variable
         debug('dataset loaded')
+        eventEmitter.emit('datasetLoaded');
     })
     .catch(function (err) {
         console.log('ERROR :', err)
     })
-}
-
-function getMeasurementLength(id, measurement) {
-    var length = 0;
-
-    if (!measurementNormalizer[id])
-        return (measurement.measurement);
-    measurement.signal_strengths.forEach(function (signal) {
-        if (signal > measurementNormalizer[id])
-            ++length;
-    })
-    return length;
 }
 
 // In dev, there are usually no sensor pushing.
@@ -283,3 +293,4 @@ function getMeasurementLength(id, measurement) {
 // if(process.env.NODE_ENV === 'development'){
 //     simulateSensorMeasurementArrival();
 // }
+

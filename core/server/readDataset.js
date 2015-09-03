@@ -42,9 +42,10 @@ function parseCSVSync(csv, format, callback) {
 }
 
 // return the whole dataset as an array of objects like this: [{place, date}, {place, date}]
-function readDataset() {
+function readDataset(path) {
+    if (!path) return;
     return new Promise(function (resolve, reject) {
-        fs.readFile('/6element/data/all_data.csv', function (err, file) {
+        fs.readFile(path, function (err, file) {
             if (err) {
                 reject(err);
                 return false;
@@ -60,7 +61,10 @@ function readDataset() {
             });
             resolve(dataset);
         })
-    });
+    })
+    .catch(function (err) {
+        console.log('ERROR :', err)
+    })
 }
 
 module.exports = {removeAccents: removeAccents, parseCSVSync: parseCSVSync, readDataset: readDataset};

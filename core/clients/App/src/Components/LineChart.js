@@ -35,7 +35,8 @@ function getStats(data, minDate, maxDate) {
             correlation = ubique.corrcoef(measurements, realDatas)[0][1];
 
             var sum = 0;
-            for (var _i = 0; _i < measurements.length; i++) {
+            var _i = 0
+            for (; _i < measurements.length; _i++) {
                 sum += Math.pow(measurements[_i] - realDatas[_i], 2);
             }
             rmse = Math.sqrt(sum / _i);

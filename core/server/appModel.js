@@ -117,14 +117,21 @@ function trainModel(realDatas) {
 
         Promise.all(PPlace)
         .then(function () {
+
+            function addModelResult(min, max){
+                return function(measurement){
+                    modelResults.push(modelForward(measurement, {min: min, max: max, employee: 0}));
+                    // modelResults.push(measurement.signal_strengths ? measurement.signal_strengths.length : null);
+                }
+
+            }
+
             // Train the 'model'
             for (var min = -100; min <= -50; min += 5) {
                 for (var max = 0; max >= -50; max -= 5) {
 
                     var modelResults = []; // Array of int
-                    allMeasurements.forEach(function (measurement) {
-                        modelResults.push(modelForward(measurement, {min: min, max: max, employee: 0}));
-                    });
+                    allMeasurements.forEach(addModelResult(min, max))
 
                     // get stats for this try
                     var resultStats = getStats(modelResults, allDatas);

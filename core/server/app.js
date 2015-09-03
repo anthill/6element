@@ -131,7 +131,7 @@ app.get('/place/:id', function(req, res){
 
             toSend.forEach(function (data) {
                 data.measurement = model.forward(data);
-                //data.measurement = data.signal_strengths ? data.signal_strengths.length : null;
+                // data.measurement = data.signal_strengths ? data.signal_strengths.length : null;
             })
 
             res.send(toSend);

@@ -35,7 +35,7 @@ function mixMeasurementsAndRealValues(measurements, realValues, id) {
     var nbRealValues = 0;
     var lastMeasurementDate = new Date(0);
 
-    // Pass throught this array
+    // Pass through this array
     everything.forEach(function (data) {
         if (!data) return;
         if (!data.real) { // If the data is a measurement

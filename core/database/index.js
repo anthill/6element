@@ -109,7 +109,8 @@ module.exports = {
                         sensorMeasurement.measurement_date,
                         sensorMeasurement
                             .literal('array_length(affluence_sensor_measurements.signal_strengths, 1)')
-                            .as('measurement')
+                            .as('measurement'),
+                        sensorMeasurement.signal_strengths
                     )
                     .from(
                         sensor

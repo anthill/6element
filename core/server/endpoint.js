@@ -109,16 +109,22 @@ tcpServerForSensors.listen(monitorPort);
 
 
 // Send datas to app and admin servers
+
 var tcpServerToAdminApp = net.createServer(function(tcpSocketAdminApp) {
 
-    eventEmitter.on("data", function(data){
+    var sendToAdminApp = function(data) {
         tcpSocketAdminApp.write(JSON.stringify(data) + "\n");
-    });
+    }
+
+    eventEmitter.on("data", sendToAdminApp);
 
     tcpSocketAdminApp.on("error", function(err) {
         console.log("[ERROR] : ", err.message);
     });
 
+    tcpSocketAdminApp.on("end", function() {
+        eventEmitter.removeListener("end", sendToAdminApp)
+    })
 });
 
 tcpServerToAdminApp.listen(process.env.INTERNAL_PORT ? process.env.INTERNAL_PORT : 55555);

@@ -60,6 +60,7 @@
     "sql": "^0.51.0",
     "sql-generate": "^1.0.0",
     "twilio": "^2.2.1",
+    "ubique": "^0.5.0",
     "vinyl-source-stream": "^1.1.0",
     "xml": "^1.0.0"
   },

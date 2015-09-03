@@ -5,7 +5,8 @@ var LineChart = React.createFactory(require('./LineChart.js'));
 
 /*
 interface DetailProps{
-    place: Place
+    place: Place,
+    day: string
 }
 */
 
@@ -19,11 +20,11 @@ var Detail = React.createClass({
         //var self = this;
         var props = this.props;
 
-        // console.log('detail props', props);
-                
+        console.log('detail props', props);
+
         return React.DOM.div({id: 'detail'}, 
             React.DOM.h2({}, props.place.name),
-            new LineChart({ measurements: props.place.details })
+            new LineChart({ measurements: props.place.details, day: props.day })
         );
     }
 

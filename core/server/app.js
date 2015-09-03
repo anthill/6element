@@ -11,12 +11,23 @@ var compression = require('compression');
 var bodyParser = require('body-parser');
 var net = require('net');
 var makeTcpReceiver = require('./makeTcpReceiver');
+var EventEmitter = require('events').EventEmitter;
 
 var database = require('../database');
+var datasetParser = require('./readDataset.js')
+
+var model = require('./appModel.js');
 
 var PORT = 4000;
 var DEBUG = process.env.NODE_ENV === "development" ? true : false;
 
+var SECOND = 1000;
+var MINUTE = SECOND * 60;
+var HOUR = MINUTE * 60;
+
+var eventEmitter = new EventEmitter();
+
+var realDatas; // Set by loadDataSet().
 
 var endpointConfig =
     {
@@ -37,6 +48,15 @@ var io = require('socket.io')(server);
 
 io.set('origins', '*:*');
 
+
+// Load the real-data dataset
+loadDataset();
+
+// train the model
+eventEmitter.on('datasetLoaded', function() {
+    model.train(realDatas);
+});
+
 // listening to the reception server
 var endpointInterval = setInterval(function() {
     var tcpSocketEnpoint = net.connect(endpointConfig, function(){
@@ -50,7 +70,7 @@ var endpointInterval = setInterval(function() {
             var packet = JSON.parse(message);
 
             if (packet.type === 'data') {
-                io.sockets.emit('data', packet.data); // Forwarding data to web clients
+                io.sockets.emit('data', packet.data); // Forwarding data to web clients, TODO : delete useless signals
             }
 
         })
@@ -98,10 +118,24 @@ app.get('/live-affluence', function(req, res){
 
 app.get('/place/:id', function(req, res){
     var id = Number(req.params.id);
-    
+
     database.complexQueries.getPlaceMeasurements(id)
-    .then(function(data){
-        res.send(data);
+    .then(function(measurements){
+
+        if (!realDatas || !realDatas[id]) {
+            debug('no entries for id', id, 'in the dataset. Sending only measurements')
+            res.send(measurements);
+        }
+        else {
+            var toSend = mixMeasurementsAndRealValues(measurements, realDatas[id], id);
+
+            toSend.forEach(function (data) {
+                data.measurement = model.forward(data);
+                // data.measurement = data.signal_strengths ? data.signal_strengths.length : null;
+            })
+
+            res.send(toSend);
+        }
     })
     .catch(function(error){
         console.log("error in /recycling-center/'+req.params.id: ", error);
@@ -119,6 +153,16 @@ app.get('/sensors', function(req, res){
     });
 });
 
+app.get('/reloadDataset', function(req, res) {
+    loadDataset()
+    .then(function () {
+        res.send('done');
+    })
+    .catch(function (err) {
+        res.send('error : ', err)
+    })
+})
+
 server.listen(PORT, function () {
     console.log('Server running on', [
         'http://localhost:',
@@ -127,8 +171,126 @@ server.listen(PORT, function () {
 });
 
 
+// mix measurements and real values from the dataset for one place ID
+function mixMeasurementsAndRealValues(measurements, realValues, id) {
+    var toSend = [];
+    var everything = [];
+
+    // Make an array with everything
+    everything = everything.concat(measurements);
+    everything = everything.concat(realValues);
+
+    // Sort by date
+    everything.sort(function (data1, data2) {
+        return data1.measurement_date.getTime() - data2.measurement_date.getTime();
+    })
+
+    var nbRealValues = 0;
+    var lastMeasurementDate = new Date(0);
+
+    // Pass throught this array
+    everything.forEach(function (data) {
+        if (!data) return;
+        if (!data.real) { // If the data is a measurement
+            lastMeasurementDate = data.measurement_date;
+            // Add to the final array
+            toSend.push({
+                id: id,
+                measurement_date: data.measurement_date,
+                measurement: data.signal_strengths.length,
+                signal_strengths: data.signal_strengths,
+                realMeasurement: nbRealValues
+            });
+            nbRealValues = 0;
+        }
+        else { // If the data is a real value
+            if (data.measurement_date - lastMeasurementDate >= 10 * MINUTE) {  // 10 minutes without measurement
+                toSend.push({
+                    id: id, 
+                    measurement_date: data.measurement_date, 
+                    measurement: null, // Not 0, because dygraphs handle null as 'no data'
+                    realMeasurement: nbRealValues
+                });
+                lastMeasurementDate = data.measurement_date;
+                nbRealValues = 0;
+            }
+            ++nbRealValues;
+        }
+    })
+
+    return (toSend) 
+    // Array of Objects : [{id, measurementDate, measurement, signal_strengths, realMeasurement}, ...]
+}
+
+
+
+
+// Load the real dataset.
+function loadDataset(_path) {
+    var datasByID = {};
+
+    _path = _path || '/6element/data/all_data.csv';
+
+    var PCsv = datasetParser.readDataset(_path)
+    .catch(function (err) {
+        console.log('ERROR in dataset parsing:', err)
+    })
+    
+    // return all the places in the DB in order to create a map name->id
+    var PPlaces = database.complexQueries.getAllPlacesInfos()
+    .catch(function (err) {
+        console.log('Error while retrieving the database :', err)
+    })
+    
+    return Promise.all([PCsv, PPlaces])
+    .then(function(results) {
+        debug('DB and dataset retrieved')
+        var dataset = results[0];
+        var places = results[1];
+    
+        var nameToID = {};
+    
+        places.forEach(function (place) {
+            nameToID[datasetParser.removeAccents(place.name.toLowerCase())] = place.id;
+        })
+    
+        var lastData;
+
+        // Cut the dataset into little arrays by place ID
+        dataset.forEach(function(data) {
+            if (!data || !data.place || nameToID[data.place] === undefined) return;
+            // Don't save two adjacent datas with the same md5 hash 
+            if (!lastData || lastData.md5 !== data.md5) {
+                if (datasByID[nameToID[data.place]] === undefined) {
+                    datasByID[nameToID[data.place]] = [];
+                }
+                datasByID[nameToID[data.place]].push(
+                    {
+                        measurement_date: new Date(data.date.getTime() - 2 * HOUR), // Convert to UTC
+                        real: true
+                    });
+                lastData = data;
+            }
+        })
+    
+        // Sort each array by date
+        Object.keys(datasByID).forEach(function (key) {
+            datasByID[key].sort(function (data1, data2) {
+                return data1.measurement_date.getTime() - data2.measurement_date.getTime();
+            })
+        })
+        realDatas = datasByID; // Change the global variable
+        debug('dataset loaded')
+        eventEmitter.emit('datasetLoaded');
+    })
+    .catch(function (err) {
+        console.log('ERROR :', err)
+    })
+}
+
 // In dev, there are usually no sensor pushing.
 // Let's simulate that part
 // if(process.env.NODE_ENV === 'development'){
 //     simulateSensorMeasurementArrival();
 // }
+

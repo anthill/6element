@@ -14,6 +14,8 @@ var socket = io();
 
 var errlog = console.error.bind(console);
 
+var HOUR = 1000 * 60 * 60;
+
 function render(){
     React.render(new Application(topLevelStore), document.body);
 }
@@ -196,10 +198,12 @@ function refreshView(){
             var sensorMap = makeMap(sensors, 'id');
             console.log('sensorMap', sensorMap);
 
+
             // transform dbStatus to constants
-            sensorMap.forEach(function(sensor){
-                sensor.quipu_status = dbStatusMap.get(sensor.quipu_status);
-                sensor.sense_status = dbStatusMap.get(sensor.sense_status);
+            sensorMap.forEach(function (sensor){
+                var isConnected = new Date().getTime() - new Date(sensor.updated_at).getTime() <= 12 * HOUR;
+                sensor.quipu_status = isConnected ? dbStatusMap.get(sensor.quipu_status) : "DISCONNECTED";
+                sensor.sense_status = isConnected ? dbStatusMap.get(sensor.sense_status) : "";
             });
 
             topLevelStore.sensorMap = sensorMap;

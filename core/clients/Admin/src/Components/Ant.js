@@ -5,6 +5,7 @@ var Modifiable = React.createFactory(require('./Modifiable.js'));
 
 var moment = require('moment');
 
+var HOUR = 1000 * 60 * 60
 /*
 
 interface AntProps{
@@ -53,6 +54,9 @@ var Ant = React.createClass({
     render: function() {
         var props = this.props;
 
+        var isConnected = new Date().getTime() - new Date(props.ant.updated_at).getTime() <= 12 * HOUR;
+        var quipu_status = isConnected ? props.ant.quipu_status : "DISCONNECTED";
+        var signal = isConnected ? props.ant.signal : "";
         // console.log('ANT props', props);
         // console.log('ANT state', state);
 
@@ -105,8 +109,8 @@ var Ant = React.createClass({
                 React.DOM.li({className: 'quipu dark'},
                     React.DOM.div({},
                         React.DOM.div({}, 'Quipu Status'),
-                        React.DOM.div({}, props.ant.quipu_status),
-                        React.DOM.div({}, props.ant.signal) // Pas de signal ???
+                        React.DOM.div({}, quipu_status),
+                        React.DOM.div({}, signal) // Pas de signal ???
                     )
                 ),
                 React.DOM.li({className: 'sense light'},

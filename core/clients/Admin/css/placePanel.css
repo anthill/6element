@@ -115,6 +115,10 @@
 	color: blue;
 }
 
+.ant.disconnected .quipu {
+	color: #B00
+}
+
 /* 6sense status */
 
 .ant .sense div.status,  .ant .sense div.settings{

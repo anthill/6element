@@ -118,9 +118,9 @@ function trainModel(realDatas) {
         Promise.all(PPlace)
         .then(function () {
 
-            function addModelResult(min, max){
+            function addModelResult(_min, _max){
                 return function(measurement){
-                    modelResults.push(modelForward(measurement, {min: min, max: max, employee: 0}));
+                    modelResults.push(modelForward(measurement, {min: _min, max: _max, employee: 0}));
                     // modelResults.push(measurement.signal_strengths ? measurement.signal_strengths.length : null);
                 }
 

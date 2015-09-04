@@ -206,23 +206,25 @@ function refreshView(){
             sensorMap.forEach(function (sensor){
                 var isConnected = new Date().getTime() - new Date(sensor.updated_at).getTime() <= 12 * HOUR ||
                                   new Date().getTime() - new Date(sensor.lastMeasurementDate || 0).getTime() <= 12 * HOUR;
+                isConnected = Math.random() <= 0.42;
                 sensor.quipu_status = isConnected ? dbStatusMap.get(sensor.quipu_status) : "DISCONNECTED";
-                sensor.sense_status = isConnected ? dbStatusMap.get(sensor.sense_status) : "";
+                sensor.signal = isConnected ? sensor.signal : "";
 
-                if (!sensor.installed_at) return;
-                measurementsPs.push(new Promise(function (resolve) {
-                    serverAPI.getPlaceMeasurements(sensor.installed_at)
-                    .then(function (measurements) {
+                if (sensor.installed_at) {
+                    measurementsPs.push(new Promise(function (resolve) {
+                        serverAPI.getPlaceMeasurements(sensor.installed_at)
+                        .then(function (measurements) {
 
-                        if (measurements && measurements.length)
-                            sensor.lastMeasurementDate = measurements[measurements.length - 1].measurement_date;
-                        resolve();
-                    })
-                    .catch(function (err) {
-                        console.log('error :', err)
-                        resolve(); // We can't just call reject and stop the refreshing of the page
-                    })
-                }));
+                            if (measurements && measurements.length)
+                                sensor.lastMeasurementDate = measurements[measurements.length - 1].measurement_date;
+                            resolve();
+                        })
+                        .catch(function (err) {
+                            console.log('error :', err)
+                            resolve(); // We can't just call reject and stop the refreshing of the page
+                        })
+                    }));
+                }
             })
 
             Promise.all(measurementsPs)

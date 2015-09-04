@@ -131,7 +131,7 @@ app.get('/live-affluence', function(req, res){
 app.get('/place/:id', function(req, res){
     var id = Number(req.params.id);
     
-    database.complexQueries.getPlaceDetails(id)
+    database.complexQueries.getPlaceMeasurements(id)
     .then(function(data){
         res.send(data);
     })

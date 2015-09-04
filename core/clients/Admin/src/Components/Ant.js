@@ -5,7 +5,7 @@ var Modifiable = React.createFactory(require('./Modifiable.js'));
 
 var moment = require('moment');
 
-var HOUR = 1000 * 60 * 60
+var HOUR = 1000 * 60 * 60;
 /*
 
 interface AntProps{
@@ -54,7 +54,8 @@ var Ant = React.createClass({
     render: function() {
         var props = this.props;
 
-        var isConnected = new Date().getTime() - new Date(props.ant.updated_at).getTime() <= 12 * HOUR;
+        var isConnected = new Date().getTime() - new Date(props.ant.updated_at).getTime() <= 12 * HOUR ||
+                          new Date().getTime() - new Date(props.ant.lastMeasurementDate || 0).getTime() <= 12 * HOUR;
         var quipu_status = isConnected ? props.ant.quipu_status : "DISCONNECTED";
         var signal = isConnected ? props.ant.signal : "";
         // console.log('ANT props', props);
@@ -137,8 +138,8 @@ var Ant = React.createClass({
                 ),
                 React.DOM.li({className: 'low-importance light'}, 
                     React.DOM.div({},
-                        React.DOM.div({}, 'Created'),
-                        React.DOM.div({}, moment(props.ant.created_at).format("DD/MM/YYYY HH:mm:ss"))
+                        React.DOM.div({}, 'Last Data'),
+                        React.DOM.div({}, moment(props.ant.lastMeasurementDate).fromNow())
                     ),
                     React.DOM.div({},
                         React.DOM.div({}, 'Updated'),

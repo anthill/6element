@@ -7,7 +7,7 @@ module.exports = {
         return sendReq('GET', '/live-affluence');
     },
     getPlaceMeasurements: function(id){
-        return sendReq('GET', '/places/' + id);
+        return sendReq('GET', '/place/' + id);
     },
     getAllPlacesInfos: function(){
         return sendReq('GET', '/allPlacesInfos');

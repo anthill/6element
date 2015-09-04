@@ -206,7 +206,6 @@ function refreshView(){
             sensorMap.forEach(function (sensor){
                 var isConnected = new Date().getTime() - new Date(sensor.updated_at).getTime() <= 12 * HOUR ||
                                   new Date().getTime() - new Date(sensor.lastMeasurementDate || 0).getTime() <= 12 * HOUR;
-                isConnected = Math.random() <= 0.42;
                 sensor.quipu_status = isConnected ? dbStatusMap.get(sensor.quipu_status) : "DISCONNECTED";
                 sensor.signal = isConnected ? sensor.signal : "";
 

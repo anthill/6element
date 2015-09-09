@@ -133,8 +133,8 @@ var Ant = React.createClass({
                 ),
                 React.DOM.li({className: 'low-importance light'}, 
                     React.DOM.div({},
-                        React.DOM.div({}, 'Created'),
-                        React.DOM.div({}, moment(props.ant.created_at).format("DD/MM/YYYY HH:mm:ss"))
+                        React.DOM.div({}, 'Last Data'),
+                        React.DOM.div({}, moment(props.ant.lastMeasurementDate).fromNow())
                     ),
                     React.DOM.div({},
                         React.DOM.div({}, 'Updated'),

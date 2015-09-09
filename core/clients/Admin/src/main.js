@@ -14,6 +14,8 @@ var socket = io();
 
 var errlog = console.error.bind(console);
 
+var HOUR = 1000 * 60 * 60;
+
 function render(){
     React.render(new Application(topLevelStore), document.body);
 }
@@ -191,8 +193,6 @@ function refreshView(){
                 return a.id > b.id ? 1 : -1;
             });
             
-            // console.log('sensors', results[1]);
-            
             var sensorMap = makeMap(sensors, 'id');
             console.log('sensorMap', sensorMap);
 
@@ -204,21 +204,56 @@ function refreshView(){
 
             topLevelStore.sensorMap = sensorMap;
 
-            // change updating status
-            if (updatingID) {
-                var updatingAnt = topLevelStore.sensorMap.get(updatingID);
-                updatingAnt.isUpdating = true;
+            console.log('sensorMap', sensorMap);
 
-                updatingID = undefined;
+            var measurementsPs = [];
+            // transform dbStatus to constants
+            sensorMap.forEach(function (sensor){
+                var isConnected = new Date().getTime() - new Date(sensor.updated_at).getTime() <= 12 * HOUR ||
+                                  new Date().getTime() - new Date(sensor.lastMeasurementDate || 0).getTime() <= 12 * HOUR;
+                sensor.quipu_status = isConnected ? dbStatusMap.get(sensor.quipu_status) : "DISCONNECTED";
+                sensor.signal = isConnected ? sensor.signal : "";
 
-                setTimeout(function(){
-                    resetUpdate(updatingAnt);
-                    render();
-                }, 500);
-            }
+                if (sensor.installed_at) {
+                    measurementsPs.push(new Promise(function (resolve) {
+                        serverAPI.getPlaceMeasurements(sensor.installed_at)
+                        .then(function (measurements) {
+
+                            if (measurements && measurements.length)
+                                sensor.lastMeasurementDate = measurements[measurements.length - 1].measurement_date;
+                            resolve();
+                        })
+                        .catch(function (err) {
+                            console.log('error :', err)
+                            resolve(); // We can't just call reject and stop the refreshing of the page
+                        })
+                    }));
+                }
+            })
+
+            Promise.all(measurementsPs)
+            .then(function () {
+                // change updating status
+                if (updatingID) {
+                    var updatingAnt = topLevelStore.sensorMap.get(updatingID);
+
+                    updatingAnt.isUpdating = true;
+
+                    updatingID = undefined;
+                    console.log('updatingAnt', updatingAnt.isUpdating)
+
+                    setTimeout(function(){
+                        resetUpdate(updatingAnt);
+                        render();
+                    }, 500);
+                }
+                render();
+
+            })
+            .catch(function (err) {
+                console.log('An error happened :', err)
+            })
         }
-        
-        render();
     })
     .catch(errlog);
 }
@@ -275,5 +310,3 @@ socket.on('status', function (msg) {
     updatingID = id;
     refreshView();
 });
-
-

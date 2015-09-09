@@ -1,7 +1,7 @@
-app:
+dashboard:
    build: .
    dockerfile: core/Dockerfile
-   command: npm run start-app-prod
+   command: npm run start-dashboard-prod
    links:
       - db
       - endpoint
@@ -15,6 +15,7 @@ app:
       - NODE_ENV=production
    volumes:
       - ./core:/6element/core
+      - /data/6element:/6element/data
    restart: always
 endpoint:
    build: .

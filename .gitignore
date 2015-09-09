@@ -1,3 +1,4 @@
+
 *.DS_Store
 node_modules
 presentation/node_modules/
@@ -12,5 +13,10 @@ sensor/vision/data/*
 *-browserify-bundle.js
 
 PRIVATE.json
+
+npm-debug.log
+
+backups/
+data
 
 npm-debug.log

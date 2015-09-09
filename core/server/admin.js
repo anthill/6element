@@ -20,8 +20,8 @@ var schedule = require('node-schedule');
 var zlib = require('zlib');
 
 var PORT = 4001;
-var DEBUG = process.env.NODE_ENV === "development" ? true : false;
-
+var DEBUG = process.env.NODE_ENV === "development";
+var secret = require("../PRIVATE.json").secret;
 
 var endpointConfig =
     {
@@ -105,7 +105,10 @@ app.use("/Admin", express.static(path.join(__dirname, '../clients/Admin')));
 app.use("/_common", express.static(path.join(__dirname, '../clients/_common')));
 
 app.get('/', function(req, res){
-    res.sendFile(path.join(__dirname, '../clients/Admin/index.html'));
+    if(req.query.s === secret || DEBUG)
+        res.sendFile(path.join(__dirname, '../clients/Admin/index.html'));
+    else
+        res.status(403).sendFile(path.join(__dirname, '../clients/Admin/403.html'));
 });
 
 
@@ -128,7 +131,7 @@ app.get('/live-affluence', function(req, res){
 app.get('/place/:id', function(req, res){
     var id = Number(req.params.id);
     
-    database.complexQueries.getPlaceDetails(id)
+    database.complexQueries.getPlaceMeasurements(id)
     .then(function(data){
         res.send(data);
     })
@@ -241,7 +244,9 @@ app.post('/createSensor', function(req, res){
 server.listen(PORT, function () {
     console.log('Server running on', [
         'http://localhost:',
-        PORT
+        PORT,
+        '/?s=',
+        secret
     ].join(''));
 });
 

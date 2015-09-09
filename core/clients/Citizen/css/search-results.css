@@ -1,0 +1,47 @@
+.search-results{
+    
+}
+
+
+.search-results > *{
+    display: flex;
+    flex-direction: column;
+}
+
+.search-results > * > *{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    
+    margin: 1em 0;
+}
+
+.search-results .mode-switch > * {
+    padding: 0.8em;
+    outline: 1px solid darkblue;
+    cursor: pointer;
+}
+
+.search-results .mode-switch label.give{
+    background-color: hsl(118, 38%, 74%);
+}
+
+.search-results .mode-switch label.need{
+    background-color: hsl(208, 38%, 74%);
+}
+
+.search-results .results{
+    list-style: none;
+}
+
+.search-results .results li{
+    padding: 1em;
+    background-color: beige;
+    margin: 0.2em 0;
+    justify-content: flex-start;
+    
+    cursor: pointer;
+}
+
+
+

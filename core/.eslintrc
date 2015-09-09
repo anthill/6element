@@ -28,7 +28,9 @@
         "camelcase": 0,
         "no-extra-strict": 0,
         "no-spaced-func": 0,
-        "consistent-return": 0
+        "consistent-return": 0,
+        "no-loop-func": 1
+
     },
     "globals": {
         "Promise": true,

@@ -47,8 +47,17 @@ var tcpServerForSensors = net.createServer(function(tcpSocketSensor) {
             phoneNumber = message.substr(12);
             phoneNumber2socket[phoneNumber] = tcpSocketSensor;
             console.log(tcpSocketSensor.remoteAddress + " is now known as " + phoneNumber);
-            var date = new Date();
-            sendCommand(tcpSocketSensor, 'date ' + date.toISOString())
+            
+            // Send config to the sensor
+            database.Sensors.findByPhoneNumber(phoneNumber)
+            .then(function(sensor) {
+                console.log('sending config');
+                var date = new Date();
+                sendCommand(tcpSocketSensor, 'init '+ [sensor.data_period, sensor.start_time, sensor.stop_time, date.toISOString()].join(" "));
+            })
+            .catch(function(err) {
+                console.log("[ERROR] Couldn't get sensor's config in DB :", err);
+            })
         }
 
         // handle data
@@ -100,16 +109,22 @@ tcpServerForSensors.listen(monitorPort);
 
 
 // Send datas to app and admin servers
+
 var tcpServerToAdminApp = net.createServer(function(tcpSocketAdminApp) {
 
-    eventEmitter.on("data", function(data){
+    var sendToAdminApp = function(data) {
         tcpSocketAdminApp.write(JSON.stringify(data) + "\n");
-    });
+    }
+
+    eventEmitter.on("data", sendToAdminApp);
 
     tcpSocketAdminApp.on("error", function(err) {
         console.log("[ERROR] : ", err.message);
     });
 
+    tcpSocketAdminApp.on("end", function() {
+        eventEmitter.removeListener("end", sendToAdminApp)
+    })
 });
 
 tcpServerToAdminApp.listen(process.env.INTERNAL_PORT ? process.env.INTERNAL_PORT : 55555);
@@ -126,6 +141,8 @@ tcpServerToAdminApp.on('connection', function(tcpSocketAdminApp) {
                 if (phoneNumber2socket[antPhone]){
                     sendCommand(phoneNumber2socket[antPhone], data.command);
                 }
+                else
+                    console.log('phoneNumber2socket[antPhone] undefined !')
             });
 
         }
@@ -204,30 +221,39 @@ function handleData(dat, socket, phoneNumber) {
                 new Promise(function (resolve, reject) {
                     switch (cmd) {
                         case 'changestarttime' :
-                            if (msgStatus.info.result === 'KO')
+                            if (msgStatus.info.result === 'KO') {
                                 reject('KO');
+                                return 'KO';
+                            }
                             database.Sensors.update(data.sensor.id, {start_time: parseInt(msgStatus.info.result)})
                             .then(resolve());
                             break;
                         case 'changestoptime' :
-                            if (msgStatus.info.result === 'KO')
+                            if (msgStatus.info.result === 'KO') {
                                 reject('KO');
+                                return 'KO';
+                            }
                             database.Sensors.update(data.sensor.id, {stop_time: parseInt(msgStatus.info.result)})
                             .then(resolve());
                             break;
                         case 'changeperiod' :
-                            if (msgStatus.info.result === 'KO')
+                            if (msgStatus.info.result === 'KO') {
                                 reject('KO');
+                                return 'KO';
+                            }
                             database.Sensors.update(data.sensor.id, {data_period: parseInt(msgStatus.info.result)})
                             .then(resolve());
                             break;
+                        default:
+                            reject(null)
                     }
                 })
                 .then(function() {
                     debug(cmd + ' result successfully stored in database');
                 })
                 .catch(function(err) {
-                    console.log('error : ' + 'cannot store result of ' + cmd + 'in database ('+err+')')
+                    if (err)
+                        console.log('error : ' + 'cannot store result of ' + cmd + ' in database ('+err+')')
                 });
 
                 database.Sensors.update(data.sensor.id, (msgStatus.info.command !== 'null') ?

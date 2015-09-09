@@ -99,8 +99,8 @@ gulp.task('init', function () {
 // }
 
 
-gulp.task('serve-app', function () {
-    server.run(['./server/app.js']);
+gulp.task('serve-dashboard', function () {
+    server.run(['./server/dashboard.js']);
 });
 
 gulp.task('serve-admin', function () {
@@ -125,25 +125,25 @@ gulp.task('build-admin', function(){
     browserifyShare('Admin');
 });
 
-gulp.task('build-app', function(){
-    browserifyShare('App');
+gulp.task('build-dashboard', function(){
+    browserifyShare('Dashboard');
 });
 
 gulp.task('server-stop', function(){
     server.stop();
 });
 
-gulp.task('watch-app', function() {
+gulp.task('watch-dashboard', function() {
     console.log('Watching');
     gulp.watch(['./server/**', './database/**'], function(){
         server.stop();
-        gulp.run('serve-app');
+        gulp.run('serve-dashboard');
     });
 
-    var appWatcher = gulp.watch('./clients/App/src/**', ['build-app']);
+    var dashboardWatcher = gulp.watch('./clients/Dashboard/src/**', ['build-dashboard']);
 
-    appWatcher.on('change', function(event) {
-        console.log('*** App *** File ' + event.path + ' was ' + event.type + ', running tasks...');
+    dashboardWatcher.on('change', function(event) {
+        console.log('*** Dashboard *** File ' + event.path + ' was ' + event.type + ', running tasks...');
         // livereload.changed(event.path)
     });
 });
@@ -192,12 +192,12 @@ gulp.task('admin-dev', ['serve-admin', 'build-admin', 'watch-admin'], function()
     console.log('Starting admin in dev');
 });
 
-gulp.task('app-dev', ['serve-app', 'build-app', 'watch-app'], function(){
-    console.log('Starting app in dev');
+gulp.task('dashboard-dev', ['build-dashboard', 'serve-dashboard'/*, 'watch-dashboard'*/], function(){
+    console.log('Starting dashboard in dev');
 });
 
 
 
 gulp.task('admin-prod', ['serve-admin', 'build-admin']);
 
-gulp.task('app-prod', ['serve-app', 'build-app']);
+gulp.task('dashboard-prod', ['serve-dashboard', 'build-dashboard']);

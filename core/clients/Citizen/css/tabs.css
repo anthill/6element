@@ -1,0 +1,28 @@
+.tabs{
+    display: flex; margin-bottom: 1em;
+    justify-content: center;
+}
+
+.tabs > * {
+    padding: 1em;
+    cursor: pointer;
+}
+
+.tabs > .active {
+	background: #333;
+    color: #EEE;
+}
+
+input.login {
+	position: absolute; top: 1em; right: 1em; height: 2em;
+}
+
+@media (max-width: 40em) {
+    .tabs{
+        margin-top: 1.5em;
+    }
+
+    input.login {
+		position: absolute; top: 0em; right: 0em; width: 100%; height: 1.5em; padding: 0 .5em;
+	}
+}

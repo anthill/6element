@@ -118,6 +118,8 @@ function trainModel(realDatas) {
         Promise.all(PPlace)
         .then(function () {
 
+            var modelResults;
+            
             function addModelResult(_min, _max){
                 return function(measurement){
                     modelResults.push(modelForward(measurement, {min: _min, max: _max, employee: 0}));
@@ -130,7 +132,7 @@ function trainModel(realDatas) {
             for (var min = -100; min <= -50; min += 5) {
                 for (var max = 0; max >= -50; max -= 5) {
 
-                    var modelResults = []; // Array of int
+                    modelResults = []; // Array of int
                     allMeasurements.forEach(addModelResult(min, max))
 
                     // get stats for this try

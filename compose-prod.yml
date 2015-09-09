@@ -1,7 +1,7 @@
-app:
+dashboard:
    build: .
    dockerfile: core/Dockerfile
-   command: npm run start-app-prod
+   command: npm run start-dashboard-prod
    links:
       - db
       - endpoint

@@ -52,7 +52,7 @@ function doIt(){
                 if(error) {
                     console.log("ERROR:", error);
                 } else {
-                    console.log('[6element app]', response.statusCode, body);
+                    console.log('[6element dashboard]', response.statusCode, body);
                 }
             });
         });

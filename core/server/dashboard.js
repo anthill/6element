@@ -94,15 +94,15 @@ app.use(bodyParser.json());
 app.use("/leaflet.css", express.static(path.join(__dirname, '../../node_modules/leaflet/dist/leaflet.css')));
 
 app.use("/dygraph-combined.js", express.static(path.join(__dirname, '../../node_modules/dygraphs/dygraph-combined.js')));
-app.use("/App", express.static(path.join(__dirname, '../clients/App')));
+app.use("/Dashboard", express.static(path.join(__dirname, '../clients/Dashboard')));
 app.use("/_common", express.static(path.join(__dirname, '../clients/_common')));
 
 app.get('/', function(req, res){
-    res.sendFile(path.join(__dirname, '../clients/App/index.html'));
+    res.sendFile(path.join(__dirname, '../clients/Dashboard/index.html'));
 });
 
 app.get('/App-browserify-bundle.js', function(req, res){
-    res.sendFile(path.join(__dirname, '../clients/App-browserify-bundle.js'));
+    res.sendFile(path.join(__dirname, '../clients/Dashboard-browserify-bundle.js'));
 });
 
 app.get('/live-affluence', function(req, res){

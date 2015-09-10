@@ -51,6 +51,13 @@ git clone git@github.com:anthill/6element.git
 cd 6element
 ```
 
+* Install [Node](https://github.com/nodesource/distributions#installation-instructions), then [gulp](http://gulpjs.com/) on your machine
+
+```
+npm install gulp -g
+```
+
+
 * Copy / Create the file `core/PRIVATE.json` containing
 
 ```

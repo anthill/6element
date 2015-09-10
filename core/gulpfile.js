@@ -34,61 +34,6 @@ var generateDefinitions = function() {
     });
 }
 
-gulp.task('init', function () {                                 
-
-    // wait database to be created 
-    var interval = setInterval(function(){
-
-        console.log("checking for connection.");
-
-        require('./database/management/databaseClientP')
-        .then(function(){
-            clearInterval(interval);
-
-            // when ready, drop and create tables
-            var dropAllTables = require('./database/management/dropAllTables.js');
-            var createTables = require('./database/management/createTables.js');
-            var hardCodedSensors = require("./server/hardCodedSensors.js");
-
-            dropAllTables()
-            .then(function(){
-                createTables()
-                .then(function(){   
-                    if (!process.env.BACKUP) {
-                        console.log('no backup file');
-                        generateDefinitions()
-                        .then(function(){
-                            console.log("Dropped and created the tables.")
-                            hardCodedSensors();
-                        })
-                        .catch(function(err){
-                            console.error("Couldn't write the schema", err);
-                        });
-                    }
-                    else {
-                        generateDefinitions()
-                        .then(console.log('definitions generated'))
-                        .catch(function(err){
-                            console.error("Couldn't write the schema", err);
-                        });
-                    }
-
-                }).catch(function(err){
-                    console.error("Couldn't create tables", err);
-                });
-            }).catch(function(err){
-                console.error("Couldn't drop tables", err);
-            });         
-
-        })
-        .catch(function(err){
-            console.error("Couldn't connect tables", err);
-        });
-
-
-    }, 1000);
-   
-});
 
 
 // http://stackoverflow.com/a/23973536
@@ -141,35 +86,7 @@ gulp.task('server-stop', function(){
     server.stop();
 });
 
-gulp.task('watch-dashboard', function() {
-    console.log('Watching');
-    gulp.watch(['./server/**', './database/**'], function(){
-        server.stop();
-        gulp.run('serve-dashboard');
-    });
 
-    var dashboardWatcher = gulp.watch('./clients/Dashboard/src/**', ['build-dashboard']);
-
-    dashboardWatcher.on('change', function(event) {
-        console.log('*** Dashboard *** File ' + event.path + ' was ' + event.type + ', running tasks...');
-        // livereload.changed(event.path)
-    });
-});
-
-gulp.task('watch-admin', function() {
-    console.log('Watching admin');
-    gulp.watch(['./server/**', './database/**'], function(){
-        server.stop();
-        gulp.run('serve-admin');
-    });
-
-    var adminWatcher = gulp.watch('./clients/Admin/src/**', ['build-admin']);
-   
-    adminWatcher.on('change', function(event) {
-        console.log('*** Admin *** File ' + event.path + ' was ' + event.type + ', running tasks...');
-    });
-
-});
 
 function browserifyShare(name){
     var b = browserify({

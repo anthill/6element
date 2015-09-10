@@ -1,7 +1,7 @@
 citizen:
    build: .
-   dockerfile: core/Dockerfile
-   command: npm run start-citizen-dev
+   dockerfile: Dockerfile
+   command: npm run start-citizen
    links:
       - db
    ports:
@@ -16,8 +16,8 @@ citizen:
       - /data/6element:/6element/data
 dashboard:
    build: .
-   dockerfile: core/Dockerfile
-   command: npm run start-dashboard-dev
+   dockerfile: Dockerfile
+   command: npm run start-dashboard
    links:
       - db
       - endpoint
@@ -34,8 +34,8 @@ dashboard:
       - /data/6element:/6element/data
 endpoint:
    build: .
-   dockerfile: core/Dockerfile
-   command: npm run start-endpoint-dev
+   dockerfile: Dockerfile
+   command: npm run start-endpoint
    links:
       - db
    ports:
@@ -49,8 +49,8 @@ endpoint:
       - ./core:/6element/core
 admin:
    build: .
-   dockerfile: core/Dockerfile
-   command: npm run start-admin-dev
+   dockerfile: Dockerfile
+   command: npm run start-admin
    links:
       - db
       - endpoint

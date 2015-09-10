@@ -1,8 +1,6 @@
 FROM ants/nodejs:v1
 MAINTAINER Alexandre Vallette <alexandre.vallette@ants.builders>
 
-RUN npm install gulp -g
-
 RUN mkdir /6element
 WORKDIR /6element
 
@@ -14,6 +12,6 @@ RUN apt-get update -y
 RUN apt-get upgrade -y
 RUN apt-get install -y postgresql-9.4 
 
-COPY ./core/package.json /6element/package.json
+COPY ./package.json /6element/package.json
 
 RUN npm install

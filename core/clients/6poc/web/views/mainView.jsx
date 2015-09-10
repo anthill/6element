@@ -3,7 +3,7 @@
 var React = require('react');
 var $ = require('jquery');
 
-var MapView =  React.createFactory(require('./mapView.jsx'));
+var MapView =  require('./mapView.jsx');
 
 module.exports = React.createClass({
   getInitialState: function() {

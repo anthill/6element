@@ -2,9 +2,9 @@
 
 var React = require('react');
 
-var MainView =  React.createFactory(require('./views/mainView.jsx'));
+var MainView =  require('./views/mainView.jsx');
 
 React.render( 
-  new MainView(),
+  React.createElement(MainView),
   document.body
 );

@@ -1,6 +1,7 @@
 "use strict";
 
 var React = require('react');
+var L = require('leaflet');
 
 module.exports = React.createClass({
   getInitialState: function() {
@@ -15,11 +16,11 @@ module.exports = React.createClass({
   loadSelection: function(map, select){
 
     var self = this;
-    
     // Adding icons
     var CentroidIcon = L.Icon.Default.extend({
       options: {
-        iconUrl:      './../img/centroid.png',
+        imagePath:    '/img/centroid.png',
+        iconUrl:     '/img/centroid.png',
         iconSize:     [20, 20],
         shadowSize:   [0, 0], // size of the shadow
         iconAnchor:   [10, 10], // point of the icon which will correspond to marker's location
@@ -29,7 +30,8 @@ module.exports = React.createClass({
     });
     var PingIcon = L.Icon.Default.extend({
       options: {
-        iconUrl:      './../img/ping.png',
+        imagePath:    '/img/centroid.png',
+        iconUrl:      '/img/ping.png',
         iconSize:     [20, 20],
         shadowSize:   [0, 0], // size of the shadow
         iconAnchor:   [10, 10], // point of the icon which will correspond to marker's location
@@ -237,6 +239,7 @@ var MapCore = React.createClass({
         ],
         attributionControl: false,
     });
+    L.Icon.Default.imagePath = 'http://api.tiles.mapbox.com/mapbox.js/v1.0.0beta0.0/images';
     this.props.getMapInfos(map);
   },
   componentWillUnmount: function() {

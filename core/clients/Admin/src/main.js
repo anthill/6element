@@ -16,6 +16,18 @@ var errlog = console.error.bind(console);
 
 var HOUR = 1000 * 60 * 60;
 
+var topLevelStore = {
+    sensorMap: undefined,
+    placeMap: undefined,
+    onChangePlace: updatePlaceInDb,
+    onChangeSensor: updateSensorInDb,
+    onCreatePlace: createPlaceInDb,
+    onRemovePlace: removePlaceFromDb,
+    onRemoveSensor: removeSensorFromDb,
+    onCreateSensor: createSensorInDb,
+    sendCommand: sendCommand
+};
+
 function render(){
     React.render(new Application(topLevelStore), document.body);
 }
@@ -274,18 +286,6 @@ function sendCommand(command, selectedAntSet){
 }
 
 
-
-var topLevelStore = {
-    sensorMap: undefined,
-    placeMap: undefined,
-    onChangePlace: updatePlaceInDb,
-    onChangeSensor: updateSensorInDb,
-    onCreatePlace: createPlaceInDb,
-    onRemovePlace: removePlaceFromDb,
-    onRemoveSensor: removeSensorFromDb,
-    onCreateSensor: createSensorInDb,
-    sendCommand: sendCommand
-};
 
 // Initial rendering
 refreshView();

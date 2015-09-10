@@ -3,4 +3,6 @@ node_modules
 database/management/declarations.js
 clients/Admin-browserify-bundle.js
 clients/Dashboard-browserify-bundle.js
+clients/Citizen-browserify-bundle.js
+
 tests/

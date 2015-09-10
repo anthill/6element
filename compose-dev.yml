@@ -1,3 +1,19 @@
+citizen:
+   build: .
+   dockerfile: core/Dockerfile
+   command: npm run start-citizen-dev
+   links:
+      - db
+   ports:
+      - 4002:4002
+   environment:
+      - VIRTUAL_HOST=6citizen.ants.builders 
+      - VIRTUAL_PORT=4002
+      - POSTGRES_PASSWORD=elements
+      - NODE_ENV=development
+   volumes:
+      - ./core:/6element/core
+      - /data/6element:/6element/data
 dashboard:
    build: .
    dockerfile: core/Dockerfile

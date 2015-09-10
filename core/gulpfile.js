@@ -107,6 +107,10 @@ gulp.task('serve-admin', function () {
     server.run(['./server/admin.js']);
 });
 
+gulp.task('serve-citizen', function () {
+    server.run(['./server/citizen.js']);
+});
+
 gulp.task('serve-endpoint', function () {
     var proc = spawn('node', ['./server/endpoint.js'])
 
@@ -127,6 +131,10 @@ gulp.task('build-admin', function(){
 
 gulp.task('build-dashboard', function(){
     browserifyShare('Dashboard');
+});
+
+gulp.task('build-citizen', function(){
+    browserifyShare('Citizen');
 });
 
 gulp.task('server-stop', function(){
@@ -196,8 +204,14 @@ gulp.task('dashboard-dev', ['build-dashboard', 'serve-dashboard'/*, 'watch-dashb
     console.log('Starting dashboard in dev');
 });
 
+gulp.task('citizen-dev', ['build-citizen', 'serve-citizen'], function(){
+    console.log('Starting citizen in dev');
+});
+
 
 
 gulp.task('admin-prod', ['serve-admin', 'build-admin']);
 
 gulp.task('dashboard-prod', ['serve-dashboard', 'build-dashboard']);
+
+gulp.task('citizen-prod', ['build-citizen', 'serve-citizen']);

@@ -4,8 +4,8 @@
   "description": "2nd round of sketches of the 6element App",
   "main": "app.js",
   "scripts": {
-    "watch": "watchify -t reactify web/main.js -o web/app.js -d -v",
-    "build": "browserify -t reactify web/main.js -o web/app.js",
+    "watch": "watchify -t reactify web/main.js -o web/6poc-browserify-bundle.js -d -v",
+    "build": "browserify -t reactify web/main.js -o web/6poc-browserify-bundle.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

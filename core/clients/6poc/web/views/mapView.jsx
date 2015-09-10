@@ -5,15 +5,27 @@ var L = require('leaflet');
 
 module.exports = React.createClass({
   getInitialState: function() {
-    return {map: null, markers: [], select: null};
+    var temp = [];
+    var files = [];
+    this.props.result.objects.forEach(function(object){
+      if(temp.indexOf(object.file) ===-1){
+        temp.push(object.file);       
+        files.push({
+          name: object.file.replace('.json', ''),
+          color: object.color,
+          checked: true
+        }); 
+      }
+    });
+    return {map: null, markers: [], select: null, files: files};
   },
   getMapInfos: function(map){
-    this.loadSelection(map, null);
+    this.loadSelection(map, null, this.state.files);
   },
   select: function(index){
-    this.loadSelection(this.state.map, index);
+    this.loadSelection(this.state.map, null, this.state.files);
   },
-  loadSelection: function(map, select){
+  loadSelection: function(map, select, files){
 
     var self = this;
     // Adding icons
@@ -48,13 +60,22 @@ module.exports = React.createClass({
     markers = [];
     
     var markerSelected = null;
-    this.props.result.objects.forEach(function(object, index){
+    var list = [];
+    this.state.files.forEach(function(file){
+      if(file.checked === true) list.push(file.name);
+    });
+    
+    this.props.result.objects.filter(function(object){
+      var file = object.file.replace('.json', '');
+      return (list.indexOf(file) !== -1);
+    }).
+    forEach(function(object, index){
 
         var isSelected = (select !== null && select === index);
       
         var options = {
-            color: (isSelected?'red':'blue'),
-            fillColor: (isSelected?'red':'blue'), 
+            color: object.color,
+            fillColor: object.color, 
             fillOpacity: 0.7,
             weight:(isSelected?'10px':'5px'),
             clickable: false
@@ -82,20 +103,51 @@ module.exports = React.createClass({
     var centroid = new L.Marker(new L.LatLng(geoloc[0], geoloc[1]), {icon: centroidIcon});
     markers.push(centroid);
     centroid.addTo(map);
-
-    this.setState({map: map, markers: markers, select: select});
+   
+    this.setState({map: map, markers: markers, select: select, files: files});
+  },
+  selectFile: function(index){
+    var files = this.state.files;
+    files[index].checked = !files[index].checked;
+    this.loadSelection(this.state.map, null, files);
   },
   render: function() {
 
+    var self = this;
     if(this.props.result.length===0) return "";
-    
+
+    var iconsCheck = ["glyphicon-unchecked", "glyphicon-check"];
+    var filesJSX = this.state.files.map(function(file, index){
+      var style = { 
+        'color': file.color,
+      };
+      return (
+        <li>
+          <a href="javascript:;">
+            <span style={style}> <i className={"clickable glyphicon "+iconsCheck[(file.checked?1:0)]} onClick={self.selectFile.bind(self, index)} > </i> {file.name}</span>
+          </a>
+        </li>
+      );
+    });
+    var result = JSON.parse(JSON.stringify(this.props.result));
+    var list = [];
+    this.state.files.forEach(function(file){
+      if(file.checked === true) list.push(file.name);
+    });
+    result.objects = this.props.result.objects.filter(function(object){
+      var file = object.file.replace('.json', '');
+      return (list.indexOf(file) !== -1);
+    });
     return (
-        <div id="resultView" className="row">
-            <ListView result={this.props.result} select={this.select}/>
-            <div className="col-lg-6">
-                <h4 id="nbResults">Il y a <strong>{this.props.result.objects.length}</strong> résultats pour votre recherche</h4>
-                <MapCore zoom={12} getMapInfos={this.getMapInfos} result={this.props.result}/>
-            </div>
+        <div>
+          <ul id="listFiles">{filesJSX}</ul>
+          <div id="resultView" className="row">
+              <ListView result={result} select={this.select}/>
+              <div className="col-lg-6">
+                  <h4 id="nbResults">Il y a <strong>{result.objects.length}</strong> résultats pour votre recherche</h4>
+                  <MapCore zoom={12} getMapInfos={this.getMapInfos} result={result}/>
+              </div>
+          </div>
         </div>);
   }
 });

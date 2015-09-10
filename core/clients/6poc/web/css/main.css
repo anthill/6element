@@ -17,6 +17,7 @@ address{
 }
 
 .star { color: gold; }
+.clickable{ cursor: pointer;}
 
 #landingPage{
 	height: 682px; 
@@ -214,4 +215,15 @@ address{
 #postAdvert button {
 	margin-left: 10px;
 	margin-right: 10px;	
+}
+
+#listFiles {
+	text-align: center;
+}
+#listFiles li {
+	list-style-type: none;
+	display: inline;
+}
+#listFiles li a{
+	margin-left: 10px;
 }

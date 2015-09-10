@@ -3,8 +3,41 @@
 require('es6-shim');
 var turf = require('turf');
 
-var FileToObjects = function(dir, file, request){
+var blue    = '#348fe2',
+    blueLight = '#5da5e8',
+    blueDark  = '#1993E4',
+    aqua    = '#49b6d6',
+    aquaLight = '#6dc5de',
+    aquaDark  = '#3a92ab',
+    green   = '#00acac',
+    greenLight  = '#33bdbd',
+    greenDark = '#008a8a',
+    orange    = '#f59c1a',
+    orangeLight = '#f7b048',
+    orangeDark  = '#c47d15',
+    dark    = '#2d353c',
+    grey    = '#b6c2c9',
+    purple    = '#727cb6',
+    purpleLight = '#8e96c5',
+    purpleDark  = '#5b6392',
+    red         = '#ff5b57',
+    white       = 'rgb(255,255,255)';
+
+var colors = [blue,blueLight,blueDark,aqua,aquaLight,aquaDark,green,greenLight,greenDark,orange,orangeLight,orangeDark,dark,grey,purple,purpleLight,purpleDark,red];
+
+function getRandomColor() {
+    var letters = '0123456789ABCDEF'.split('');
+    var color = '#';
+    for (var i = 0; i < 6; i++ ) {
+        color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+}
+
+var FileToObjects = function(dir, file, index, request){
   return new Promise(function(resolve, reject){
+
+  	var color = getRandomColor();//colors[index];
 
     fs.readFile(path.join(dir,file), 'utf8', function (err, data) {
       
@@ -26,18 +59,21 @@ var FileToObjects = function(dir, file, request){
           			request.square.minLon <= lon &&
           			lon <= request.square.maxLon){
           			var match = false;
-				      for (var category in object.properties.objects) {
-				          if (object.properties.objects.hasOwnProperty(category)) {
-				            if(object.properties.objects[category] === 1){
-				            	if(request.categories.indexOf(category) !== -1){
-				            		match = true;
-				            		break;
+          			if(request.categories.length === 1 && request.categories[0] === 'All'){
+          				match = true;
+          			} else {
+				      	for (var category in object.properties.objects) {
+				          	if (object.properties.objects.hasOwnProperty(category)) {
+				            	if(object.properties.objects[category] === 1){
+				            		if(request.categories.indexOf(category) !== -1){
+				            			match = true;
+				            			break;
+				            		}
 				            	}
-				            }
-				        }
-				      }
-
-				      if(match){
+				        	}
+				      	}
+				  	}
+				     if(match){
 
 				      	var line = {
 							  "type": "Feature",
@@ -48,6 +84,8 @@ var FileToObjects = function(dir, file, request){
 							  }
 							};
 							object["distance"] = turf.lineDistance(line, 'kilometers');
+							object["color"] = color;
+							object["file"] = path.basename(file);
 	          			objects.push(object);
 				      }
           		}
@@ -121,8 +159,8 @@ app.post('/search', function(req, res){
 	.filter(function(file){
 	  return (path.extname(file) === '.json'); 
 	})
-	.map(function(file){
-		return FileToObjects(dir, file, result)
+	.map(function(file, index){
+		return FileToObjects(dir, file, index, result)
 	  	.then(function(objects){
 			Array.prototype.push.apply(result.objects, objects);
 	  	})

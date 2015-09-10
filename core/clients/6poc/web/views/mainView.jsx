@@ -8,6 +8,7 @@ var MapView =  require('./mapView.jsx');
 module.exports = React.createClass({
   getInitialState: function() {
     var availableCategories = [
+      'All',
       'aluminium',
       'batteries',
       'beverage_carton',

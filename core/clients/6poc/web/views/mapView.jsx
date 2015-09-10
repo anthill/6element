@@ -19,7 +19,6 @@ module.exports = React.createClass({
     // Adding icons
     var CentroidIcon = L.Icon.Default.extend({
       options: {
-        imagePath:    '/img/centroid.png',
         iconUrl:     '/img/centroid.png',
         iconSize:     [20, 20],
         shadowSize:   [0, 0], // size of the shadow
@@ -30,7 +29,6 @@ module.exports = React.createClass({
     });
     var PingIcon = L.Icon.Default.extend({
       options: {
-        imagePath:    '/img/centroid.png',
         iconUrl:      '/img/ping.png',
         iconSize:     [20, 20],
         shadowSize:   [0, 0], // size of the shadow

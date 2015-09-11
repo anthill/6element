@@ -4,7 +4,6 @@
   "description": "Reducing waste with sensors and an app",
   "main": "index.js",
   "scripts": {
-    "postinstall": "cp ../git-hooks/pre-commit ../.git/hooks/pre-commit; chmod a+x ../.git/hooks/pre-commit",
     "init-db": "node tools/init-db.js",
     "lint": "eslint ./",
     "test": "mocha test/automated/*",

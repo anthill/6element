@@ -90,7 +90,7 @@ gulp.task('watch-citizen', function() {
 
 
 var dockerComposeProcess;
-gulp.task('start-containers-dev', function(cb){
+gulp.task('start-containers-dev', function(){
     dockerComposeProcess = spawn('docker-compose', ['-f', 'compose-dev.yml', 'up'], {stdio: 'inherit'});
 });
 
@@ -101,5 +101,8 @@ gulp.task('watch', ['watch-dashboard', 'watch-admin', 'watch-citizen']);
 */
 
 gulp.task('dev', ['start-containers-dev', 'watch']);
+gulp.task('rebuild-db', function(){
+    spawn('docker-compose', ['-f', 'rebuild-db.yml', 'up'], {stdio: 'inherit'});
+});
 
 

@@ -23,7 +23,7 @@ module.exports = React.createClass({
     this.loadSelection(map, null, this.state.files);
   },
   select: function(index){
-    this.loadSelection(this.state.map, null, this.state.files);
+    this.loadSelection(this.state.map, index, this.state.files);
   },
   loadSelection: function(map, select, files){
 
@@ -98,7 +98,8 @@ module.exports = React.createClass({
     }
     else
     {
-        map.setView([geoloc[0], geoloc[1]], 13);
+        console.log(map.getZoom());
+        map.setView([geoloc[0], geoloc[1]], Math.min(13, map.getZoom()));
     }
     var centroid = new L.Marker(new L.LatLng(geoloc[0], geoloc[1]), {icon: centroidIcon});
     markers.push(centroid);
@@ -124,7 +125,11 @@ module.exports = React.createClass({
       return (
         <li>
           <a href="javascript:;">
-            <span style={style}> <i className={"clickable glyphicon "+iconsCheck[(file.checked?1:0)]} onClick={self.selectFile.bind(self, index)} > </i> {file.name}</span>
+            <span> 
+              <i className={"legend-name clickable glyphicon "+iconsCheck[(file.checked?1:0)]} onClick={self.selectFile.bind(self, index)} > </i> 
+              <i className={"legend glyphicon glyphicon-stop"} style={style}> </i> 
+              {file.name}
+            </span>
           </a>
         </li>
       );
@@ -145,7 +150,7 @@ module.exports = React.createClass({
               <ListView result={result} select={this.select}/>
               <div className="col-lg-6">
                   <h4 id="nbResults">Il y a <strong>{result.objects.length}</strong> résultats pour votre recherche</h4>
-                  <MapCore zoom={12} getMapInfos={this.getMapInfos} result={result}/>
+                  <MapCore getMapInfos={this.getMapInfos} result={result}/>
               </div>
           </div>
         </div>);
@@ -238,6 +243,7 @@ var ListView = React.createClass({
                     {object.properties.address_1}<br/>
                     {object.properties.address_2}<br/>
                     {phoneJSX}
+                    <small><em>src: {object.file.replace('.json', '')}</em></small><br/>
                     <h4 className="distance"><small><em><i className="text-left glyphicon glyphicon-map-marker"></i> {distance} </em></small></h4>
                     <p><a href="javascript:;" onClick={self.select.bind(self, index)}>Localiser sur la carte</a>
                     </p>
@@ -289,6 +295,7 @@ var MapCore = React.createClass({
         ],
         attributionControl: false,
     });
+    map.setZoom(13);
     L.Icon.Default.imagePath = 'http://api.tiles.mapbox.com/mapbox.js/v1.0.0beta0.0/images';
     this.props.getMapInfos(map);
   },

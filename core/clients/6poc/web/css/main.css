@@ -145,7 +145,7 @@ address{
 }
 
 #listView{
-	height: 440px;
+	height: 400px;
 	overflow:auto;
 }
 
@@ -159,7 +159,7 @@ address{
 }
 
 #map{
-	height: 510px;
+	height: 470px;
 }
 
 #groupSort {
@@ -182,7 +182,7 @@ address{
 #filterView a {
 	margin-top: 10px;
 	margin-bottom: 0px;
-	color: Black;
+	color: black;
 	font-size: 20px;
 }
 
@@ -206,7 +206,7 @@ address{
 
 #postAdvert{
 	font-size: 18px;
-	color: White;
+	color: white;
 	height: 50px;
 	vertical-align: middle;
 	padding: 5px;
@@ -225,5 +225,10 @@ address{
 	display: inline;
 }
 #listFiles li a{
-	margin-left: 10px;
+	margin-left: 20px;
+	color: lightgray;
+}
+#listFiles li .legend{
+	margin-left: 2px;
+	margin-right: 2px;
 }

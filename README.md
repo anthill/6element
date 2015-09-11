@@ -51,6 +51,13 @@ git clone git@github.com:anthill/6element.git
 cd 6element
 ```
 
+* Install [Node](https://github.com/nodesource/distributions#installation-instructions), then [gulp](http://gulpjs.com/) on your machine
+
+```
+npm install gulp -g
+```
+
+
 * Copy / Create the file `core/PRIVATE.json` containing
 
 ```
@@ -71,21 +78,26 @@ npm install
 * build the docker containers : 
 
 ```
-docker-compose -f rebuild-db.yml build
+gulp rebuild-db
 docker-compose -f compose-prod.yml build
+docker-compose -f compose-prod.yml up
 ```
 
-* Build the database : `docker-compose -f rebuild-db.yml up`
+* Build the database : `gulp rebuild-db`
 
 	*When it says you that the database has been reseted, you can stop it.*
 
 * Start the server : `docker-compose -f compose-prod.yml up -d`
 
 
-## Contribute :
+## Daily dev routine
 
-* Clone the repository
+````js
+gulp dev # This starts the docker dev containers (with volume to code in host) and watches files for rebuild in host
+````
 
-* Create a new branch to work in
 
-* Make a pull request explaining why and what you changed
+
+
+
+

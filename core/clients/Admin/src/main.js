@@ -32,7 +32,7 @@ function render(){
     React.render(new Application(topLevelStore), document.body);
 }
 
-
+sdsds
 function updatePlaceInDb(datas) {
 
     console.log('PLACE datas', datas);

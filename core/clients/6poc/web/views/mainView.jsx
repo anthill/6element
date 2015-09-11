@@ -134,7 +134,7 @@ module.exports = React.createClass({
     // - as single item list in results page mini search bar (postConditionJSX)
     var preConditionJSX = "";
     var itemsJSX = conditions.map(function(condition, index){
-      return (<label className="radio-inline"><input type="radio" name="optradio" checked={self.state.condition===index} onClick={self.changeCondition.bind(self,index)}/>{condition}</label>);
+      return (<label key={'ch'+index.toString()} className="radio-inline"><input type="radio" name="optradio" defaultChecked={self.state.condition===index} onClick={self.changeCondition.bind(self,index)}/>{condition}</label>);
     });
     var postConditionJSX = (
       <div id="groupCondition" className="text-left">
@@ -152,7 +152,7 @@ module.exports = React.createClass({
         </div>);
       suffixLg = "";
       itemsJSX = conditions.map(function(condition, index){
-        return (<li className={self.state.condition===index?"active":""}><a href="javascript:;" onClick={self.changeCondition.bind(self,index)}>{condition}</a></li>);
+        return (<li key={'ch'+index.toString()} className={self.state.condition===index?"active":""}><a href="javascript:;" onClick={self.changeCondition.bind(self,index)}>{condition}</a></li>);
       });
       preConditionJSX = (
       <div className="btn-group dropdown" id="groupCondition">

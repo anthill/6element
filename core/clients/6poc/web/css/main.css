@@ -5,11 +5,11 @@ body{
     font-family: Lato, sans-serif;
 }
 
-a { text-decoration: none !important; }
+a { text-decoration: none; }
 
 button a{
 	color: white;
-	text-decoration: none !important;
+	text-decoration: none;
 }
 
 address{
@@ -231,4 +231,7 @@ address{
 #listFiles li .legend{
 	margin-left: 2px;
 	margin-right: 2px;
+}
+#collapse {
+	width: 100%;
 }

@@ -17,7 +17,7 @@ module.exports = React.createClass({
         }); 
       }
     });
-    return {map: null, markers: [], select: null, files: files};
+    return {map: null, markers: [], select: null, files: files, detail: null};
   },
   getMapInfos: function(map){
     this.loadSelection(map, null, this.state.files);
@@ -71,14 +71,17 @@ module.exports = React.createClass({
     }).
     forEach(function(object, index){
 
-        var isSelected = (select !== null && select === index);
-      
+        var isSelected = (select !== null && 
+                          select === index);
+        var isCenter = (object.properties.type === 'centre');
         var options = {
+            stroke: true,
+            fill: true,
             color: object.color,
             fillColor: object.color, 
-            fillOpacity: 0.7,
-            weight:(isSelected?'10px':'5px'),
-            clickable: false
+            //fillOpacity: isCenter ? 1 : 0.7,
+            weight: ((isSelected || isCenter) ?'20px':'5px'),
+            clickable: isCenter
         };
 
         if(isSelected){
@@ -98,7 +101,6 @@ module.exports = React.createClass({
     }
     else
     {
-        console.log(map.getZoom());
         map.setView([geoloc[0], geoloc[1]], Math.min(13, map.getZoom()));
     }
     var centroid = new L.Marker(new L.LatLng(geoloc[0], geoloc[1]), {icon: centroidIcon});
@@ -112,6 +114,21 @@ module.exports = React.createClass({
     files[index].checked = !files[index].checked;
     this.loadSelection(this.state.map, null, files);
   },
+  expand: function(index){
+    var detail = this.state.detail;
+    var select = this.state.select;
+    if(detail !== null && 
+      detail === index) {
+      detail = null;
+    }
+    else if(detail !== null) {
+      detail = index;
+      select = index;
+    } else {
+      detail = index;
+    }
+    this.setState({detail: detail, select: select});
+  },
   render: function() {
 
     var self = this;
@@ -123,7 +140,7 @@ module.exports = React.createClass({
         'color': file.color,
       };
       return (
-        <li>
+        <li key={'file'+index.toString()}>
           <a href="javascript:;">
             <span> 
               <i className={"legend-name clickable glyphicon "+iconsCheck[(file.checked?1:0)]} onClick={self.selectFile.bind(self, index)} > </i> 
@@ -147,7 +164,7 @@ module.exports = React.createClass({
         <div>
           <ul id="listFiles">{filesJSX}</ul>
           <div id="resultView" className="row">
-              <ListView result={result} select={this.select}/>
+              <ListView result={result} select={this.select} detail={this.state.detail} expand={this.expand}/>
               <div className="col-lg-6">
                   <h4 id="nbResults">Il y a <strong>{result.objects.length}</strong> résultats pour votre recherche</h4>
                   <MapCore getMapInfos={this.getMapInfos} result={result}/>
@@ -172,6 +189,9 @@ var ListView = React.createClass({
   },
   postAdvert: function(){
     alert("TODO Bro!");
+  },
+  expand: function(index){
+    this.props.expand(index);
   },
   render: function() {
 
@@ -228,36 +248,66 @@ var ListView = React.createClass({
         distance = (Math.round(object.distance * 1000)).toString() + " m";
       }
       var allowedJSX = list
-      .map(function(type){
-        return (<li>{type}</li>);
+      .map(function(type, id){
+        return (<li key={id}>{type}</li>);
       })
       
+      var detailJSX = "";
+      if(self.props.detail !== null &&
+        self.props.detail === index){
+        detailJSX = (
+          <div>
+            <h4>Les déchetteries c est trop bien !</h4>
+            <ul>
+              <li>parce qu on a les horaires</li>
+              <li>les affluences</li>
+              <li>et tout ça </li>
+            </ul>
+            <div id="collapse">
+              <a href="javascript:;">
+                <h3 onClick={self.expand.bind(self, null)}>
+                  <i className="glyphicon glyphicon-menu-up"></i>
+                </h3>
+              </a>
+            </div>
+          </div>);
+      } else {
+        detailJSX = (
+          <div>
+            <a href="javascript:;">
+              <span onClick={self.expand.bind(self, index)}>
+                <i className="glyphicon glyphicon-plus-sign"></i> d&apos;infos
+              </span>
+            </a>
+          </div>);
+      }
       return (
-        <div className="">
-          <div className="panel panel-default">
-            <div className="panel-body">
-              <div className="row">
-                <div className="col-lg-6 text-left">
-                  <address>
-                    <strong>{object.properties.name}</strong><br/>
-                    {object.properties.address_1}<br/>
-                    {object.properties.address_2}<br/>
-                    {phoneJSX}
-                    <small><em>src: {object.file.replace('.json', '')}</em></small><br/>
-                    <h4 className="distance"><small><em><i className="text-left glyphicon glyphicon-map-marker"></i> {distance} </em></small></h4>
-                    <p><a href="javascript:;" onClick={self.select.bind(self, index)}>Localiser sur la carte</a>
-                    </p>
-                  </address>
-                </div>
-                <div className="col-lg-6">
-                  <div className="pull-right">{starJSX}{starJSX}{starJSX}{starJSX}{starJSX}</div>
-                  <div className="pull-left">
-                    <ul id="allowedObjects">
-                      {allowedJSX}
-                    </ul>
-                  </div>
+        <div className="panel panel-default" key={'row'+index.toString()}>
+          <div className="panel-body">
+            <div className="row">
+              <div className="col-lg-6 text-left">
+                <address>
+                  <strong>{object.properties.name}</strong><br/>
+                  {object.properties.address_1}<br/>
+                  {object.properties.address_2}<br/>
+                  {phoneJSX}
+                  <small><em>src: {object.file.replace('.json', '')}</em></small><br/>
+                  <h4 className="distance"><small><em><i className="text-left glyphicon glyphicon-map-marker"></i> {distance} </em></small></h4>
+                  <p><a href="javascript:;" onClick={self.select.bind(self, index)}>Localiser sur la carte</a>
+                  </p>
+                </address>
+              </div>
+              <div className="col-lg-6">
+                <div className="pull-right">{starJSX}{starJSX}{starJSX}{starJSX}{starJSX}</div>
+                <div className="pull-left">
+                  <ul id="allowedObjects">
+                    {allowedJSX}
+                  </ul>
                 </div>
               </div>
+            </div>
+            <div className="row">
+              {detailJSX}
             </div>
           </div>
         </div>

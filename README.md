@@ -78,11 +78,12 @@ npm install
 * build the docker containers : 
 
 ```
-docker-compose -f rebuild-db.yml build
+gulp rebuild-db
 docker-compose -f compose-prod.yml build
+docker-compose -f compose-prod.yml up
 ```
 
-* Build the database : `docker-compose -f rebuild-db.yml up`
+* Build the database : `gulp rebuild-db`
 
 	*When it says you that the database has been reseted, you can stop it.*
 

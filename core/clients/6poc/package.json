@@ -23,7 +23,6 @@
     "bootstrap": "^3.3.5",
     "browserify": "^10.2.4",
     "express": "^4.13.1",
-    "http": "0.0.0",
     "jquery": "^2.1.4",
     "leaflet": "^0.7.5",
     "react": "^0.13.3",

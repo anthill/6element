@@ -1,3 +1,5 @@
+"use strict";
+
 var search = require('./search.js');
 
 var bodyParser	= require('body-parser');

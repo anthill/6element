@@ -1,9 +1,8 @@
 "use strict";
 
 var React = require('react');
-var $ = require('jquery');
-
 var MapView =  require('./mapView.jsx');
+var requestData = require('./../js/requestData.js');
 
 module.exports = React.createClass({
   getInitialState: function() {
@@ -84,32 +83,28 @@ module.exports = React.createClass({
     var self = this;
 
     var options =  React.findDOMNode(this.refs.what).options;
-    var categories = [];
-    for(var i=0; i<options.length; ++i){
-      if(options[i].selected == false) continue;
-      var value = options[i].value;
-      categories.push(value);
-    }
+    var categories = Array.from(options)
+    .filter(function(option){
+      return (option.selected);
+    })
+    .map(function(option){
+      return option.value;
+    });
+   
     var data = {
       'placeName': this.state.placeName,
       'radius': this.state.radius,
       'categories': categories,
       'geoloc': this.state.geoloc
     };
-    $.ajax({
-      type: 'POST',
-      url: '/search',
-      data: JSON.stringify(data),
-      contentType: 'application/json',
-      success: function(data) {
-        var mode = self.state.mode;
-        if(mode===0) mode = 1;
-        self.setState({result: data, mode: mode, searchCpt: self.state.searchCpt+1});
-      }.bind(this),
-      error: function(xhr, status, err) {
-        console.error(status, err.toString());
-      }.bind(this)
-    });
+
+    requestData(data)
+    .then(function(result){
+      self.setState({mode: (self.state.mode===0)?1:0, result: result, searchCpt: self.state.searchCpt+1});
+    })
+    .catch(function(error){
+      console.error(error.status, error.message.toString());
+    })    
   },
   changeCondition: function(condition){
     this.setState({condition: condition});

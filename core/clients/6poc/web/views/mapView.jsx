@@ -72,14 +72,12 @@ module.exports = React.createClass({
     forEach(function(object, index){
 
         var isSelected = (select !== null && 
-                          select === index);
+                        select === index);
         var isCenter = (object.properties.type === 'centre');
         var options = {
-            stroke: true,
-            fill: true,
             color: object.color,
             fillColor: object.color, 
-            //fillOpacity: isCenter ? 1 : 0.7,
+            fillOpacity: isCenter ? 1 : 0.7,
             weight: ((isSelected || isCenter) ?'20px':'5px'),
             clickable: isCenter
         };
@@ -188,7 +186,7 @@ var ListView = React.createClass({
     this.setState({filterDisplayed: display});
   },
   postAdvert: function(){
-    alert("TODO Bro!");
+    throw "TODO Bro!";
   },
   expand: function(index){
     this.props.expand(index);
@@ -233,20 +231,18 @@ var ListView = React.createClass({
       if(object.properties.phone){
         phoneJSX =  <div><abbr title="phone">T:</abbr> {object.properties.phone}<br/></div>
       } 
-      var list = [];
-      for (var key in object.properties.objects) {
-          if (object.properties.objects.hasOwnProperty(key)) {
-            if(object.properties.objects[key] === 1)
-              list.push(key);
-        }
-      }
-      var distance = "";
-      if(object.distance > 1){
-        distance = (Math.round(object.distance * 100) / 100).toString() + " Km";
-      }
-      else {
-        distance = (Math.round(object.distance * 1000)).toString() + " m";
-      }
+      var list = Object.keys(object.properties.objects)
+      .filter(function(category){
+        return object.properties.objects[category] === 1;
+      })
+      .map(function(category){
+        return category;
+      });
+   
+      var distance = (object.distance > 1) ? 
+        object.distance.toFixed(2) + " Km":
+        (Math.round(object.distance * 1000)).toString() + " m";
+     
       var allowedJSX = list
       .map(function(type, id){
         return (<li key={id}>{type}</li>);

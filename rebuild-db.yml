@@ -1,17 +1,17 @@
 6element:
    build: .
-   dockerfile: core/Dockerfile
-   command: npm run init-db
+   command: node tools/init-db.js
    links:
       - db
    environment:
       - POSTGRES_USER=postgres
-      - PGPASSWORD=elements
+      - PGPASSWORD=elements # For pg_gump purposes?
       - POSTGRES_PASSWORD=elements
       # - BACKUP=backups/save.txt.gz
    volumes:
       - ./core:/6element/core
       - ./app:/6element/app
+      - ./tools:/6element/tools
       - /data/6element:/6element/app/data
       - /data/6element/backups:/6element/app/data/backups
 

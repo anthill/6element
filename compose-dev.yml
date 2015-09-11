@@ -1,7 +1,6 @@
 citizen:
    build: .
-   dockerfile: core/Dockerfile
-   command: npm run start-citizen-dev
+   command: nodemon core/server/citizen.js
    links:
       - db
    ports:
@@ -16,8 +15,7 @@ citizen:
       - /data/6element:/6element/data
 dashboard:
    build: .
-   dockerfile: core/Dockerfile
-   command: npm run start-dashboard-dev
+   command: nodemon core/server/dashboard.js
    links:
       - db
       - endpoint
@@ -34,8 +32,7 @@ dashboard:
       - /data/6element:/6element/data
 endpoint:
    build: .
-   dockerfile: core/Dockerfile
-   command: npm run start-endpoint-dev
+   command: nodemon core/server/endpoint.js
    links:
       - db
    ports:
@@ -49,8 +46,7 @@ endpoint:
       - ./core:/6element/core
 admin:
    build: .
-   dockerfile: core/Dockerfile
-   command: npm run start-admin-dev
+   command: nodemon core/server/admin.js
    links:
       - db
       - endpoint

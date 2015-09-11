@@ -1,0 +1,237 @@
+body{
+	background-color: Black; /*WhiteSmoke*/
+    height: 100%;
+    width: 100%;
+    font-family: Lato, sans-serif;
+}
+
+a { text-decoration: none; }
+
+button a{
+	color: white;
+	text-decoration: none;
+}
+
+address{
+	margin: 0px;
+}
+
+.star { color: gold; }
+.clickable{ cursor: pointer;}
+
+#landingPage{
+	height: 682px; 
+	width: 100%; 
+	margin: 0 auto;
+	display: block;
+	position: relative;
+	text-align: center;
+}
+
+#landingPage::after{
+	background: url('./../img/bg-sewetlaine.jpg') no-repeat left top;
+	background-size: 100%;
+	opacity:0.5;
+	top: 0;
+	left: 0;
+	bottom: 0;
+	right: 0;
+	position: absolute;
+	z-index: -1;
+	content: "";
+}
+
+#landingPage h1{
+	padding-top: 100px;
+	margin: 0px;
+	text-align: center;
+	color: white;
+	text-shadow: 2px 2px #336699;
+	font-size: 80px; 
+}
+
+#landingPage h2{
+	padding-bottom: 40px;
+	margin: 10px;
+	color: white;
+	text-shadow: 1px 1px Gray;
+	font-size: 40px;
+}
+/*
+#what {
+    line-height: 45px;
+	font-size: 25px;
+ 	-webkit-border-radius: 6px;
+    -moz-border-radius: 6px;
+    border-radius: 6px;}
+
+#what .chzn-container-multi .chzn-choices {
+	line-height: 50px !important;
+    overflow-y: auto;
+}*/
+
+#landingPage #searchBar{
+	width: 800px;
+}
+
+#resultsPage #searchBar{
+	width: 100%;
+}
+
+#searchBar{
+	margin: 0 auto;
+	width: 800px;
+  	padding: 5px;
+  	background-color: rgba(0,0,0,0.5);
+	vertical-align: middle;
+	color: white;
+}
+
+
+#groupCondition{
+	margin-left: 5px;
+	margin-right: 5px;
+	text-align: left;
+}
+
+#what,
+#where{
+	width: 350px;
+	margin: 5px;
+}
+
+#searchBar .radio-inline {
+	margin: 10px;
+	color: #CC9900;
+	font-size: 16px;
+}
+
+#btnSearch {
+	margin-left: 5px;
+	margin-right: 5px;	
+}
+
+#resultsPage{
+	height: 70px; 
+	width: 100%; 
+	display: block;
+	position: relative;
+	text-align: center;
+	vertical-align: middle;
+}
+
+#resultsPage::after{
+	background: white url('./../img/bg-sewetlaine.jpg') no-repeat right bottom;
+	background-size: 100%;
+	opacity:0.5;
+	top: 0;
+	left: 0;
+	bottom: 0;
+	right: 0;
+	position: absolute;
+	z-index: -1;
+	content: "";
+}
+
+#resultsPage h1{
+	margin: 0 auto;
+	color: white;
+	text-shadow: 2px 2px #336699;
+	font-size: 50px; 
+	height: 70px; 
+	vertical-align: middle;
+	text-align: left;
+	padding-left: 20px;
+}
+
+#listView{
+	height: 400px;
+	overflow:auto;
+}
+
+#listView .panel{
+	margin-bottom: 10px;
+	margin-right: 15px;
+}
+
+#listView .panel-body{
+	padding: 5px 10px;
+}
+
+#map{
+	height: 470px;
+}
+
+#groupSort {
+	margin-bottom: 20px; 
+}
+
+#nbResults{
+	background-color: white;
+	margin: 0 auto;
+	height: 40px;
+	padding: 10px;
+	display: block;
+}
+
+#filterView{
+	background-color: white;
+	margin-bottom: 20px;
+}
+
+#filterView a {
+	margin-top: 10px;
+	margin-bottom: 0px;
+	color: black;
+	font-size: 20px;
+}
+
+#allowedObjects{
+	text-align: left;
+}
+#allowedObjects li{
+	list-style-type: none;
+}
+#allowedObjects li:before{
+	content: "✓";
+	font-weight: bold;
+	padding: 0px;
+	margin-right: 5px;
+	text-align: left;
+}
+
+.distance{
+	margin: 0px;
+}
+
+#postAdvert{
+	font-size: 18px;
+	color: white;
+	height: 50px;
+	vertical-align: middle;
+	padding: 5px;
+}
+
+#postAdvert button {
+	margin-left: 10px;
+	margin-right: 10px;	
+}
+
+#listFiles {
+	text-align: center;
+}
+#listFiles li {
+	list-style-type: none;
+	display: inline;
+}
+#listFiles li a{
+	margin-left: 20px;
+	color: lightgray;
+}
+#listFiles li .legend{
+	margin-left: 2px;
+	margin-right: 2px;
+}
+#collapse {
+	width: 100%;
+}

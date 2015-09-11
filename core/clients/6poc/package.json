@@ -1,0 +1,37 @@
+{
+  "name": "6POC",
+  "version": "0.0.0",
+  "description": "2nd round of sketches of the 6element App",
+  "main": "app.js",
+  "scripts": {
+    "watch": "watchify -t reactify web/main.js -o web/6poc-browserify-bundle.js -d -v",
+    "build": "browserify -t reactify web/main.js -o web/6poc-browserify-bundle.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/anthill/6element.git"
+  },
+  "author": "ants <contact@ants.builders> (http://ants.builders/)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/anthill/6element/issues"
+  },
+  "homepage": "https://github.com/anthill/6element",
+  "dependencies": {
+    "body-parser": "^1.13.2",
+    "bootstrap": "^3.3.5",
+    "browserify": "^10.2.4",
+    "express": "^4.13.1",
+    "jquery": "^2.1.4",
+    "leaflet": "^0.7.5",
+    "react": "^0.13.3",
+    "reactify": "^1.1.1",
+    "turf": "^2.0.2"
+  },
+  "devDependencies": {
+    "es6-shim": "^0.33.0",
+    "eslint": "^0.24.1",
+    "watchify": "^3.2.1"
+  }
+}

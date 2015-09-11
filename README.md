@@ -89,10 +89,14 @@ docker-compose -f compose-prod.yml build
 * Start the server : `docker-compose -f compose-prod.yml up -d`
 
 
-## Contribute :
+## Daily dev routine
 
-* Clone the repository
+````js
+gulp dev # This starts the docker dev containers (with volume to code in host) and watches files for rebuild in host
+````
 
-* Create a new branch to work in
 
-* Make a pull request explaining why and what you changed
+
+
+
+

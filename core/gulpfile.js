@@ -70,44 +70,7 @@ gulp.task('serve-endpoint', function () {
     })
 });
 
-gulp.task('build-admin', function(){
-    browserifyShare('Admin');
-});
 
-gulp.task('build-dashboard', function(){
-    browserifyShare('Dashboard');
-});
-
-gulp.task('build-citizen', function(){
-    browserifyShare('Citizen');
-});
-
-gulp.task('server-stop', function(){
-    server.stop();
-});
-
-
-
-function browserifyShare(name){
-    var b = browserify({
-        cache: {},
-        packageCache: {},
-        fullPaths: true
-    });
-    
-    b.add( join('./clients', name, 'src', 'main.js') );
-    bundleShare(b, name);
-}
-
-function bundleShare(b, name) {
-    b.bundle()
-
-    .pipe(source( join('./clients', name+'-browserify-bundle.js') ) )
-    .pipe(gulp.dest('.'))
-    .on('error', function (err) {
-        console.log(err.message);
-    });
-}
 
 
 /*

@@ -5,10 +5,6 @@
   "main": "index.js",
   "scripts": {
     "postinstall": "cp ../git-hooks/pre-commit ../.git/hooks/pre-commit; chmod a+x ../.git/hooks/pre-commit",
-    "start-admin": "node core/server/admin.js",
-    "start-dashboard": "node core/server/dashboard.js",
-    "start-endpoint": "node core/server/endpoint.js",
-    "start-citizen": "node core/server/citizen.js",
     "init-db": "node tools/init-db.js",
     "lint": "eslint ./",
     "test": "mocha test/automated/*",

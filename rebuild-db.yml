@@ -1,7 +1,6 @@
 6element:
    build: .
-   dockerfile: core/Dockerfile
-   command: npm run init-db
+   command: node tools/init-db.js
    links:
       - db
    environment:

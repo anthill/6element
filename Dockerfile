@@ -4,6 +4,8 @@ MAINTAINER Alexandre Vallette <alexandre.vallette@ants.builders>
 RUN mkdir /6element
 WORKDIR /6element
 
+RUN npm install nodemon -g
+
 # install pgdump and related
 RUN sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt/ $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
 RUN apt-get install -y wget ca-certificates

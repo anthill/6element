@@ -1,7 +1,23 @@
+citizen:
+   build: .
+   command: node core/server/citizen.js
+   links:
+      - db
+   ports:
+      - 4002:4002
+   environment:
+      - VIRTUAL_HOST=6citizen.ants.builders 
+      - VIRTUAL_PORT=4002
+      - POSTGRES_PASSWORD=elements
+      - NODE_ENV=production
+   volumes:
+      - ./core:/6element/core
+      - /data/6element:/6element/data
+      
+      
 dashboard:
    build: .
-   dockerfile: core/Dockerfile
-   command: npm run start-dashboard-prod
+   command: node core/server/dashboard.js
    links:
       - db
       - endpoint
@@ -17,10 +33,11 @@ dashboard:
       - ./core:/6element/core
       - /data/6element:/6element/data
    restart: always
+   
+   
 endpoint:
    build: .
-   dockerfile: core/Dockerfile
-   command: npm run start-endpoint-dev
+   command: node core/server/endpoint.js
    links:
       - db
    ports:
@@ -33,10 +50,11 @@ endpoint:
    volumes:
       - ./core:/6element/core
    restart: always
+
+
 admin:
    build: .
-   dockerfile: core/Dockerfile
-   command: npm run start-admin-dev
+   command: node core/server/admin.js
    links:
       - db
       - endpoint
@@ -54,6 +72,8 @@ admin:
       - ./core:/6element/core
       - /data/6element:/6element/app/data
    restart: always
+   
+   
 db:
    image: postgres:9.4
    environment:

@@ -14,20 +14,6 @@ function GetRandomColor() {
     return color;
 }
 var colors = [
-/*'#A4BE69',
-'#AA8750',
-'#7FD045',
-'#D8C458',
-'#79A67E',
-'#01760F',
-'#76561D',
-'#CFCE4B',
-'#2DB8DE',
-'#D9B0B3',
-'#7795D5',
-'#61927C',
-'#D35381',
-,*/
 '#265846',
 '#077527',
 '#ED7AEB',
@@ -41,8 +27,19 @@ var colors = [
 '#516B27',
 '#41B93D',
 '#79F879',
-'#2002A1'/*,
-'#008112'*/]
+'#2002A1',
+'#AA8750',
+'#7FD045',
+'#D8C458',
+'#79A67E',
+'#01760F',
+'#76561D',
+'#CFCE4B',
+'#2DB8DE',
+'#D9B0B3',
+'#7795D5',
+'#61927C',
+'#D35381']
 
 var FileToObjects = function(dir, file, index, request){
     
@@ -146,7 +143,7 @@ module.exports = function(req, res){
         maxLon: rightUp[1]
     };
     
-    var dir = path.join(__dirname,'data');
+    var dir = path.join(__dirname,'../database/fileData');
 
     var files = fs.readdirSync(dir);
     //console.log('->', files.length, 'files to parse');

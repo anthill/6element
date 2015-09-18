@@ -1,30 +1,32 @@
 body{
-	background-color: Black; /*WhiteSmoke*/
+	background-color: black; /*WhiteSmoke*/
     height: 100%;
     width: 100%;
     font-family: Lato, sans-serif;
 }
-
-a { text-decoration: none; }
 
 button a{
 	color: white;
 	text-decoration: none;
 }
 
-address{
-	margin: 0px;
-}
-
 .star { color: gold; }
-.clickable{ cursor: pointer;}
+.no-star { color: lightgray; }
+.clickable { cursor: pointer;}
+.styleRow {
+	padding: 0 15px;
+}
+/*#listView .detail{
+	margin-left: 5px;
+	margin-right: 5px;
+	padding: 5px;
+}*/
+
 
 #landingPage{
-	height: 682px; 
+	height: 100%; 
 	width: 100%; 
 	margin: 0 auto;
-	display: block;
-	position: relative;
 	text-align: center;
 }
 
@@ -42,7 +44,7 @@ address{
 }
 
 #landingPage h1{
-	padding-top: 100px;
+	padding-top: 10%;
 	margin: 0px;
 	text-align: center;
 	color: white;
@@ -70,17 +72,20 @@ address{
     overflow-y: auto;
 }*/
 
-#landingPage #searchBar{
+/*#landingPage #searchBar{
 	width: 800px;
-}
+}*/
 
+#landingPage #searchBar{
+	display: inline-block;
+}
 #resultsPage #searchBar{
-	width: 100%;
+	text-align: center;
 }
 
 #searchBar{
 	margin: 0 auto;
-	width: 800px;
+	/*width: 800px;*/
   	padding: 5px;
   	background-color: rgba(0,0,0,0.5);
 	vertical-align: middle;
@@ -96,8 +101,10 @@ address{
 
 #what,
 #where{
-	width: 350px;
+	/*width: 350px;*/
 	margin: 5px;
+	/*display:block;
+	width:auto;*/
 }
 
 #searchBar .radio-inline {
@@ -160,6 +167,18 @@ address{
 
 #map{
 	height: 470px;
+	position: relative;
+}
+
+#popup {
+	background-color: rgba(255,255,255,0.9);
+	bottom: 0px;
+	left: 0px;
+	right: 0px;
+	margin-left: 15px;
+	margin-right: 15px;
+	padding: 5px;
+	position: absolute;
 }
 
 #groupSort {
@@ -186,22 +205,39 @@ address{
 	font-size: 20px;
 }
 
-#allowedObjects{
-	text-align: left;
+.addressFull {
+	background-color: whitesmoke;
+	padding: 5px;
 }
-#allowedObjects li{
+.addressFull li {
 	list-style-type: none;
 }
-#allowedObjects li:before{
+
+#listView .allowedObjects{
+	text-align: left;
+}
+#listView .allowedObjects li{
+	list-style-type: none;
+}
+#listView .allowedObjects li:before{
 	content: "✓";
 	font-weight: bold;
 	padding: 0px;
 	margin-right: 5px;
 	text-align: left;
 }
-
-.distance{
-	margin: 0px;
+#popup{
+	padding: 10px;
+}
+#popup .allowedObjects{
+	text-align: left;
+}
+#popup .allowedObjects li{
+	list-style-type: none;
+	margin: 5px;
+	display: inline-block;
+	padding: 5px;
+	border: 1px solid black;
 }
 
 #postAdvert{

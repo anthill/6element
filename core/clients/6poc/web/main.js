@@ -2,9 +2,9 @@
 
 var React = require('react');
 
-var MainView =  require('./views/mainView.jsx');
+var SearchView =  require('./views/searchView.jsx');
 
 React.render( 
-  React.createElement(MainView),
+  React.createElement(SearchView),
   document.body
 );

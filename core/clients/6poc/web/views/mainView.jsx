@@ -1,189 +1,227 @@
 "use strict";
 
 var React = require('react');
-var MapView =  require('./mapView.jsx');
-var requestData = require('./../js/requestData.js');
+var L = require('leaflet');
+
+var ListView    =  require('./listView.jsx');
+var DetailView  =  require('./detailView.jsx');
+var MapCore     =  require('./mapCore.jsx');
 
 module.exports = React.createClass({
   getInitialState: function() {
-    var availableCategories = [
-      'All',
-      'aluminium',
-      'batteries',
-      'beverage_carton',
-      'bicycles',
-      'books',
-      'cans',
-      'cardboard',
-      'cds',
-      'chipboard',
-      'christmas_trees',
-      'clothes',
-      'computers',
-      'cooking_oil',
-      'cork',
-      'engine_oil',
-      'foil',
-      'furniture',
-      'glass',
-      'glass_bottles',
-      'green_waste',
-      'garden_waste',
-      'hardcode',
-      'hazardous_waste',
-      'light_bulbs',
-      'magazines',
-      'mobile_phones',
-      'music',
-      'newspaper',
-      'organic',
-      'paint',
-      'paper',
-      'paper_packaging',
-      'plastic',
-      'plastic_bags',
-      'plastic_bottles',
-      'plastic_packaging',
-      'polyester',
-      'printer_cartridges',
-      'rubble',
-      'scrap_metal',
-      'sheet_metal',
-      'shoes',
-      'tyres',
-      'waste',
-      'waste_oil',
-      'white_goods',
-      'wood']
-    return {result: null, mode: 0, condition: 0, radius: 50, availableCategories: availableCategories, categories: [], searchCpt: 0};
-  },
-  componentDidMount: function() {
-    var self = this;
-
-    var where = React.findDOMNode(this.refs.where);
-    google.maps.event.addDomListener(window, 'load', function() {
-      if (where) {
-        var autocomplete = new google.maps.places.Autocomplete(where, { types: ['geocode'] });
-        google.maps.event.addListener(autocomplete, 'place_changed', function(){
-          var place = autocomplete.getPlace();
-          var address = '';
-          if (place.address_components) {
-            address = [
-              (place.address_components[0] && place.address_components[0].short_name || ''),
-              (place.address_components[1] && place.address_components[1].short_name || ''),
-              (place.address_components[2] && place.address_components[2].short_name || '')
-            ].join(' ');
-          }
-          self.setState({geoloc: {lat: place.geometry.location.G, lon: place.geometry.location.K}, placeName: address})
-        });
+    var temp = [];
+    var files = [];
+    this.props.result.objects.forEach(function(object){
+      if(temp.indexOf(object.file) ===-1){
+        temp.push(object.file);       
+        files.push({
+          name: object.file.replace('.json', ''),
+          color: object.color,
+          checked: true
+        }); 
       }
-    })
-  },
-  launchSearch: function(){
-    var self = this;
-
-    var options =  React.findDOMNode(this.refs.what).options;
-    var categories = Array.from(options)
-    .filter(function(option){
-      return (option.selected);
-    })
-    .map(function(option){
-      return option.value;
     });
-   
-    var data = {
-      'placeName': this.state.placeName,
-      'radius': this.state.radius,
-      'categories': categories,
-      'geoloc': this.state.geoloc
-    };
-
-    requestData(data)
-    .then(function(result){
-      self.setState({mode: (self.state.mode===0)?1:0, result: result, searchCpt: self.state.searchCpt+1});
-    })
-    .catch(function(error){
-      console.error(error.status, error.message.toString());
-    })    
+    return {map: null, markers: [], select: null, selectMap: null, files: files, detail: null};
   },
-  changeCondition: function(condition){
-    this.setState({condition: condition});
+  getMapInfos: function(map){
+    this.loadSelection(map, null, this.state.files);
+  },
+  select: function(index){
+    this.loadSelection(this.state.map, index, this.state.files);
+  },
+  clickMarker: function(e){
+    var index = this.state.markers.findIndex(function(marker){
+      return (marker.id === e.target._leaflet_id)
+    });
+    if(index === -1) 
+      this.toggleMap(null);
+    else
+      this.toggleMap(index);
+    //console.log(index);
+    //this.expand(index);
+  },
+  loadSelection: function(map, select, files){
+
+    var self = this;
+    // Adding icons
+    var CentroidIcon = L.Icon.Default.extend({
+      options: {
+        iconUrl:     '/img/centroid.png',
+        iconSize:     [20, 20],
+        shadowSize:   [0, 0], // size of the shadow
+        iconAnchor:   [10, 10], // point of the icon which will correspond to marker's location
+        shadowAnchor: [10, 10], // the same for the shadow
+        popupAnchor:  [-3, -40] // point from which the popup should open relative to the iconAnchor
+      }
+    });
+    var PingIcon = L.Icon.Default.extend({
+      options: {
+        iconUrl:      '/img/ping.png',
+        iconSize:     [20, 20],
+        shadowSize:   [0, 0], // size of the shadow
+        iconAnchor:   [10, 10], // point of the icon which will correspond to marker's location
+        shadowAnchor: [10, 10], // the same for the shadow
+        popupAnchor:  [-3, -40] // point from which the popup should open relative to the iconAnchor
+      }
+    });
+    var centroidIcon = new CentroidIcon();
+    var pingIcon = new PingIcon();
+    
+    // Cleaning map
+    var markers = this.state.markers;
+    markers.forEach(function(marker){
+      map.removeLayer(marker);
+    });
+    markers = [];
+    
+    var markerSelected = null;
+    var list = [];
+    this.state.files.forEach(function(file){
+      if(file.checked === true) list.push(file.name);
+    });
+    console.log(list.length);
+    this.props.result.objects.filter(function(object){
+      var file = object.file.replace('.json', '');
+      return (list.indexOf(file) !== -1);
+    }).
+    forEach(function(object, index){
+
+        var isSelected = (select !== null && 
+                        select === index);
+        var isCenter = (object.properties.type === 'centre');
+        var options = {
+          color: isCenter?'black':object.color,
+          fill: true,
+          fillColor: object.color, 
+          fillOpacity: isCenter?1:0.7,
+          radius: isCenter?10:5,
+          clickable: true,
+          weight: '5px'
+        };
+        
+        if(isSelected){
+            markerSelected = new L.Marker(new L.LatLng(object.geometry.coordinates.lat, object.geometry.coordinates.lon), {icon: pingIcon});      
+            marker.on("click", self.clickMarker);
+            map.setView([object.geometry.coordinates.lat, object.geometry.coordinates.lon], 16);
+        } 
+        else if (isCenter){
+            var marker = new L.CircleMarker(new L.LatLng(object.geometry.coordinates.lat, object.geometry.coordinates.lon), options);
+            marker.on("click", self.clickMarker);
+            marker.addTo(map); 
+            markers.push({
+              id: marker._leaflet_id,
+              marker: marker
+            });
+        }
+        else{
+            var marker = new L.Circle(new L.LatLng(object.geometry.coordinates.lat, object.geometry.coordinates.lon), 10, options);
+            marker.addTo(map);
+            marker.on("click", self.clickMarker);
+            markers.push({
+              id: marker._leaflet_id,
+              marker: marker
+            });
+        } 
+    });
+    var geoloc = this.props.result.geoloc;
+    if(markerSelected !== null){
+        markerSelected.addTo(map);      
+        markers.push({
+          id: markerSelected._leaflet_id,
+          marker: markerSelected
+        });
+    }
+    else
+    {
+        map.setView([geoloc[0], geoloc[1]], Math.min(13, map.getZoom()));
+    }
+    var centroid = new L.Marker(new L.LatLng(geoloc[0], geoloc[1]), {icon: centroidIcon});
+    markers.push(centroid);
+    centroid.addTo(map);
+   
+    this.setState({map: map, markers: markers, select: select, files: files});
+  },
+  selectFile: function(index){
+    var files = this.state.files;
+    files[index].checked = !files[index].checked;
+    this.loadSelection(this.state.map, null, files);
+  },
+  expand: function(index){
+    var detail = this.state.detail;
+    var select = this.state.select;
+    if(detail !== null && 
+      detail === index) {
+      detail = null;
+    }
+    else if(detail !== null) {
+      detail = index;
+      select = index;
+    } else {
+      detail = index;
+    }
+    this.setState({detail: detail, select: select});
+  },
+  toggleMap: function(index){
+    this.setState({selectMap: index});
   },
   render: function() {
+
     var self = this;
+    if(this.props.result.length===0) return "";
 
-    var conditions = ["Neuf", "Bon état", "Réparable", "Irréparable"]; 
-    var resultJSX = "";
-
-    // Landing page tags
-    var idFrame = "landingPage";
-    var nameJSX = (<h1>6 Element</h1>);
-    var mvpJSX = (<h2>Jetez encore plus mieux</h2>);
-    
-    var suffixLg = "-lg"; // Size on the search bar, Large on the Landing page, Normal on the results page
-    
-
-    // Condition (état) list items
-    // !INFORMATION! Condition items are stored on 2 ways:
-    // - as radio buttons in landing page search bar (preConditionJSX)
-    // - as single item list in results page mini search bar (postConditionJSX)
-    var preConditionJSX = "";
-    var itemsJSX = conditions.map(function(condition, index){
-      return (<label key={'ch'+index.toString()} className="radio-inline"><input type="radio" name="optradio" defaultChecked={self.state.condition===index} onClick={self.changeCondition.bind(self,index)}/>{condition}</label>);
+    var iconsCheck = ["glyphicon-unchecked", "glyphicon-check"];
+    var filesJSX = this.state.files.map(function(file, index){
+      var style = { 
+        'color': file.color,
+      };
+      return (
+        <li key={'file'+index.toString()}>
+          <a href="javascript:;">
+            <span> 
+              <i className={"legend-name clickable glyphicon "+iconsCheck[(file.checked?1:0)]} onClick={self.selectFile.bind(self, index)} > </i> 
+              <i className={"legend glyphicon glyphicon-stop"} style={style}> </i> 
+              {file.name}
+            </span>
+          </a>
+        </li>
+      );
     });
-    var postConditionJSX = (
-      <div id="groupCondition" className="text-left">
-        {itemsJSX}
-      </div>);
+    var result = JSON.parse(JSON.stringify(this.props.result));
+    var list = [];
+    this.state.files.forEach(function(file){
+      if(file.checked === true) list.push(file.name);
+    });
+    result.objects = this.props.result.objects.filter(function(object){
+      var file = object.file.replace('.json', '');
+      return (list.indexOf(file) !== -1);
+    });
 
-    if(this.state.result){
 
-      idFrame = "resultsPage";
-      mvpJSX = "";
-      resultJSX = (
-        <div id="list" key={'list'+this.state.searchCpt.toString()} className="container">
-          <br/>
-          <MapView key={'map'+this.state.searchCpt.toString()} result={this.state.result}/>
+    var detailMapJSX = "";
+    if(this.state.selectMap !== null){
+    //if(false){
+      detailMapJSX = (
+        <div id="popup">
+          <DetailView object={this.props.result.objects[this.state.selectMap]} isDetailed={true} select={self.select} index={this.state.selectMap} />
+           <a href="javascript:;">
+            <span onClick={self.toggleMap.bind(self, null)}>
+              <i className="glyphicon glyphicon-triangle-bottom"></i>
+            </span>
+          </a>
         </div>);
-      suffixLg = "";
-      itemsJSX = conditions.map(function(condition, index){
-        return (<li key={'ch'+index.toString()} className={self.state.condition===index?"active":""}><a href="javascript:;" onClick={self.changeCondition.bind(self,index)}>{condition}</a></li>);
-      });
-      preConditionJSX = (
-      <div className="btn-group dropdown" id="groupCondition">
-        <button type="button" className="form-control dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          <strong>État | {conditions[this.state.condition]}</strong> <span className="caret"></span>
-        </button>
-        <ul className="dropdown-menu" aria-labelledby="groupCondition">
-          {itemsJSX}
-        </ul>
-      </div>);
-      postConditionJSX = "";
     }
 
-    var selectJSX = this.state.availableCategories.map(function(category){
-      return (<option key={category} value={category}>{category}</option>);
-    });
-
-    return(
-      <div id={idFrame}>
-        {nameJSX}
-        {mvpJSX}
-        <div id="searchBar" className="navbar-form navbar-inverse" role="search">
-          <div className="form-group">
-            <select className={"form-control input"+suffixLg}  id="what" ref="what">
-              {selectJSX}
-            </select>
-            <input type="text" id="where" ref="where" className={"form-control input"+suffixLg} placeholder="Où ?" autoComplete="off"/>
-            {preConditionJSX}
-            <button id="btnSearch" className={"btn btn-primary navbar-btn btn"+suffixLg} onClick={this.launchSearch}>
-              <a href="javascript:;" className="glyphicon glyphicon-search"></a>
-            </button>
-            {postConditionJSX}
-            <br/>
+    return (
+        <div>
+          <ul id="listFiles">{filesJSX}</ul>
+          <div id="resultView" className="row">
+            <ListView result={result} select={this.select} detail={this.state.detail} expand={this.expand}/>
+            <div id="mapBox" className="col-lg-6">
+              <h4 id="nbResults">Il y a <strong>{result.objects.length}</strong> résultats pour votre recherche</h4>
+              <MapCore getMapInfos={this.getMapInfos} result={result}/>
+              {detailMapJSX}
+            </div>
           </div>
-        </div>
-        {resultJSX}
-      </div>);
+        </div>);
   }
 });

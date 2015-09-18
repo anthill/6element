@@ -19,6 +19,7 @@ var join = path.join;
 
 var gulp = require('gulp');
 var browserify = require('browserify');
+var reactify = require('reactify');
 var source = require("vinyl-source-stream");
 
 
@@ -38,6 +39,7 @@ function browserifyShare(name){
         packageCache: {},
         fullPaths: true
     });
+    b.transform(reactify);
     
     b.add( join('.', 'core', 'clients', name, 'src', 'main.js') );
     bundleShare(b, name);

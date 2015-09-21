@@ -5,7 +5,7 @@ var React = require('react');
 module.exports = React.createClass({
   render: function() {
     return (
-      <div className="traffic">Lalala</div>
+      <div className="traffic">to be continued...</div>
     );
   }
 });

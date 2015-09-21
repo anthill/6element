@@ -19,6 +19,7 @@ var join = path.join;
 
 var gulp = require('gulp');
 var browserify = require('browserify');
+var reactify = require('reactify');
 var source = require("vinyl-source-stream");
 
 
@@ -38,69 +39,49 @@ function browserifyShare(name){
         packageCache: {},
         fullPaths: true
     });
+    b.transform(reactify);
     
     b.add( join('.', 'core', 'clients', name, 'src', 'main.js') );
     bundleShare(b, name);
 }
 
+var clients = ['Dashboard', 'Admin', 'Citizen'];
 
+clients.forEach(function(client){
 
-
-gulp.task('build-dashboard', function(){
-    browserifyShare('Dashboard');
-});
-
-gulp.task('build-admin', function(){
-    browserifyShare('Admin');
-});
-
-gulp.task('build-citizen', function(){
-    browserifyShare('Citizen');
-});
-
-
-
-
-gulp.task('watch-dashboard', function() {
-    console.log('Watching dashboard');
-    
-    var dashboardWatcher = gulp.watch('./core/clients/Dashboard/src/**', ['build-dashboard']);
-    dashboardWatcher.on('change', function(event) {
-        console.log('** Dashboard ** File ' + path.relative(__dirname, event.path) + ' was ' + event.type);
+    gulp.task('build-'+client, function(){
+        browserifyShare(client);
     });
-});
 
-gulp.task('watch-admin', function() {
-    console.log('Watching admin');
-
-    var adminWatcher = gulp.watch('./core/clients/Admin/src/**', ['build-admin']);
-    adminWatcher.on('change', function(event) {
-        console.log('** Admin ** File ' + path.relative(__dirname, event.path) + ' was ' + event.type);
+    gulp.task('watch-'+client, function() {
+        console.log('Watching', client);
+        
+        var watcher = gulp.watch(path.join('./core/clients', client, 'src/**'), ['build-'+client]);
+        watcher.on('change', function(event) {
+            console.log('**', client, '** File ', path.relative(__dirname, event.path), 'was', event.type);
+        });
     });
+
 });
 
-gulp.task('watch-citizen', function() {
-    console.log('Watching citizen');
+gulp.task('watch', clients.map(function(client){
+    return 'watch-'+client;
+}));
 
-    var adminWatcher = gulp.watch('./core/clients/Citizen/src/**', ['build-citizen']);
-    adminWatcher.on('change', function(event) {
-        console.log('** Citizen ** File ' + path.relative(__dirname, event.path) + ' was ' + event.type);
-    });
-});
-
+gulp.task('build', clients.map(function(client){
+    return 'build-'+client;
+}));
 
 var dockerComposeProcess;
 gulp.task('start-containers-dev', function(){
-    dockerComposeProcess = spawn('docker-compose', ['-f', 'compose-dev.yml', 'up'], {stdio: 'inherit'});
+    dockerComposeProcess = spawn('docker-compose', ['-f', 'compose-dev.yml', 'up', '--force-recreate'], {stdio: 'inherit'});
 });
-
-gulp.task('watch', ['watch-dashboard', 'watch-admin', 'watch-citizen']);
 
 /*
     Top-level tasks
 */
 
-gulp.task('dev', ['start-containers-dev', 'watch']);
+gulp.task('dev', ['start-containers-dev', 'watch', 'build']);
 gulp.task('rebuild-db', function(){
     spawn('docker-compose', ['-f', 'rebuild-db.yml', 'up'], {stdio: 'inherit'});
 });

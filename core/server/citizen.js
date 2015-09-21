@@ -1,47 +1,26 @@
 "use strict";
 
-require('es6-shim');
-require('better-log').install();
+var search = require('./searchFiles.js');
 
-var path = require('path');
-var express = require('express');
-var app = express();
-var http = require('http');
-var compression = require('compression');
-var bodyParser = require('body-parser');
-
-var fs = require('fs');
-var database = require('../database');
+var bodyParser	= require('body-parser');
+var express 	= require('express');
+var path 		= require('path');
+var app 		= express();
+var server 	= require('http').createServer(app);
 
 var PORT = process.env.VIRTUAL_PORT;
 var DEBUG = process.env.NODE_ENV === "development";
-var secret = require("../PRIVATE.json").secret;
 
-var debug = function() {
-    if (DEBUG) {
-        [].unshift.call(arguments, "[DEBUG 6element] ");
-        console.log.apply(console, arguments);
-    }
-}
+app.use(bodyParser.json({limit: '1000mb'}));
+app.use(bodyParser.urlencoded({extended: true}))
 
-// Admin API
-app.use(compression());
-app.use(bodyParser.json());
-
-
-
-app.get('/', function(req, res){
-    res.sendFile(path.join(__dirname, '../clients/Citizen/index.html'));
-});
-
+app.use('/', express.static(path.join(__dirname, '../clients/Citizen/src')));
 
 app.get('/Citizen-browserify-bundle.js', function(req, res){
     res.sendFile(path.join(__dirname, '../clients/Citizen-browserify-bundle.js'));
 });
 
-app.use("/css", express.static(path.join(__dirname, '../clients/Citizen/css')));
-app.use("/pictures", express.static(path.join(__dirname, '../clients/Citizen/pictures')));
-
+app.post('/search', search);
 
 
 app.listen(PORT, function () {

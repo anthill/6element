@@ -1,7 +1,7 @@
 "use strict";
 
 var React = require('react');
-var MapView =  require('./mapView.jsx');
+var MainView =  require('./mainView.jsx');
 var requestData = require('./../js/requestData.js');
 
 module.exports = React.createClass({
@@ -74,7 +74,7 @@ module.exports = React.createClass({
               (place.address_components[2] && place.address_components[2].short_name || '')
             ].join(' ');
           }
-          self.setState({geoloc: {lat: place.geometry.location.G, lon: place.geometry.location.K}, placeName: address})
+          self.setState({geoloc: {lat: place.geometry.location.H, lon: place.geometry.location.L}, placeName: address})
         });
       }
     })
@@ -97,7 +97,6 @@ module.exports = React.createClass({
       'categories': categories,
       'geoloc': this.state.geoloc
     };
-
     requestData(data)
     .then(function(result){
       self.setState({mode: (self.state.mode===0)?1:0, result: result, searchCpt: self.state.searchCpt+1});
@@ -143,7 +142,7 @@ module.exports = React.createClass({
       resultJSX = (
         <div id="list" key={'list'+this.state.searchCpt.toString()} className="container">
           <br/>
-          <MapView key={'map'+this.state.searchCpt.toString()} result={this.state.result}/>
+          <MainView key={'map'+this.state.searchCpt.toString()} result={this.state.result}/>
         </div>);
       suffixLg = "";
       itemsJSX = conditions.map(function(condition, index){

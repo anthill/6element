@@ -15,7 +15,7 @@ app.use(bodyParser.json({limit: '1000mb'}));
 app.use(bodyParser.urlencoded({extended: true}))
 
 app.use('/', express.static(path.join(__dirname, '../clients/Citizen/src')));
-app.use("/css/leaflet.css", express.static(__dirname + '/node_modules/leaflet/dist/leaflet.css'));
+app.use("/css/leaflet.css", express.static(path.join(__dirname, '../../node_modules/leaflet/dist/leaflet.css')));
 
 app.get('/Citizen-browserify-bundle.js', function(req, res){
     res.sendFile(path.join(__dirname, '../clients/Citizen-browserify-bundle.js'));

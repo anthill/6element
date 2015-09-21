@@ -45,7 +45,7 @@ function browserifyShare(name){
     bundleShare(b, name);
 }
 
-var clients = ['Dashboard', 'Admin', 'Citizen'];
+var clients = [/*'Dashboard', 'Admin', */'Citizen'];
 
 clients.forEach(function(client){
 
@@ -64,20 +64,24 @@ clients.forEach(function(client){
 
 });
 
-gulp.task('watch', clients.map(function(client){ 
+gulp.task('watch', clients.map(function(client){
     return 'watch-'+client;
+}));
+
+gulp.task('build', clients.map(function(client){
+    return 'build-'+client;
 }));
 
 var dockerComposeProcess;
 gulp.task('start-containers-dev', function(){
-    dockerComposeProcess = spawn('docker-compose', ['-f', 'compose-dev.yml', 'up'], {stdio: 'inherit'});
+    dockerComposeProcess = spawn('docker-compose', ['-f', 'compose-dev.yml', 'up', '--force-recreate'], {stdio: 'inherit'});
 });
 
 /*
     Top-level tasks
 */
 
-gulp.task('dev', ['start-containers-dev', 'watch']);
+gulp.task('dev', ['start-containers-dev', 'watch', 'build']);
 gulp.task('rebuild-db', function(){
     spawn('docker-compose', ['-f', 'rebuild-db.yml', 'up'], {stdio: 'inherit'});
 });

@@ -9,7 +9,8 @@ button a{
 	color: white;
 	text-decoration: none;
 }
-
+.open { color: green;}
+.closed { color: red;}
 .star { color: gold; }
 .no-star { color: lightgray; }
 .clickable { cursor: pointer;}
@@ -237,9 +238,18 @@ button a{
 	margin: 5px;
 	display: inline-block;
 	padding: 5px;
+	background-color: whitesmoke;
 	border: 1px solid black;
 }
-
+.allowedObjects{
+	height: 100px;
+	overflow:auto;
+	border-bottom: solid black 1px;
+}
+.traffic {
+	width: 100%;
+	border: 1px solid black;
+}
 #postAdvert{
 	font-size: 18px;
 	color: white;

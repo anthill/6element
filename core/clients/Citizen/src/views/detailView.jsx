@@ -2,6 +2,8 @@
 
 var React = require('react');
 var Rate  =  require('./rate.jsx');
+var Calendar  =  require('./calendar.jsx');
+var Traffic  =  require('./traffic.jsx');
 
 var NotEmpty = function(field){
   if(typeof field === 'undefined') return false;
@@ -48,6 +50,11 @@ module.exports = React.createClass({
       coordinatesJSX.push(<li><em>Pas de coordonnées indiquées</em></li>);
     }
     
+    var calendarJSX = "";
+    if(NotEmpty(object.properties.opening_hours)){
+      calendarJSX = (<Calendar opening_hours={object.properties.opening_hours} />);
+    }
+
     var detailJSX = [];
     if(self.props.isDetailed){
       detailJSX.push(
@@ -56,12 +63,22 @@ module.exports = React.createClass({
             <ul className="addressFull">{coordinatesJSX}</ul>
           </div>
           <div className="col-lg-6">
-            ROXANE INFOS TO FILL IN
+            {calendarJSX}
           </div>
         </div>);
       detailJSX.push(
        <div className="row clearfix styleRow">
-         <ul className="allowedObjects">
+        <div className="text-left">
+          <label className="text-left">Affluence:</label><br/>
+          <Traffic />
+        </div>
+      </div>);
+      detailJSX.push(
+       <div className="row clearfix styleRow">
+        <div className="text-left">
+          <label>Déchets acceptés:</label>
+        </div>
+        <ul className="allowedObjects">
           {allowedJSX}
         </ul>
       </div>);
@@ -72,7 +89,7 @@ module.exports = React.createClass({
       <div>
         <div className="row clearfix styleRow">
           <div className="pull-left text-left">
-            <label><strong>{object.properties.name}</strong></label><br/>
+            <label><b>{object.properties.name}</b></label><br/>
             <label><small><em>src: {object.file.replace('.json', '')}</em></small></label>
           </div>
           <div className="pull-right text-right">

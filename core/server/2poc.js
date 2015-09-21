@@ -31,16 +31,16 @@ app.use(bodyParser.json());
 
 
 app.get('/', function(req, res){
-    res.sendFile(path.join(__dirname, '../clients/Citizen/index.html'));
+    res.sendFile(path.join(__dirname, '../clients/2poc/index.html'));
 });
 
 
-app.get('/Citizen-browserify-bundle.js', function(req, res){
-    res.sendFile(path.join(__dirname, '../clients/Citizen-browserify-bundle.js'));
+app.get('/2poc-browserify-bundle.js', function(req, res){
+    res.sendFile(path.join(__dirname, '../clients/2poc-browserify-bundle.js'));
 });
 
-app.use("/css", express.static(path.join(__dirname, '../clients/Citizen/css')));
-app.use("/pictures", express.static(path.join(__dirname, '../clients/Citizen/pictures')));
+app.use("/css", express.static(path.join(__dirname, '../clients/2poc/css')));
+app.use("/pictures", express.static(path.join(__dirname, '../clients/2poc/pictures')));
 
 
 

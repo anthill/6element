@@ -45,7 +45,7 @@ function browserifyShare(name){
     bundleShare(b, name);
 }
 
-var clients = [/*'Dashboard', 'Admin', */'Citizen'];
+var clients = ['Dashboard', 'Admin', 'Citizen'];
 
 clients.forEach(function(client){
 

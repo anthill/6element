@@ -103,7 +103,7 @@ module.exports = React.createClass({
         <div id="postAdvert" className="navbar-form navbar-inverse" role="search">
           <div className="form-group">
             <label>Vous ne trouvez pas ? Déposez une annonce </label> 
-            <button className="btn btn-primary" onClick={this.postAdvert}><a href="javascript:;" className="glyphicon glyphicon-pencil"></a></button>
+            <button className="btn btn-primary" onClick={this.postAdvert}><i className="glyphicon glyphicon-pencil"></i></button>
           </div>
         </div>
       </div>                                              

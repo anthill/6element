@@ -176,7 +176,7 @@ module.exports = React.createClass({
             <input type="text" id="where" ref="where" className={"form-control input"+suffixLg} placeholder="Où ?" autoComplete="off"/>
             {preConditionJSX}
             <button id="btnSearch" className={"btn btn-primary navbar-btn btn"+suffixLg} onClick={this.launchSearch}>
-              <a href="javascript:;" className="glyphicon glyphicon-search"></a>
+              <i className="glyphicon glyphicon-search"></i>
             </button>
             {postConditionJSX}
             <br/>

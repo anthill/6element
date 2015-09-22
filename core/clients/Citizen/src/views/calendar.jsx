@@ -35,15 +35,21 @@ module.exports = React.createClass({
     var to   = new Date(from);
     to.setDate(from.getDate()+7);
 
-    var intervals = oh.getOpenIntervals(from, to);
-    for (var i in intervals){
-      var start = new Date(intervals[i][0]);
-      var end = new Date(intervals[i][1]);
-      var slot = getHour(start)+'-'+getHour(end);
-      var index = start.getDay()===0?6:start.getDay()-1;
-      calendar[index].slots.push(slot);
-    }
+    oh.getOpenIntervals(from, to).forEach(function(interval){
+      if(interval.length >== 2){
 
+        var start = new Date(interval[0]);
+        var end = new Date(interval[1]);
+        var slot = getHour(start)+'-'+getHour(end);
+        var index = start.getDay()===0?6:start.getDay()-1;
+        console.log('******');
+        console.log(start, end);
+        console.log(slot);
+        console.log(index);
+        calendar[index].slots.push(slot);
+      }
+    });
+    
     calendar = calendar.map(function(day){
       return {
         name: day.name,

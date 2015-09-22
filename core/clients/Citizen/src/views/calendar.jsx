@@ -42,10 +42,6 @@ module.exports = React.createClass({
         var end = new Date(interval[1]);
         var slot = getHour(start)+'-'+getHour(end);
         var index = start.getDay()===0?6:start.getDay()-1;
-        console.log('******');
-        console.log(start, end);
-        console.log(slot);
-        console.log(index);
         calendar[index].slots.push(slot);
       }
     });

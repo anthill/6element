@@ -36,7 +36,7 @@ module.exports = React.createClass({
     to.setDate(from.getDate()+7);
 
     oh.getOpenIntervals(from, to).forEach(function(interval){
-      if(interval.length >== 2){
+      if(interval.length > 1){
 
         var start = new Date(interval[0]);
         var end = new Date(interval[1]);
@@ -49,7 +49,7 @@ module.exports = React.createClass({
         calendar[index].slots.push(slot);
       }
     });
-    
+
     calendar = calendar.map(function(day){
       return {
         name: day.name,

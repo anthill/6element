@@ -3,6 +3,7 @@
 var React = require('react');
 var L = require('leaflet');
 
+var TabView    =  require('./tabView.jsx');
 var ListView    =  require('./listView.jsx');
 var DetailView  =  require('./detailView.jsx');
 var MapCore     =  require('./mapCore.jsx');
@@ -21,7 +22,7 @@ module.exports = React.createClass({
         }); 
       }
     });
-    return {map: null, markers: [], select: null, selectMap: null, files: files, detail: null};
+    return {view: 0, map: null, markers: [], select: null, selectMap: null, files: files, detail: null};
   },
   getMapInfos: function(map){
     this.loadSelection(map, null, this.state.files);
@@ -164,6 +165,9 @@ module.exports = React.createClass({
   toggleMap: function(index){
     this.setState({selectMap: index});
   },
+  changeView: function(view){
+    this.setState({view: view});
+  },
   render: function() {
 
     var self = this;
@@ -210,17 +214,30 @@ module.exports = React.createClass({
           </a>
         </div>);
     }
-
-    return (
+    var viewJSX = "";
+    if(this.state.view === 0){
+      viewJSX = (
+        <ListView result={result} select={this.select} detail={this.state.detail} expand={this.expand} />
+      );
+    } else {
+      viewJSX = (
         <div>
-          <ul id="listFiles">{filesJSX}</ul>
-          <div id="resultView" className="row">
-            <ListView result={result} select={this.select} detail={this.state.detail} expand={this.expand}/>
-            <div id="mapBox" className="col-lg-6">
-              <h4 id="nbResults">Il y a <strong>{result.objects.length}</strong> résultats pour votre recherche</h4>
-              <MapCore getMapInfos={this.getMapInfos} result={result}/>
-              {detailMapJSX}
-            </div>
+          <div id="mapBox" className="clearfix">
+            <h4 id="nbResults">Il y a <strong>{result.objects.length}</strong> résultats pour votre recherche</h4>
+            <MapCore getMapInfos={this.getMapInfos} result={result}/>
+            {detailMapJSX}
+          </div>
+        </div>
+      );
+    }
+    return (
+        <div className="row">
+          <div className="col-sm-3 pull-left text-left">
+            <TabView changeView={this.changeView} view={this.state.view} /> 
+            <ul id="listFiles">{filesJSX}</ul>
+          </div>
+          <div id="resultView" className="col-sm-9">
+            {viewJSX}
           </div>
         </div>);
   }

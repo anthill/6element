@@ -264,14 +264,15 @@ button a{
 }
 
 #listFiles {
-	text-align: center;
+	text-align: left;
+	padding: 0;
 }
 #listFiles li {
 	list-style-type: none;
-	display: inline;
+	/*display: inline;*/
 }
 #listFiles li a{
-	margin-left: 20px;
+	/*margin-left: 20px;*/
 	color: lightgray;
 }
 #listFiles li .legend{

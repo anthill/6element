@@ -1,6 +1,7 @@
 "use strict";
 
 var React = require('react');
+var TabView    =  require('./tabView.jsx');
 var DetailView  =  require('./detailView.jsx');
 
 module.exports = React.createClass({
@@ -93,7 +94,7 @@ module.exports = React.createClass({
     });
     
     return (
-      <div className="col-lg-6">
+      <div>
         <div className="clearfix">
           <div className="pull-left">{navSortJSX}</div>
         </div>

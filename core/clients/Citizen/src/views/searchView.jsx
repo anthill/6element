@@ -117,7 +117,7 @@ module.exports = React.createClass({
     // Landing page tags
     var idFrame = "landingPage";
     var nameJSX = (<h1>6 Element</h1>);
-    var mvpJSX = (<h2>Jetez encore plus mieux</h2>);
+    var mvpJSX = (<h2>Nos déchets ont de la valeur</h2>);
     
     var suffixLg = "-lg"; // Size on the search bar, Large on the Landing page, Normal on the results page
     

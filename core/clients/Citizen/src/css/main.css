@@ -1,6 +1,5 @@
 body{
 	background-color: black; /*WhiteSmoke*/
-    height: 100%;
     width: 100%;
     font-family: Lato, sans-serif;
 }
@@ -17,13 +16,8 @@ button a{
 .styleRow {
 	padding: 0 15px;
 }
-/*#listView .detail{
-	margin-left: 5px;
-	margin-right: 5px;
-	padding: 5px;
-}*/
 
-
+/*
 #landingPage{
 	height: 100%; 
 	width: 100%; 
@@ -60,22 +54,6 @@ button a{
 	text-shadow: 1px 1px Gray;
 	font-size: 40px;
 }
-/*
-#what {
-    line-height: 45px;
-	font-size: 25px;
- 	-webkit-border-radius: 6px;
-    -moz-border-radius: 6px;
-    border-radius: 6px;}
-
-#what .chzn-container-multi .chzn-choices {
-	line-height: 50px !important;
-    overflow-y: auto;
-}*/
-
-/*#landingPage #searchBar{
-	width: 800px;
-}*/
 
 #landingPage #searchBar{
 	display: inline-block;
@@ -86,7 +64,6 @@ button a{
 
 #searchBar{
 	margin: 0 auto;
-	/*width: 800px;*/
   	padding: 5px;
   	background-color: rgba(0,0,0,0.5);
 	vertical-align: middle;
@@ -102,10 +79,7 @@ button a{
 
 #what,
 #where{
-	/*width: 350px;*/
 	margin: 5px;
-	/*display:block;
-	width:auto;*/
 }
 
 #searchBar .radio-inline {
@@ -165,9 +139,9 @@ button a{
 #listView .panel-body{
 	padding: 5px 10px;
 }
-
+*/
 #map{
-	height: 470px;
+	height: 100%;
 	position: relative;
 }
 
@@ -191,9 +165,10 @@ button a{
 	margin: 0 auto;
 	height: 40px;
 	padding: 10px;
+	text-align: center;
 	display: block;
 }
-
+/*
 #filterView{
 	background-color: white;
 	margin-bottom: 20px;
@@ -205,7 +180,7 @@ button a{
 	color: black;
 	font-size: 20px;
 }
-
+*/
 .addressFull {
 	background-color: whitesmoke;
 	padding: 5px;

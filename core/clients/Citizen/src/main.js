@@ -4,9 +4,9 @@ require('es6-promise').polyfill();
 
 var React = require('react');
 
-var SearchView =  require('./views/searchView.jsx');
+var Layout =  require('./views/layout.jsx');
 
 React.render( 
-  React.createElement(SearchView),
+  React.createElement(Layout),
   document.body
 );

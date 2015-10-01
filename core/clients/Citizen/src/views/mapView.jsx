@@ -2,6 +2,7 @@
 
 var React = require('react');
 var L = require('leaflet');
+var Colors = require('material-ui/lib/styles/colors');
 
 var TabView    =  require('./tabView.jsx');
 var ListView    =  require('./listView.jsx');
@@ -22,7 +23,7 @@ module.exports = React.createClass({
         }); 
       }
     });
-    return {view: 0, map: null, markers: [], select: null, selectMap: null, files: files, detail: null};
+    return {map: null, markers: [], select: null, selectMap: null, files: files, detail: null};
   },
   getMapInfos: function(map){
     this.loadSelection(map, null, this.state.files);
@@ -142,11 +143,6 @@ module.exports = React.createClass({
    
     this.setState({map: map, markers: markers, select: select, files: files});
   },
-  selectFile: function(index){
-    var files = this.state.files;
-    files[index].checked = !files[index].checked;
-    this.loadSelection(this.state.map, null, files);
-  },
   expand: function(index){
     var detail = this.state.detail;
     var select = this.state.select;
@@ -165,31 +161,11 @@ module.exports = React.createClass({
   toggleMap: function(index){
     this.setState({selectMap: index});
   },
-  changeView: function(view){
-    this.setState({view: view});
-  },
   render: function() {
 
     var self = this;
     if(this.props.result.length===0) return "";
 
-    var iconsCheck = ["glyphicon-unchecked", "glyphicon-check"];
-    var filesJSX = this.state.files.map(function(file, index){
-      var style = { 
-        'color': file.color,
-      };
-      return (
-        <li key={'file'+index.toString()}>
-          <a href="javascript:;">
-            <span> 
-              <i className={"legend-name clickable glyphicon "+iconsCheck[(file.checked?1:0)]} onClick={self.selectFile.bind(self, index)} > </i> 
-              <i className={"legend glyphicon glyphicon-stop"} style={style}> </i> 
-              {file.name}
-            </span>
-          </a>
-        </li>
-      );
-    });
     var result = JSON.parse(JSON.stringify(this.props.result));
     var list = [];
     this.state.files.forEach(function(file){
@@ -200,12 +176,11 @@ module.exports = React.createClass({
       return (list.indexOf(file) !== -1);
     });
 
-
     var detailMapJSX = "";
     if(this.state.selectMap !== null){
     //if(false){
       detailMapJSX = (
-        <div id="popup">
+        <div id="popup" zDepth={1}>
           <DetailView object={this.props.result.objects[this.state.selectMap]} isDetailed={true} select={self.select} index={this.state.selectMap} />
            <a href="javascript:;">
             <span onClick={self.toggleMap.bind(self, null)}>
@@ -214,31 +189,26 @@ module.exports = React.createClass({
           </a>
         </div>);
     }
-    var viewJSX = "";
-    if(this.state.view === 0){
-      viewJSX = (
-        <ListView result={result} select={this.select} detail={this.state.detail} expand={this.expand} />
-      );
-    } else {
-      viewJSX = (
-        <div>
-          <div id="mapBox" className="clearfix">
-            <h4 id="nbResults">Il y a <strong>{result.objects.length}</strong> résultats pour votre recherche</h4>
-            <MapCore getMapInfos={this.getMapInfos} result={result}/>
-            {detailMapJSX}
-          </div>
-        </div>
-      );
+    var nbResultJSX = "";
+    if(result.objects.length){
+      nbResultJSX = (<p id="nbResults">Il y a <strong>{result.objects.length}</strong> résultats pour votre recherche</p>);
     }
     return (
-        <div className="row">
-          <div className="col-sm-3 pull-left text-left">
-            <TabView changeView={this.changeView} view={this.state.view} /> 
-            <ul id="listFiles">{filesJSX}</ul>
-          </div>
-          <div id="resultView" className="col-sm-9">
-            {viewJSX}
-          </div>
-        </div>);
+      <div flex layout="row">
+        <md-content flex color={Colors.grey600} >
+          {nbResultJSX}
+          <MapCore getMapInfos={this.getMapInfos} result={result}/>
+          {detailMapJSX}
+        </md-content>
+      </div>
+    );
+    /*
+    return (
+      <div id="mapBox" className="clearfix" style={height: "100%"}>
+        <h5 id="nbResults">Il y a <strong>{result.objects.length}</strong> résultats pour votre recherche</h5>
+        <MapCore getMapInfos={this.getMapInfos} result={result}/>
+        {detailMapJSX}
+      </div>
+    );*/
   }
 });

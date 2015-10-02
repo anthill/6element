@@ -16,6 +16,9 @@ button a{
 .styleRow {
 	padding: 0 15px;
 }
+.noRef{
+	color:inherit;	
+}
 
 /*
 #landingPage{

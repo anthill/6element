@@ -4,9 +4,7 @@ var React = require('react');
 var L = require('leaflet');
 var Colors = require('material-ui/lib/styles/colors');
 
-var TabView    =  require('./tabView.jsx');
-var ListView    =  require('./listView.jsx');
-var DetailView  =  require('./detailView.jsx');
+var Preview  =  require('./preview.jsx');
 var MapCore     =  require('./mapCore.jsx');
 
 module.exports = React.createClass({
@@ -19,7 +17,7 @@ module.exports = React.createClass({
   select: function(index){
     this.loadSelection(this.state.map, index);
   },
-  clickMarker: function(e){
+  onClickMarker: function(e){
     var index = this.state.markers.findIndex(function(marker){
       return (marker.id === e.target._leaflet_id)
     });
@@ -27,12 +25,12 @@ module.exports = React.createClass({
       this.toggleMap(null);
     else
       this.toggleMap(index);
-    //console.log(index);
-    //this.expand(index);
   },
   onClickMap: function(){
-    this.setState({select: null});
-  }
+    if(this.state.selectMap !== null){
+      this.setState({selectMap: null});
+    }
+  },
   loadSelection: function(map, select){
 
     var self = this;
@@ -86,12 +84,12 @@ module.exports = React.createClass({
         
         if(isSelected){
             markerSelected = new L.Marker(new L.LatLng(object.geometry.coordinates.lat, object.geometry.coordinates.lon), {icon: pingIcon});      
-            marker.on("click", self.clickMarker);
+            markerSelected.on("click", self.onClickMarker);
             map.setView([object.geometry.coordinates.lat, object.geometry.coordinates.lon], 16);
         } 
         else if (isCenter){
             var marker = new L.CircleMarker(new L.LatLng(object.geometry.coordinates.lat, object.geometry.coordinates.lon), options);
-            marker.on("click", self.clickMarker);
+            marker.on("click", self.onClickMarker);
             marker.addTo(map); 
             markers.push({
               id: marker._leaflet_id,
@@ -101,7 +99,7 @@ module.exports = React.createClass({
         else{
             var marker = new L.Circle(new L.LatLng(object.geometry.coordinates.lat, object.geometry.coordinates.lon), 10, options);
             marker.addTo(map);
-            marker.on("click", self.clickMarker);
+            marker.on("click", self.onClickMarker);
             markers.push({
               id: marker._leaflet_id,
               marker: marker
@@ -146,6 +144,9 @@ module.exports = React.createClass({
   toggleMap: function(index){
     this.setState({selectMap: index});
   },
+  onClickPreview: function(){
+    alert('yo');
+  },
   render: function() {
 
     var self = this;
@@ -157,11 +158,8 @@ module.exports = React.createClass({
     
       detailMapJSX = (
         <div id="popup" zDepth={1} className="text-center">
-          <DetailView object={result.objects[this.state.selectMap]} isDetailed={true} select={self.select} index={this.state.selectMap} />
-           <a href="javascript:;">
-            <span onClick={self.toggleMap.bind(self, null)}>
-              <i className="glyphicon glyphicon-lg glyphicon-triangle-bottom"></i>
-            </span>
+          <a href="javascript:;" className="noRef clickable" onClick={self.onClickPreview}>
+            <Preview object={result.objects[this.state.selectMap]} select={self.select} index={this.state.selectMap} />
           </a>
         </div>);
     }

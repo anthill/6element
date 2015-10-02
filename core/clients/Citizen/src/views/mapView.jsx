@@ -30,6 +30,9 @@ module.exports = React.createClass({
     //console.log(index);
     //this.expand(index);
   },
+  onClickMap: function(){
+    this.setState({select: null});
+  }
   loadSelection: function(map, select){
 
     var self = this;
@@ -120,6 +123,8 @@ module.exports = React.createClass({
     var centroid = new L.Marker(new L.LatLng(geoloc[0], geoloc[1]), {icon: centroidIcon});
     markers.push(centroid);
     centroid.addTo(map);
+
+    map.on('click', this.onClickMap); 
    
     this.setState({map: map, markers: markers, select: select});
   },

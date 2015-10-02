@@ -95,7 +95,6 @@ module.exports = React.createClass({
     
     return (
       <div>
-        {labelsJSX}
         <label className={isOpen?"open":"closed"}><b>{isOpen?"Ouvert actuellement":"Fermé actuellement"}</b></label>
       </div>
     );

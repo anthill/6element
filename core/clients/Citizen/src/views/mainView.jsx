@@ -10,25 +10,13 @@ var MapCore     =  require('./mapCore.jsx');
 
 module.exports = React.createClass({
   getInitialState: function() {
-    var temp = [];
-    var files = [];
-    this.props.result.objects.forEach(function(object){
-      if(temp.indexOf(object.file) ===-1){
-        temp.push(object.file);       
-        files.push({
-          name: object.file.replace('.json', ''),
-          color: object.color,
-          checked: true
-        }); 
-      }
-    });
-    return {view: 0, map: null, markers: [], select: null, selectMap: null, files: files, detail: null};
+    return {view: 0, map: null, markers: [], select: null, selectMap: null, detail: null};
   },
   getMapInfos: function(map){
-    this.loadSelection(map, null, this.state.files);
+    this.loadSelection(map, null);
   },
   select: function(index){
-    this.loadSelection(this.state.map, index, this.state.files);
+    this.loadSelection(this.state.map, index);
   },
   clickMarker: function(e){
     var index = this.state.markers.findIndex(function(marker){
@@ -77,7 +65,7 @@ module.exports = React.createClass({
     
     var markerSelected = null;
     var list = [];
-    this.state.files.forEach(function(file){
+    this.props.files.forEach(function(file){
       if(file.checked === true) list.push(file.name);
     });
     console.log(list.length);
@@ -140,7 +128,7 @@ module.exports = React.createClass({
     markers.push(centroid);
     centroid.addTo(map);
    
-    this.setState({map: map, markers: markers, select: select, files: files});
+    this.setState({map: map, markers: markers, select: select});
   },
   selectFile: function(index){
     var files = this.state.files;

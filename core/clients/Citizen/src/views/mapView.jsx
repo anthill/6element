@@ -11,25 +11,13 @@ var MapCore     =  require('./mapCore.jsx');
 
 module.exports = React.createClass({
   getInitialState: function() {
-    var temp = [];
-    var files = [];
-    this.props.result.objects.forEach(function(object){
-      if(temp.indexOf(object.file) ===-1){
-        temp.push(object.file);       
-        files.push({
-          name: object.file.replace('.json', ''),
-          color: object.color,
-          checked: true
-        }); 
-      }
-    });
-    return {map: null, markers: [], select: null, selectMap: null, files: files, detail: null};
+    return {map: null, markers: [], select: null, selectMap: null, detail: null};
   },
   getMapInfos: function(map){
-    this.loadSelection(map, null, this.state.files);
+    this.loadSelection(map, null);
   },
   select: function(index){
-    this.loadSelection(this.state.map, index, this.state.files);
+    this.loadSelection(this.state.map, index);
   },
   clickMarker: function(e){
     var index = this.state.markers.findIndex(function(marker){
@@ -42,7 +30,7 @@ module.exports = React.createClass({
     //console.log(index);
     //this.expand(index);
   },
-  loadSelection: function(map, select, files){
+  loadSelection: function(map, select){
 
     var self = this;
     // Adding icons
@@ -77,16 +65,8 @@ module.exports = React.createClass({
     markers = [];
     
     var markerSelected = null;
-    var list = [];
-    this.state.files.forEach(function(file){
-      if(file.checked === true) list.push(file.name);
-    });
-    console.log(list.length);
-    this.props.result.objects.filter(function(object){
-      var file = object.file.replace('.json', '');
-      return (list.indexOf(file) !== -1);
-    }).
-    forEach(function(object, index){
+    this.props.result.objects
+    .forEach(function(object, index){
 
         var isSelected = (select !== null && 
                         select === index);
@@ -141,7 +121,7 @@ module.exports = React.createClass({
     markers.push(centroid);
     centroid.addTo(map);
    
-    this.setState({map: map, markers: markers, select: select, files: files});
+    this.setState({map: map, markers: markers, select: select});
   },
   expand: function(index){
     var detail = this.state.detail;
@@ -166,22 +146,13 @@ module.exports = React.createClass({
     var self = this;
     if(this.props.result.length===0) return "";
 
-    var result = JSON.parse(JSON.stringify(this.props.result));
-    var list = [];
-    this.state.files.forEach(function(file){
-      if(file.checked === true) list.push(file.name);
-    });
-    result.objects = this.props.result.objects.filter(function(object){
-      var file = object.file.replace('.json', '');
-      return (list.indexOf(file) !== -1);
-    });
-
+    var result = this.props.result;
     var detailMapJSX = "";
     if(this.state.selectMap !== null){
-    //if(false){
+    
       detailMapJSX = (
-        <div id="popup" zDepth={1}>
-          <DetailView object={this.props.result.objects[this.state.selectMap]} isDetailed={true} select={self.select} index={this.state.selectMap} />
+        <div id="popup" zDepth={1} className="text-center">
+          <DetailView object={result.objects[this.state.selectMap]} isDetailed={true} select={self.select} index={this.state.selectMap} />
            <a href="javascript:;">
             <span onClick={self.toggleMap.bind(self, null)}>
               <i className="glyphicon glyphicon-lg glyphicon-triangle-bottom"></i>
@@ -202,13 +173,5 @@ module.exports = React.createClass({
         </md-content>
       </div>
     );
-    /*
-    return (
-      <div id="mapBox" className="clearfix" style={height: "100%"}>
-        <h5 id="nbResults">Il y a <strong>{result.objects.length}</strong> résultats pour votre recherche</h5>
-        <MapCore getMapInfos={this.getMapInfos} result={result}/>
-        {detailMapJSX}
-      </div>
-    );*/
   }
 });

@@ -4,33 +4,11 @@ var React = require('react');
 var L = require('leaflet');
 var MapView = require('./mapView.jsx');
 
-var MaterialUi = require('material-ui');
-var AppBar = require('material-ui/lib/app-bar');
-var LeftNav = require('material-ui/lib/left-nav');
-var Lists = require('material-ui/lib/lists');
-var Menu = require('material-ui/lib/menu');
-var Menus = require('material-ui/lib/menus');
-var Dialog = require('material-ui/lib/dialog');
-var TextField = require('material-ui/lib/text-field');
-var SelectField = require('material-ui/lib/select-field');
-var Table = require('material-ui/lib/table');
-var Tab = require('material-ui/lib/tabs');
+var Mui = require('material-ui');
 var Colors = require('material-ui/lib/styles/colors');
 var $ = require('jquery');
 var mapsApi = require( 'google-maps-api' )( 'AIzaSyCLuhubHWNbDgBhmj61OUo07L-zjHsVkKw' , ['places']);
 var requestData = require('./../js/requestData.js');
-
-//require('material-ui/lib/svg-icon');
-var NavigationExpandMore = require('material-ui/lib/svg-icons/navigation/expand-more');
-var ActionSearch = require('material-ui/lib/svg-icons/action/search');
-var MoreVert = require('material-ui/lib/svg-icons/navigation/more-vert');
-require('material-ui/lib/toolbar');
-
-var FontIcon = require('material-ui/lib/font-icon');
-var IconButton = require('material-ui/lib/icon-button');
-var FlatButton = require('material-ui/lib/flat-button');
-var DropDownMenu = require('material-ui/lib/drop-down-menu');
-var RaisedButton = require('material-ui/lib/raised-button');
 
 var injectTapEventPlugin = require("react-tap-event-plugin");
 
@@ -163,11 +141,15 @@ module.exports = React.createClass({
       what: availableCategories[e.target.value]
     });
   },
-  handleChangeTab: function(value,e,tab){
-    this.setState({tab: value})
-  },
-  getMapInfos: function(map){
-    this.loadSelection(map, null, this.state.files);
+  onSelectFilter: function(e){
+    var files = this.state.files;
+    files.forEach(function(file){
+      file.checked = false;
+    });
+    e.forEach(function(row){
+     files[row].checked = true;
+    });
+    this.setState({files: files, cpt: this.state.cpt+1});
   },
   render: function() {
 
@@ -177,40 +159,78 @@ module.exports = React.createClass({
     
     var menuItems = [];
 
+    let iconMenuItems = [
+      { payload: '1', text: 'Download' },
+      { payload: '2', text: 'More Info' }
+    ];
     //Standard Actions
     let standardActions = [
-      { text: 'Valider', onTouchTap: this.onDialogSubmit, ref: 'submit' },
-      { text: 'Annuler' }
+      { text: 'Valider', onTouchTap: this.onDialogSubmit, ref: 'submit' }
     ];
-
-    var result = this.state.result;
+        
+    var result = JSON.parse(JSON.stringify(this.state.result));
+    var list = [];
+    this.state.files.forEach(function(file){
+      if(file.checked === true) list.push(file.name);
+    });
+    result.objects = result.objects.filter(function(object){
+      var file = object.file.replace('.json', '');
+      return (list.indexOf(file) !== -1);
+    });
+    
     var resultJSX = "";
+    var filterJSX = "";
     if(result){
-      resultJSX = (<MapView key={'map'+this.state.cpt.toString()} result={result}/>);
-      menuItems = this.state.files.map(function(file){
-        return { text: file.name, selected: true };
+      resultJSX = (<MapView key={'map'+this.state.cpt.toString()} result={result} />);
+      filterJSX = this.state.files.map(function(file){
+        return (
+          <Mui.TableRow selected={file.checked}>
+            <Mui.TableRowColumn style={{padding: "10px"}}>{file.name}</Mui.TableRowColumn>
+            <Mui.TableRowColumn style={{width: "24px", padding: "0px"}}>
+              <Mui.FontIcon className="material-icons" color={file.color}>lens</Mui.FontIcon>
+            </Mui.TableRowColumn>
+          </Mui.TableRow>);
       });
-      //console.log(menuItems);
     }
+       
+    //onRowSelection={this.onFilterSelection}
+    var panelJSX = (
+      <Mui.Table 
+        fixedHeader={true}
+        fixedFooter={false}
+        selectable={true}
+        multiSelectable={true}
+        onRowSelection={this.onSelectFilter}>
+        <Mui.TableHeader enableSelectAll={true}>
+          <Mui.TableRow>
+            <Mui.TableHeaderColumn>Source</Mui.TableHeaderColumn>
+            <Mui.TableHeaderColumn></Mui.TableHeaderColumn>
+          </Mui.TableRow>
+        </Mui.TableHeader>
+        <Mui.TableBody 
+          deselectOnClickaway={false}
+          showRowHover={true}
+          stripedRows={false}>
+          {filterJSX}
+        </Mui.TableBody>
+      </Mui.Table>);
+            
     return (
       <div>
-        <AppBar
-          title="6element"
-          zDepth={2}
-          showMenuIconButton={false}
-          iconElementRight={<IconButton><MoreVert/></IconButton>} 
-          onLeftIconButtonTouchTap={this.handleLeftNav} >
-        </AppBar>
-        <Tab.Tabs
-          zDepth={2}
-          onChange={this.handleChangeTab}>
-          <Tab.Tab value={0} label="Afficher par Carte" />
-          <Tab.Tab value={1} label="Afficher par Liste" />
-        </Tab.Tabs>
+        <Mui.Toolbar>
+          <Mui.ToolbarGroup key={0} float="left">
+            <Mui.ToolbarTitle text="6element" />
+          </Mui.ToolbarGroup>
+          <Mui.ToolbarGroup key={1} float="right">
+            <Mui.IconButton tooltip="Afficher par Liste"><Mui.FontIcon className="material-icons" color={Colors.pink400} >dvr</Mui.FontIcon></Mui.IconButton>
+            <Mui.IconButton tooltip="Afficher mes Favoris" disabled={true}><Mui.FontIcon className="material-icons">favorite</Mui.FontIcon></Mui.IconButton>
+            <Mui.IconButton tooltip="Filtrer par source" onTouchTap={this.handleLeftNav}><Mui.FontIcon className="material-icons" color={Colors.pink400} >filter_list</Mui.FontIcon></Mui.IconButton>
+            <Mui.IconButton tooltip="Rechercher" onTouchTap={this.handleSearchNav}><Mui.FontIcon className="material-icons" color={Colors.pink400} >search</Mui.FontIcon></Mui.IconButton>
+          </Mui.ToolbarGroup>
+        </Mui.Toolbar>
         {resultJSX}
-        <LeftNav ref="leftNav" docked={false} menuItems={menuItems}>
-        </LeftNav>
-        <Dialog
+        <Mui.LeftNav ref="leftNav" docked={false} openRight={true} menuItems={menuItems} header={panelJSX} />
+        <Mui.Dialog
           ref="dialog"
           title="6element"
           actions={standardActions}
@@ -224,9 +244,9 @@ module.exports = React.createClass({
           <div>
             <table width="100%">
               <tr>
-                <td><FontIcon className="material-icons" color={Colors.grey600} >description</FontIcon></td>
+                <td><Mui.FontIcon className="material-icons" color={Colors.grey600} >description</Mui.FontIcon></td>
                 <td>
-                  <SelectField
+                  <Mui.SelectField
                     ref="whatField"
                     defaultValue={this.state.what}
                     onChange= {this.handleSelectWhat}
@@ -236,9 +256,9 @@ module.exports = React.createClass({
                 </td>
               </tr>
               <tr>
-                <td><FontIcon className="material-icons" color={Colors.grey600} >room</FontIcon></td>
+                <td><Mui.FontIcon className="material-icons" color={Colors.grey600} >room</Mui.FontIcon></td>
                 <td>
-                  <TextField
+                  <Mui.TextField
                     defaultValue={this.state.placeName}
                     ref="whereField" 
                     fullWidth={true}/>
@@ -246,73 +266,8 @@ module.exports = React.createClass({
               </tr>
             </table>
           </div>
-        </Dialog>
+        </Mui.Dialog>
       </div>
     );
   }
 });
-
-
-/*
-
-    <Menu.IconMenu iconButtonElement={MoreVert}>
-      <Menu.MenuItem primaryText="Refresh" />
-      <Menu.MenuItem primaryText="Send feedback" />
-      <Menu.MenuItem primaryText="Settings" />
-      <Menu.MenuItem primaryText="Help" />
-      <Menu.MenuItem primaryText="Sign out" />
-    </Menu.IconMenu>
-        <Lists.List>
-          <Lists.ListItem primaryText="Inbox" leftIcon={<ActionSearch />} />
-          <Lists.ListItem primaryText="Starred" leftIcon={<ActionSearch />} />
-          <Lists.ListItem primaryText="Sent mail" leftIcon={<ActionSearch />} />
-          <Lists.ListItem primaryText="Drafts" leftIcon={<ActionSearch />} />
-          <Lists.ListItem primaryText="Inbox" leftIcon={<ActionSearch />} />
-        </Lists.List>
-
-var iconsCheck = ["glyphicon-unchecked", "glyphicon-check"];
-    var filesJSX = this.state.files.map(function(file, index){
-      var style = { 
-        'color': file.color,
-      };
-      return (
-        <li key={'file'+index.toString()}>
-          <a href="javascript:;">
-            <span> 
-              <i className={"legend-name clickable glyphicon "+iconsCheck[(file.checked?1:0)]} onClick={self.selectFile.bind(self, index)} > </i> 
-              <i className={"legend glyphicon glyphicon-stop"} style={style}> </i> 
-              {file.name}
-            </span>
-          </a>
-        </li>
-      );
-    });
-
-    selectFile: function(index){
-    var files = this.state.files;
-    files[index].checked = !files[index].checked;
-    this.loadSelection(this.state.map, null, files);
-  },
-  
-
-  { type: Menu.MenuItem.Types.SUBHEADER, text: 'Recherche' },
-      { route: 'get-started', text: 'Get Started' },
-      { route: 'customization', text: 'Customization' },
-      { route: 'components', text: 'Components' },
-      { type: Menu.MenuItem.Types.SUBHEADER, text: 'Sources' },
-      {
-         type: Menu.MenuItem.Types.LINK,
-         payload: 'https://github.com/callemall/material-ui',
-         text: 'GitHub'
-      },
-      {
-         text: 'Disabled',
-         disabled: true
-      },
-      {
-         type: Menu.MenuItem.Types.LINK,
-         payload: 'https://www.google.com',
-         text: 'Disabled Link',
-         disabled: true
-      },
-*/

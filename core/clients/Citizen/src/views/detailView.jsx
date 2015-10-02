@@ -58,6 +58,10 @@ module.exports = React.createClass({
     var detailJSX = [];
     if(self.props.isDetailed){
       detailJSX.push(
+        <div className="row clearfix styleRow text-center">
+          {calendarJSX}
+        </div>);
+      /*detailJSX.push(
         <div className="row clearfix styleRow">
           <div className="col-lg-6 text-left">
             <ul className="addressFull">{coordinatesJSX}</ul>
@@ -81,7 +85,7 @@ module.exports = React.createClass({
         <ul className="allowedObjects">
           {allowedJSX}
         </ul>
-      </div>);
+      </div>);*/
     }
     
     // Final Object render

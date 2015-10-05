@@ -131,7 +131,7 @@ module.exports = React.createClass({
           }); 
         }
       });
-      self.setState({result: result, files: files, cpt: self.state.cpt+1, detailedObject: result.objects[13]});
+      self.setState({result: result, files: files, cpt: self.state.cpt+1});
     })
     .catch(function(error){
       console.error(error.status, error.message.toString());

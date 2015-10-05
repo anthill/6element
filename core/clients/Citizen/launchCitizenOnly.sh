@@ -1,7 +1,6 @@
 npm install
-node_modules/gulp/bin/gulp.js
 
-node_modules/browserify/bin/cmd.js -t reactify core/clients/Citizen/src/main.js -o /6element/core/clients/Citizen-browserify-bundle.js
+node_modules/browserify/bin/cmd.js -t reactify core/clients/Citizen/src/main.js -o core/clients/Citizen-browserify-bundle.js
 
 docker run -d \
 	-v $PWD:/6element \

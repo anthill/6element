@@ -9,12 +9,12 @@ var MapCore     =  require('./mapCore.jsx');
 
 module.exports = React.createClass({
   getInitialState: function() {
-    return {map: null, markers: [], select: null, selectMap: null, detail: null};
+    return {map: null, markers: [], selectMap: null};
   },
   getMapInfos: function(map){
     this.loadSelection(map, null);
   },
-  select: function(index){
+  onSelectMap: function(index){
     this.loadSelection(this.state.map, index);
   },
   onClickMarker: function(e){
@@ -22,9 +22,9 @@ module.exports = React.createClass({
       return (marker.id === e.target._leaflet_id)
     });
     if(index === -1) 
-      this.toggleMap(null);
+      this.setState({selectMap: null});
     else
-      this.toggleMap(index);
+      this.setState({selectMap: index});
   },
   onClickMap: function(){
     if(this.state.selectMap !== null){
@@ -69,8 +69,10 @@ module.exports = React.createClass({
     this.props.result.objects
     .forEach(function(object, index){
 
-        var isSelected = (select !== null && 
-                        select === index);
+        var isSelected = false;
+
+        /*(select !== null && 
+                        select === index);*/
         var isCenter = (object.properties.type === 'centre');
         var options = {
           color: isCenter?'black':object.color,
@@ -126,30 +128,11 @@ module.exports = React.createClass({
    
     this.setState({map: map, markers: markers, select: select});
   },
-  expand: function(index){
-    var detail = this.state.detail;
-    var select = this.state.select;
-    if(detail !== null && 
-      detail === index) {
-      detail = null;
-    }
-    else if(detail !== null) {
-      detail = index;
-      select = index;
-    } else {
-      detail = index;
-    }
-    this.setState({detail: detail, select: select});
-  },
-  toggleMap: function(index){
-    this.setState({selectMap: index});
-  },
   onClickPreview: function(){
-    alert('yo');
+    this.props.onShowDetail(this.props.result.objects[this.state.selectMap]);
   },
   render: function() {
 
-    var self = this;
     if(this.props.result.length===0) return "";
 
     var result = this.props.result;
@@ -158,8 +141,8 @@ module.exports = React.createClass({
     
       detailMapJSX = (
         <div id="popup" zDepth={1} className="text-center">
-          <a href="javascript:;" className="noRef clickable" onClick={self.onClickPreview}>
-            <Preview object={result.objects[this.state.selectMap]} select={self.select} index={this.state.selectMap} />
+          <a href="javascript:;" className="noRef clickable" onClick={this.onClickPreview}>
+            <Preview object={result.objects[this.state.selectMap]} />
           </a>
         </div>);
     }

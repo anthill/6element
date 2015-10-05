@@ -12,9 +12,6 @@ var NotEmpty = function(field){
 }
 
 module.exports = React.createClass({
-  select: function(index){
-    this.props.select(index);
-  },
   render: function() {
 
     var object = this.props.object;
@@ -41,7 +38,7 @@ module.exports = React.createClass({
           </div>
           <div className="pull-right text-right">
             <Rate rate={object.rate} /><br/>
-            <a href="javascript:;" onClick={this.select.bind(this, this.props.index)}>
+            <a href="javascript:;">
               <label className="distance clickable">
                 <em>
                   <i className="text-left glyphicon glyphicon-map-marker"></i> {distance} 

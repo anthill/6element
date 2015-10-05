@@ -4,6 +4,8 @@ var React = require('react');
 var Rate  =  require('./rate.jsx');
 var Calendar  =  require('./calendar.jsx');
 var Traffic  =  require('./traffic.jsx');
+var Mui = require('material-ui');
+var Colors = require('material-ui/lib/styles/colors');
 
 var NotEmpty = function(field){
   if(typeof field === 'undefined') return false;
@@ -13,8 +15,8 @@ var NotEmpty = function(field){
 }
 
 module.exports = React.createClass({
-  select: function(index){
-    this.props.select(index);
+  onClose: function(){
+    this.props.onShowDetail(null);
   },
   render: function() {
 
@@ -56,58 +58,59 @@ module.exports = React.createClass({
     }
 
     var detailJSX = [];
-    if(self.props.isDetailed){
-      detailJSX.push(
-        <div className="row clearfix styleRow text-center">
+    detailJSX.push(
+      <div className="row clearfix styleRow">
+        <div className="pull-left">
+          <ul className="addressFull">{coordinatesJSX}</ul>
+        </div>
+        <div className="pull-right text-left">
           {calendarJSX}
-        </div>);
-      /*detailJSX.push(
-        <div className="row clearfix styleRow">
-          <div className="col-lg-6 text-left">
-            <ul className="addressFull">{coordinatesJSX}</ul>
-          </div>
-          <div className="col-lg-6">
-            {calendarJSX}
-          </div>
-        </div>);
-      detailJSX.push(
-       <div className="row clearfix styleRow">
-        <div className="text-left">
-          <label className="text-left">Affluence:</label><br/>
-          <Traffic />
         </div>
       </div>);
-      detailJSX.push(
-       <div className="row clearfix styleRow">
-        <div className="text-left">
-          <label>Déchets acceptés:</label>
-        </div>
-        <ul className="allowedObjects">
-          {allowedJSX}
-        </ul>
-      </div>);*/
-    }
+    detailJSX.push(
+     <div className="row clearfix styleRow">
+      <div className="text-left">
+        <label className="text-left">Affluence:</label><br/>
+        <Traffic />
+      </div>
+    </div>);
+    detailJSX.push(
+     <div className="row clearfix styleRow">
+      <div className="text-left">
+        <label>Déchets acceptés:</label>
+      </div>
+      <ul className="allowedObjects">
+        {allowedJSX}
+      </ul>
+    </div>);
     
     // Final Object render
     return (
-      <div>
-        <div className="row clearfix styleRow">
-          <div className="pull-left text-left">
-            <label><b>{object.properties.name}</b></label><br/>
-            <label><small><em>src: {object.file.replace('.json', '')}</em></small></label>
+      <Mui.Paper flex layout="row">
+        <md-content flex >
+          <Mui.Toolbar>
+            <Mui.ToolbarGroup key={0} float="left">
+              <Mui.IconButton onTouchTap={this.onClose}><Mui.FontIcon className="material-icons" color={Colors.pink400} >arrow_back</Mui.FontIcon></Mui.IconButton>
+            </Mui.ToolbarGroup>
+          </Mui.Toolbar>
+          <div className="row clearfix styleRow">
+            <div className="pull-left text-left">
+              <label><b>{object.properties.name}</b></label><br/>
+              <label><small><em>src: {object.file.replace('.json', '')}</em></small></label>
+            </div>
+            <div className="pull-right text-right">
+              <Rate rate={object.rate} /><br/>
+              <a href="javascript:;">
+                <label className="distance clickable">
+                  <em>
+                    <i className="text-left glyphicon glyphicon-map-marker"></i> {distance} 
+                  </em>
+                </label>
+              </a>
+            </div>
           </div>
-          <div className="pull-right text-right">
-            <Rate rate={object.rate} /><br/>
-            <a href="javascript:;" onClick={self.select.bind(self, self.props.index)}>
-              <label className="distance clickable">
-                <em>
-                  <i className="text-left glyphicon glyphicon-map-marker"></i> {distance} 
-                </em>
-              </label>
-            </a>
-          </div>
-        </div>
-        {detailJSX}
-      </div>);
+          {detailJSX}
+       </md-content>
+      </Mui.Paper>);
   }
 });

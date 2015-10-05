@@ -171,19 +171,6 @@ button a{
 	text-align: center;
 	display: block;
 }
-/*
-#filterView{
-	background-color: white;
-	margin-bottom: 20px;
-}
-
-#filterView a {
-	margin-top: 10px;
-	margin-bottom: 0px;
-	color: black;
-	font-size: 20px;
-}
-*/
 .addressFull {
 	background-color: whitesmoke;
 	padding: 5px;
@@ -192,26 +179,7 @@ button a{
 	list-style-type: none;
 }
 
-#listView .allowedObjects{
-	text-align: left;
-}
-#listView .allowedObjects li{
-	list-style-type: none;
-}
-#listView .allowedObjects li:before{
-	content: "✓";
-	font-weight: bold;
-	padding: 0px;
-	margin-right: 5px;
-	text-align: left;
-}
-#popup{
-	padding: 10px;
-}
-#popup .allowedObjects{
-	text-align: left;
-}
-#popup .allowedObjects li{
+.allowedObjects li{
 	list-style-type: none;
 	margin: 5px;
 	display: inline-block;
@@ -220,6 +188,7 @@ button a{
 	border: 1px solid black;
 }
 .allowedObjects{
+	text-align: left;
 	height: 100px;
 	overflow:auto;
 	border-bottom: solid black 1px;
@@ -227,36 +196,4 @@ button a{
 .traffic {
 	width: 100%;
 	border: 1px solid black;
-}
-#postAdvert{
-	font-size: 18px;
-	color: white;
-	height: 50px;
-	vertical-align: middle;
-	padding: 5px;
-}
-
-#postAdvert button {
-	margin-left: 10px;
-	margin-right: 10px;	
-}
-
-#listFiles {
-	text-align: left;
-	padding: 0;
-}
-#listFiles li {
-	list-style-type: none;
-	/*display: inline;*/
-}
-#listFiles li a{
-	/*margin-left: 20px;*/
-	color: lightgray;
-}
-#listFiles li .legend{
-	margin-left: 2px;
-	margin-right: 2px;
-}
-#collapse {
-	width: 100%;
 }

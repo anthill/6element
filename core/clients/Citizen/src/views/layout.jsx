@@ -3,6 +3,7 @@
 var React = require('react');
 var L = require('leaflet');
 var MapView = require('./mapView.jsx');
+var DetailView = require('./detailView.jsx');
 
 var Mui = require('material-ui');
 var Colors = require('material-ui/lib/styles/colors');
@@ -78,7 +79,7 @@ module.exports = React.createClass({
         square: {}, 
         objects: []
     }
-    return {what: 'All', placeName: '', radius: iniResult.radius, tab: 0, result: iniResult, files: [], cpt: 0};
+    return {what: 'All', placeName: '', radius: iniResult.radius, tab: 0, result: iniResult, files: [], cpt: 0, detailedObject: null};
   },
   onShowDialog: function(){
     var self = this;
@@ -104,7 +105,7 @@ module.exports = React.createClass({
     this.refs.leftNav.toggle();
   },
   handleSearchNav: function(e){
-   this.refs.dialog.show();
+    this.refs.dialog.show();
   },
   onDialogSubmit: function(e){
     var self = this;
@@ -130,7 +131,7 @@ module.exports = React.createClass({
           }); 
         }
       });
-      self.setState({result: result, files: files, cpt: self.state.cpt+1});
+      self.setState({result: result, files: files, cpt: self.state.cpt+1, detailedObject: result.objects[13]});
     })
     .catch(function(error){
       console.error(error.status, error.message.toString());
@@ -151,8 +152,15 @@ module.exports = React.createClass({
     });
     this.setState({files: files, cpt: this.state.cpt+1});
   },
+  onShowDetail: function(object){
+    this.setState({detailedObject: object})
+  },
   render: function() {
 
+    if(this.state.detailedObject){
+      return (<DetailView object={this.state.detailedObject} onShowDetail={this.onShowDetail} />);
+    }
+    
     var whatOptions = availableCategories.map(function(category, index){
       return { payload: index, text: category };
     });
@@ -181,7 +189,7 @@ module.exports = React.createClass({
     var resultJSX = "";
     var filterJSX = "";
     if(result){
-      resultJSX = (<MapView key={'map'+this.state.cpt.toString()} result={result} />);
+      resultJSX = (<MapView key={'map'+this.state.cpt.toString()} result={result} onShowDetail={this.onShowDetail} />);
       filterJSX = this.state.files.map(function(file){
         return (
           <Mui.TableRow selected={file.checked}>
@@ -193,7 +201,6 @@ module.exports = React.createClass({
       });
     }
        
-    //onRowSelection={this.onFilterSelection}
     var panelJSX = (
       <Mui.Table 
         fixedHeader={true}
@@ -223,9 +230,9 @@ module.exports = React.createClass({
           </Mui.ToolbarGroup>
           <Mui.ToolbarGroup key={1} float="right">
             <Mui.IconButton tooltip="Afficher par Liste"><Mui.FontIcon className="material-icons" color={Colors.pink400} >dvr</Mui.FontIcon></Mui.IconButton>
-            <Mui.IconButton tooltip="Afficher mes Favoris" disabled={true}><Mui.FontIcon className="material-icons">favorite</Mui.FontIcon></Mui.IconButton>
-            <Mui.IconButton tooltip="Filtrer par source" onTouchTap={this.handleLeftNav}><Mui.FontIcon className="material-icons" color={Colors.pink400} >filter_list</Mui.FontIcon></Mui.IconButton>
+            <Mui.IconButton tooltip="Afficher mes Favoris"><Mui.FontIcon className="material-icons">favorite</Mui.FontIcon></Mui.IconButton>
             <Mui.IconButton tooltip="Rechercher" onTouchTap={this.handleSearchNav}><Mui.FontIcon className="material-icons" color={Colors.pink400} >search</Mui.FontIcon></Mui.IconButton>
+            <Mui.IconButton tooltip="Filtrer par source" onTouchTap={this.handleLeftNav} disabled={this.state.detailedObject!==null}><Mui.FontIcon className="material-icons" color={Colors.pink400} >filter_list</Mui.FontIcon></Mui.IconButton>
           </Mui.ToolbarGroup>
         </Mui.Toolbar>
         {resultJSX}
@@ -237,10 +244,10 @@ module.exports = React.createClass({
           actionFocus="submit"
           modal={true}
           onShow={this.onShowDialog}
-          openImmediately={true}
+          openImmediately={this.state.cpt===0}
           autoDetectWindowHeight={true} 
           autoScrollBodyContent={true}
-          contentStyle={{width: '420px'}}>
+          contentStyle={{maxWidth: '420px'}}>
           <div>
             <table width="100%">
               <tr>

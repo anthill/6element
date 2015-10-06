@@ -1,7 +1,7 @@
+
 "use strict";
 
 var React = require('react');
-var Rate  =  require('./rate.jsx');
 var Calendar  =  require('./calendar.jsx');
 var Traffic  =  require('./traffic.jsx');
 var Mui = require('material-ui');
@@ -57,60 +57,60 @@ module.exports = React.createClass({
       calendarJSX = (<Calendar opening_hours={object.properties.opening_hours} />);
     }
 
-    var detailJSX = [];
-    detailJSX.push(
-      <div className="row clearfix styleRow">
-        <div className="pull-left">
-          <ul className="addressFull">{coordinatesJSX}</ul>
-        </div>
-        <div className="pull-right text-left">
-          {calendarJSX}
-        </div>
-      </div>);
-    detailJSX.push(
-     <div className="row clearfix styleRow">
-      <div className="text-left">
-        <label className="text-left">Affluence:</label><br/>
-        <Traffic />
-      </div>
-    </div>);
-    detailJSX.push(
-     <div className="row clearfix styleRow">
-      <div className="text-left">
-        <label>Déchets acceptés:</label>
-      </div>
-      <ul className="allowedObjects">
-        {allowedJSX}
-      </ul>
-    </div>);
-    
+    var trafficJSX = "";
+    if(NotEmpty(object.properties.opening_hours)){
+      trafficJSX = (<Traffic opening_hours={object.properties.opening_hours} />);
+    }
+
     // Final Object render
     return (
-      <Mui.Paper flex layout="row">
-        <md-content flex >
-          <Mui.Toolbar>
-            <Mui.ToolbarGroup key={0} float="left">
-              <Mui.IconButton onTouchTap={this.onClose}><Mui.FontIcon className="material-icons" color={Colors.pink400} >arrow_back</Mui.FontIcon></Mui.IconButton>
-            </Mui.ToolbarGroup>
-          </Mui.Toolbar>
-          <div className="row clearfix styleRow">
-            <div className="pull-left text-left">
-              <label><b>{object.properties.name}</b></label><br/>
-              <label><small><em>src: {object.file.replace('.json', '')}</em></small></label>
+      <div flex layout="row">
+        <md-content flex color={Colors.white} >
+          <Mui.Paper id="sheet">
+            <Mui.Toolbar>
+              <Mui.ToolbarGroup key={0} float="left">
+                <Mui.IconButton onTouchTap={this.onClose}><Mui.FontIcon className="material-icons" color={Colors.pink400} >arrow_back</Mui.FontIcon></Mui.IconButton>
+              </Mui.ToolbarGroup>
+            </Mui.Toolbar>
+            <div id="detail">
+              <div className="row clearfix styleRow">
+                <div className="pull-left text-left">
+                  <label><b>{object.properties.name}</b></label><br/>
+                  <label><small><em>src: {object.file.replace('.json', '')}</em></small></label>
+                </div>
+                <div className="pull-right text-right">
+                  <label>
+                    <em><i className="text-left glyphicon glyphicon-map-marker"></i> {distance}</em>
+                  </label>
+                </div>
+              </div>
+              <hr/>
+              <br/>
+              <div className="row clearfix styleRow">
+                <div className="pull-left">
+                  <ul className="addressFull">{coordinatesJSX}</ul>
+                </div>
+                <div className="pull-right text-left">
+                  {calendarJSX}
+                </div>
+              </div>
+              <div className="row clearfix styleRow">
+                <div className="text-left">
+                  <label className="text-left">Affluence:</label><br/>
+                  <Traffic />
+                </div>
+              </div>
+              <div id="allowedObjects" className="row clearfix styleRow">
+                <div className="text-left">
+                  <label>Déchets acceptés:</label>
+                </div>
+                <ul>
+                  {allowedJSX}
+                </ul>
+              </div>
             </div>
-            <div className="pull-right text-right">
-              <Rate rate={object.rate} /><br/>
-              <a href="javascript:;">
-                <label className="distance clickable">
-                  <em>
-                    <i className="text-left glyphicon glyphicon-map-marker"></i> {distance} 
-                  </em>
-                </label>
-              </a>
-            </div>
-          </div>
-          {detailJSX}
-       </md-content>
-      </Mui.Paper>);
+          </Mui.Paper>
+        </md-content>
+      </div>);
   }
 });

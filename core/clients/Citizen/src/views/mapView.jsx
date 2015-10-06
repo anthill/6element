@@ -12,7 +12,9 @@ module.exports = React.createClass({
     return {map: null, markers: [], selectMap: null};
   },
   getMapInfos: function(map){
-    this.loadSelection(map, null);
+    var select = null;
+    //if(this.props.result.objects.length > 0) select = 0;
+    this.loadSelection(map, select);
   },
   onSelectMap: function(index){
     this.loadSelection(this.state.map, index);
@@ -38,7 +40,7 @@ module.exports = React.createClass({
     var CentroidIcon = L.Icon.Default.extend({
       options: {
         iconUrl:     '/img/centroid.png',
-        iconSize:     [20, 20],
+        iconSize:     [25, 25],
         shadowSize:   [0, 0], // size of the shadow
         iconAnchor:   [10, 10], // point of the icon which will correspond to marker's location
         shadowAnchor: [10, 10], // the same for the shadow
@@ -48,7 +50,7 @@ module.exports = React.createClass({
     var PingIcon = L.Icon.Default.extend({
       options: {
         iconUrl:      '/img/ping.png',
-        iconSize:     [20, 20],
+        iconSize:     [30, 30],
         shadowSize:   [0, 0], // size of the shadow
         iconAnchor:   [10, 10], // point of the icon which will correspond to marker's location
         shadowAnchor: [10, 10], // the same for the shadow
@@ -69,24 +71,22 @@ module.exports = React.createClass({
     this.props.result.objects
     .forEach(function(object, index){
 
-        var isSelected = false;
-
-        /*(select !== null && 
-                        select === index);*/
+        var isSelected = (select !== null && 
+                        select === index);
         var isCenter = (object.properties.type === 'centre');
         var options = {
           color: isCenter?'black':object.color,
           fill: true,
           fillColor: object.color, 
           fillOpacity: isCenter?1:0.7,
-          radius: isCenter?10:5,
+          radius: isCenter?10:7,
           clickable: true,
           weight: '5px'
         };
         
         if(isSelected){
             markerSelected = new L.Marker(new L.LatLng(object.geometry.coordinates.lat, object.geometry.coordinates.lon), {icon: pingIcon});      
-            markerSelected.on("click", self.onClickMarker);
+            //markerSelected.on("click", self.onClickMarker);
             map.setView([object.geometry.coordinates.lat, object.geometry.coordinates.lon], 16);
         } 
         else if (isCenter){
@@ -126,7 +126,7 @@ module.exports = React.createClass({
 
     map.on('click', this.onClickMap); 
    
-    this.setState({map: map, markers: markers, select: select});
+    this.setState({map: map, markers: markers, selectMap: select});
   },
   onClickPreview: function(){
     this.props.onShowDetail(this.props.result.objects[this.state.selectMap]);
@@ -140,7 +140,7 @@ module.exports = React.createClass({
     if(this.state.selectMap !== null){
     
       detailMapJSX = (
-        <div id="popup" zDepth={1} className="text-center">
+        <div id="popup" className="text-center">
           <a href="javascript:;" className="noRef clickable" onClick={this.onClickPreview}>
             <Preview object={result.objects[this.state.selectMap]} />
           </a>
@@ -151,12 +151,10 @@ module.exports = React.createClass({
       nbResultJSX = (<p id="nbResults">Il y a <strong>{result.objects.length}</strong> résultats pour votre recherche</p>);
     }
     return (
-      <div flex layout="row">
-        <md-content flex color={Colors.grey600} >
-          {nbResultJSX}
-          <MapCore getMapInfos={this.getMapInfos} result={result}/>
-          {detailMapJSX}
-        </md-content>
+      <div>
+        {nbResultJSX}
+        <MapCore getMapInfos={this.getMapInfos} result={result}/>
+        {detailMapJSX}
       </div>
     );
   }

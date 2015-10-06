@@ -121,6 +121,7 @@ module.exports = React.createClass({
     .then(function(result){
       var temp = [];
       var files = [];
+      console.log(result);
       result.objects.forEach(function(object){
         if(temp.indexOf(object.file) ===-1){
           temp.push(object.file);       
@@ -156,6 +157,21 @@ module.exports = React.createClass({
     this.setState({detailedObject: object})
   },
   render: function() {
+    /*
+    return (
+      <div flex layout="row">
+        <md-content flex color={Colors.white} >
+          <Mui.Paper id="sheet">
+            <Mui.Toolbar >
+              <Mui.ToolbarGroup key={0} float="left">
+                <Mui.ToolbarTitle text="6element" />
+              </Mui.ToolbarGroup>
+            </Mui.Toolbar>
+            Lalala
+          </Mui.Paper>
+        </md-content>
+      </div>
+    );*/
 
     if(this.state.detailedObject){
       return (<DetailView object={this.state.detailedObject} onShowDetail={this.onShowDetail} />);
@@ -167,12 +183,12 @@ module.exports = React.createClass({
     
     var menuItems = [];
 
-    let iconMenuItems = [
+    var iconMenuItems = [
       { payload: '1', text: 'Download' },
       { payload: '2', text: 'More Info' }
     ];
     //Standard Actions
-    let standardActions = [
+    var standardActions = [
       { text: 'Valider', onTouchTap: this.onDialogSubmit, ref: 'submit' }
     ];
         
@@ -223,57 +239,61 @@ module.exports = React.createClass({
       </Mui.Table>);
             
     return (
-      <div>
-        <Mui.Toolbar>
-          <Mui.ToolbarGroup key={0} float="left">
-            <Mui.ToolbarTitle text="6element" />
-          </Mui.ToolbarGroup>
-          <Mui.ToolbarGroup key={1} float="right">
-            <Mui.IconButton tooltip="Afficher par Liste"><Mui.FontIcon className="material-icons" color={Colors.pink400} >dvr</Mui.FontIcon></Mui.IconButton>
-            <Mui.IconButton tooltip="Afficher mes Favoris"><Mui.FontIcon className="material-icons">favorite</Mui.FontIcon></Mui.IconButton>
-            <Mui.IconButton tooltip="Rechercher" onTouchTap={this.handleSearchNav}><Mui.FontIcon className="material-icons" color={Colors.pink400} >search</Mui.FontIcon></Mui.IconButton>
-            <Mui.IconButton tooltip="Filtrer par source" onTouchTap={this.handleLeftNav} disabled={this.state.detailedObject!==null}><Mui.FontIcon className="material-icons" color={Colors.pink400} >filter_list</Mui.FontIcon></Mui.IconButton>
-          </Mui.ToolbarGroup>
-        </Mui.Toolbar>
-        {resultJSX}
-        <Mui.LeftNav ref="leftNav" docked={false} openRight={true} menuItems={menuItems} header={panelJSX} />
-        <Mui.Dialog
-          ref="dialog"
-          title="6element"
-          actions={standardActions}
-          actionFocus="submit"
-          modal={true}
-          onShow={this.onShowDialog}
-          openImmediately={this.state.cpt===0}
-          autoDetectWindowHeight={true} 
-          autoScrollBodyContent={true}
-          contentStyle={{maxWidth: '420px'}}>
-          <div>
-            <table width="100%">
-              <tr>
-                <td><Mui.FontIcon className="material-icons" color={Colors.grey600} >description</Mui.FontIcon></td>
-                <td>
-                  <Mui.SelectField
-                    ref="whatField"
-                    defaultValue={this.state.what}
-                    onChange= {this.handleSelectWhat}
-                    hintText="Quoi ?"
-                    fullWidth={true}
-                    menuItems={whatOptions} />
-                </td>
-              </tr>
-              <tr>
-                <td><Mui.FontIcon className="material-icons" color={Colors.grey600} >room</Mui.FontIcon></td>
-                <td>
-                  <Mui.TextField
-                    defaultValue={this.state.placeName}
-                    ref="whereField" 
-                    fullWidth={true}/>
-                </td>  
-              </tr>
-            </table>
-          </div>
-        </Mui.Dialog>
+      <div flex layout="row">
+        <md-content flex color={Colors.white} >
+          <Mui.Paper id="sheet">
+            <Mui.Toolbar>
+              <Mui.ToolbarGroup key={0} float="left">
+                <Mui.ToolbarTitle text="6element" />
+              </Mui.ToolbarGroup>
+              <Mui.ToolbarGroup key={1} float="right">
+                <Mui.IconButton tooltip="Afficher par Liste"><Mui.FontIcon className="material-icons" color={Colors.pink400} >dvr</Mui.FontIcon></Mui.IconButton>
+                <Mui.IconButton tooltip="Afficher mes Favoris"><Mui.FontIcon className="material-icons">favorite</Mui.FontIcon></Mui.IconButton>
+                <Mui.IconButton tooltip="Rechercher" onTouchTap={this.handleSearchNav}><Mui.FontIcon className="material-icons" color={Colors.pink400} >search</Mui.FontIcon></Mui.IconButton>
+                <Mui.IconButton tooltip="Filtrer par source" onTouchTap={this.handleLeftNav} disabled={this.state.detailedObject!==null}><Mui.FontIcon className="material-icons" color={Colors.pink400} >filter_list</Mui.FontIcon></Mui.IconButton>
+              </Mui.ToolbarGroup>
+            </Mui.Toolbar>
+            {resultJSX}
+            <Mui.LeftNav ref="leftNav" docked={false} openRight={true} menuItems={menuItems} header={panelJSX} />
+            <Mui.Dialog
+              ref="dialog"
+              title="6element"
+              actions={standardActions}
+              actionFocus="submit"
+              modal={true}
+              onShow={this.onShowDialog}
+              openImmediately={this.state.cpt===0}
+              autoDetectWindowHeight={true} 
+              autoScrollBodyContent={true}
+              contentStyle={{maxWidth: '420px'}}>
+              <div>
+                <table width="100%">
+                  <tr>
+                    <td><Mui.FontIcon className="material-icons" color={Colors.grey600} >description</Mui.FontIcon></td>
+                    <td>
+                      <Mui.SelectField
+                        ref="whatField"
+                        defaultValue={this.state.what}
+                        onChange= {this.handleSelectWhat}
+                        hintText="Quoi ?"
+                        fullWidth={true}
+                        menuItems={whatOptions} />
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><Mui.FontIcon className="material-icons" color={Colors.grey600} >room</Mui.FontIcon></td>
+                    <td>
+                      <Mui.TextField
+                        defaultValue={this.state.placeName}
+                        ref="whereField" 
+                        fullWidth={true}/>
+                    </td>  
+                  </tr>
+                </table>
+              </div>
+            </Mui.Dialog>
+          </Mui.Paper>
+        </md-content>
       </div>
     );
   }

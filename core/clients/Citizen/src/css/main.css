@@ -1,6 +1,6 @@
 body{
 	background-color: black; /*WhiteSmoke*/
-    width: 100%;
+    max-width: 500px;
     font-family: Lato, sans-serif;
 }
 
@@ -144,19 +144,30 @@ button a{
 }
 */
 #map{
-	height: 100%;
+	height: 90%;
 	position: relative;
 }
 
 #popup {
 	background-color: rgba(255,255,255,0.9);
 	bottom: 0px;
-	left: 0px;
-	right: 0px;
-	margin-left: 15px;
-	margin-right: 15px;
-	padding: 5px;
+	padding: 15px;
 	position: absolute;
+	width: 100%;
+	max-width: 500px;
+}
+
+#sheet{
+	position: absolute;
+	width: 100%;
+	max-width: 500px;	
+	height: 100%;
+	margin: 0 auto;
+	text-align: center;
+}
+
+#detail{
+	padding: 15px;
 }
 
 #groupSort {
@@ -179,19 +190,23 @@ button a{
 	list-style-type: none;
 }
 
-.allowedObjects li{
+#allowedObjects{
+	width: 100%;
+	position: absolute;
+	bottom: 0px;
+}
+#allowedObjects ul{
+	text-align: left;
+	height: 100px;
+	overflow:auto;
+}
+#allowedObjects ul li{
 	list-style-type: none;
 	margin: 5px;
 	display: inline-block;
 	padding: 5px;
 	background-color: whitesmoke;
 	border: 1px solid black;
-}
-.allowedObjects{
-	text-align: left;
-	height: 100px;
-	overflow:auto;
-	border-bottom: solid black 1px;
 }
 .traffic {
 	width: 100%;

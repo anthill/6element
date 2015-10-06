@@ -36,7 +36,7 @@
     "compression": "^1.4.4",
     "dygraphs": "^1.1.1",
     "es6-promise": "^3.0.2",
-    "es6-shim": "^0.31.2",
+    "es6-shim": "^0.31.3",
     "express": "^4.12.4",
     "fbjs": "^0.2.1",
     "flux": "^2.0.3",

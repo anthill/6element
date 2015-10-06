@@ -1,5 +1,7 @@
 "use strict";
 
+require('es6-shim');
+
 var search = require('./searchFiles.js');
 
 var bodyParser	= require('body-parser');
@@ -16,7 +18,7 @@ app.use(bodyParser.urlencoded({extended: true}))
 
 app.use('/', express.static(path.join(__dirname, '../clients/Citizen/src')));
 app.use("/css/leaflet.css", 	express.static(path.join(__dirname, '../../node_modules/leaflet/dist/leaflet.css')));
-app.use("/css/material.css", 	express.static(path.join(__dirname, '../../node_modules/material-design-lite/material.min.css')));
+app.use("/css/material/", 	express.static(path.join(__dirname, '../../node_modules/material-design-lite')));
 
 app.get('/Citizen-browserify-bundle.js', function(req, res){
     res.sendFile(path.join(__dirname, '../clients/Citizen-browserify-bundle.js'));

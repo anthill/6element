@@ -96,8 +96,7 @@ var FileToObjects = function(dir, file, index, request){
                             objects.push(object);
                         }
                     }
-                });
-              
+                });              
                 //console.log(file, ":", objects.length, 'objecs to save');
                 resolve(objects);
             }
@@ -148,7 +147,6 @@ module.exports = function(req, res){
     var files = fs.readdirSync(dir);
     //console.log('->', files.length, 'files to parse');
 
-    var results = [];
     Promise.all(files
     .filter(function(file){
       return (path.extname(file) === '.json'); 
@@ -160,6 +158,12 @@ module.exports = function(req, res){
         })
     }))
     .then(function(){
+        result.objects = result.objects
+        .sort(function(o1,o2){
+            return (o1.distance-o2.distance);
+        })
+        .slice(0, 100);
+
         res.setHeader('Content-Type', 'application/json');
         res.send(JSON.stringify(result));
     })

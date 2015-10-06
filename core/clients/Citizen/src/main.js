@@ -1,6 +1,6 @@
 'use strict';
 
-require('es6-promise').polyfill();
+require('es6-shim');
 
 var React = require('react');
 

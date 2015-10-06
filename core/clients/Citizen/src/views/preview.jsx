@@ -1,7 +1,6 @@
 "use strict";
 
 var React = require('react');
-var Rate  =  require('./rate.jsx');
 var opening_hours = require('opening_hours');
 
 var NotEmpty = function(field){
@@ -37,14 +36,9 @@ module.exports = React.createClass({
             <label><small><em>src: {object.file.replace('.json', '')}</em></small></label>
           </div>
           <div className="pull-right text-right">
-            <Rate rate={object.rate} /><br/>
-            <a href="javascript:;">
-              <label className="distance clickable">
-                <em>
-                  <i className="text-left glyphicon glyphicon-map-marker"></i> {distance} 
-                </em>
-              </label>
-            </a>
+            <label>
+              <em><i className="text-left glyphicon glyphicon-map-marker"></i> {distance}</em>
+            </label>
           </div>
         </div>
         {openJSX}

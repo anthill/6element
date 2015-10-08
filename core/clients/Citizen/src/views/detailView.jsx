@@ -115,7 +115,7 @@ module.exports = React.createClass({
     return (
       <div flex layout="row">
         <md-content flex color={Colors.white} >
-          <Mui.Paper id="sheet">
+          <div id="sheet">
             <Mui.Toolbar>
               <Mui.ToolbarGroup key={0} float="left">
                 <Mui.IconButton onTouchTap={this.onClose}><Mui.FontIcon className="material-icons" color={Colors.pink400} >arrow_back</Mui.FontIcon></Mui.IconButton>
@@ -139,7 +139,7 @@ module.exports = React.createClass({
                 </tr>
             </table>
             {detailJSX}
-           </Mui.Paper>
+           </div>
         </md-content>
       </div>);
   }

@@ -15,6 +15,21 @@ var NotEmpty = function(field){
 }
 
 module.exports = React.createClass({
+  /*getInitialState: function() {
+    return {width: 0};
+  },
+  updateDimensionsMaster: function() {
+    var width = this.getDOMNode().getBoundingClientRect().width;
+    if(this.state.width != width)
+        this.setState({width: width});    
+  },
+  componentDidMount: function() {
+      this.updateDimensionsMaster();
+      window.addEventListener("resize", this.updateDimensionsMaster);
+  },
+  componentWillUnmount: function() {
+      window.removeEventListener("resize", this.updateDimensionsMaster);
+  },*/
   onClose: function(){
     this.props.onShowDetail(null);
   },
@@ -40,27 +55,61 @@ module.exports = React.createClass({
     // Address
     var coordinatesJSX = [];
     if(NotEmpty(object.properties.address_1)){
-      coordinatesJSX.push(<li>{object.properties.address_1}</li>);
+      coordinatesJSX.push(<span>{object.properties.address_1}</span>);
+      coordinatesJSX.push(<br/>);
     }
     if(NotEmpty(object.properties.address_2)){
-      coordinatesJSX.push(<li>{object.properties.address_2}</li>);
+      coordinatesJSX.push(<span>{object.properties.address_2}</span>);
+      coordinatesJSX.push(<br/>);
     }
     if(NotEmpty(object.properties.phone)){
-      coordinatesJSX.push(<li><abbr title="phone">T:</abbr> {object.properties.phone}</li>);
+      coordinatesJSX.push(<span><abbr title="phone">T:</abbr> {object.properties.phone}</span>);
+      coordinatesJSX.push(<br/>);
     }
     if(coordinatesJSX.length === 0){
-      coordinatesJSX.push(<li><em>Pas de coordonnées indiquées</em></li>);
+      coordinatesJSX.push(<span><em>Pas de coordonnées indiquées</em></span>);
+      coordinatesJSX.push(<br/>);
     }
     
     var calendarJSX = "";
+    var detailJSX = "";
     if(NotEmpty(object.properties.opening_hours)){
       calendarJSX = (<Calendar opening_hours={object.properties.opening_hours} />);
+      
+      detailJSX = (
+        <Mui.Tabs>
+          <Mui.Tab label="Affluence" style={{backgroundColor: Colors.blueGrey200}}>
+              <br/>
+             <Traffic opening_hours={object.properties.opening_hours}/>
+          </Mui.Tab>
+          <Mui.Tab label="Elements acceptés" style={{backgroundColor: Colors.blueGrey200}}>
+            <div id="allowedObjects" className="row clearfix styleRow">
+              <br/>
+              <ul>
+                {allowedJSX}
+              </ul>
+            </div>
+          </Mui.Tab>
+        </Mui.Tabs>);
+    }
+    else
+    {
+        detailJSX = (
+        <div id="allowedObjects" className="row clearfix styleRow">
+          <br/>
+          <ul>
+            {allowedJSX}
+          </ul>
+        </div>);
     }
 
-    var trafficJSX = "";
-    if(NotEmpty(object.properties.opening_hours)){
-      trafficJSX = (<Traffic opening_hours={object.properties.opening_hours} />);
-    }
+    /*
+    <div className="pull-right text-right">
+                  <label>
+                    <em><i className="text-left glyphicon glyphicon-map-marker"></i> {distance}</em>
+                  </label>
+                </div>
+    */
 
     // Final Object render
     return (
@@ -72,44 +121,25 @@ module.exports = React.createClass({
                 <Mui.IconButton onTouchTap={this.onClose}><Mui.FontIcon className="material-icons" color={Colors.pink400} >arrow_back</Mui.FontIcon></Mui.IconButton>
               </Mui.ToolbarGroup>
             </Mui.Toolbar>
-            <div id="detail">
-              <div className="row clearfix styleRow">
-                <div className="pull-left text-left">
-                  <label><b>{object.properties.name}</b></label><br/>
-                  <label><small><em>src: {object.file.replace('.json', '')}</em></small></label>
-                </div>
-                <div className="pull-right text-right">
-                  <label>
-                    <em><i className="text-left glyphicon glyphicon-map-marker"></i> {distance}</em>
-                  </label>
-                </div>
-              </div>
-              <hr/>
-              <br/>
-              <div className="row clearfix styleRow">
-                <div className="pull-left">
-                  <ul className="addressFull">{coordinatesJSX}</ul>
-                </div>
-                <div className="pull-right text-left">
-                  {calendarJSX}
-                </div>
-              </div>
-              <div className="row clearfix styleRow">
-                <div className="text-left">
-                  <label className="text-left">Affluence:</label><br/>
-                  <Traffic />
-                </div>
-              </div>
-              <div id="allowedObjects" className="row clearfix styleRow">
-                <div className="text-left">
-                  <label>Déchets acceptés:</label>
-                </div>
-                <ul>
-                  {allowedJSX}
-                </ul>
-              </div>
-            </div>
-          </Mui.Paper>
+            <Mui.Card id="detail">
+              <Mui.CardHeader 
+                title={object.properties.name} 
+                subtitle={'src: '+object.file.replace('.json', '')}
+                avatar={<Mui.Avatar style={{backgroundColor: object.color}}></Mui.Avatar>}
+                style={{textAlign: "left", overflow: "hidden"}}/>
+            </Mui.Card>
+            <table style={{width:"100%", backgroundColor: Colors.blueGrey100}}>
+                <tr>
+                  <td id="address"style={{width:"50%", padding:"10px", verticalAlign: "top"}}>
+                    <Mui.CardTitle title="Adresse" subtitle={coordinatesJSX}/>
+                  </td>
+                  <td id="accessTime" style={{width:"50%", padding:"10px", verticalAlign: "top"}}>
+                    <Mui.CardTitle title="Horaires" subtitle={calendarJSX}/>
+                  </td>
+                </tr>
+            </table>
+            {detailJSX}
+           </Mui.Paper>
         </md-content>
       </div>);
   }

@@ -20,134 +20,10 @@ button a{
 	color:inherit;	
 }
 
-/*
-#landingPage{
-	height: 100%; 
-	width: 100%; 
-	margin: 0 auto;
-	text-align: center;
-}
-
-#landingPage::after{
-	background: url('./../img/bg-sewetlaine.jpg') no-repeat left top;
-	background-size: 100%;
-	opacity:0.5;
-	top: 0;
-	left: 0;
-	bottom: 0;
-	right: 0;
-	position: absolute;
-	z-index: -1;
-	content: "";
-}
-
-#landingPage h1{
-	padding-top: 10%;
-	margin: 0px;
-	text-align: center;
-	color: white;
-	text-shadow: 2px 2px #336699;
-	font-size: 80px; 
-}
-
-#landingPage h2{
-	padding-bottom: 40px;
-	margin: 10px;
-	color: white;
-	text-shadow: 1px 1px Gray;
-	font-size: 40px;
-}
-
-#landingPage #searchBar{
-	display: inline-block;
-}
-#resultsPage #searchBar{
-	text-align: center;
-}
-
-#searchBar{
-	margin: 0 auto;
-  	padding: 5px;
-  	background-color: rgba(0,0,0,0.5);
-	vertical-align: middle;
-	color: white;
-}
-
-
-#groupCondition{
-	margin-left: 5px;
-	margin-right: 5px;
-	text-align: left;
-}
-
-#what,
-#where{
-	margin: 5px;
-}
-
-#searchBar .radio-inline {
-	margin: 10px;
-	color: #CC9900;
-	font-size: 16px;
-}
-
-#btnSearch {
-	margin-left: 5px;
-	margin-right: 5px;	
-}
-
-#resultsPage{
-	height: 70px; 
-	width: 100%; 
-	display: block;
-	position: relative;
-	text-align: center;
-	vertical-align: middle;
-}
-
-#resultsPage::after{
-	background: white url('./../img/bg-sewetlaine.jpg') no-repeat right bottom;
-	background-size: 100%;
-	opacity:0.5;
-	top: 0;
-	left: 0;
-	bottom: 0;
-	right: 0;
-	position: absolute;
-	z-index: -1;
-	content: "";
-}
-
-#resultsPage h1{
-	margin: 0 auto;
-	color: white;
-	text-shadow: 2px 2px #336699;
-	font-size: 50px; 
-	height: 70px; 
-	vertical-align: middle;
-	text-align: left;
-	padding-left: 20px;
-}
-
-#listView{
-	height: 400px;
-	overflow:auto;
-}
-
-#listView .panel{
-	margin-bottom: 10px;
-	margin-right: 15px;
-}
-
-#listView .panel-body{
-	padding: 5px 10px;
-}
-*/
 #map{
 	height: 90%;
-	position: relative;
+	position: relative;*/
 }
-
 #popup {
 	background-color: rgba(255,255,255,0.9);
 	bottom: 0px;
@@ -156,7 +32,6 @@ button a{
 	width: 100%;
 	max-width: 500px;
 }
-
 #sheet{
 	position: absolute;
 	width: 100%;
@@ -169,11 +44,9 @@ button a{
 #detail{
 	padding: 15px;
 }
-
 #groupSort {
 	margin-bottom: 20px; 
 }
-
 #nbResults{
 	background-color: white;
 	margin: 0 auto;
@@ -182,33 +55,50 @@ button a{
 	text-align: center;
 	display: block;
 }
-.addressFull {
-	background-color: whitesmoke;
-	padding: 5px;
+
+#accessTime{
+	background-image: url("../img/access_time.svg");
+	background-size: 100px 100px;
+	background-repeat: no-repeat;
+	background-position: right top;
 }
-.addressFull li {
-	list-style-type: none;
+
+#address{
+	background-image: url("../img/gps_fixed.svg");
+	background-size: 100px 100px;
+	background-repeat: no-repeat;
+	background-position: right top;
 }
 
 #allowedObjects{
 	width: 100%;
-	position: absolute;
-	bottom: 0px;
-}
-#allowedObjects ul{
 	text-align: left;
-	height: 100px;
+	height: 300px;
 	overflow:auto;
+	padding: 0px;
 }
-#allowedObjects ul li{
+#allowedObjects li{
 	list-style-type: none;
 	margin: 5px;
 	display: inline-block;
 	padding: 5px;
-	background-color: whitesmoke;
+	background-color: #cfd8dc;
 	border: 1px solid black;
+	border-radius: 5px;
 }
-.traffic {
-	width: 100%;
-	border: 1px solid black;
+#traffic {
+	text-align: center;
+	vertical-align: text-top;
+}
+
+.flatIcon,
+.flatIcon:hover {
+	margin: 0px;
+	padding: 0px;
+	min-width: 0px !important;
+}
+
+#tsChart {
+	text-align: center;
+	vertical-align: text-top;
 }

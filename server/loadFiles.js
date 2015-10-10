@@ -28,6 +28,7 @@ var fileToObjects = function(dir, file){
                 var toSave = doc[key].properties;
                 toSave.lat = doc[key].geometry.coordinates.lat;
                 toSave.lon = doc[key].geometry.coordinates.lon;
+                toSave.geom = 'POINT(' + toSave.lon + ' ' + toSave.lat + ')';
                 
                 
                 hstore.stringify(toSave.objects, function(result) {

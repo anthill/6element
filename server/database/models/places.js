@@ -2,20 +2,20 @@
 
 var sql = require('sql');
 sql.setDialect('postgres');
-var databaseP = require('../management/databaseClientP');
+var connectToDB = require('../management/connectToDB.js');
 
 var places = require('../management/declarations.js').places;
 
 module.exports = {
     create: function (data) {
-        return databaseP.then(function (db) {
+        return connectToDB().then(function (db) {
             
             var query = places
                 .insert(data)
                 .returning('*')
                 .toQuery();
 
-            //console.log('places create query', query);
+            // console.log('places create query', query);
 
             return new Promise(function (resolve, reject) {
                 db.query(query, function (err, result) {
@@ -30,7 +30,7 @@ module.exports = {
     },
 
     update: function(id, delta) {
-        return databaseP.then(function (db) {
+        return connectToDB().then(function (db) {
             
             var query = places
                 .update(delta)
@@ -52,7 +52,7 @@ module.exports = {
     },
 
     get: function(id){
-        return databaseP.then(function (db) {
+        return connectToDB().then(function (db) {
             
             var query = places
                 .select('*')
@@ -74,7 +74,7 @@ module.exports = {
     },
 
     getAll: function() {
-        return databaseP.then(function (db) {
+        return connectToDB().then(function (db) {
             
             var query = places
                 .select('*')
@@ -95,7 +95,7 @@ module.exports = {
     },
 
     delete: function(id) {
-        return databaseP.then(function (db) {
+        return connectToDB().then(function (db) {
             
             var query = places
                 .delete()
@@ -117,7 +117,7 @@ module.exports = {
     },
 
     deleteAll: function() {
-        return databaseP.then(function (db) {
+        return connectToDB().then(function (db) {
             
             var query = places
                 .delete()

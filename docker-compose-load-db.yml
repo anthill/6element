@@ -1,7 +1,7 @@
 api:
    build: ./dockerfiles
    dockerfile: node
-   command: nodemon --watch server server/index.js
+   command: node server/loadFiles.js
    links:
       - db
    ports:
@@ -20,8 +20,6 @@ api:
 db:
    build: ./dockerfiles
    dockerfile: postgis
-   ports:
-      - "5432:5432"
    environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres

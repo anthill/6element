@@ -3,8 +3,7 @@
   "version": "1.0.0",
   "description": "Reducing waste with sensors and an app",
   "main": "index.js",
-  "scripts": {
-  },
+  "scripts": {},
   "repository": {
     "type": "git",
     "url": "https://github.com/anthill/6element.git"
@@ -33,12 +32,14 @@
     "material-design-lite": "^1.0.4-2",
     "material-ui": "^0.12.1",
     "opening_hours": "^3.3.0",
+    "pg": "^4.4.2",
     "proj4": "^2.3.10",
     "rbush": "^1.4.0",
     "react": "^0.13.3",
     "react-dom": "^0.14.0-rc1",
     "react-tap-event-plugin": "^0.1.8",
     "reactify": "^1.1.1",
+    "sql-generate": "^1.1.0",
     "turf": "^2.0.2"
   },
   "devDependencies": {

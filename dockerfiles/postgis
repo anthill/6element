@@ -1,0 +1,8 @@
+FROM postgres:9.4
+
+MAINTAINER Alexandre Vallette
+
+RUN apt-get update
+RUN DEBIAN_FRONTEND=noninteractive \
+  apt-get -qfy install postgis postgresql-9.4-postgis-2.1 \
+  && apt-get clean

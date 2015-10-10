@@ -29,6 +29,33 @@ module.exports = {
         });
     },
 
+    createByChunk: function (datas) {
+        return connectToDB().then(function (db) {
+
+            return Promise.all(datas.map(function(data){
+
+                var query = places
+                    .insert(data)
+                    .returning('*')
+                    .toQuery();
+
+                // console.log('places create query', query);
+
+                return new Promise(function (resolve, reject) {
+                    db.query(query, function (err, result) {
+                        if (err) {
+                            console.log("EROR in saving entry", query);
+                        }
+                        else resolve(result.rows);
+                    });
+                });
+            }))
+        })
+        .catch(function(err){
+            console.log('ERROR in create bulk', err);
+        });
+    },
+
     update: function(id, delta) {
         return connectToDB().then(function (db) {
             

@@ -49,6 +49,7 @@ exports.places = sql.define({
 		{ name: 'dechet_non_dangereux' },
 		{ name: 'opening_hours' },
 		{ name: 'phone' },
+		{ name: 'website' },
 		{ name: 'objects' },
 		{ name: 'address_1' },
 		{ name: 'address_2' },

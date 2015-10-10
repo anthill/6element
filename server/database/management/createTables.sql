@@ -26,6 +26,7 @@ CREATE TABLE IF NOT EXISTS places (
     dechet_non_dangereux boolean DEFAULT NULL,
     opening_hours text DEFAULT NULL,
     phone text DEFAULT NULL,
+    website text DEFAULT NULL,
     objects hstore,
     address_1 text DEFAULT NULL,
     address_2 text DEFAULT NULL,

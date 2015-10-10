@@ -6,7 +6,8 @@ var path = require('path');
 var fs   = require('fs');
 var hstore = require('pg-hstore')();
 var Utils = require("./utils.js");
-var Places = require('./database/models/places.js')
+var Places = require('./database/models/places.js');
+var placesDeclaration = require('./database/management/declarations.js').places;
 
 var fileToObjects = function(dir, file){
 
@@ -23,7 +24,7 @@ var fileToObjects = function(dir, file){
             var doc = JSON.parse(data);
             console.log(file, ":", Object.keys(doc).length, 'objecs to save');
 
-            Promise.all(Object.keys(doc).map(function(key){
+            var objectsTosave = Object.keys(doc).map(function(key){
 
                 var toSave = doc[key].properties;
                 toSave.lat = doc[key].geometry.coordinates.lat;
@@ -34,19 +35,31 @@ var fileToObjects = function(dir, file){
                 hstore.stringify(toSave.objects, function(result) {
                     toSave.objects = result;
                 });
-                // console.log(toSave)
 
-                return Places.create(toSave)
-                .then(function(data){
-                    // console.log('Place created', data);
-                })
-                .catch(function(error){
-                    console.log('error in place creation', error);
-                });
-            }))
-            .then(function(){
+                var filteredObject = {};
+                placesDeclaration
+                    .columns.map(function(obj){return obj.name})
+                    .filter(function(name){return ['created_at', 'updated_at', 'id'].indexOf(name) === -1})
+                    .forEach(function(name){
+                        filteredObject[name] = toSave[name];
+                    })
+
+
+                // console.log(toSave)
+                return filteredObject;
+            })
+            .filter(function(obj){
+                return obj.lat != null && obj.lon != null;
+            });
+
+            Places.createByChunk(objectsTosave)
+            .then(function(data){
+                console.log("Entries saved ", data.length);
                 resolve();
             })
+            .catch(function(error){
+                console.log('error in place chunk creation', error);
+            });
             
                         
         });
@@ -63,7 +76,7 @@ var files = fs.readdirSync(dir);
 Promise.all(
     files
     .filter(function(file){
-      return (file === 'dechetterie_gironde.json'); 
+      return (path.extname(file) === '.json'); 
     })
     .map(function(file){
         return fileToObjects(dir, file)

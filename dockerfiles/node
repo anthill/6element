@@ -7,4 +7,8 @@ WORKDIR /6element
 
 RUN npm install nodemon -g
 
-
+RUN apt-get install wget ca-certificates
+RUn wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add -
+RUN apt-get update -y
+RUN apt-get upgrade -y
+RUN apt-get install -y postgresql-9.4

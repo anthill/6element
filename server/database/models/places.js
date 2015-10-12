@@ -197,4 +197,27 @@ module.exports = {
             console.log('ERROR in getWithin', err);
         }); 
     },
+
+    getKNearest: function(coords, k){
+        return connectToDB().then(function (db) {
+            
+            var query = places
+                .select("*")
+                .from(places)
+                .order("places.geom <-> st_setsrid(st_makepoint(" + coords.lon + ", " + coords.lat + "), 4326)")
+                .limit(k)
+                .toQuery();
+
+            return new Promise(function (resolve, reject) {
+                db.query(query, function (err, result) {
+                    if (err) reject(err);
+
+                    else resolve(result.rows);
+                });
+            });
+        })
+        .catch(function(err){
+            console.log('ERROR in getKNearest', err);
+        }); 
+    },
 };

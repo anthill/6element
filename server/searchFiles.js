@@ -76,7 +76,7 @@ module.exports = function(req, res){
     
 
 
-    Places.getWithin(result.square)
+    Places.getKNearest({"lon": data.geoloc.lon, "lat": data.geoloc.lat}, 10)
     .then(function(results){
         toGeoJson(results)
         .then(function(geoJson){

@@ -21,7 +21,7 @@ var toGeoJson = function(results){
                     var geoJson = { 
                         type: 'Feature',
                         properties: result,
-                        geometry: { "type": "Point", "coordinates": [result["lat"], result["lon"]] },
+                        geometry: { "type": "Point", "coordinates": {"lat":result["lat"], "lon": result["lon"]} },
                         distance: 0.08488681638164158,
                         color: '#41B93D',
                         file: 'screlec.json',

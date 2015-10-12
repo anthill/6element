@@ -161,5 +161,27 @@ module.exports = {
         .catch(function(err){
             console.log('ERROR in deleteAll places', err);
         });        
-    }
+    },
+
+    getWithin: function(){
+        return connectToDB().then(function (db) {
+            
+            var query = places
+                .select('*')
+                .from(places)
+                .limit(10)
+                .toQuery();
+
+            return new Promise(function (resolve, reject) {
+                db.query(query, function (err, result) {
+                    if (err) reject(err);
+
+                    else resolve(result.rows);
+                });
+            });
+        })
+        .catch(function(err){
+            console.log('ERROR in getWithin', err);
+        }); 
+    },
 };

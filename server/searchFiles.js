@@ -22,9 +22,9 @@ var toGeoJson = function(results){
                         type: 'Feature',
                         properties: result,
                         geometry: { "type": "Point", "coordinates": {"lat":result["lat"], "lon": result["lon"]} },
-                        distance: 0.08488681638164158,
-                        color: '#41B93D',
-                        file: 'screlec.json',
+                        distance: result.distance,
+                        color: result.color,
+                        file: result.file,
                         rate: 3 
                     }
                     resolve(geoJson);
@@ -60,9 +60,7 @@ module.exports = function(req, res){
         "coordinates": [data.geoloc.lat, data.geoloc.lon]
       }
     };
-
-    
-    
+ 
     var distance = data.radius * Math.SQRT2;
     var units = 'kilometers';
     var leftDown = turf.destination(point, distance, 225, units).geometry.coordinates;
@@ -72,16 +70,13 @@ module.exports = function(req, res){
         maxLat: rightUp[0],
         minLon: leftDown[1],
         maxLon: rightUp[1]
-    };
-    
-
+    };  
 
     Places.getKNearest({"lon": data.geoloc.lon, "lat": data.geoloc.lat}, 10)
     .then(function(results){
         toGeoJson(results)
         .then(function(geoJson){
             result.objects = geoJson;
-            console.log(result)
             res.setHeader('Content-Type', 'application/json');
             res.send(JSON.stringify(result));
         })

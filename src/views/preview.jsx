@@ -16,9 +16,9 @@ module.exports = React.createClass({
     var object = this.props.object;
 
     // Distance field
-    var distance = (object.distance > 1) ? 
-      object.distance.toFixed(2) + " Km":
-      (Math.round(object.distance * 1000)).toString() + " m";
+    var distance = (object.distance > 1000) ? 
+      (object.distance/1000).toFixed(2) + " Km":
+      Math.round(object.distance).toString() + " m";
      
     var openJSX = "";
     if(NotEmpty(object.properties.opening_hours)){
@@ -33,7 +33,7 @@ module.exports = React.createClass({
         <div className="row clearfix styleRow">
           <div className="pull-left text-left">
             <label><b>{object.properties.name}</b></label><br/>
-            <label><small><em>src: {object.file.replace('.json', '')}</em></small></label>
+            <label><small><em>src: {object.properties.file}</em></small></label>
           </div>
           <div className="pull-right text-right">
             <label>

@@ -18,6 +18,14 @@ END;
 $$ language 'plpgsql';
 
 
+CREATE TABLE IF NOT EXISTS networks (
+    id          SERIAL PRIMARY KEY,
+    name        text NOT NULL,
+    sources     text[] DEFAULT NULL,
+    color       text NOT NULL,
+    url         text DEFAULT NULL
+) INHERITS(lifecycle);
+CREATE TRIGGER updated_at_networks BEFORE UPDATE ON networks FOR EACH ROW EXECUTE PROCEDURE update_updated_at_column();
 
 CREATE TABLE IF NOT EXISTS places (
     id           SERIAL PRIMARY KEY,
@@ -31,6 +39,7 @@ CREATE TABLE IF NOT EXISTS places (
     address_1 text DEFAULT NULL,
     address_2 text DEFAULT NULL,
     owner text DEFAULT NULL,
+    network integer REFERENCES networks (id) NOT NULL,
     public_access boolean DEFAULT NULL,
     dechet_dangereux boolean DEFAULT NULL,
     dechet_inerte boolean DEFAULT NULL,

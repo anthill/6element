@@ -4,19 +4,16 @@ var sql = require('sql');
 sql.setDialect('postgres');
 var connectToDB = require('../management/connectToDB.js');
 
-var places = require('../management/declarations.js').places;
 var networks = require('../management/declarations.js').networks;
 
 module.exports = {
     create: function (data) {
         return connectToDB().then(function (db) {
             
-            var query = places
+            var query = networks
                 .insert(data)
                 .returning('*')
                 .toQuery();
-
-            // console.log('places create query', query);
 
             return new Promise(function (resolve, reject) {
                 db.query(query, function (err, result) {
@@ -35,13 +32,10 @@ module.exports = {
 
             return Promise.all(datas.map(function(data){
 
-                var query = places
+                var query = networks
                     .insert(data)
                     .returning('*')
                     .toQuery();
-
-                // console.log('places create query', query);
-
                 return new Promise(function (resolve, reject) {
                     db.query(query, function (err, result) {
                         if (err) {
@@ -60,9 +54,9 @@ module.exports = {
     update: function(id, delta) {
         return connectToDB().then(function (db) {
             
-            var query = places
+            var query = networks
                 .update(delta)
-                .where(places.id.equals(id))
+                .where(networks.id.equals(id))
                 .returning('*')
                 .toQuery();
 
@@ -82,10 +76,10 @@ module.exports = {
     get: function(id){
         return connectToDB().then(function (db) {
             
-            var query = places
+            var query = networks
                 .select('*')
-                .where(places.id.equals(id))
-                .from(places)
+                .where(networks.id.equals(id))
+                .from(networks)
                 .toQuery();
 
             return new Promise(function (resolve, reject) {
@@ -97,16 +91,16 @@ module.exports = {
             });
         })
         .catch(function(err){
-            console.log('ERROR in getPlace', err);
+            console.log('ERROR in getNetwork', err);
         }); 
     },
 
     getAll: function() {
         return connectToDB().then(function (db) {
             
-            var query = places
+            var query = networks
                 .select('*')
-                .from(places)
+                .from(networks)
                 .toQuery();
 
             return new Promise(function (resolve, reject) {
@@ -125,9 +119,9 @@ module.exports = {
     delete: function(id) {
         return connectToDB().then(function (db) {
             
-            var query = places
+            var query = networks
                 .delete()
-                .where(places.id.equals(id))
+                .where(networks.id.equals(id))
                 .returning('*')
                 .toQuery();
 
@@ -140,88 +134,8 @@ module.exports = {
             });
         })
         .catch(function(err){
-            console.log('ERROR in delete places', err);
+            console.log('ERROR in delete networks', err);
         });        
     },
 
-    deleteAll: function() {
-        return connectToDB().then(function (db) {
-            
-            var query = places
-                .delete()
-                .returning('*')
-                .toQuery();
-
-            return new Promise(function (resolve, reject) {
-                db.query(query, function (err, result) {
-                    if (err) reject(err);
-                    else resolve(result.rows);
-                });
-            });
-        })
-        .catch(function(err){
-            console.log('ERROR in deleteAll places', err);
-        });        
-    },
-
-    getWithin: function(bbox){
-        return connectToDB().then(function (db) {
-            
-            var query = places
-                .select("*")
-                .from(places)
-                .where("places.geom && ST_MakeEnvelope(" + bbox.minLon + ", " + bbox.minLat + ", " + bbox.maxLon + ", " + bbox.maxLat + ", 4326)")
-                .limit(100)
-                .toQuery();
-
-            
-            // var query = places
-            //     .select(
-            //         places.literal(
-            //             {
-            //                 text: "SELECT * FROM places WHERE places.geom && ST_MakeEnvelope($1, $2, $3, $4, 4326)",
-            //                 values: [bbox.minLon, bbox.minLat, bbox.maxLon, bbox.maxLat]
-            //             }
-            //         )
-            //     )
-            //     .toQuery();
-
-            return new Promise(function (resolve, reject) {
-                db.query(query, function (err, result) {
-                    if (err) reject(err);
-
-                    else resolve(result.rows);
-                });
-            });
-        })
-        .catch(function(err){
-            console.log('ERROR in getWithin', err);
-        }); 
-    },
-
-    getKNearest: function(coords, k){
-        return connectToDB().then(function (db) {
-            
-            //var strDistance = "places.geom <-> st_setsrid(st_makepoint(" + coords.lon + ", " + coords.lat + "), 4326) as distance";
-            var strDistance = "st_distance_sphere(places.geom, st_makepoint(" + coords.lon + ", " + coords.lat + ")) as distance";
-            var query = places
-                .select(places.star(),networks.name.as('file'), networks.color.as('color'), strDistance)
-                .from(places.join(networks).on(places.network.equals(networks.id)))
-                .order("distance")
-                .limit(k)
-                .toQuery();
-
-            console.log(query);
-            return new Promise(function (resolve, reject) {
-                db.query(query, function (err, result) {
-                    if (err) reject(err);
-
-                    else resolve(result.rows);
-                });
-            });
-        })
-        .catch(function(err){
-            console.log('ERROR in getKNearest', err);
-        }); 
-    },
 };

@@ -163,14 +163,27 @@ module.exports = {
         });        
     },
 
-    getWithin: function(){
+    getWithin: function(bbox){
         return connectToDB().then(function (db) {
             
             var query = places
-                .select('*')
+                .select("*")
                 .from(places)
-                .limit(10)
+                .where("places.geom && ST_MakeEnvelope(" + bbox.minLon + ", " + bbox.minLat + ", " + bbox.maxLon + ", " + bbox.maxLat + ", 4326)")
+                .limit(100)
                 .toQuery();
+
+            
+            // var query = places
+            //     .select(
+            //         places.literal(
+            //             {
+            //                 text: "SELECT * FROM places WHERE places.geom && ST_MakeEnvelope($1, $2, $3, $4, 4326)",
+            //                 values: [bbox.minLon, bbox.minLat, bbox.maxLon, bbox.maxLat]
+            //             }
+            //         )
+            //     )
+            //     .toQuery();
 
             return new Promise(function (resolve, reject) {
                 db.query(query, function (err, result) {

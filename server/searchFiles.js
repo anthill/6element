@@ -76,7 +76,7 @@ module.exports = function(req, res){
     
 
 
-    Places.getWithin()
+    Places.getWithin(result.square)
     .then(function(results){
         toGeoJson(results)
         .then(function(geoJson){

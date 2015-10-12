@@ -23,4 +23,5 @@ db:
    environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
+      - PGPASSWORD=postgres
    tty: true

@@ -11,7 +11,7 @@ put your datafiles in `data`.
 docker-compose -f docker-compose-init-db.yml rm -f
 docker-compose -f docker-compose-init-db.yml up
 docker-compose -f docker-compose-load-db.yml up
-docker-compose up
+docker-compose up --force-recreate
 ```
 
 then watch the change in your frontend files while you're coding

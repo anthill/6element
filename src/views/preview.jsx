@@ -16,9 +16,9 @@ module.exports = React.createClass({
     var object = this.props.object;
 
     // Distance field
-    var distance = (object.distance > 1) ? 
-      object.distance.toFixed(2) + " Km":
-      (Math.round(object.distance * 1000)).toString() + " m";
+    var distance = (object.distance > 1000) ? 
+      (object.distance/1000).toFixed(2) + " Km":
+      Math.round(object.distance).toString() + " m";
      
     var openJSX = "";
     if(NotEmpty(object.properties.opening_hours)){

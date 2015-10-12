@@ -201,13 +201,15 @@ module.exports = {
     getKNearest: function(coords, k){
         return connectToDB().then(function (db) {
             
+            //var strDistance = "places.geom <-> st_setsrid(st_makepoint(" + coords.lon + ", " + coords.lat + "), 4326) as distance";
+            var strDistance = "st_distance_sphere(places.geom, st_makepoint(" + coords.lon + ", " + coords.lat + ")) as distance";
+            
             var query = places
-                .select("*")
+                .select("*", strDistance)
                 .from(places)
-                .order("places.geom <-> st_setsrid(st_makepoint(" + coords.lon + ", " + coords.lat + "), 4326)")
+                .order("distance")
                 .limit(k)
                 .toQuery();
-
             return new Promise(function (resolve, reject) {
                 db.query(query, function (err, result) {
                     if (err) reject(err);

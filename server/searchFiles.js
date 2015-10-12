@@ -22,7 +22,7 @@ var toGeoJson = function(results){
                         type: 'Feature',
                         properties: result,
                         geometry: { "type": "Point", "coordinates": {"lat":result["lat"], "lon": result["lon"]} },
-                        distance: 0.08488681638164158,
+                        distance: result.distance,
                         color: '#41B93D',
                         file: 'screlec.json',
                         rate: 3 

@@ -7,9 +7,12 @@ var fs   = require('fs');
 var hstore = require('pg-hstore')();
 var Utils = require("./utils.js");
 var Places = require('./database/models/places.js');
+var Networks = require('./database/models/networks.js');
 var placesDeclaration = require('./database/management/declarations.js').places;
 
-var fileToObjects = function(dir, file){
+var FileToNetworks = function(dir, file){
+
+    var sources = [];
 
     return new Promise(function(resolve, reject){
 
@@ -20,18 +23,50 @@ var fileToObjects = function(dir, file){
                 reject(err);
             }
 
+            var networks = JSON.parse(data);
+
+            Networks.createByChunk(networks)
+            .then(function(data){
+                console.log("Entries saved ", data.length);
+                resolve(data);
+            })
+            .catch(function(error){
+                console.log('error in network chunk creation', error);
+            });   
+        });
+    });
+}
+
+var FileToObjects = function(dir, file, networks){
+
+    return new Promise(function(resolve, reject){
+
+        
+        var sources = {};
+        networks.forEach(function(network, index){
+            network[0].sources.forEach(function(source){
+                sources[source] = network[0].id;
+            });
+        });
+
+        fs.readFile(path.join(dir,file), 'utf8', function (err, data) {
+          
+            if ( err !== null ) {
+                console.log("ERROR in file ", file, '', err);
+                reject(err);
+            }
 
             var doc = JSON.parse(data);
-            console.log(file, ":", Object.keys(doc).length, 'objecs to save');
-
             var objectsTosave = Object.keys(doc).map(function(key){
 
                 var toSave = doc[key].properties;
                 toSave.lat = doc[key].geometry.coordinates.lat;
                 toSave.lon = doc[key].geometry.coordinates.lon;
                 toSave.geom = 'POINT(' + toSave.lon + ' ' + toSave.lat + ')';
-                
-                
+                toSave.network = sources[toSave.source];
+                if(typeof toSave.network === 'undefined')
+                    console.log('error network', toSave.source);
+               
                 hstore.stringify(toSave.objects, function(result) {
                     toSave.objects = result;
                 });
@@ -44,9 +79,9 @@ var fileToObjects = function(dir, file){
                         filteredObject[name] = toSave[name];
                     })
 
-
                 // console.log(toSave)
                 return filteredObject;
+         
             })
             .filter(function(obj){
                 return obj.lat != null && obj.lon != null;
@@ -70,29 +105,19 @@ var fileToObjects = function(dir, file){
 
    
 var dir = path.join(__dirname,'../data/');
-var files = fs.readdirSync(dir);
 
-
-Promise.all(
-    files
-    .filter(function(file){
-      return (path.extname(file) === '.json'); 
+FileToNetworks(dir, 'networks.json')
+.then(function(networks){
+    FileToObjects(dir, 'places.json', networks)
+    .then(function(){
+        console.log('completed');
+        process.exit();
     })
-    .map(function(file){
-        return fileToObjects(dir, file)
-        .then(function(){
-
-        })
-        .catch(function(err){
-            console.log(err);
-        });
-    })
-)
-.then(function(){
-    console.log('completed');
-    process.exit();
+    .catch(function(err){
+        console.log('places:', err);
+    });
 })
 .catch(function(err){
-    console.log(err);
+    console.log('networks:', err);
 });
 

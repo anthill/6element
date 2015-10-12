@@ -33,7 +33,7 @@ module.exports = React.createClass({
         <div className="row clearfix styleRow">
           <div className="pull-left text-left">
             <label><b>{object.properties.name}</b></label><br/>
-            <label><small><em>src: {object.file.replace('.json', '')}</em></small></label>
+            <label><small><em>src: {object.properties.file}</em></small></label>
           </div>
           <div className="pull-right text-right">
             <label>

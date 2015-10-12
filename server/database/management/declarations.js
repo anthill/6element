@@ -38,6 +38,20 @@ exports.lifecycle = sql.define({
 });
 
 
+exports.networks = sql.define({
+	name: 'networks',
+	columns: [
+		{ name: 'created_at' },
+		{ name: 'updated_at' },
+		{ name: 'id' },
+		{ name: 'name' },
+		{ name: 'sources' },
+		{ name: 'color' },
+		{ name: 'url' }
+	]
+});
+
+
 exports.places = sql.define({
 	name: 'places',
 	columns: [
@@ -54,6 +68,7 @@ exports.places = sql.define({
 		{ name: 'address_1' },
 		{ name: 'address_2' },
 		{ name: 'owner' },
+		{ name: 'network' },
 		{ name: 'public_access' },
 		{ name: 'dechet_dangereux' },
 		{ name: 'dechet_inerte' },

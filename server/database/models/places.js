@@ -202,8 +202,8 @@ module.exports = {
     getKNearest: function(coords, k){
         return connectToDB().then(function (db) {
             
-            //var strDistance = "places.geom <-> st_setsrid(st_makepoint(" + coords.lon + ", " + coords.lat + "), 4326) as distance";
-            var strDistance = "st_distance_sphere(places.geom, st_makepoint(" + coords.lon + ", " + coords.lat + ")) as distance";
+            console.log(places.geom);
+            var strDistance = "st_distance_sphere(places.geom, st_makepoint(" + coords.lon + ", " + coords.lat + ")) AS distance";
             var query = places
                 .select(places.star(),networks.name.as('file'), networks.color.as('color'), strDistance)
                 .from(places.join(networks).on(places.network.equals(networks.id)))
@@ -211,7 +211,6 @@ module.exports = {
                 .limit(k)
                 .toQuery();
 
-            console.log(query);
             return new Promise(function (resolve, reject) {
                 db.query(query, function (err, result) {
                     if (err) reject(err);

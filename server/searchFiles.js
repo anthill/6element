@@ -4,7 +4,6 @@ var turf = require('turf');
 var path = require('path');
 var fs   = require('fs');
 var hstore = require('pg-hstore')();
-var Utils = require("./utils.js");
 var Places = require('./database/models/places.js');
 
 
@@ -39,6 +38,15 @@ module.exports = function(req, res){
     var data = req.body;
     if(data === null){
         console.log("-> request without parameters");
+        return;
+    } 
+    console.log(data.geoloc);
+    if(data.geoloc.lon === null){
+        console.log("-> request with null centroid");
+        return;
+    } 
+    if(data.geoloc.lat === null){
+        console.log("-> request with null centroid");
         return;
     } 
 
@@ -76,6 +84,7 @@ module.exports = function(req, res){
     .then(function(results){
         toGeoJson(results)
         .then(function(geoJson){
+            // SQUARE TODO
             result.objects = geoJson;
             res.setHeader('Content-Type', 'application/json');
             res.send(JSON.stringify(result));

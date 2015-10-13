@@ -27,6 +27,7 @@
   "homepage": "https://github.com/anthill/6element",
   "dependencies": {
     "body-parser": "^1.10.1",
+    "core-js": "^1.2.1",
     "es6-shim": "^0.31.3",
     "express": "^4.12.4",
     "google-maps-api": "^1.1.0",

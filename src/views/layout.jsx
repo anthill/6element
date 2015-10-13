@@ -91,7 +91,6 @@ module.exports = React.createClass({
       var autocomplete = new maps.places.Autocomplete(val, { types: ['geocode'] });
       maps.event.addListener(autocomplete, 'place_changed', function(){
         var place = autocomplete.getPlace();
-        console.log(place);
         var address = '';
         if (place.address_components) {
           address = [
@@ -100,7 +99,7 @@ module.exports = React.createClass({
             (place.address_components[2] && place.address_components[2].short_name || '')
           ].join(' ');
         }
-        self.setState({geoloc: {lat: place.geometry.location.J, lon: place.geometry.location.M}, placeName: address})
+        self.setState({geoloc: {lat: place.geometry.location.lat(), lon: place.geometry.location.lng()}, placeName: address})
       });
     });
   },
@@ -253,7 +252,7 @@ module.exports = React.createClass({
                 <Mui.IconButton tooltip="Afficher par Liste"><Mui.FontIcon className="material-icons" color={Colors.pink400} >dvr</Mui.FontIcon></Mui.IconButton>
                 <Mui.IconButton tooltip="Afficher mes Favoris"><Mui.FontIcon className="material-icons">favorite</Mui.FontIcon></Mui.IconButton>
                 <Mui.IconButton tooltip="Rechercher" onTouchTap={this.handleSearchNav}><Mui.FontIcon className="material-icons" color={Colors.pink400} >search</Mui.FontIcon></Mui.IconButton>
-                <Mui.IconButton tooltip="Filtrer par source" onTouchTap={this.handleLeftNav} disabled={this.state.detailedObject!==null}><Mui.FontIcon className="material-icons" color={Colors.pink400} >filter_list</Mui.FontIcon></Mui.IconButton>
+                <Mui.IconButton tooltip="Filtrer par source" onTouchTap={this.handleLeftNav}><Mui.FontIcon className="material-icons" color={Colors.pink400} >filter_list</Mui.FontIcon></Mui.IconButton>
               </Mui.ToolbarGroup>
             </Mui.Toolbar>
             {resultJSX}

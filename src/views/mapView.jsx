@@ -33,6 +33,18 @@ module.exports = React.createClass({
       this.setState({selectMap: null});
     }
   },
+  onMoveMap: function(){
+    if(this.state.map !== null){
+      var bounds = this.state.map.getBounds(); 
+      var box = {
+        'maxLat': bounds.getNorth(),
+        'minLat': bounds.getSouth(),
+        'maxLon': bounds.getEast(),
+        'minLon': bounds.getWest()
+      }
+      this.props.onSearch(this.props.geoloc, box);
+    }
+  },
   loadSelection: function(map, select){
 
     var self = this;
@@ -66,10 +78,25 @@ module.exports = React.createClass({
       map.removeLayer(marker);
     });
     markers = [];
-    
+
+    // Bouding box to compute    
+    var box = {
+      'n': null,
+      's': null,
+      'e': null,
+      'o': null
+    }
+
     var markerSelected = null;
     this.props.result.objects
     .forEach(function(object, index){
+
+        var lat = object.geometry.coordinates.lat;
+        var lon = object.geometry.coordinates.lon;
+        if(box.n === null || box.n < lat) box.n = lat;
+        if(box.s === null || box.s > lat) box.s = lat;
+        if(box.e === null || box.e < lon) box.e = lon;
+        if(box.o === null || box.o > lon) box.o = lon;
 
         var isSelected = (select !== null && 
                         select === index);
@@ -85,12 +112,12 @@ module.exports = React.createClass({
         };
         
         if(isSelected){
-            markerSelected = new L.Marker(new L.LatLng(object.geometry.coordinates.lat, object.geometry.coordinates.lon), {icon: pingIcon});      
+            markerSelected = new L.Marker(new L.LatLng(lat, lon), {icon: pingIcon});      
             //markerSelected.on("click", self.onClickMarker);
-            map.setView([object.geometry.coordinates.lat, object.geometry.coordinates.lon], 16);
+            map.setView([lat, lon], 16);
         } 
         else{
-            var marker = new L.CircleMarker(new L.LatLng(object.geometry.coordinates.lat, object.geometry.coordinates.lon), options);
+            var marker = new L.CircleMarker(new L.LatLng(lat, lon), options);
             marker.on("click", self.onClickMarker);
             marker.addTo(map); 
             markers.push({
@@ -99,7 +126,7 @@ module.exports = React.createClass({
             });
         }
     });
-    var geoloc = this.props.result.geoloc;
+    var geoloc = this.props.geoloc;
     if(markerSelected !== null){
         markerSelected.addTo(map);      
         markers.push({
@@ -107,16 +134,21 @@ module.exports = React.createClass({
           marker: markerSelected
         });
     }
+    else if(this.props.result.objects.length > 0){
+        var southWest = L.latLng(box.s, box.o);
+        var northEast = L.latLng(box.n, box.e);
+        map.fitBounds(L.latLngBounds(southWest, northEast));
+    }
     else
     {
-        map.setView([geoloc[0], geoloc[1]], Math.min(13, map.getZoom()));
+        map.setView([geoloc.lat, geoloc.lon], Math.min(13, map.getZoom()));
     }
-    var centroid = new L.Marker(new L.LatLng(geoloc[0], geoloc[1]), {icon: centroidIcon});
+    var centroid = new L.Marker(new L.LatLng(geoloc.lat, geoloc.lon), {icon: centroidIcon});
     markers.push(centroid);
     centroid.addTo(map);
 
     map.on('click', this.onClickMap); 
-   
+    map.on('moveend', this.onMoveMap);
     this.setState({map: map, markers: markers, selectMap: select});
   },
   onClickPreview: function(){

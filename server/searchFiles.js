@@ -40,12 +40,8 @@ module.exports = function(req, res){
         console.log("-> request without parameters");
         return;
     } 
-    console.log(data.geoloc);
-    if(data.geoloc.lon === null){
-        console.log("-> request with null centroid");
-        return;
-    } 
-    if(data.geoloc.lat === null){
+    if(data.geoloc.lon === null ||
+        data.geoloc.lat === null){
         console.log("-> request with null centroid");
         return;
     } 

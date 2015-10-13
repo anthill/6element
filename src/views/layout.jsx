@@ -221,12 +221,12 @@ module.exports = React.createClass({
        
     var panelJSX = (
       <Mui.Table 
-        fixedHeader={true}
+        fixedHeader={false}
         fixedFooter={false}
         selectable={true}
         multiSelectable={true}
         onRowSelection={this.onSelectFilter}>
-        <Mui.TableHeader enableSelectAll={true}>
+        <Mui.TableHeader enableSelectAll={false} displaySelectAll={false}>
           <Mui.TableRow>
             <Mui.TableHeaderColumn>Source</Mui.TableHeaderColumn>
             <Mui.TableHeaderColumn></Mui.TableHeaderColumn>

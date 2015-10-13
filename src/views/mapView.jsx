@@ -89,7 +89,7 @@ module.exports = React.createClass({
             //markerSelected.on("click", self.onClickMarker);
             map.setView([object.geometry.coordinates.lat, object.geometry.coordinates.lon], 16);
         } 
-        else if (isCenter){
+        else{
             var marker = new L.CircleMarker(new L.LatLng(object.geometry.coordinates.lat, object.geometry.coordinates.lon), options);
             marker.on("click", self.onClickMarker);
             marker.addTo(map); 
@@ -98,15 +98,6 @@ module.exports = React.createClass({
               marker: marker
             });
         }
-        else{
-            var marker = new L.Circle(new L.LatLng(object.geometry.coordinates.lat, object.geometry.coordinates.lon), 10, options);
-            marker.addTo(map);
-            marker.on("click", self.onClickMarker);
-            markers.push({
-              id: marker._leaflet_id,
-              marker: marker
-            });
-        } 
     });
     var geoloc = this.props.result.geoloc;
     if(markerSelected !== null){

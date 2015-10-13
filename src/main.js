@@ -1,6 +1,7 @@
 'use strict';
 
-require('es6-shim');
+window.Symbol = require('core-js/modules/es6.symbol');
+window.Symbol.iterator = require('core-js/fn/symbol/iterator');
 
 var React = require('react');
 

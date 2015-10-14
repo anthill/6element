@@ -80,8 +80,6 @@ module.exports = {
                 .limit(k)
                 .toQuery();
 
-            console.log(query)
-
             return new Promise(function (resolve, reject) {
                 db.query(query, function (err, result) {
                     if (err) reject(err);

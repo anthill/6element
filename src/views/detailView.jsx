@@ -44,11 +44,11 @@ module.exports = React.createClass({
       
     // Categories list
     var allowedJSX = Object.keys(object.properties.objects)
-    .filter(function(category){
-      return object.properties.objects[category] === 1;
-    })
+    /*.filter(function(category){
+      return object.properties.objects[category] === "1";
+    })*/
     .map(function(category, id){
-      return (<li key={id}>{category}</li>);
+      return (<li key={id}><label className="open">&bull;</label> {category}</li>);
     });
     
     // Address

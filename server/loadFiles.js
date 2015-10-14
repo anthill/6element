@@ -5,7 +5,6 @@ require('es6-shim');
 var path = require('path');
 var fs   = require('fs');
 var hstore = require('pg-hstore')();
-var Utils = require("./utils.js");
 var Places = require('./database/models/places.js');
 var Networks = require('./database/models/networks.js');
 var placesDeclaration = require('./database/management/declarations.js').places;
@@ -67,7 +66,14 @@ var FileToObjects = function(dir, file, networks){
                 if(typeof toSave.network === 'undefined')
                     console.log('error network', toSave.source);
                
-                hstore.stringify(toSave.objects, function(result) {
+                var wastes = {};
+                Object.keys(toSave.objects).filter(function(key){
+                    return toSave.objects[key] === 1;
+                })
+                .forEach(function(key){
+                    wastes[key] = toSave.objects[key];
+                })
+                hstore.stringify(wastes, function(result) {
                     toSave.objects = result;
                 });
 

@@ -2,6 +2,8 @@
 
 var React = require('react');
 var opening_hours = require('opening_hours');
+var Mui = require('material-ui');
+var Colors = require('material-ui/lib/styles/colors');
 
 var NotEmpty = function(field){
   if(typeof field === 'undefined') return false;
@@ -32,13 +34,14 @@ module.exports = React.createClass({
       <div>
         <div className="row clearfix styleRow">
           <div className="pull-left text-left">
-            <label><b>{object.properties.name}</b></label><br/>
-            <label><small><em>{object.properties.file}</em></small></label>
+            <Mui.CardHeader 
+              title={object.properties.name} 
+              subtitle={object.file}
+              avatar={<Mui.Avatar style={{backgroundColor: object.color}}></Mui.Avatar>}
+              style={{textAlign: "left", overflow: "hidden", padding: 0}}/>
           </div>
           <div className="pull-right text-right">
-            <label>
-              <em><i className="text-left glyphicon glyphicon-map-marker"></i> {distance}</em>
-            </label>
+            <em><i className="text-left glyphicon glyphicon-map-marker"></i> {distance}</em>
           </div>
         </div>
         {openJSX}

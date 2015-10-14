@@ -36,14 +36,14 @@ module.exports = {
         });
     },
 
-    getWithin: function(coords, bbox){
+    getWithin: function(coords, bbox, categories){
         return connectToDB().then(function (db) {
             
             var strDistance = "st_distance_sphere(places.geom, st_makepoint(" + coords.lon + ", " + coords.lat + ")) AS distance";
             var query = places
                 .select(places.star(),networks.name.as('file'), networks.color.as('color'), strDistance)
                 .from(places.join(networks).on(places.network.equals(networks.id)))
-                .where("places.geom && ST_MakeEnvelope(" + bbox.minLon + ", " + bbox.minLat + ", " + bbox.maxLon + ", " + bbox.maxLat + ", 4326)")
+                .where("places.geom && ST_MakeEnvelope(" + bbox.minLon + ", " + bbox.minLat + ", " + bbox.maxLon + ", " + bbox.maxLat + ", 4326) AND places.objects ?| " + categories)
                 .order("distance")
                 .limit(100)
                 .toQuery();
@@ -62,13 +62,14 @@ module.exports = {
         }); 
     },
 
-    getKNearest: function(coords, k){
+    getKNearest: function(coords, k, categories){
         return connectToDB().then(function (db) {
             
             var strDistance = "st_distance_sphere(places.geom, st_makepoint(" + coords.lon + ", " + coords.lat + ")) AS distance";
             var query = places
                 .select(places.star(),networks.name.as('file'), networks.color.as('color'), strDistance)
                 .from(places.join(networks).on(places.network.equals(networks.id)))
+                .where("places.objects ?| " + categories)
                 .order("distance")
                 .limit(k)
                 .toQuery();

@@ -8,8 +8,8 @@ button a{
 	color: white;
 	text-decoration: none;
 }
-.open { color: green;}
-.closed { color: red;}
+.open { color: green; font-size: 15px;}
+.closed { color: red; font-size: 15px;}
 .star { color: gold; }
 .no-star { color: lightgray; }
 .clickable { cursor: pointer;}

@@ -44,11 +44,11 @@ module.exports = React.createClass({
       
     // Categories list
     var allowedJSX = Object.keys(object.properties.objects)
-    .filter(function(category){
-      return object.properties.objects[category] === 1;
-    })
+    /*.filter(function(category){
+      return object.properties.objects[category] === "1";
+    })*/
     .map(function(category, id){
-      return (<li key={id}>{category}</li>);
+      return (<li key={id}><label className="open">&bull;</label> {category}</li>);
     });
     
     // Address
@@ -102,14 +102,6 @@ module.exports = React.createClass({
         </div>);
     }
 
-    /*
-    <div className="pull-right text-right">
-                  <label>
-                    <em><i className="text-left glyphicon glyphicon-map-marker"></i> {distance}</em>
-                  </label>
-                </div>
-    */
-
     // Final Object render
     return (
       <div flex layout="row">
@@ -123,7 +115,7 @@ module.exports = React.createClass({
             <Mui.Card id="detail">
               <Mui.CardHeader 
                 title={object.properties.name} 
-                subtitle={object.file.replace('.json', '')}
+                subtitle={object.file}
                 avatar={<Mui.Avatar style={{backgroundColor: object.color}}></Mui.Avatar>}
                 style={{textAlign: "left", overflow: "hidden"}}/>
             </Mui.Card>

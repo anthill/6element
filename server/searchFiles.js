@@ -40,58 +40,57 @@ module.exports = function(req, res){
         console.log("-> request without parameters");
         return;
     } 
-    if(data.geoloc.lon === null ||
-        data.geoloc.lat === null){
-        console.log("-> request with null centroid");
-        return;
-    } 
-
+    
     var result = {
-        radius: data.radius,
         categories: data.categories,
         placeName: data.placeName,
-        geoloc: [data.geoloc.lat, data.geoloc.lon],
-        square: {}, 
         objects: []
     }
-    var point = {
-      "type": "Feature",
-      "properties": {
-        "marker-color": "#0f0"
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [data.geoloc.lat, data.geoloc.lon]
-      }
-    };
- 
-    var distance = data.radius * Math.SQRT2;
-    var units = 'kilometers';
-    var leftDown = turf.destination(point, distance, 225, units).geometry.coordinates;
-    var rightUp = turf.destination(point, distance, 45, units).geometry.coordinates;
-    result.square = {
-        minLat: leftDown[0],
-        maxLat: rightUp[0],
-        minLon: leftDown[1],
-        maxLon: rightUp[1]
-    };  
+    
+    if(data.boundingBox !== null &&
+        data.geoloc !== null){
 
-    Places.getKNearest({"lon": data.geoloc.lon, "lat": data.geoloc.lat}, 10)
-    .then(function(results){
-        toGeoJson(results)
-        .then(function(geoJson){
-            // SQUARE TODO
-            result.objects = geoJson;
-            res.setHeader('Content-Type', 'application/json');
-            res.send(JSON.stringify(result));
+        Places.getWithin(data.geoloc, data.boundingBox)
+        .then(function(results){
+            toGeoJson(results)
+            .then(function(geoJson){
+                result.objects = geoJson;
+                res.setHeader('Content-Type', 'application/json');
+                res.send(JSON.stringify(result));
+            })
+            .catch(function(err){
+                console.error(err);
+                res.status(500).send(err);
+            });
         })
         .catch(function(err){
             console.error(err);
             res.status(500).send(err);
         });
-    })
-    .catch(function(err){
-        console.error(err);
-        res.status(500).send(err);
-    });
+        
+    } else if(data.geoloc !== null){
+
+        console.log('getKNearest');
+        Places.getKNearest({"lon": data.geoloc.lon, "lat": data.geoloc.lat}, 10)
+        .then(function(results){
+            toGeoJson(results)
+            .then(function(geoJson){
+                result.objects = geoJson;
+                res.setHeader('Content-Type', 'application/json');
+                res.send(JSON.stringify(result));
+            })
+            .catch(function(err){
+                console.error(err);
+                res.status(500).send(err);
+            });
+        })
+        .catch(function(err){
+            console.error(err);
+            res.status(500).send(err);
+        });        
+    }
+    else{
+         console.log("-> request without centroid nor boundingBox");
+        return;       
+    }
 }

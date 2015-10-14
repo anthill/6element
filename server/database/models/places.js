@@ -36,15 +36,15 @@ module.exports = {
         });
     },
 
-    getWithin: function(bbox){
+    getWithin: function(coords, bbox){
         return connectToDB().then(function (db) {
             
             var strDistance = "st_distance_sphere(places.geom, st_makepoint(" + coords.lon + ", " + coords.lat + ")) AS distance";
             var query = places
                 .select(places.star(),networks.name.as('file'), networks.color.as('color'), strDistance)
                 .from(places.join(networks).on(places.network.equals(networks.id)))
-                .order("distance")
                 .where("places.geom && ST_MakeEnvelope(" + bbox.minLon + ", " + bbox.minLat + ", " + bbox.maxLon + ", " + bbox.maxLat + ", 4326)")
+                .order("distance")
                 .limit(100)
                 .toQuery();
 

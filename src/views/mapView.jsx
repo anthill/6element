@@ -1,15 +1,12 @@
 "use strict";
-
 var React = require('react');
 var L = require('leaflet');
 var Colors = require('material-ui/lib/styles/colors');
-
 var Preview  =  require('./preview.jsx');
 var MapCore     =  require('./mapCore.jsx');
-
 module.exports = React.createClass({
   getInitialState: function() {
-    return {map: null, markers: [], selected: null};
+    return {map: null, markers: [], selected: null, markersLayer: undefined};
   },
   getMapInfos: function(map){
     this.loadSelection(map, 1, this.props.result.objects, this.props.files, this.props.geoloc, null);
@@ -24,10 +21,10 @@ module.exports = React.createClass({
     else this.props.onShowDetail(this.props.result.objects[index]);
   },
   onClickMarker: function(e){// -> select a point
-    var index = this.state.markers.findIndex(function(marker){
-      return (marker.id === e.target._leaflet_id);
+    var index = this.state.markersLayer.getLayers().findIndex(function(marker){
+      return (marker._leaflet_id === e.target._leaflet_id);
     });
-    this.setState({selected: (index === -1) ? null : this.state.markers[index].idPoint});      
+    this.setState({selected: (index === -1) ? null : this.state.markersLayer.getLayers()[index].idPoint});      
   },
   onClickMap: function(){// -> unselect a point
     if(this.state.selected !== null){
@@ -58,35 +55,31 @@ module.exports = React.createClass({
     }
   },
   loadSelection: function(map, status, points, files, center, selected ){
-
+    var self = this;
     // STATUS Definition
     // -1- Empty map, Zoom 13, no BoundingBox, geoloc centered
     // -2- Filled map, no Zoom, BoudingBox, no centered
     // -3- Filled map, no Zoom, no BoundingBox, no centered
-
     // Cleaning map
-    var markers = this.state.markers;
-    markers.forEach(function(marker){
-      map.removeLayer(marker);
-    });
-    markers = [];
-    var selected = null;
+    var markersLayer = this.state.markersLayer;
+    // markers.forEach(function(marker){
+    //   map.removeLayer(marker);
+    // });
+    if(self.state.markersLayer)
+      map.removeLayer(self.state.markersLayer);
 
+    var markers = [];
+    var selected = null;
     // -> STATUS 1
     if(status === 1){
-
       map.setView([center.lat, center.lon], Math.min(13, map.getZoom()));
       this.setState({map: map, markers: markers, selected: selected});
       return;
     }
-
-    var self = this;
     
     // Bouding box to compute (only for STATUS 2)
     var box = { 'n': null, 's': null, 'e': null, 'o': null };
-
     var markerSelected = null;
-
     var list = files
     .filter(function(file){
         return file.checked;
@@ -98,16 +91,13 @@ module.exports = React.createClass({
       return (list.indexOf(point.file) !== -1);
     })
     .forEach(function(point){
-
         // Confirm that the selected point is still on the map
         if(self.state.selected !== null &&
           self.state.selected === point.properties.id){
           selected = self.state.selected;
         }
-
         var lat = point.geometry.coordinates.lat;
         var lon = point.geometry.coordinates.lon;
-
         // Fit extrem points to the bounds
         if(status === 2){
           if(box.n === null || box.n < lat) box.n = lat;
@@ -115,7 +105,6 @@ module.exports = React.createClass({
           if(box.e === null || box.e < lon) box.e = lon;
           if(box.o === null || box.o > lon) box.o = lon;
         }
-
         var isCenter = (point.properties.type === 'centre');
         var options = {
           color: 'black',
@@ -131,7 +120,6 @@ module.exports = React.createClass({
         // TODO
         /*var isSelected = false;//(selected !== null && selected === index);
         if(isSelected){
-
             var PingIcon = L.Icon.Default.extend({
               options: {
                 iconUrl:      '/img/ping.png',
@@ -147,15 +135,19 @@ module.exports = React.createClass({
         else{*/
         // Regular point
         var marker = new L.CircleMarker(new L.LatLng(lat, lon), options);
+        marker["idPoint"] = point.properties.id;
         marker.on("click", self.onClickMarker);
-        marker.addTo(map); 
+        // marker.addTo(map); 
         markers.push({
           id: marker._leaflet_id,
           marker: marker,
           idPoint: point.properties.id
         });
     });
-    
+    var markersLayer = L.layerGroup(markers.map(function(m){return m.marker}));
+    self.state.markersLayer = markersLayer;
+    map.addLayer(markersLayer);
+  
     // Adding selected piont at the top (if necessary)
     /*if(markerSelected !== null){
         markerSelected.addTo(map);      
@@ -174,7 +166,6 @@ module.exports = React.createClass({
         map.fitBounds(L.latLngBounds(southWest, northEast));
         map.on('moveend', this.onMoveMap);
     }
-
     var CentroidIcon = L.Icon.Default.extend({
       options: {
         iconUrl:     '/img/centroid.png',
@@ -188,17 +179,13 @@ module.exports = React.createClass({
     var centroid = new L.Marker(new L.LatLng(center.lat, center.lon), {icon: new CentroidIcon()});
     markers.push(centroid);
     centroid.addTo(map);
-
     map.on('click',   this.onClickMap); 
-    console.log(markers.length, "markers");
     
     this.setState({map: map, markers: markers, selected: selected});
   },
   render: function() {
-
     var self = this;
     if(this.props.result.length===0) return "";
-
     var result = this.props.result;
     var detailMapJSX = "";
     if(this.state.selected !== null){

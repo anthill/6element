@@ -9,31 +9,26 @@ var MapCore     =  require('./mapCore.jsx');
 
 module.exports = React.createClass({
   getInitialState: function() {
-    return {map: null, markers: [], selectMap: null};
+    return {map: null, markers: [], selected: null};
   },
   getMapInfos: function(map){
-    var select = null;
-    //if(this.props.result.objects.length > 0) select = 0;
-    this.loadSelection(map, select);
+    this.loadSelection(map, 1, this.props.result.objects, this.props.files, this.props.geoloc, null);
   },
-  onSelectMap: function(index){
-    this.loadSelection(this.state.map, index);
+  onClickPreview: function(){
+    this.props.onShowDetail(this.props.result.objects[this.state.selected]);
   },
-  onClickMarker: function(e){
+  onClickMarker: function(e){// -> select a point
     var index = this.state.markers.findIndex(function(marker){
-      return (marker.id === e.target._leaflet_id)
+      return (marker.id === e.target._leaflet_id);
     });
-    if(index === -1) 
-      this.setState({selectMap: null});
-    else
-      this.setState({selectMap: index});
+    this.setState({selected: (index === -1) ? null : index});      
   },
-  onClickMap: function(){
-    if(this.state.selectMap !== null){
-      this.setState({selectMap: null});
+  onClickMap: function(){// -> unselect a point
+    if(this.state.selected !== null){
+      this.setState({selected: null});
     }
   },
-  onMoveMap: function(){
+  onMoveMap: function(e){
     if(this.state.map !== null){
       var bounds = this.state.map.getBounds(); 
       var box = {
@@ -42,36 +37,22 @@ module.exports = React.createClass({
         'maxLon': bounds.getEast(),
         'minLon': bounds.getWest()
       }
-      this.props.onSearch(this.props.geoloc, box);
+      this.props.onSearch(this.props.geoloc, box, 3);
     }
   },
-  loadSelection: function(map, select){
+  componentWillReceiveProps: function(nextProps){
+    if( this.state.map !== null &&
+        nextProps.status !== 1){
+      this.loadSelection(this.state.map, nextProps.status, nextProps.result.objects, nextProps.files, nextProps.geoloc, this.state.selected);
+    }
+  },
+  loadSelection: function(map, status, points, files, center, selected ){
 
-    var self = this;
-    // Adding icons
-    var CentroidIcon = L.Icon.Default.extend({
-      options: {
-        iconUrl:     '/img/centroid.png',
-        iconSize:     [25, 25],
-        shadowSize:   [0, 0], // size of the shadow
-        iconAnchor:   [10, 10], // point of the icon which will correspond to marker's location
-        shadowAnchor: [10, 10], // the same for the shadow
-        popupAnchor:  [-3, -40] // point from which the popup should open relative to the iconAnchor
-      }
-    });
-    var PingIcon = L.Icon.Default.extend({
-      options: {
-        iconUrl:      '/img/ping.png',
-        iconSize:     [30, 30],
-        shadowSize:   [0, 0], // size of the shadow
-        iconAnchor:   [10, 10], // point of the icon which will correspond to marker's location
-        shadowAnchor: [10, 10], // the same for the shadow
-        popupAnchor:  [-3, -40] // point from which the popup should open relative to the iconAnchor
-      }
-    });
-    var centroidIcon = new CentroidIcon();
-    var pingIcon = new PingIcon();
-    
+    // STATUS Definition
+    // -1- Empty map, Zoom 13, no BoundingBox, geoloc centered
+    // -2- Filled map, no Zoom, BoudingBox, no centered
+    // -3- Filled map, no Zoom, no BoundingBox, no centered
+
     // Cleaning map
     var markers = this.state.markers;
     markers.forEach(function(marker){
@@ -79,43 +60,69 @@ module.exports = React.createClass({
     });
     markers = [];
 
-    // Bouding box to compute    
-    var box = {
-      'n': null,
-      's': null,
-      'e': null,
-      'o': null
+    // -> STATUS 1
+    if(status === 1){
+
+      map.setView([center.lat, center.lon], Math.min(13, map.getZoom()));
+      this.setState({map: map, markers: markers, selected: selected});
+      return;
     }
 
+    var self = this;
+    
+    // Bouding box to compute (only for STATUS 2)
+    var box = { 'n': null, 's': null, 'e': null, 'o': null };
+
     var markerSelected = null;
-    this.props.result.objects
-    .forEach(function(object, index){
 
-        var lat = object.geometry.coordinates.lat;
-        var lon = object.geometry.coordinates.lon;
-        if(box.n === null || box.n < lat) box.n = lat;
-        if(box.s === null || box.s > lat) box.s = lat;
-        if(box.e === null || box.e < lon) box.e = lon;
-        if(box.o === null || box.o > lon) box.o = lon;
+    var list = [];
+    files.forEach(function(file){
+      if(file.checked === true) list.push(file.name);
+    });
+    points.filter(function(point){
+      return (list.indexOf(point.file) !== -1);
+    })
+    .forEach(function(point, index){
 
-        var isSelected = (select !== null && 
-                        select === index);
-        var isCenter = (object.properties.type === 'centre');
+        var lat = point.geometry.coordinates.lat;
+        var lon = point.geometry.coordinates.lon;
+
+        // Fit extrem points to the bounds
+        if(status === 2){
+          if(box.n === null || box.n < lat) box.n = lat;
+          if(box.s === null || box.s > lat) box.s = lat;
+          if(box.e === null || box.e < lon) box.e = lon;
+          if(box.o === null || box.o > lon) box.o = lon;
+        }
+
+        var isSelected = false;//(selected !== null && selected === index);
+        var isCenter = (point.properties.type === 'centre');
         var options = {
-          color: isCenter?'black':object.color,
+          color: 'black',
           fill: true,
-          fillColor: object.color, 
+          fillColor: point.color, 
           fillOpacity: isCenter?1:0.7,
           radius: isCenter?10:7,
           clickable: true,
-          weight: '5px'
+          weight: isCenter?5:3
         };
         
+        // Special icon for selected point
         if(isSelected){
-            markerSelected = new L.Marker(new L.LatLng(lat, lon), {icon: pingIcon});      
-            //markerSelected.on("click", self.onClickMarker);
-            map.setView([lat, lon], 16);
+
+            var PingIcon = L.Icon.Default.extend({
+              options: {
+                iconUrl:      '/img/ping.png',
+                iconSize:     [30, 30],
+                shadowSize:   [0, 0], // size of the shadow
+                iconAnchor:   [10, 10], // point of the icon which will correspond to marker's location
+                shadowAnchor: [10, 10], // the same for the shadow
+                popupAnchor:  [-3, -40] // point from which the popup should open relative to the iconAnchor
+              }
+            });
+            markerSelected = new L.Marker(new L.LatLng(lat, lon), {icon: new PingIcon()});      
         } 
+        // Regular point
         else{
             var marker = new L.CircleMarker(new L.LatLng(lat, lon), options);
             marker.on("click", self.onClickMarker);
@@ -126,7 +133,8 @@ module.exports = React.createClass({
             });
         }
     });
-    var geoloc = this.props.geoloc;
+    
+    // Adding selected piont at the top (if necessary)
     if(markerSelected !== null){
         markerSelected.addTo(map);      
         markers.push({
@@ -134,25 +142,34 @@ module.exports = React.createClass({
           marker: markerSelected
         });
     }
-    else if(this.props.result.objects.length > 0){
+    else if(status === 2 &&
+            points.length > 0){
         var southWest = L.latLng(box.s, box.o);
         var northEast = L.latLng(box.n, box.e);
+        map.off('moveend', this.onMoveMap);
         map.fitBounds(L.latLngBounds(southWest, northEast));
+        map.on('moveend', this.onMoveMap);
     }
-    else
-    {
-        map.setView([geoloc.lat, geoloc.lon], Math.min(13, map.getZoom()));
-    }
-    var centroid = new L.Marker(new L.LatLng(geoloc.lat, geoloc.lon), {icon: centroidIcon});
+
+    var CentroidIcon = L.Icon.Default.extend({
+      options: {
+        iconUrl:     '/img/centroid.png',
+        iconSize:     [25, 25],
+        shadowSize:   [0, 0], // size of the shadow
+        iconAnchor:   [10, 10], // point of the icon which will correspond to marker's location
+        shadowAnchor: [10, 10], // the same for the shadow
+        popupAnchor:  [-3, -40] // point from which the popup should open relative to the iconAnchor
+      }
+    });
+    var centroid = new L.Marker(new L.LatLng(center.lat, center.lon), {icon: new CentroidIcon()});
     markers.push(centroid);
     centroid.addTo(map);
 
-    map.on('click', this.onClickMap); 
-    map.on('moveend', this.onMoveMap);
-    this.setState({map: map, markers: markers, selectMap: select});
-  },
-  onClickPreview: function(){
-    this.props.onShowDetail(this.props.result.objects[this.state.selectMap]);
+    map.on('click',   this.onClickMap); 
+    console.log(map === this.state.map);
+    console.log(markers.length, "markers");
+    
+    this.setState({map: map, markers: markers, selected: selected});
   },
   render: function() {
 
@@ -160,12 +177,12 @@ module.exports = React.createClass({
 
     var result = this.props.result;
     var detailMapJSX = "";
-    if(this.state.selectMap !== null){
+    if(this.state.selected !== null){
     
       detailMapJSX = (
         <div id="popup" className="text-center">
           <a href="javascript:;" className="noRef clickable" onClick={this.onClickPreview}>
-            <Preview object={result.objects[this.state.selectMap]} />
+            <Preview object={result.objects[this.state.selected]} />
           </a>
         </div>);
     }

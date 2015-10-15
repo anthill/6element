@@ -74,12 +74,11 @@ module.exports = React.createClass({
     var iniResult = {
         categories: ['All'],
         placeName: '',
-        boundingBox: null, 
         objects: []
     }
     //var str = '{"type":"Feature","properties":{"dechet_non_dangereux":1,"name":"Déchèterie de Bordeaux Deschamps-bastide","menage":1,"opening_hours":"Apr 01-Sep 30 09:00-12:30,13:15-19:00; Oct 01-Apr 01 09:00-12:30,13:15-18:00","phone":"05 56 40 21 41","objects":{"rubble":0,"waste_medical":0,"batteries":1,"paper":1,"magazines":0,"white_goods":1,"waste_oil":1,"green_waste":1,"garden_waste":0,"hazardous_waste":1,"printer_toner":0,"scrap_metal":1,"plastic":0,"paint":1,"wood":1,"scrap_ concrete":1,"light_bulbs":0,"waste":1,"plastic_packaging":0,"scrap_metal_no_iron":1,"glass":1,"cardboard":1,"tyres":0,"waste_farming_chemical":1,"waste_mix_chemical":1,"beverage_carton":1,"fat_corp":0,"engine_oil":0,"newspaper":0,"waste_asbestos":0,"medical":0,"clothes":0},"address_1":"Quai Deschamps","address_2":"33100 - Bordeaux","owner":"Sinoe","dechet_dangereux":1,"type":"centre","dechet_inerte":0,"entreprise":0},"geometry":{"type":"Point","coordinates":{"lat":44.83401,"lon":-0.55198}},"distance":3.3535893441212057,"color":"#077527","file":"dechetterie_gironde.json","rate":2}';
     //, detailedObject: JSON.parse(str)
-    return {what: 'All', placeName: '', tab: 0, result: iniResult, files: [], geoloc: {lat: 44.8404507, lon: -0.5704909}, cpt: 0};
+    return {what: 'All', placeName: '', tab: 0, result: iniResult, files: [], geoloc: {lat: 44.8404507, lon: -0.5704909}, status: 1};
   },
   onShowDialog: function(){
     var self = this;
@@ -109,9 +108,9 @@ module.exports = React.createClass({
   },
   onDialogSubmit: function(e){
     this.refs.dialog.dismiss();
-    this.onSearch(this.state.geoloc,null);
+    this.onSearch(this.state.geoloc,null,2);
   },
-  onSearch: function(geoloc, boundingBox){
+  onSearch: function(geoloc, boundingBox, status){
 
     var self = this;
     
@@ -130,14 +129,14 @@ module.exports = React.createClass({
         if(temp.indexOf(object.file) ===-1){
           temp.push(object.file);       
           files.push({
-            name: object.file.replace('.json', ''),
+            name: object.file,
             color: object.color,
             checked: true
           }); 
         }
       });
 
-      self.setState({result: result, files: files, cpt: self.state.cpt+1});
+      self.setState({result: result, files: files, status: status});
     })
     .catch(function(error){
       console.error(error.status, error.message.toString());
@@ -156,7 +155,7 @@ module.exports = React.createClass({
     e.forEach(function(row){
      files[row].checked = true;
     });
-    this.setState({files: files, cpt: this.state.cpt+1});
+    this.setState({files: files});
   },
   onShowDetail: function(object){
     this.setState({detailedObject: object});
@@ -210,7 +209,7 @@ module.exports = React.createClass({
     var resultJSX = "";
     var filterJSX = "";
     if(result){
-      resultJSX = (<MapView key={'map'+this.state.cpt.toString()} result={result} geoloc={this.state.geoloc} onShowDetail={this.onShowDetail} onSearch={this.onSearch} />);
+      resultJSX = (<MapView status={this.state.status} result={result} files={this.state.files} geoloc={this.state.geoloc} onShowDetail={this.onShowDetail} onSearch={this.onSearch} />);
       filterJSX = this.state.files.map(function(file){
         return (
           <Mui.TableRow selected={file.checked}>
@@ -267,7 +266,7 @@ module.exports = React.createClass({
               actionFocus="submit"
               modal={true}
               onShow={this.onShowDialog}
-              openImmediately={this.state.cpt===0}
+              openImmediately={this.state.status===1}
               autoDetectWindowHeight={true} 
               autoScrollBodyContent={true}
               contentStyle={{maxWidth: '420px'}}>

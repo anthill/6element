@@ -8,7 +8,7 @@ var places = require('../management/declarations.js').places;
 var networks = require('../management/declarations.js').networks;
 
 var jsArrayToPg = function(nodeArray) {
-    return "ARRAY['" + categories.join("','") + "']";
+    return "ARRAY['" + nodeArray.join("','") + "']";
 }
 
 module.exports = {

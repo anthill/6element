@@ -15,13 +15,19 @@ module.exports = React.createClass({
     this.loadSelection(map, 1, this.props.result.objects, this.props.files, this.props.geoloc, null);
   },
   onClickPreview: function(){
-    this.props.onShowDetail(this.props.result.objects[this.state.selected]);
+    var self = this;
+    if(this.state.selected === null) return;
+    var index = this.props.result.objects.findIndex(function(object){
+      return object.properties.id === self.state.selected;
+    });
+    if(index === -1) this.setState({selected: null});
+    else this.props.onShowDetail(this.props.result.objects[index]);
   },
   onClickMarker: function(e){// -> select a point
     var index = this.state.markers.findIndex(function(marker){
       return (marker.id === e.target._leaflet_id);
     });
-    this.setState({selected: (index === -1) ? null : index});      
+    this.setState({selected: (index === -1) ? null : this.state.markers[index].idPoint});      
   },
   onClickMap: function(){// -> unselect a point
     if(this.state.selected !== null){
@@ -43,7 +49,12 @@ module.exports = React.createClass({
   componentWillReceiveProps: function(nextProps){
     if( this.state.map !== null &&
         nextProps.status !== 1){
-      this.loadSelection(this.state.map, nextProps.status, nextProps.result.objects, nextProps.files, nextProps.geoloc, this.state.selected);
+      this.loadSelection( this.state.map, 
+                          nextProps.status, 
+                          nextProps.result.objects, 
+                          nextProps.files, 
+                          nextProps.geoloc, 
+                          this.state.selected);
     }
   },
   loadSelection: function(map, status, points, files, center, selected ){
@@ -59,6 +70,7 @@ module.exports = React.createClass({
       map.removeLayer(marker);
     });
     markers = [];
+    var selected = null;
 
     // -> STATUS 1
     if(status === 1){
@@ -75,14 +87,23 @@ module.exports = React.createClass({
 
     var markerSelected = null;
 
-    var list = [];
-    files.forEach(function(file){
-      if(file.checked === true) list.push(file.name);
+    var list = files
+    .filter(function(file){
+        return file.checked;
+    })
+    .map(function(file){
+      return file.name;
     });
     points.filter(function(point){
       return (list.indexOf(point.file) !== -1);
     })
-    .forEach(function(point, index){
+    .forEach(function(point){
+
+        // Confirm that the selected point is still on the map
+        if(self.state.selected !== null &&
+          self.state.selected === point.properties.id){
+          selected = self.state.selected;
+        }
 
         var lat = point.geometry.coordinates.lat;
         var lon = point.geometry.coordinates.lon;
@@ -95,7 +116,6 @@ module.exports = React.createClass({
           if(box.o === null || box.o > lon) box.o = lon;
         }
 
-        var isSelected = false;//(selected !== null && selected === index);
         var isCenter = (point.properties.type === 'centre');
         var options = {
           color: 'black',
@@ -108,6 +128,8 @@ module.exports = React.createClass({
         };
         
         // Special icon for selected point
+        // TODO
+        /*var isSelected = false;//(selected !== null && selected === index);
         if(isSelected){
 
             var PingIcon = L.Icon.Default.extend({
@@ -122,27 +144,29 @@ module.exports = React.createClass({
             });
             markerSelected = new L.Marker(new L.LatLng(lat, lon), {icon: new PingIcon()});      
         } 
+        else{*/
         // Regular point
-        else{
-            var marker = new L.CircleMarker(new L.LatLng(lat, lon), options);
-            marker.on("click", self.onClickMarker);
-            marker.addTo(map); 
-            markers.push({
-              id: marker._leaflet_id,
-              marker: marker
-            });
-        }
+        var marker = new L.CircleMarker(new L.LatLng(lat, lon), options);
+        marker.on("click", self.onClickMarker);
+        marker.addTo(map); 
+        markers.push({
+          id: marker._leaflet_id,
+          marker: marker,
+          idPoint: point.properties.id
+        });
     });
     
     // Adding selected piont at the top (if necessary)
-    if(markerSelected !== null){
+    /*if(markerSelected !== null){
         markerSelected.addTo(map);      
         markers.push({
           id: markerSelected._leaflet_id,
-          marker: markerSelected
-        });
+          marker: markerSelected,
+          idPoint: point.id
+       });
     }
-    else if(status === 2 &&
+    else*/
+    if(status === 2 &&
             points.length > 0){
         var southWest = L.latLng(box.s, box.o);
         var northEast = L.latLng(box.n, box.e);
@@ -166,25 +190,29 @@ module.exports = React.createClass({
     centroid.addTo(map);
 
     map.on('click',   this.onClickMap); 
-    console.log(map === this.state.map);
     console.log(markers.length, "markers");
     
     this.setState({map: map, markers: markers, selected: selected});
   },
   render: function() {
 
+    var self = this;
     if(this.props.result.length===0) return "";
 
     var result = this.props.result;
     var detailMapJSX = "";
     if(this.state.selected !== null){
-    
-      detailMapJSX = (
-        <div id="popup" className="text-center">
-          <a href="javascript:;" className="noRef clickable" onClick={this.onClickPreview}>
-            <Preview object={result.objects[this.state.selected]} />
-          </a>
-        </div>);
+      var index = result.objects.findIndex(function(object){
+        return object.properties.id === self.state.selected;
+      });
+      if(index !== -1) {
+        detailMapJSX = (
+          <div id="popup" className="text-center">
+            <a href="javascript:;" className="noRef clickable" onClick={this.onClickPreview}>
+              <Preview object={result.objects[index]} />
+            </a>
+          </div>);
+      }
     }
     var nbResultJSX = "";
     if(result.objects.length){

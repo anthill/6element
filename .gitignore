@@ -1,23 +1,13 @@
-
 *.DS_Store
-node_modules
-presentation/node_modules/
-sensor/vision/data/*
 *.dat
 *.vec
 *.pyc
 *.pdf
 *.doc
 *.doc#
+*.log
 
 *-browserify-bundle.js
 
-PRIVATE.json
-
-npm-debug.log
-
-backups/
+node_modules
 data
-core/database/fileData
-
-npm-debug.log

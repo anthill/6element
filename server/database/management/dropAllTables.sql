@@ -1,0 +1,3 @@
+-- Destruction --
+DROP TABLE IF EXISTS networks CASCADE;
+DROP TABLE IF EXISTS places CASCADE;

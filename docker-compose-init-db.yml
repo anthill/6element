@@ -1,0 +1,27 @@
+api:
+   build: ./dockerfiles
+   dockerfile: node
+   command: node server/database/init-db.js
+   links:
+      - db
+   ports:
+      - "3500:3500"
+   environment:
+      - VIRTUAL_HOST=citizen.ants.builders
+      - VIRTUAL_PORT=3500
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - PGPASSWORD=postgres
+      - NODE_ENV=development
+   volumes:
+      - ./:/6element
+   tty: true
+
+db:
+   build: ./dockerfiles
+   dockerfile: postgis
+   environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - PGPASSWORD=postgres
+   tty: true

@@ -1,39 +1,37 @@
 "use strict";
-
 var React = require('react');
 var L = require('leaflet');
 var Colors = require('material-ui/lib/styles/colors');
-
 var Preview  =  require('./preview.jsx');
 var MapCore     =  require('./mapCore.jsx');
-
 module.exports = React.createClass({
   getInitialState: function() {
-    return {map: null, markers: [], selectMap: null};
+    return {map: null, markers: [], selected: null, markersLayer: undefined};
   },
   getMapInfos: function(map){
-    var select = null;
-    //if(this.props.result.objects.length > 0) select = 0;
-    this.loadSelection(map, select);
+    this.loadSelection(map, 1, this.props.result.objects, this.props.files, this.props.geoloc, null);
   },
-  onSelectMap: function(index){
-    this.loadSelection(this.state.map, index);
-  },
-  onClickMarker: function(e){
-    var index = this.state.markers.findIndex(function(marker){
-      return (marker.id === e.target._leaflet_id)
+  onClickPreview: function(){
+    var self = this;
+    if(this.state.selected === null) return;
+    var index = this.props.result.objects.findIndex(function(object){
+      return object.properties.id === self.state.selected;
     });
-    if(index === -1) 
-      this.setState({selectMap: null});
-    else
-      this.setState({selectMap: index});
+    if(index === -1) this.setState({selected: null});
+    else this.props.onShowDetail(this.props.result.objects[index]);
   },
-  onClickMap: function(){
-    if(this.state.selectMap !== null){
-      this.setState({selectMap: null});
+  onClickMarker: function(e){// -> select a point
+    var index = this.state.markersLayer.getLayers().findIndex(function(marker){
+      return (marker._leaflet_id === e.target._leaflet_id);
+    });
+    this.setState({selected: (index === -1) ? null : this.state.markersLayer.getLayers()[index].idPoint});      
+  },
+  onClickMap: function(){// -> unselect a point
+    if(this.state.selected !== null){
+      this.setState({selected: null});
     }
   },
-  onMoveMap: function(){
+  onMoveMap: function(e){
     if(this.state.map !== null){
       var bounds = this.state.map.getBounds(); 
       var box = {
@@ -42,13 +40,132 @@ module.exports = React.createClass({
         'maxLon': bounds.getEast(),
         'minLon': bounds.getWest()
       }
-      this.props.onSearch(this.props.geoloc, box);
+      this.props.onSearch(this.props.geoloc, box, 3);
     }
   },
-  loadSelection: function(map, select){
-
+  componentWillReceiveProps: function(nextProps){
+    if( this.state.map !== null &&
+        nextProps.status !== 1){
+      this.loadSelection( this.state.map, 
+                          nextProps.status, 
+                          nextProps.result.objects, 
+                          nextProps.files, 
+                          nextProps.geoloc, 
+                          this.state.selected);
+    }
+  },
+  loadSelection: function(map, status, points, files, center, selected ){
     var self = this;
-    // Adding icons
+    // STATUS Definition
+    // -1- Empty map, Zoom 13, no BoundingBox, geoloc centered
+    // -2- Filled map, no Zoom, BoudingBox, no centered
+    // -3- Filled map, no Zoom, no BoundingBox, no centered
+    // Cleaning map
+    var markersLayer = this.state.markersLayer;
+    // markers.forEach(function(marker){
+    //   map.removeLayer(marker);
+    // });
+    if(self.state.markersLayer)
+      map.removeLayer(self.state.markersLayer);
+
+    var markers = [];
+    var selected = null;
+    // -> STATUS 1
+    if(status === 1){
+      map.setView([center.lat, center.lon], Math.min(13, map.getZoom()));
+      this.setState({map: map, markers: markers, selected: selected});
+      return;
+    }
+    
+    // Bouding box to compute (only for STATUS 2)
+    var box = { 'n': null, 's': null, 'e': null, 'o': null };
+    var markerSelected = null;
+    var list = files
+    .filter(function(file){
+        return file.checked;
+    })
+    .map(function(file){
+      return file.name;
+    });
+    points.filter(function(point){
+      return (list.indexOf(point.file) !== -1);
+    })
+    .forEach(function(point){
+        // Confirm that the selected point is still on the map
+        if(self.state.selected !== null &&
+          self.state.selected === point.properties.id){
+          selected = self.state.selected;
+        }
+        var lat = point.geometry.coordinates.lat;
+        var lon = point.geometry.coordinates.lon;
+        // Fit extrem points to the bounds
+        if(status === 2){
+          if(box.n === null || box.n < lat) box.n = lat;
+          if(box.s === null || box.s > lat) box.s = lat;
+          if(box.e === null || box.e < lon) box.e = lon;
+          if(box.o === null || box.o > lon) box.o = lon;
+        }
+        var isCenter = (point.properties.type === 'centre');
+        var options = {
+          color: 'black',
+          fill: true,
+          fillColor: point.color, 
+          fillOpacity: isCenter?1:0.7,
+          radius: isCenter?10:7,
+          clickable: true,
+          weight: isCenter?5:3
+        };
+        
+        // Special icon for selected point
+        // TODO
+        /*var isSelected = false;//(selected !== null && selected === index);
+        if(isSelected){
+            var PingIcon = L.Icon.Default.extend({
+              options: {
+                iconUrl:      '/img/ping.png',
+                iconSize:     [30, 30],
+                shadowSize:   [0, 0], // size of the shadow
+                iconAnchor:   [10, 10], // point of the icon which will correspond to marker's location
+                shadowAnchor: [10, 10], // the same for the shadow
+                popupAnchor:  [-3, -40] // point from which the popup should open relative to the iconAnchor
+              }
+            });
+            markerSelected = new L.Marker(new L.LatLng(lat, lon), {icon: new PingIcon()});      
+        } 
+        else{*/
+        // Regular point
+        var marker = new L.CircleMarker(new L.LatLng(lat, lon), options);
+        marker["idPoint"] = point.properties.id;
+        marker.on("click", self.onClickMarker);
+        // marker.addTo(map); 
+        markers.push({
+          id: marker._leaflet_id,
+          marker: marker,
+          idPoint: point.properties.id
+        });
+    });
+    var markersLayer = L.layerGroup(markers.map(function(m){return m.marker}));
+    self.state.markersLayer = markersLayer;
+    map.addLayer(markersLayer);
+  
+    // Adding selected piont at the top (if necessary)
+    /*if(markerSelected !== null){
+        markerSelected.addTo(map);      
+        markers.push({
+          id: markerSelected._leaflet_id,
+          marker: markerSelected,
+          idPoint: point.id
+       });
+    }
+    else*/
+    if(status === 2 &&
+            points.length > 0){
+        var southWest = L.latLng(box.s, box.o);
+        var northEast = L.latLng(box.n, box.e);
+        map.off('moveend', this.onMoveMap);
+        map.fitBounds(L.latLngBounds(southWest, northEast));
+        map.on('moveend', this.onMoveMap);
+    }
     var CentroidIcon = L.Icon.Default.extend({
       options: {
         iconUrl:     '/img/centroid.png',
@@ -59,115 +176,30 @@ module.exports = React.createClass({
         popupAnchor:  [-3, -40] // point from which the popup should open relative to the iconAnchor
       }
     });
-    var PingIcon = L.Icon.Default.extend({
-      options: {
-        iconUrl:      '/img/ping.png',
-        iconSize:     [30, 30],
-        shadowSize:   [0, 0], // size of the shadow
-        iconAnchor:   [10, 10], // point of the icon which will correspond to marker's location
-        shadowAnchor: [10, 10], // the same for the shadow
-        popupAnchor:  [-3, -40] // point from which the popup should open relative to the iconAnchor
-      }
-    });
-    var centroidIcon = new CentroidIcon();
-    var pingIcon = new PingIcon();
-    
-    // Cleaning map
-    var markers = this.state.markers;
-    markers.forEach(function(marker){
-      map.removeLayer(marker);
-    });
-    markers = [];
-
-    // Bouding box to compute    
-    var box = {
-      'n': null,
-      's': null,
-      'e': null,
-      'o': null
-    }
-
-    var markerSelected = null;
-    this.props.result.objects
-    .forEach(function(object, index){
-
-        var lat = object.geometry.coordinates.lat;
-        var lon = object.geometry.coordinates.lon;
-        if(box.n === null || box.n < lat) box.n = lat;
-        if(box.s === null || box.s > lat) box.s = lat;
-        if(box.e === null || box.e < lon) box.e = lon;
-        if(box.o === null || box.o > lon) box.o = lon;
-
-        var isSelected = (select !== null && 
-                        select === index);
-        var isCenter = (object.properties.type === 'centre');
-        var options = {
-          color: isCenter?'black':object.color,
-          fill: true,
-          fillColor: object.color, 
-          fillOpacity: isCenter?1:0.7,
-          radius: isCenter?10:7,
-          clickable: true,
-          weight: '5px'
-        };
-        
-        if(isSelected){
-            markerSelected = new L.Marker(new L.LatLng(lat, lon), {icon: pingIcon});      
-            //markerSelected.on("click", self.onClickMarker);
-            map.setView([lat, lon], 16);
-        } 
-        else{
-            var marker = new L.CircleMarker(new L.LatLng(lat, lon), options);
-            marker.on("click", self.onClickMarker);
-            marker.addTo(map); 
-            markers.push({
-              id: marker._leaflet_id,
-              marker: marker
-            });
-        }
-    });
-    var geoloc = this.props.geoloc;
-    if(markerSelected !== null){
-        markerSelected.addTo(map);      
-        markers.push({
-          id: markerSelected._leaflet_id,
-          marker: markerSelected
-        });
-    }
-    else if(this.props.result.objects.length > 0){
-        var southWest = L.latLng(box.s, box.o);
-        var northEast = L.latLng(box.n, box.e);
-        map.fitBounds(L.latLngBounds(southWest, northEast));
-    }
-    else
-    {
-        map.setView([geoloc.lat, geoloc.lon], Math.min(13, map.getZoom()));
-    }
-    var centroid = new L.Marker(new L.LatLng(geoloc.lat, geoloc.lon), {icon: centroidIcon});
+    var centroid = new L.Marker(new L.LatLng(center.lat, center.lon), {icon: new CentroidIcon()});
     markers.push(centroid);
     centroid.addTo(map);
-
-    map.on('click', this.onClickMap); 
-    map.on('moveend', this.onMoveMap);
-    this.setState({map: map, markers: markers, selectMap: select});
-  },
-  onClickPreview: function(){
-    this.props.onShowDetail(this.props.result.objects[this.state.selectMap]);
+    map.on('click',   this.onClickMap); 
+    
+    this.setState({map: map, markers: markers, selected: selected});
   },
   render: function() {
-
+    var self = this;
     if(this.props.result.length===0) return "";
-
     var result = this.props.result;
     var detailMapJSX = "";
-    if(this.state.selectMap !== null){
-    
-      detailMapJSX = (
-        <div id="popup" className="text-center">
-          <a href="javascript:;" className="noRef clickable" onClick={this.onClickPreview}>
-            <Preview object={result.objects[this.state.selectMap]} />
-          </a>
-        </div>);
+    if(this.state.selected !== null){
+      var index = result.objects.findIndex(function(object){
+        return object.properties.id === self.state.selected;
+      });
+      if(index !== -1) {
+        detailMapJSX = (
+          <div id="popup" className="text-center">
+            <a href="javascript:;" className="noRef clickable" onClick={this.onClickPreview}>
+              <Preview object={result.objects[index]} />
+            </a>
+          </div>);
+      }
     }
     var nbResultJSX = "";
     if(result.objects.length){

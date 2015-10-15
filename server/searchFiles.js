@@ -46,7 +46,7 @@ module.exports = function(req, res){
         placeName: data.placeName,
         objects: []
     }
-    
+
     if(data.boundingBox !== null &&
         data.geoloc !== null){
 
@@ -70,7 +70,6 @@ module.exports = function(req, res){
 
     } else if(data.geoloc !== null){
 
-        console.log('getKNearest');
         Places.getKNearest({"lon": data.geoloc.lon, "lat": data.geoloc.lat}, 10, data.categories)
         .then(function(results){
             toGeoJson(results)

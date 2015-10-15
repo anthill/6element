@@ -8,7 +8,7 @@ var places = require('../management/declarations.js').places;
 var networks = require('../management/declarations.js').networks;
 
 var jsArrayToPg = function(nodeArray) {
-    return "ARRAY['" + categories.join("','") + "']";
+    return "ARRAY['" + nodeArray.join("','") + "']";
 }
 
 module.exports = {
@@ -50,7 +50,7 @@ module.exports = {
                 .from(places.join(networks).on(places.network.equals(networks.id)))
                 .where("places.geom && ST_MakeEnvelope(" + bbox.minLon + ", " + bbox.minLat + ", " + bbox.maxLon + ", " + bbox.maxLat + ", 4326)" + filters)
                 .order("distance")
-                .limit(100)
+                .limit(2000)
                 .toQuery();
 
    

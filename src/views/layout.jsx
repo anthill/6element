@@ -1,22 +1,23 @@
 "use strict";
 
+var $ = require('jquery');
 var React = require('react');
 var L = require('leaflet');
+var Mui = require('material-ui');
+var Colors = require('material-ui/lib/styles/colors');
+
 var MapView = require('./mapView.jsx');
 var DetailView = require('./detailView.jsx');
 
-var Mui = require('material-ui');
-var Colors = require('material-ui/lib/styles/colors');
-var $ = require('jquery');
 var mapsApi = require( 'google-maps-api' )( 'AIzaSyCLuhubHWNbDgBhmj61OUo07L-zjHsVkKw' , ['places']);
 var requestData = require('./../js/requestData.js');
 
-var injectTapEventPlugin = require("react-tap-event-plugin");
 
 //Needed for onTouchTap
 //Can go away when react 1.0 release
 //Check this repo:
 //https://github.com/zilverline/react-tap-event-plugin
+var injectTapEventPlugin = require("react-tap-event-plugin");
 injectTapEventPlugin();
 
 var availableCategories = [
@@ -71,16 +72,24 @@ var availableCategories = [
 
 module.exports = React.createClass({
   getInitialState: function() {
-    var iniResult = {
-        categories: ['All'],
-        placeName: '',
-        boundingBox: null, 
-        objects: []
-    }
     //var str = '{"type":"Feature","properties":{"dechet_non_dangereux":1,"name":"Déchèterie de Bordeaux Deschamps-bastide","menage":1,"opening_hours":"Apr 01-Sep 30 09:00-12:30,13:15-19:00; Oct 01-Apr 01 09:00-12:30,13:15-18:00","phone":"05 56 40 21 41","objects":{"rubble":0,"waste_medical":0,"batteries":1,"paper":1,"magazines":0,"white_goods":1,"waste_oil":1,"green_waste":1,"garden_waste":0,"hazardous_waste":1,"printer_toner":0,"scrap_metal":1,"plastic":0,"paint":1,"wood":1,"scrap_ concrete":1,"light_bulbs":0,"waste":1,"plastic_packaging":0,"scrap_metal_no_iron":1,"glass":1,"cardboard":1,"tyres":0,"waste_farming_chemical":1,"waste_mix_chemical":1,"beverage_carton":1,"fat_corp":0,"engine_oil":0,"newspaper":0,"waste_asbestos":0,"medical":0,"clothes":0},"address_1":"Quai Deschamps","address_2":"33100 - Bordeaux","owner":"Sinoe","dechet_dangereux":1,"type":"centre","dechet_inerte":0,"entreprise":0},"geometry":{"type":"Point","coordinates":{"lat":44.83401,"lon":-0.55198}},"distance":3.3535893441212057,"color":"#077527","file":"dechetterie_gironde.json","rate":2}';
     //, detailedObject: JSON.parse(str)
-    return {what: 'All', placeName: '', tab: 0, result: iniResult, files: [], geoloc: {lat: 44.8404507, lon: -0.5704909}, cpt: 0};
+    // First empty results to display
+    var iniResult = { categories: ['All'], placeName: '', objects: [] }
+    // List of networks from endpoint
+    var files = this.props.networks.map(function(network){
+        return { name: network.name, color: network.color, checked: true };
+    })
+    return {
+      what: iniResult.categories[0], 
+      placeName: iniResult.placeName, 
+      result: iniResult, 
+      files: files, 
+      geoloc: {lat: 44.8404507, lon: -0.5704909}, // Le Node centered
+      status: 1 // INI Status
+    };
   },
+  // Plug the 'where' form field to Google Autocomplete API
   onShowDialog: function(){
     var self = this;
     var where = React.findDOMNode(this.refs.whereField);
@@ -101,20 +110,25 @@ module.exports = React.createClass({
       });
     });
   },
+  // Display the right networks panel
   handleLeftNav: function(e){
     this.refs.leftNav.toggle();
   },
+  // popup the form dialog
   handleSearchNav: function(e){
     this.refs.dialog.show();
   },
+  // Form submit
   onDialogSubmit: function(e){
     this.refs.dialog.dismiss();
-    this.onSearch(this.state.geoloc,null);
+    this.onSearch(this.state.geoloc,null,2);
   },
-  onSearch: function(geoloc, boundingBox){
+  // Search request from 2 actions
+  // - Form submit
+  // - map moves (drag or zoom)
+  onSearch: function(geoloc, boundingBox, status){
 
-    var self = this;
-    
+    var self = this; 
     var data = {
       'placeName': this.state.placeName,
       'categories': [this.state.what],
@@ -124,30 +138,19 @@ module.exports = React.createClass({
 
     requestData(data)
     .then(function(result){
-      var temp = [];
-      var files = [];
-      result.objects.forEach(function(object){
-        if(temp.indexOf(object.file) ===-1){
-          temp.push(object.file);       
-          files.push({
-            name: object.file.replace('.json', ''),
-            color: object.color,
-            checked: true
-          }); 
-        }
-      });
-
-      self.setState({result: result, files: files, cpt: self.state.cpt+1});
+      self.setState({result: result, status: status});
     })
     .catch(function(error){
-      console.error(error.status, error.message.toString());
-    })    
+      console.log(error);
+    });
   },
+  // Change in the what bar
   handleSelectWhat: function(e){
     this.setState({
       what: availableCategories[e.target.value]
     });
   },
+  // Check on filters in the right networks panel
   onSelectFilter: function(e){
     var files = this.state.files;
     files.forEach(function(file){
@@ -156,12 +159,14 @@ module.exports = React.createClass({
     e.forEach(function(row){
      files[row].checked = true;
     });
-    this.setState({files: files, cpt: this.state.cpt+1});
+    this.setState({files: files});
   },
+  // Popup the detailed sheet of the clicked point
   onShowDetail: function(object){
     this.setState({detailedObject: object});
   },
   render: function() {
+    // Sample code for tests layout designs
     /*
     return (
       <div flex layout="row">
@@ -178,50 +183,55 @@ module.exports = React.createClass({
       </div>
     );*/
 
-    if(this.state.detailedObject){
-      return (<DetailView object={this.state.detailedObject} onShowDetail={this.onShowDetail} />);
+    // If a point has been selected, we popup a detailed sheet
+    var detailedJSX = "";
+    var showDetail = false;
+    if(this.state.detailedObject !== null &&
+      typeof this.state.detailedObject !== 'undefined'){
+      detailedJSX = (
+        <DetailView 
+          object={this.state.detailedObject} 
+          onShowDetail={this.onShowDetail} />);
+      showDetail = true;
     }
-    
+
+    // * Menus items & options *    
+    var menuItems = [];
+    var standardActions = [ { text: 'Valider', onTouchTap: this.onDialogSubmit, ref: 'submit' }, ];
     var whatOptions = availableCategories.map(function(category, index){
       return { payload: index, text: category };
     });
-    
-    var menuItems = [];
-
-    var iconMenuItems = [
-      { payload: '1', text: 'Download' },
-      { payload: '2', text: 'More Info' }
-    ];
-    //Standard Actions
-    var standardActions = [
-      { text: 'Valider', onTouchTap: this.onDialogSubmit, ref: 'submit' },
-    ];
         
+    // List of points & Filters
     var result = JSON.parse(JSON.stringify(this.state.result));
-    var list = [];
-    this.state.files.forEach(function(file){
-      if(file.checked === true) list.push(file.name);
-    });
-    result.objects = result.objects.filter(function(object){
-      var file = object.file.replace('.json', '');
-      return (list.indexOf(file) !== -1);
-    });
     
     var resultJSX = "";
     var filterJSX = "";
     if(result){
-      resultJSX = (<MapView key={'map'+this.state.cpt.toString()} result={result} geoloc={this.state.geoloc} onShowDetail={this.onShowDetail} onSearch={this.onSearch} />);
+
+      // Map component
+      resultJSX = (
+        <MapView 
+          status={this.state.status} 
+          result={result} 
+          files={this.state.files} 
+          geoloc={this.state.geoloc} 
+          onShowDetail={this.onShowDetail} 
+          onSearch={this.onSearch} />);
+      
+      // Panel list
       filterJSX = this.state.files.map(function(file){
         return (
           <Mui.TableRow selected={file.checked}>
             <Mui.TableRowColumn style={{padding: "10px"}}>{file.name}</Mui.TableRowColumn>
-            <Mui.TableRowColumn style={{width: "24px", padding: "0px"}}>
+            <Mui.TableRowColumn style={{width: "24px", padding: "0"}}>
               <Mui.FontIcon className="material-icons" color={file.color}>lens</Mui.FontIcon>
             </Mui.TableRowColumn>
           </Mui.TableRow>);
       });
     }
        
+    // Panel component
     var panelJSX = (
       <Mui.Table 
         fixedHeader={false}
@@ -242,11 +252,13 @@ module.exports = React.createClass({
           {filterJSX}
         </Mui.TableBody>
       </Mui.Table>);
-            
+    
+    var styleDisplay = {visibility: showDetail ? "hidden" : "visible"};  
     return (
       <div flex layout="row">
         <md-content flex color={Colors.white} >
-          <Mui.Paper id="sheet">
+          {detailedJSX}
+          <Mui.Paper id="sheet" style={styleDisplay}>
             <Mui.Toolbar>
               <Mui.ToolbarGroup key={0} float="left">
                 <Mui.ToolbarTitle text="6element" />
@@ -267,7 +279,7 @@ module.exports = React.createClass({
               actionFocus="submit"
               modal={true}
               onShow={this.onShowDialog}
-              openImmediately={this.state.cpt===0}
+              openImmediately={this.state.status===1}
               autoDetectWindowHeight={true} 
               autoScrollBodyContent={true}
               contentStyle={{maxWidth: '420px'}}>

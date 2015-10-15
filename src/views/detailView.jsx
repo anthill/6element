@@ -104,7 +104,7 @@ module.exports = React.createClass({
 
     // Final Object render
     return (
-      <div flex layout="row">
+      <div flex layout="row" >
         <md-content flex color={Colors.white} >
           <div id="sheet">
             <Mui.Toolbar>

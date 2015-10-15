@@ -30,4 +30,25 @@ module.exports = {
             console.log('ERROR in create bulk', err);
         });
     },
+
+    getAll: function(){
+        return connectToDB().then(function (db) {
+            
+            var query = networks
+                .select('*')
+                .order(networks.name)
+                .toQuery();
+   
+            return new Promise(function (resolve, reject) {
+                db.query(query, function (err, result) {
+                    if (err) reject(err);
+
+                    else resolve(result.rows);
+                });
+            });
+        })
+        .catch(function(err){
+            console.log('ERROR in getWithin', err);
+        }); 
+    },
 };

@@ -3,6 +3,7 @@
 window.Symbol = require('core-js/modules/es6.symbol');
 window.Symbol.iterator = require('core-js/fn/symbol/iterator');
 
+require('es6-shim');
 var React = require('react');
 var requestNetworks = require('./js/requestNetworks.js');
 

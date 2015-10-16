@@ -3,7 +3,7 @@
 var React = require('react');
 var Mui = require('material-ui');
 var ThemeManager = require('material-ui/lib/styles/theme-manager');
-const DefaultRawTheme = Mui.Styles.LightRawTheme;
+var DefaultRawTheme = Mui.Styles.LightRawTheme;
 var Colors = require('material-ui/lib/styles/colors');
 
 var NotEmpty = function(field){

@@ -2,7 +2,7 @@
 
 var Mui = require('material-ui');
 var ThemeManager = require('material-ui/lib/styles/theme-manager');
-const DefaultRawTheme = Mui.Styles.LightRawTheme;
+var DefaultRawTheme = Mui.Styles.LightRawTheme;
 var React = require('react');
 
 module.exports = React.createClass({

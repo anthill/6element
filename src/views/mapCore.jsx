@@ -1,8 +1,17 @@
 "use strict";
 
+var Mui = require('material-ui');
+var ThemeManager = require('material-ui/lib/styles/theme-manager');
+const DefaultRawTheme = Mui.Styles.LightRawTheme;
 var React = require('react');
 
 module.exports = React.createClass({
+  childContextTypes: {
+    muiTheme: React.PropTypes.object
+  },
+  getChildContext: function() {
+    return { muiTheme: ThemeManager.getMuiTheme(DefaultRawTheme) };
+  },
   componentDidMount: function() {
     var map = this.map = L.map(this.getDOMNode(), {
         minZoom: 5,

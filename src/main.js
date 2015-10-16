@@ -10,8 +10,7 @@ var Layout =  require('./views/layout.jsx');
 
 requestNetworks()
 .then(function(networks){
-	console.log(networks);
- 	var props = {networks: networks}; 
+	var props = {networks: networks}; 
 	React.render( 
 	  React.createElement(Layout, props),
 	  document.body

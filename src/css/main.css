@@ -16,6 +16,11 @@ button a{
 .styleRow {
 	padding: 0 15px;
 }
+.pull-left{
+	float: left;
+}.pull-right{
+	float: right;
+}
 .noRef{
 	color:inherit;	
 }

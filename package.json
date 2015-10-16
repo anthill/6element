@@ -39,14 +39,12 @@
     "pg": "^4.4.2",
     "pg-hstore": "^2.3.2",
     "proj4": "^2.3.10",
-    "rbush": "^1.4.0",
     "react": "^0.13.3",
     "react-dom": "^0.14.0-rc1",
     "react-tap-event-plugin": "^0.1.8",
     "reactify": "^1.1.1",
     "sql": "^0.60.0",
-    "sql-generate": "^1.1.0",
-    "turf": "^2.0.2"
+    "sql-generate": "^1.1.0"
   },
   "devDependencies": {
     "browserify": "^10.2.0",

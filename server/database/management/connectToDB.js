@@ -30,7 +30,7 @@ module.exports = function(){
                     else{
                         resolve(client);
                     }
-                
+                    
                     attempts++;
                 });
 

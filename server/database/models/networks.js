@@ -2,13 +2,12 @@
 
 var sql = require('sql');
 sql.setDialect('postgres');
-var connectToDB = require('../management/connectToDB.js');
-
+var databaseP = require('../management/databaseClientP');
 var networks = require('../management/declarations.js').networks;
 
 module.exports = {
     createByChunk: function (datas) {
-        return connectToDB().then(function (db) {
+        return databaseP.then(function (db) {
 
             return Promise.all(datas.map(function(data){
 
@@ -32,7 +31,7 @@ module.exports = {
     },
 
     getAll: function(){
-        return connectToDB().then(function (db) {
+        return databaseP.then(function (db) {
             
             var query = networks
                 .select('*')

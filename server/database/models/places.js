@@ -2,8 +2,7 @@
 
 var sql = require('sql');
 sql.setDialect('postgres');
-var connectToDB = require('../management/connectToDB.js');
-
+var databaseP = require('../management/databaseClientP');
 var places = require('../management/declarations.js').places;
 var networks = require('../management/declarations.js').networks;
 
@@ -14,7 +13,7 @@ var jsArrayToPg = function(nodeArray) {
 module.exports = {
 
     createByChunk: function (datas) {
-        return connectToDB().then(function (db) {
+        return databaseP.then(function (db) {
 
             return Promise.all(datas.map(function(data){
 
@@ -41,7 +40,7 @@ module.exports = {
     },
 
     getWithin: function(coords, bbox, categories){
-        return connectToDB().then(function (db) {
+        return databaseP.then(function (db) {
             
             var strDistance = "st_distance_sphere(places.geom, st_makepoint(" + coords.lon + ", " + coords.lat + ")) AS distance";
             var filters = categories[0] === "All" ? "": " AND  places.objects ?| " + jsArrayToPg(categories);
@@ -68,7 +67,7 @@ module.exports = {
     },
 
     getKNearest: function(coords, k, categories){
-        return connectToDB().then(function (db) {
+        return databaseP.then(function (db) {
             
             var strDistance = "st_distance_sphere(places.geom, st_makepoint(" + coords.lon + ", " + coords.lat + ")) AS distance";
             var filters = categories[0] === "All" ? "TRUE": "places.objects ?| " + jsArrayToPg(categories);

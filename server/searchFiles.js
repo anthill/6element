@@ -1,6 +1,5 @@
 "use strict";
 
-var turf = require('turf');
 var path = require('path');
 var fs   = require('fs');
 var hstore = require('pg-hstore')();

@@ -1,8 +1,10 @@
 "use strict";
 
 var React = require('react');
-var opening_hours = require('opening_hours');
 var Mui = require('material-ui');
+var ThemeManager = require('material-ui/lib/styles/theme-manager');
+var opening_hours = require('opening_hours');
+var DefaultRawTheme = Mui.Styles.LightRawTheme;
 var Colors = require('material-ui/lib/styles/colors');
 
 var NotEmpty = function(field){
@@ -13,6 +15,12 @@ var NotEmpty = function(field){
 }
 
 module.exports = React.createClass({
+  childContextTypes: {
+    muiTheme: React.PropTypes.object
+  },
+  getChildContext: function() {
+    return { muiTheme: ThemeManager.getMuiTheme(DefaultRawTheme) };
+  },
   render: function() {
 
     var object = this.props.object;

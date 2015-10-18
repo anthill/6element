@@ -1,6 +1,9 @@
 "use strict";
 
 var React = require('react');
+var Mui = require('material-ui');
+var ThemeManager = require('material-ui/lib/styles/theme-manager');
+var DefaultRawTheme = Mui.Styles.LightRawTheme;
 var Calendar  =  require('./calendar.jsx');
 var Traffic  =  require('./traffic.jsx');
 var Mui = require('material-ui');
@@ -14,21 +17,12 @@ var NotEmpty = function(field){
 }
 
 module.exports = React.createClass({
-  /*getInitialState: function() {
-    return {width: 0};
+  childContextTypes: {
+     muiTheme: React.PropTypes.object
   },
-  updateDimensionsMaster: function() {
-    var width = this.getDOMNode().getBoundingClientRect().width;
-    if(this.state.width != width)
-        this.setState({width: width});    
+  getChildContext: function() {
+    return { muiTheme: ThemeManager.getMuiTheme(DefaultRawTheme) };
   },
-  componentDidMount: function() {
-      this.updateDimensionsMaster();
-      window.addEventListener("resize", this.updateDimensionsMaster);
-  },
-  componentWillUnmount: function() {
-      window.removeEventListener("resize", this.updateDimensionsMaster);
-  },*/
   onClose: function(){
     this.props.onShowDetail(null);
   },
@@ -48,7 +42,7 @@ module.exports = React.createClass({
       return object.properties.objects[category] === "1";
     })*/
     .map(function(category, id){
-      return (<li key={id}><label className="open">&bull;</label> {category}</li>);
+      return (<li key={'allow'+id.toString()}><label className="open">&bull;</label> {category}</li>);
     });
     
     // Address

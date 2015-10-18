@@ -2,6 +2,8 @@
 
 var React = require('react');
 var Mui = require('material-ui');
+var ThemeManager = require('material-ui/lib/styles/theme-manager');
+var DefaultRawTheme = Mui.Styles.LightRawTheme;
 var Colors = require('material-ui/lib/styles/colors');
 
 var NotEmpty = function(field){
@@ -14,6 +16,12 @@ var NotEmpty = function(field){
 module.exports = React.createClass({
   getInitialState: function() {
     return {date: new Date()};
+  },
+  childContextTypes: {
+    muiTheme: React.PropTypes.object
+  },
+  getChildContext: function() {
+    return { muiTheme: ThemeManager.getMuiTheme(DefaultRawTheme) };
   },
   componentDidMount: function(){
     this.update();

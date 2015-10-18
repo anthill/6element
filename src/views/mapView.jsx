@@ -1,12 +1,22 @@
 "use strict";
 var React = require('react');
+var Mui = require('material-ui');
+var ThemeManager = require('material-ui/lib/styles/theme-manager');
+var DefaultRawTheme = Mui.Styles.LightRawTheme;
 var L = require('leaflet');
 var Colors = require('material-ui/lib/styles/colors');
 var Preview  =  require('./preview.jsx');
 var MapCore     =  require('./mapCore.jsx');
+
 module.exports = React.createClass({
   getInitialState: function() {
     return {map: null, markers: [], selected: null, markersLayer: undefined};
+  },
+  childContextTypes: {
+    muiTheme: React.PropTypes.object
+  },
+  getChildContext: function() {
+    return { muiTheme: ThemeManager.getMuiTheme(DefaultRawTheme) };
   },
   getMapInfos: function(map){
     this.loadSelection(map, 1, this.props.result.objects, this.props.files, this.props.geoloc, null);
@@ -65,15 +75,15 @@ module.exports = React.createClass({
     // markers.forEach(function(marker){
     //   map.removeLayer(marker);
     // });
-    if(self.state.markersLayer)
-      map.removeLayer(self.state.markersLayer);
+    if(this.state.markersLayer)
+      map.removeLayer(this.state.markersLayer);
 
     var markers = [];
     var selected = null;
     // -> STATUS 1
     if(status === 1){
       map.setView([center.lat, center.lon], Math.min(13, map.getZoom()));
-      this.setState({map: map, markers: markers, selected: selected});
+      this.setState({map: map, markersLayer: null, selected: selected});
       return;
     }
     
@@ -137,16 +147,8 @@ module.exports = React.createClass({
         var marker = new L.CircleMarker(new L.LatLng(lat, lon), options);
         marker["idPoint"] = point.properties.id;
         marker.on("click", self.onClickMarker);
-        // marker.addTo(map); 
-        markers.push({
-          id: marker._leaflet_id,
-          marker: marker,
-          idPoint: point.properties.id
-        });
+        markers.push(marker);
     });
-    var markersLayer = L.layerGroup(markers.map(function(m){return m.marker}));
-    self.state.markersLayer = markersLayer;
-    map.addLayer(markersLayer);
   
     // Adding selected piont at the top (if necessary)
     /*if(markerSelected !== null){
@@ -181,7 +183,9 @@ module.exports = React.createClass({
     centroid.addTo(map);
     map.on('click',   this.onClickMap); 
     
-    this.setState({map: map, markers: markers, selected: selected});
+    var markersLayer = L.layerGroup(markers);
+    map.addLayer(markersLayer);
+    this.setState({map: map, markersLayer: markersLayer, selected: selected});
   },
   render: function() {
     var self = this;

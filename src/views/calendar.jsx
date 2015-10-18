@@ -1,6 +1,9 @@
 "use strict";
 
 var React = require('react');
+var Mui = require('material-ui');
+var ThemeManager = require('material-ui/lib/styles/theme-manager');
+var DefaultRawTheme = Mui.Styles.LightRawTheme;
 var opening_hours = require('opening_hours');
 
 function getMonday(d) {
@@ -17,6 +20,12 @@ function getHour(date){
 }
 
 module.exports = React.createClass({
+  childContextTypes: {
+    muiTheme: React.PropTypes.object
+  },
+  getChildContext: function() {
+    return { muiTheme: ThemeManager.getMuiTheme(DefaultRawTheme) };
+  },
   render: function() {
 
     var oh = new opening_hours(this.props.opening_hours);

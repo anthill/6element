@@ -4,6 +4,9 @@ var $ = require('jquery');
 var React = require('react');
 var L = require('leaflet');
 var Mui = require('material-ui');
+var ThemeManager = require('material-ui/lib/styles/theme-manager');
+var DefaultRawTheme = Mui.Styles.LightRawTheme;
+
 var Colors = require('material-ui/lib/styles/colors');
 
 var MapView = require('./mapView.jsx');
@@ -88,6 +91,12 @@ module.exports = React.createClass({
       geoloc: {lat: 44.8404507, lon: -0.5704909}, // Le Node centered
       status: 1 // INI Status
     };
+  },
+  childContextTypes: {
+    muiTheme: React.PropTypes.object
+  },
+  getChildContext: function() {
+    return { muiTheme: ThemeManager.getMuiTheme(DefaultRawTheme) };
   },
   // Plug the 'where' form field to Google Autocomplete API
   onShowDialog: function(){
@@ -220,11 +229,11 @@ module.exports = React.createClass({
           onSearch={this.onSearch} />);
       
       // Panel list
-      filterJSX = this.state.files.map(function(file){
+      filterJSX = this.state.files.map(function(file, id){
         return (
-          <Mui.TableRow selected={file.checked}>
+          <Mui.TableRow key={'filter'+id.toString()} selected={file.checked} style={{width: "100%"}}>
             <Mui.TableRowColumn style={{padding: "10px"}}>{file.name}</Mui.TableRowColumn>
-            <Mui.TableRowColumn style={{width: "24px", padding: "0"}}>
+            <Mui.TableRowColumn style={{maxWidth: "24px", padding: "0"}}>
               <Mui.FontIcon className="material-icons" color={file.color}>lens</Mui.FontIcon>
             </Mui.TableRowColumn>
           </Mui.TableRow>);
@@ -238,17 +247,19 @@ module.exports = React.createClass({
         fixedFooter={false}
         selectable={true}
         multiSelectable={true}
-        onRowSelection={this.onSelectFilter}>
-        <Mui.TableHeader enableSelectAll={false} displaySelectAll={false}>
+        onRowSelection={this.onSelectFilter}
+        style={{width: "100%"}}>
+        <Mui.TableHeader enableSelectAll={false} displaySelectAll={false} style={{width: "100%"}}>
           <Mui.TableRow>
-            <Mui.TableHeaderColumn>Source</Mui.TableHeaderColumn>
-            <Mui.TableHeaderColumn></Mui.TableHeaderColumn>
+            <Mui.TableHeaderColumn style={{paddingRight: "5px"}}>Source</Mui.TableHeaderColumn>
+            <Mui.TableHeaderColumn style={{width: "24px", paddingRight: "5"}}></Mui.TableHeaderColumn>
           </Mui.TableRow>
         </Mui.TableHeader>
         <Mui.TableBody 
           deselectOnClickaway={false}
           showRowHover={true}
-          stripedRows={false}>
+          stripedRows={false}
+          style={{width: "100%"}}>
           {filterJSX}
         </Mui.TableBody>
       </Mui.Table>);

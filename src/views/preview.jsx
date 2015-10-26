@@ -39,7 +39,7 @@ module.exports = React.createClass({
 
     // Final Object render
     return (
-      <div>
+      <div id="preview">
         <div className="row clearfix styleRow">
           <div className="pull-left text-left">
             <Mui.CardHeader 

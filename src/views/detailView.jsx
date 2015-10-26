@@ -23,9 +23,6 @@ module.exports = React.createClass({
   getChildContext: function() {
     return { muiTheme: ThemeManager.getMuiTheme(DefaultRawTheme) };
   },
-  onClose: function(){
-    this.props.onShowDetail(null);
-  },
   render: function() {
 
     var self = this;
@@ -98,34 +95,27 @@ module.exports = React.createClass({
 
     // Final Object render
     return (
-      <div flex layout="row" >
-        <md-content flex color={Colors.white} >
-          <div id="sheet">
-            <Mui.Toolbar>
-              <Mui.ToolbarGroup key={0} float="left">
-                <Mui.IconButton onTouchTap={this.onClose}><Mui.FontIcon className="material-icons" color={Colors.pink400} >arrow_back</Mui.FontIcon></Mui.IconButton>
-              </Mui.ToolbarGroup>
-            </Mui.Toolbar>
-            <Mui.Card id="detail">
-              <Mui.CardHeader 
-                title={object.properties.name} 
-                subtitle={object.file}
-                avatar={<Mui.Avatar style={{backgroundColor: object.color}}></Mui.Avatar>}
-                style={{textAlign: "left", overflow: "hidden"}}/>
-            </Mui.Card>
-            <table style={{width:"100%", backgroundColor: Colors.blueGrey100}}>
-                <tr>
-                  <td id="address"style={{width:"50%", padding:"10px", verticalAlign: "top"}}>
-                    <Mui.CardTitle title="Adresse" subtitle={coordinatesJSX}/>
-                  </td>
-                  <td id="accessTime" style={{width:"50%", padding:"10px", verticalAlign: "top"}}>
-                    <Mui.CardTitle title="Horaires" subtitle={calendarJSX}/>
-                  </td>
-                </tr>
-            </table>
-            {detailJSX}
-           </div>
-        </md-content>
-      </div>);
+      <div className="fixedHeader fixedFooter">
+        <div id="sheet">
+          <Mui.Card id="detail">
+            <Mui.CardHeader 
+              title={object.properties.name} 
+              subtitle={object.file}
+              avatar={<Mui.Avatar style={{backgroundColor: object.color}}></Mui.Avatar>}
+              style={{textAlign: "left", overflow: "hidden"}}/>
+          </Mui.Card>
+          <table style={{width:"100%", backgroundColor: Colors.blueGrey100}}>
+              <tr>
+                <td id="address"style={{width:"50%", padding:"10px", verticalAlign: "top"}}>
+                  <Mui.CardTitle title="Adresse" subtitle={coordinatesJSX}/>
+                </td>
+                <td id="accessTime" style={{width:"50%", padding:"10px", verticalAlign: "top"}}>
+                  <Mui.CardTitle title="Horaires" subtitle={calendarJSX}/>
+                </td>
+              </tr>
+          </table>
+          {detailJSX}
+         </div>
+        </div>);
   }
 });

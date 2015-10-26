@@ -192,22 +192,26 @@ module.exports = React.createClass({
     if(this.props.result.length===0) return "";
     var result = this.props.result;
     var detailMapJSX = "";
-    if(this.state.selected !== null){
+    if(this.state.selected !== null && 
+       this.props.showHeaderAndFooter){
       var index = result.objects.findIndex(function(object){
         return object.properties.id === self.state.selected;
       });
       if(index !== -1) {
         detailMapJSX = (
-          <div id="popup" className="text-center">
-            <a href="javascript:;" className="noRef clickable" onClick={this.onClickPreview}>
-              <Preview object={result.objects[index]} />
-            </a>
+          <div className="fixedFooter">
+            <div id="popup" className="text-center">
+              <a href="javascript:;" className="noRef clickable" onClick={this.onClickPreview}>
+                <Preview object={result.objects[index]} />
+              </a>
+            </div>
           </div>);
       }
     }
     var nbResultJSX = "";
-    if(result.objects.length){
-      nbResultJSX = (<p id="nbResults">Il y a <strong>{result.objects.length}</strong> résultats pour votre recherche</p>);
+    if(result.objects.length && 
+       this.props.showHeaderAndFooter){
+      nbResultJSX = (<div className="fixedHeader"><div id="nbResults"><p>Il y a <strong>{result.objects.length}</strong> résultats pour votre recherche</p></div></div>);
     }
     return (
       <div>

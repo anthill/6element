@@ -193,6 +193,7 @@ module.exports = React.createClass({
     );*/
 
     // If a point has been selected, we popup a detailed sheet
+    var toolBarJSX = "";
     var detailedJSX = "";
     var showDetail = false;
     if(this.state.detailedObject !== null &&
@@ -201,7 +202,32 @@ module.exports = React.createClass({
         <DetailView 
           object={this.state.detailedObject} 
           onShowDetail={this.onShowDetail} />);
+      toolBarJSX = (
+        <div id="toolbar">
+          <Mui.Toolbar id="toolbar">
+            <Mui.ToolbarGroup key={0} float="left">
+              <Mui.IconButton onTouchTap={this.onShowDetail.bind(this, null)}><Mui.FontIcon className="material-icons" color={Colors.pink400} >arrow_back</Mui.FontIcon></Mui.IconButton>
+            </Mui.ToolbarGroup>
+          </Mui.Toolbar>
+        </div>);
       showDetail = true;
+    }
+    else
+    {
+      toolBarJSX = (
+        <div id="toolbar">
+          <Mui.Toolbar>
+            <Mui.ToolbarGroup key={0} float="left">
+              <Mui.ToolbarTitle text="6element" />
+            </Mui.ToolbarGroup>
+            <Mui.ToolbarGroup key={1} float="right">
+              <Mui.IconButton tooltip="Afficher par Liste"><Mui.FontIcon className="material-icons" color={Colors.pink400} >dvr</Mui.FontIcon></Mui.IconButton>
+              <Mui.IconButton tooltip="Afficher mes Favoris"><Mui.FontIcon className="material-icons">favorite</Mui.FontIcon></Mui.IconButton>
+              <Mui.IconButton tooltip="Rechercher" onTouchTap={this.handleSearchNav}><Mui.FontIcon className="material-icons" color={Colors.pink400} >search</Mui.FontIcon></Mui.IconButton>
+              <Mui.IconButton tooltip="Filtrer par source" onTouchTap={this.handleLeftNav}><Mui.FontIcon className="material-icons" color={Colors.pink400} >filter_list</Mui.FontIcon></Mui.IconButton>
+            </Mui.ToolbarGroup>
+          </Mui.Toolbar>
+        </div>);
     }
 
     // * Menus items & options *    
@@ -226,7 +252,8 @@ module.exports = React.createClass({
           files={this.state.files} 
           geoloc={this.state.geoloc} 
           onShowDetail={this.onShowDetail} 
-          onSearch={this.onSearch} />);
+          onSearch={this.onSearch}
+          showHeaderAndFooter={!showDetail} />);
       
       // Panel list
       filterJSX = this.state.files.map(function(file, id){
@@ -264,23 +291,12 @@ module.exports = React.createClass({
         </Mui.TableBody>
       </Mui.Table>);
     
-    var styleDisplay = {visibility: showDetail ? "hidden" : "visible"};  
     return (
       <div flex layout="row">
         <md-content flex color={Colors.white} >
           {detailedJSX}
-          <Mui.Paper id="sheet" style={styleDisplay}>
-            <Mui.Toolbar>
-              <Mui.ToolbarGroup key={0} float="left">
-                <Mui.ToolbarTitle text="6element" />
-              </Mui.ToolbarGroup>
-              <Mui.ToolbarGroup key={1} float="right">
-                <Mui.IconButton tooltip="Afficher par Liste"><Mui.FontIcon className="material-icons" color={Colors.pink400} >dvr</Mui.FontIcon></Mui.IconButton>
-                <Mui.IconButton tooltip="Afficher mes Favoris"><Mui.FontIcon className="material-icons">favorite</Mui.FontIcon></Mui.IconButton>
-                <Mui.IconButton tooltip="Rechercher" onTouchTap={this.handleSearchNav}><Mui.FontIcon className="material-icons" color={Colors.pink400} >search</Mui.FontIcon></Mui.IconButton>
-                <Mui.IconButton tooltip="Filtrer par source" onTouchTap={this.handleLeftNav}><Mui.FontIcon className="material-icons" color={Colors.pink400} >filter_list</Mui.FontIcon></Mui.IconButton>
-              </Mui.ToolbarGroup>
-            </Mui.Toolbar>
+          {toolBarJSX}
+          <Mui.Paper>
             {resultJSX}
             <Mui.LeftNav ref="leftNav" docked={false} openRight={true} menuItems={menuItems} header={panelJSX} />
             <Mui.Dialog

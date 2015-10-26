@@ -1,5 +1,5 @@
 body{
-	background-color: white; /*WhiteSmoke*/
+	background-color: rgba(229,229,229,0.5);
     /*max-width: 500px;*/
     font-family: Lato, sans-serif;
 }
@@ -13,9 +13,6 @@ button a{
 .star { color: gold; }
 .no-star { color: lightgray; }
 .clickable { cursor: pointer;}
-.styleRow {
-	padding: 0 15px;
-}
 .pull-left{
 	float: left;
 }.pull-right{
@@ -27,40 +24,54 @@ button a{
 
 #map{
 	height: 90%;
-	position: relative;*/
+	position: relative;
 }
-#popup {
-	background-color: rgba(255,255,255,0.9);
+.fixedHeader
+{
+	top: 56px;
+	z-index: 1;
+}
+.fixedFooter {
 	bottom: 0px;
-	padding: 15px;
-	position: absolute;
-	width: 100%;
-	/*max-width: 500px;*/
 }
-#sheet{
+.fixedHeader, 
+.fixedFooter{
+	background-color: rgba(255,255,255,0.5);
+	left: 0px;
+	right: 0px;
 	position: absolute;
-	width: 100%;
-	/*max-width: 500px;*/
-	height: 100%;
-	margin: 0 auto;
 	text-align: center;
 }
-
+#toolbar{
+	z-index: 2;
+}
+#nbResults, 
+#popup,
+#toolbar
+{
+	background-color: rgba(255,255,255,0.9);
+	max-width: 700px;
+	margin: 0 auto;
+}
+#nbResults p, 
+#preview 
+{
+	padding: 15px;
+	margin: 0px;
+}
+#sheet	{
+	margin: 0 auto;
+	max-width: 700px;
+	height: 100%;
+	background-color: white; 
+}
+/*
 #detail{
 	padding: 15px;
-}
+}*/
 #groupSort {
 	margin-bottom: 20px; 
 }
-#nbResults{
-	background-color: white;
-	margin: 0 auto;
-	height: 40px;
-	padding: 10px;
-	text-align: center;
-	display: block;
-}
-
 #accessTime{
 	background-image: url("../img/access_time.svg");
 	background-size: 100px 100px;

@@ -12,7 +12,8 @@ var Colors = require('material-ui/lib/styles/colors');
 var MapView = require('./mapView.jsx');
 var DetailView = require('./detailView.jsx');
 
-var mapsApi = require( 'google-maps-api' )( 'AIzaSyCLuhubHWNbDgBhmj61OUo07L-zjHsVkKw' , ['places']);
+var PRIVATE = require('../../PRIVATE.json');
+var mapsApi = require( 'google-maps-api' )(  PRIVATE.google_token, ['places']);
 var requestData = require('./../js/requestData.js');
 
 

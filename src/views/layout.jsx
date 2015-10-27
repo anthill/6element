@@ -24,68 +24,18 @@ var requestData = require('./../js/requestData.js');
 var injectTapEventPlugin = require("react-tap-event-plugin");
 injectTapEventPlugin();
 
-var availableCategories = [
-      'All',
-      'aluminium',
-      'batteries',
-      'beverage_carton',
-      'bicycles',
-      'books',
-      'cans',
-      'cardboard',
-      'cds',
-      'chipboard',
-      'christmas_trees',
-      'clothes',
-      'computers',
-      'cooking_oil',
-      'cork',
-      'engine_oil',
-      'foil',
-      'furniture',
-      'glass',
-      'glass_bottles',
-      'green_waste',
-      'garden_waste',
-      'hardcode',
-      'hazardous_waste',
-      'light_bulbs',
-      'magazines',
-      'mobile_phones',
-      'music',
-      'newspaper',
-      'organic',
-      'paint',
-      'paper',
-      'paper_packaging',
-      'plastic',
-      'plastic_bags',
-      'plastic_bottles',
-      'plastic_packaging',
-      'polyester',
-      'printer_cartridges',
-      'rubble',
-      'scrap_metal',
-      'sheet_metal',
-      'shoes',
-      'tyres',
-      'waste',
-      'waste_oil',
-      'white_goods',
-      'wood'];
-
 module.exports = React.createClass({
   getInitialState: function() {
     //var str = '{"type":"Feature","properties":{"dechet_non_dangereux":1,"name":"Déchèterie de Bordeaux Deschamps-bastide","menage":1,"opening_hours":"Apr 01-Sep 30 09:00-12:30,13:15-19:00; Oct 01-Apr 01 09:00-12:30,13:15-18:00","phone":"05 56 40 21 41","objects":{"rubble":0,"waste_medical":0,"batteries":1,"paper":1,"magazines":0,"white_goods":1,"waste_oil":1,"green_waste":1,"garden_waste":0,"hazardous_waste":1,"printer_toner":0,"scrap_metal":1,"plastic":0,"paint":1,"wood":1,"scrap_ concrete":1,"light_bulbs":0,"waste":1,"plastic_packaging":0,"scrap_metal_no_iron":1,"glass":1,"cardboard":1,"tyres":0,"waste_farming_chemical":1,"waste_mix_chemical":1,"beverage_carton":1,"fat_corp":0,"engine_oil":0,"newspaper":0,"waste_asbestos":0,"medical":0,"clothes":0},"address_1":"Quai Deschamps","address_2":"33100 - Bordeaux","owner":"Sinoe","dechet_dangereux":1,"type":"centre","dechet_inerte":0,"entreprise":0},"geometry":{"type":"Point","coordinates":{"lat":44.83401,"lon":-0.55198}},"distance":3.3535893441212057,"color":"#077527","file":"dechetterie_gironde.json","rate":2}';
     //, detailedObject: JSON.parse(str)
     // First empty results to display
-    var iniResult = { categories: ['All'], placeName: '', objects: [] }
+    var iniResult = { categories: [this.props.categoriesEN[0]], placeName: '', objects: [] }
     // List of networks from endpoint
     var files = this.props.networks.map(function(network){
         return { name: network.name, color: network.color, checked: true };
     })
     return {
-      what: iniResult.categories[0], 
+      what: 0, 
       placeName: iniResult.placeName, 
       result: iniResult, 
       files: files, 
@@ -141,7 +91,7 @@ module.exports = React.createClass({
     var self = this; 
     var data = {
       'placeName': this.state.placeName,
-      'categories': [this.state.what],
+      'categories': [this.props.categoriesEN[this.state.what]],
       'geoloc': geoloc,
       'boundingBox': boundingBox
     };
@@ -157,7 +107,7 @@ module.exports = React.createClass({
   // Change in the what bar
   handleSelectWhat: function(e){
     this.setState({
-      what: availableCategories[e.target.value]
+      what: e.target.value
     });
   },
   // Check on filters in the right networks panel
@@ -199,10 +149,12 @@ module.exports = React.createClass({
     var showDetail = false;
     if(this.state.detailedObject !== null &&
       typeof this.state.detailedObject !== 'undefined'){
+    
       detailedJSX = (
         <DetailView 
           object={this.state.detailedObject} 
           onShowDetail={this.onShowDetail} />);
+
       toolBarJSX = (
         <div id="toolbar">
           <Mui.Toolbar id="toolbar">
@@ -234,7 +186,7 @@ module.exports = React.createClass({
     // * Menus items & options *    
     var menuItems = [];
     var standardActions = [ { text: 'Valider', onTouchTap: this.onDialogSubmit, ref: 'submit' }, ];
-    var whatOptions = availableCategories.map(function(category, index){
+    var whatOptions = this.props.categoriesFR.map(function(category, index){
       return { payload: index, text: category };
     });
         
@@ -318,9 +270,8 @@ module.exports = React.createClass({
                     <td>
                       <Mui.SelectField
                         ref="whatField"
-                        defaultValue={this.state.what}
+                        selectedIndex={this.state.what}
                         onChange= {this.handleSelectWhat}
-                        hintText="Quoi ?"
                         fullWidth={true}
                         menuItems={whatOptions} />
                     </td>

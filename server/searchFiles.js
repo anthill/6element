@@ -4,7 +4,7 @@ var path = require('path');
 var fs   = require('fs');
 var hstore = require('pg-hstore')();
 var Places = require('./database/models/places.js');
-
+var dictionnary = require('../data/dictionnary.json');
 
 var toGeoJson = function(results){
 
@@ -14,7 +14,11 @@ var toGeoJson = function(results){
 
                 hstore.parse(result["objects"], function(fromHstore) {
 
-                    result["objects"] = fromHstore;
+                    result["objects"] = {}
+                    Object.keys(fromHstore).forEach(function(key){
+                        var fr = dictionnary[key];
+                        result.objects[fr]= fromHstore[key];
+                    });
 
                     var geoJson = { 
                         type: 'Feature',

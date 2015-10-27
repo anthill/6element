@@ -32,7 +32,7 @@ module.exports = React.createClass({
         zoomControl: false,
     });
     map.setZoom(13);
-    L.Icon.Default.imagePath = 'http://api.tiles.mapbox.com/mapbox.js/v1.0.0beta0.0/images';
+    L.Icon.Default.imagePath = '/images-leaflet';
     //new L.Control.Zoom({ position: 'topright' }).addTo(map);
     this.props.getMapInfos(map);
   },

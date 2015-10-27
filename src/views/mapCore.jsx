@@ -4,7 +4,7 @@ var Mui = require('material-ui');
 var ThemeManager = require('material-ui/lib/styles/theme-manager');
 var DefaultRawTheme = Mui.Styles.LightRawTheme;
 var React = require('react');
-var PRIVATE = require('../../PRIVATE.json');
+var Tokens = require('../../Tokens.json');
 
 module.exports = React.createClass({
   childContextTypes: {
@@ -14,16 +14,15 @@ module.exports = React.createClass({
     return { muiTheme: ThemeManager.getMuiTheme(DefaultRawTheme) };
   },
   componentDidMount: function() {
-    console.log(PRIVATE.mapbox_token);
     var map = this.map = L.map(this.getDOMNode(), {
         minZoom: 12,
         maxZoom: 18,
         layers: [
                 L.tileLayer(
                     'https://api.tiles.mapbox.com/v4/' +
-                    PRIVATE.map_id +
+                    Tokens.map_id +
                     '/{z}/{x}/{y}.png?access_token=' +
-                    PRIVATE.mapbox_token, 
+                    Tokens.mapbox_token, 
                     {
                         attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
                     }

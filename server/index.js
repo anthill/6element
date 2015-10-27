@@ -19,6 +19,7 @@ app.use(bodyParser.urlencoded({extended: true}))
 
 app.use('/', express.static(path.join(__dirname, '../src')));
 app.use("/css/leaflet.css", 	express.static(path.join(__dirname, '../node_modules/leaflet/dist/leaflet.css')));
+app.use("/images-leaflet", 	express.static(path.join(__dirname, '../node_modules/leaflet/dist/images')));
 app.use("/css/material/", 	express.static(path.join(__dirname, '../node_modules/material-design-lite')));
 
 app.get('/Citizen-browserify-bundle.js', function(req, res){

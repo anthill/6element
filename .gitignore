@@ -8,6 +8,6 @@
 *.log
 
 *-browserify-bundle.js
-
+Tokens.json
 node_modules
 data

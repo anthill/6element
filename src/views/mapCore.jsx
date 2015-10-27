@@ -4,6 +4,7 @@ var Mui = require('material-ui');
 var ThemeManager = require('material-ui/lib/styles/theme-manager');
 var DefaultRawTheme = Mui.Styles.LightRawTheme;
 var React = require('react');
+var Tokens = require('../../Tokens.json');
 
 module.exports = React.createClass({
   childContextTypes: {
@@ -16,14 +17,22 @@ module.exports = React.createClass({
     var map = this.map = L.map(this.getDOMNode(), {
         minZoom: 12,
         maxZoom: 18,
-        layers: [L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png',{
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'})
-        ],
+        layers: [
+                L.tileLayer(
+                    'https://api.tiles.mapbox.com/v4/' +
+                    Tokens.map_id +
+                    '/{z}/{x}/{y}.png?access_token=' +
+                    Tokens.mapbox_token, 
+                    {
+                        attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+                    }
+                )
+            ],
         attributionControl: false,
         zoomControl: false,
     });
     map.setZoom(13);
-    L.Icon.Default.imagePath = 'https://api.tiles.mapbox.com/mapbox.js/v1.0.0beta0.0/images';
+    L.Icon.Default.imagePath = 'http://api.tiles.mapbox.com/mapbox.js/v1.0.0beta0.0/images';
     //new L.Control.Zoom({ position: 'topright' }).addTo(map);
     this.props.getMapInfos(map);
   },

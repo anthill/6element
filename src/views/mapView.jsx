@@ -21,7 +21,7 @@ module.exports = React.createClass({
     return { muiTheme: ThemeManager.getMuiTheme(DefaultRawTheme) };
   },
   getMapInfos: function(map){
-    this.loadSelection(map, 1, this.props.result.objects, this.props.files, this.props.geoloc, null);
+    this.loadSelection(map, 1, this.props.result.objects, this.props.filters, this.props.parameters.geoloc, null);
   },
   onClickPreview: function(){
     var self = this;
@@ -52,7 +52,7 @@ module.exports = React.createClass({
         'maxLon': bounds.getEast(),
         'minLon': bounds.getWest()
       }
-      this.props.onSearch(this.props.geoloc, box, 3);
+      this.props.onSearch(this.props.parameters, box, 3);
     }
   },
   componentWillReceiveProps: function(nextProps){
@@ -61,12 +61,12 @@ module.exports = React.createClass({
       this.loadSelection( this.state.map, 
                           nextProps.status, 
                           nextProps.result.objects, 
-                          nextProps.files, 
-                          nextProps.geoloc, 
+                          nextProps.filters, 
+                          nextProps.parameters.geoloc, 
                           this.state.selected);
     }
   },
-  loadSelection: function(map, status, points, files, center, selected ){
+  loadSelection: function(map, status, points, filters, center, selected ){
     var self = this;
     // STATUS Definition
     // -1- Empty map, Zoom 13, no BoundingBox, geoloc centered
@@ -92,12 +92,12 @@ module.exports = React.createClass({
     // Bouding box to compute (only for STATUS 2)
     var box = { 'n': null, 's': null, 'e': null, 'o': null };
     var markerSelected = null;
-    var list = files
-    .filter(function(file){
-        return file.checked;
+    var list = filters
+    .filter(function(filter){
+        return filter.checked;
     })
-    .map(function(file){
-      return file.name;
+    .map(function(filter){
+      return filter.name;
     });
     points.filter(function(point){
       return (list.indexOf(point.file) !== -1);
@@ -129,24 +129,7 @@ module.exports = React.createClass({
           weight: isCenter?5:3
         };
         
-        // Special icon for selected point
-        // TODO
-        /*var isSelected = false;//(selected !== null && selected === index);
-        if(isSelected){
-            var PingIcon = L.Icon.Default.extend({
-              options: {
-                iconUrl:      '/img/ping.png',
-                iconSize:     [30, 30],
-                shadowSize:   [0, 0], // size of the shadow
-                iconAnchor:   [10, 10], // point of the icon which will correspond to marker's location
-                shadowAnchor: [10, 10], // the same for the shadow
-                popupAnchor:  [-3, -40] // point from which the popup should open relative to the iconAnchor
-              }
-            });
-            markerSelected = new L.Marker(new L.LatLng(lat, lon), {icon: new PingIcon()});      
-        } 
-        else{*/
-        // Regular point
+        // Regular point or Sensor kitted point
         var marker = null;
         if(hasSensor){
           var pulsingIcon = new IconPulse({iconSize:[20,20],fillColor: point.color,pulseColor: 'red'});
@@ -162,24 +145,15 @@ module.exports = React.createClass({
         markers.push(marker);
     });
   
-    // Adding selected piont at the top (if necessary)
-    /*if(markerSelected !== null){
-        markerSelected.addTo(map);      
-        markers.push({
-          id: markerSelected._leaflet_id,
-          marker: markerSelected,
-          idPoint: point.id
-       });
-    }
-    else*/
-    if(status === 2 &&
-            points.length > 0){
+    if(status === 2 && points.length > 0){
+        
         var southWest = L.latLng(box.s, box.o);
         var northEast = L.latLng(box.n, box.e);
         map.off('moveend', this.onMoveMap);
         map.fitBounds(L.latLngBounds(southWest, northEast));
         map.on('moveend', this.onMoveMap);
     }
+
     var CentroidIcon = L.Icon.Default.extend({
       options: {
         iconUrl:     '/img/centroid.png',

@@ -1,12 +1,14 @@
 "use strict";
 var React = require('react');
 var Mui = require('material-ui');
+var IconPulse = require('../js/L.Icon.Pulse.js');
 var ThemeManager = require('material-ui/lib/styles/theme-manager');
 var DefaultRawTheme = Mui.Styles.LightRawTheme;
 var L = require('leaflet');
 var Colors = require('material-ui/lib/styles/colors');
 var Preview  =  require('./preview.jsx');
 var MapCore     =  require('./mapCore.jsx');
+
 
 module.exports = React.createClass({
   getInitialState: function() {
@@ -116,6 +118,7 @@ module.exports = React.createClass({
           if(box.o === null || box.o > lon) box.o = lon;
         }
         var isCenter = (point.properties.type === 'centre');
+        var hasSensor = (point.properties.sensor_id !== null);
         var options = {
           color: 'black',
           fill: true,
@@ -144,7 +147,16 @@ module.exports = React.createClass({
         } 
         else{*/
         // Regular point
-        var marker = new L.CircleMarker(new L.LatLng(lat, lon), options);
+        var marker = null;
+        if(hasSensor){
+          var pulsingIcon = new IconPulse({iconSize:[20,20],fillColor: point.color,pulseColor: 'red'});
+          marker = L.marker(new L.LatLng(lat, lon),{icon: pulsingIcon});
+        }
+        else
+        {
+          marker =  new L.CircleMarker(new L.LatLng(lat, lon), options);
+        } 
+
         marker["idPoint"] = point.properties.id;
         marker.on("click", self.onClickMarker);
         markers.push(marker);

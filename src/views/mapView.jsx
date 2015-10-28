@@ -131,8 +131,14 @@ module.exports = React.createClass({
         
         // Regular point or Sensor kitted point
         var marker = null;
-        if(hasSensor){
-          var pulsingIcon = new IconPulse({iconSize:[20,20],fillColor: point.color,pulseColor: 'red'});
+        if(hasSensor && typeof point.measurements !== 'undefined'){
+
+          var value = point.measurements;
+          var color = 'green';
+          if(value > 0.5 && value <= 0.75) color = 'orange';
+          else if(value > 0.75) color = 'red';
+
+          var pulsingIcon = new IconPulse({iconSize:[20,20],fillColor: point.color,pulseColor: color});
           marker = L.marker(new L.LatLng(lat, lon),{icon: pulsingIcon});
         }
         else

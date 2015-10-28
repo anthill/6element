@@ -10,6 +10,7 @@ var server 	= require('http').createServer(app);
 
 var networks = require('./database/models/networks.js');
 var search = require('./searchFiles.js');
+var dictionnary = require('../data/dictionnary.json');
 
 var PORT = process.env.VIRTUAL_PORT ? process.env.VIRTUAL_PORT: 3500;
 var DEBUG = process.env.NODE_ENV === "development";
@@ -37,6 +38,10 @@ app.get('/networks', function(req, res){
 		console.log('/networks error', err);
 		res.status(500).send(err);
 	});
+});
+
+app.get('/categories', function(req, res){
+	res.send(JSON.stringify(dictionnary));
 });
 
 

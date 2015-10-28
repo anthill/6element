@@ -1,10 +1,11 @@
 "use strict";
 
+var request = require('request');
 var path = require('path');
 var fs   = require('fs');
 var hstore = require('pg-hstore')();
 var Places = require('./database/models/places.js');
-
+var dictionnary = require('../data/dictionnary.json');
 
 var toGeoJson = function(results){
 
@@ -14,7 +15,11 @@ var toGeoJson = function(results){
 
                 hstore.parse(result["objects"], function(fromHstore) {
 
-                    result["objects"] = fromHstore;
+                    result["objects"] = {}
+                    Object.keys(fromHstore).forEach(function(key){
+                        var fr = dictionnary[key];
+                        result.objects[fr]= fromHstore[key];
+                    });
 
                     var geoJson = { 
                         type: 'Feature',
@@ -30,6 +35,50 @@ var toGeoJson = function(results){
             })
         })
     );     
+}
+
+var withSensorMeasurements = function(list){
+
+    return new Promise(function(resolve, reject){
+        
+        var sims = list.map(function(object){
+            return object.sensor_id;
+        });
+       
+        var data = { type: 'wifi', sims: sims };
+        
+        request({
+            method: 'POST',
+            url:'https://pheromon.ants.builders/sensorsLatestMeasurement', 
+            headers: {'Content-Type': 'application/json;charset=UTF-8'},
+            body: JSON.stringify(data)
+        }, function(error, response, body){
+            if (!error) {
+                if(response.statusCode < 400)
+                    resolve(JSON.parse(body));
+                else {
+                    reject(Object.assign(
+                        new Error('HTTP error because of bad status code ' + body),
+                        {
+                            HTTPstatus: response.statusCode,
+                            text: body,
+                            error: error
+                        }
+                    ));
+                }
+            }
+            else {
+                reject(Object.assign(
+                        new Error('HTTP error'),
+                        {
+                            HTTPstatus: response.statusCode,
+                            text: body,
+                            error: error
+                        }
+                    ));
+            }
+        });
+    });     
 }
 
 module.exports = function(req, res){
@@ -53,9 +102,32 @@ module.exports = function(req, res){
         .then(function(results){
             toGeoJson(results)
             .then(function(geoJson){
-                result.objects = geoJson;
-                res.setHeader('Content-Type', 'application/json');
-                res.send(JSON.stringify(result));
+
+                var list = geoJson.map(function(place, index){
+                    return {'index': index, 'sensor_id': place.properties.sensor_id};
+                })
+                .filter(function(object){
+                    return (object.sensor_id !== null && 
+                            typeof object.sensor_id !== 'undefined');
+                });
+                withSensorMeasurements(list)
+                .then(function(measures){
+
+                    if(measures !== null){
+                        measures.forEach(function(measure, index){
+                            geoJson[list[index].index]["measurements"] = (measure.latest/measure.max);
+                        });
+                    }
+                    result.objects = geoJson;
+                    res.setHeader('Content-Type', 'application/json');
+                    res.send(JSON.stringify(result));
+                })
+                .catch(function(err){
+                    console.error(err);
+                    result.objects = geoJson;
+                    res.setHeader('Content-Type', 'application/json');
+                    res.send(JSON.stringify(result));
+                });
             })
             .catch(function(err){
                 console.error(err);

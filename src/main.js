@@ -18,7 +18,6 @@ requestNetworks()
 		var listFR = ['Tous'];
 		var listEN = ['All'];
 		categories = JSON.parse(categories);
-		console.log(categories);
 		Object.keys(categories).forEach(function(key){
 			listEN.push(key);
 			listFR.push(categories[key]);

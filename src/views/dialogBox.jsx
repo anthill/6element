@@ -56,12 +56,14 @@ handleSelectWhat: function(e){
 show: function(){
 	this.refs.dialog.show();
 },
-onDialogSubmit: function(e){
+dismiss: function(){
 	this.refs.dialog.dismiss();
+},
+onDialogSubmit: function(e){
 	this.props.submitParameters(this.state.parameters);
 },
 onDialogCancel: function(e){
-	this.refs.dialog.dismiss();
+	this.props.cancelDialog();
 },
 render: function() {
 
@@ -96,7 +98,7 @@ render: function() {
 					<Mui.SelectField
 					ref="whatField"
 					selectedIndex={this.state.parameters.what}
-					onChange= {this.handleSelectWhat}
+					onChange={this.handleSelectWhat}
 					fullWidth={true}
 					menuItems={whatOptions} />
 				</td>

@@ -10,6 +10,7 @@ var Colors = require('material-ui/lib/styles/colors');
 
 var MapView = require('./mapView.jsx');
 var DetailView = require('./detailView.jsx');
+var PanelLeft = require('./panelLeft.jsx');
 var PanelRight = require('./panelRight.jsx');
 var DialogBox = require('./dialogBox.jsx');
 
@@ -42,7 +43,8 @@ module.exports = React.createClass({
         objects: [] 
       }, 
       filters: filters, 
-      status: 1 // INI Status
+      status: 1, // INI Status
+      displayList: true
     };
   },
   childContextTypes: {
@@ -51,17 +53,35 @@ module.exports = React.createClass({
   getChildContext: function() {
     return { muiTheme: ThemeManager.getMuiTheme(DefaultRawTheme) };
   },
-  // Display the right networks panel
+  // Display the left list panel
   handleLeftNav: function(e){
+    this.refs.panelLeft.toggle();
+    this.setState({displayList: !this.state.displayList});
+  },
+  // Display the right networks panel
+  handleRightNav: function(e){
     this.refs.panelRight.toggle();
   },
   // popup the form dialog
   handleSearchNav: function(e){
+    // Temporary hide the left panel
+    if(this.state.status!==1 && this.state.displayList)
+        this.refs.panelLeft.toggle(); 
     this.refs.dialogBox.show();
   },
   // Form submit
   submitParameters: function(parameters){
+    this.refs.dialogBox.dismiss();
+    // Re-Display the Temporary hidden the left panel
+    if(this.state.status!==1 && this.state.displayList)
+        this.refs.panelLeft.toggle(); 
     this.onSearch(parameters, null, 2);// BOUNDING-BOX = NULL, STATUS = 2
+  },
+  cancelDialog: function(){
+    this.refs.dialogBox.dismiss();
+    // Re-Display the Temporary hidden the left panel
+    if(this.state.status!==1 && this.state.displayList)
+        this.refs.panelLeft.toggle(); 
   },
   // Search request from 2 actions
   // - Form submit
@@ -101,6 +121,9 @@ module.exports = React.createClass({
   },
   // Popup the detailed sheet of the clicked point
   onShowDetail: function(object){
+    // Temporary hide the left panel
+    if(this.state.status!==1 && this.state.displayList)
+        this.refs.panelLeft.toggle(); 
     this.setState({detailedObject: object});
   },
   render: function() {
@@ -118,9 +141,11 @@ module.exports = React.createClass({
           object={this.state.detailedObject} 
           onShowDetail={this.onShowDetail} />) : "";
 
+    var ttStyle = {'zIndex': 100};
+
     var toolBarJSX =  showDetail ? (
         <div id="toolbar">
-          <Mui.Toolbar id="toolbar">
+          <Mui.Toolbar>
             <Mui.ToolbarGroup key={0} float="left">
               <Mui.IconButton onTouchTap={this.onShowDetail.bind(this, null)}><Mui.FontIcon className="material-icons" color={Colors.pink400} >arrow_back</Mui.FontIcon></Mui.IconButton>
             </Mui.ToolbarGroup>
@@ -133,10 +158,9 @@ module.exports = React.createClass({
               <Mui.ToolbarTitle text="6element" />
             </Mui.ToolbarGroup>
             <Mui.ToolbarGroup key={1} float="right">
-              <Mui.IconButton tooltip="Afficher par Liste"><Mui.FontIcon className="material-icons" color={Colors.pink400} >dvr</Mui.FontIcon></Mui.IconButton>
-              <Mui.IconButton tooltip="Afficher mes Favoris"><Mui.FontIcon className="material-icons">favorite</Mui.FontIcon></Mui.IconButton>
-              <Mui.IconButton tooltip="Rechercher" onTouchTap={this.handleSearchNav}><Mui.FontIcon className="material-icons" color={Colors.pink400} >search</Mui.FontIcon></Mui.IconButton>
-              <Mui.IconButton tooltip="Filtrer par source" onTouchTap={this.handleLeftNav}><Mui.FontIcon className="material-icons" color={Colors.pink400} >filter_list</Mui.FontIcon></Mui.IconButton>
+              <Mui.IconButton tooltip={this.state.displayList?"Afficher la carte":"Afficher la liste"} tooltipStyles={ttStyle} onTouchTap={this.handleLeftNav}><Mui.FontIcon className="material-icons" color={Colors.pink400} >{this.state.displayList?"map":"storage"}</Mui.FontIcon></Mui.IconButton>
+              <Mui.IconButton tooltip="Rechercher"  tooltipStyles={ttStyle} onTouchTap={this.handleSearchNav}><Mui.FontIcon className="material-icons" color={Colors.pink400} >search</Mui.FontIcon></Mui.IconButton>
+              <Mui.IconButton tooltip="Filtrer par source"  tooltipStyles={ttStyle} onTouchTap={this.handleRightNav}><Mui.FontIcon className="material-icons" color={Colors.pink400} >filter_list</Mui.FontIcon></Mui.IconButton>
             </Mui.ToolbarGroup>
           </Mui.Toolbar>
         </div>);
@@ -154,8 +178,16 @@ module.exports = React.createClass({
               parameters={this.state.parameters} 
               onShowDetail={this.onShowDetail} 
               onSearch={this.onSearch}
-              showHeaderAndFooter={!showDetail} />
-            <PanelRight 
+              showHeaderAndFooter={!showDetail}
+              hideListIfDisplayed={this.state.displayList?this.handleLeftNav:null} />
+            <PanelLeft 
+              ref="panelLeft"
+              filters={this.state.filters} 
+              onShowDetail={this.onShowDetail} 
+              visibility={(this.state.status!==1 && !showDetail)?'visible':'hidden'}
+              displayList={this.state.displayList}
+              result={result} />
+             <PanelRight 
               ref="panelRight"
               filters={this.state.filters}
               onSelectFilter={this.onSelectFilter} />
@@ -164,7 +196,8 @@ module.exports = React.createClass({
               status={this.state.status}
               categoriesFR={this.props.categoriesFR}
               parameters={this.state.parameters}
-              submitParameters={this.submitParameters} />
+              submitParameters={this.submitParameters}
+              cancelDialog={this.cancelDialog} />
           </Mui.Paper>
         </md-content>
       </div>

@@ -54,10 +54,13 @@ button a{
 	margin: 0 auto;
 }
 #nbResults p, 
-#preview 
+.preview 
 {
 	padding: 15px;
 	margin: 0px;
+}
+.preview{
+	border-bottom: solid 1px whitesmoke;
 }
 #sheet	{
 	margin: 0 auto;

@@ -39,17 +39,17 @@ module.exports = React.createClass({
 
     // Final Object render
     return (
-      <div id="preview">
+      <div className="preview">
         <div className="row clearfix styleRow">
           <div className="pull-left text-left">
             <Mui.CardHeader 
               title={object.properties.name} 
               subtitle={object.file}
               avatar={<Mui.Avatar style={{backgroundColor: object.color}}></Mui.Avatar>}
-              style={{textAlign: "left", overflow: "hidden", padding: 0}}/>
+              style={{textAlign: "left", overflow: "hidden", padding: 0, height: '40px'}}/>
           </div>
           <div className="pull-right text-right">
-            <em><i className="text-left glyphicon glyphicon-map-marker"></i> {distance}</em>
+            <em>{distance}</em>
           </div>
         </div>
         {openJSX}

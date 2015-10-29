@@ -15,7 +15,7 @@ module.exports = React.createClass({
     return { muiTheme: ThemeManager.getMuiTheme(DefaultRawTheme) };
   },
   toggle: function(){
-    this.refs.leftNav.toggle();
+    this.refs.rightNav.toggle();
   },
   render: function() {
        
@@ -59,7 +59,7 @@ module.exports = React.createClass({
     
     return (
       <Mui.LeftNav 
-        ref="leftNav" 
+        ref="rightNav" 
         docked={false} 
         openRight={true} 
         menuItems={menuItems} 

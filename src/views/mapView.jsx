@@ -7,7 +7,7 @@ var DefaultRawTheme = Mui.Styles.LightRawTheme;
 var L = require('leaflet');
 var Colors = require('material-ui/lib/styles/colors');
 var Preview  =  require('./preview.jsx');
-var MapCore     =  require('./mapCore.jsx');
+var MapCore  =  require('./mapCore.jsx');
 
 
 module.exports = React.createClass({
@@ -36,6 +36,8 @@ module.exports = React.createClass({
     var index = this.state.markersLayer.getLayers().findIndex(function(marker){
       return (marker._leaflet_id === e.target._leaflet_id);
     });
+    // On click marker we dimiss left panel if diplayed
+    if(index !== -1 && this.props.hideListIfDisplayed !== null) this.props.hideListIfDisplayed();
     this.setState({selected: (index === -1) ? null : this.state.markersLayer.getLayers()[index].idPoint});      
   },
   onClickMap: function(){// -> unselect a point
@@ -201,9 +203,19 @@ module.exports = React.createClass({
       }
     }
     var nbResultJSX = "";
-    if(result.objects.length && 
-       this.props.showHeaderAndFooter){
-      nbResultJSX = (<div className="fixedHeader"><div id="nbResults"><p>Il y a <strong>{result.objects.length}</strong> résultats pour votre recherche</p></div></div>);
+    if(this.props.showHeaderAndFooter && 
+      result.objects.length !== 0){
+       var list = this.props.filters
+      .filter(function(filter){
+          return filter.checked;
+      })
+      .map(function(filter){
+        return filter.name;
+      });
+      var nbResults = result.objects.filter(function(place){
+        return (list.indexOf(place.file) !== -1);
+      }).length;
+      nbResultJSX = (<div className="fixedHeader"><div id="nbResults"><p>Il y a <strong>{nbResults}</strong> résultat{nbResults>1?'s':''} pour votre recherche</p></div></div>);
     }
     return (
       <div>

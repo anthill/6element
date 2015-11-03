@@ -46,7 +46,8 @@ module.exports = React.createClass({
     }
   },
   onMoveMap: function(e){
-    if(this.state.map !== null){
+    if(this.state.map !== null && 
+      typeof e.hard === 'undefined'){ // Move is fired by User, not FitBounds
       var bounds = this.state.map.getBounds(); 
       var box = {
         'maxLat': bounds.getNorth(),
@@ -54,7 +55,7 @@ module.exports = React.createClass({
         'maxLon': bounds.getEast(),
         'minLon': bounds.getWest()
       }
-      this.props.onSearch(this.props.parameters, box, 3);
+      this.props.onSearch(this.props.parameters, box, 3, 0);
     }
   },
   componentWillReceiveProps: function(nextProps){
@@ -157,9 +158,11 @@ module.exports = React.createClass({
         
         var southWest = L.latLng(box.s, box.o);
         var northEast = L.latLng(box.n, box.e);
-        map.off('moveend', this.onMoveMap);
+        map.off('dragend', this.onMoveMap);
+        map.off('zoomend', this.onMoveMap);
         map.fitBounds(L.latLngBounds(southWest, northEast));
-        map.on('moveend', this.onMoveMap);
+        map.on('dragend', this.onMoveMap);
+        map.off('zoomend', this.onMoveMap);
     }
 
     var CentroidIcon = L.Icon.Default.extend({
@@ -183,7 +186,6 @@ module.exports = React.createClass({
   },
   render: function() {
     var self = this;
-    if(this.props.result.length===0) return "";
     var result = this.props.result;
     var detailMapJSX = "";
     if(this.state.selected !== null && 
@@ -203,9 +205,9 @@ module.exports = React.createClass({
       }
     }
     var nbResultJSX = "";
-    if(this.props.showHeaderAndFooter && 
-      result.objects.length !== 0){
-       var list = this.props.filters
+    if(this.props.showHeaderAndFooter && this.props.status !== 1){ // INI
+      
+      var list = this.props.filters
       .filter(function(filter){
           return filter.checked;
       })
@@ -215,7 +217,14 @@ module.exports = React.createClass({
       var nbResults = result.objects.filter(function(place){
         return (list.indexOf(place.file) !== -1);
       }).length;
-      nbResultJSX = (<div className="fixedHeader"><div id="nbResults"><p>Il y a <strong>{nbResults}</strong> résultat{nbResults>1?'s':''} pour votre recherche</p></div></div>);
+      
+      if(nbResults === 0){
+        nbResultJSX = (<div className="fixedHeader"><div id="nbResults"><p>Il n&apos;y a <strong>aucun</strong> résultat pour votre recherche</p></div></div>);
+
+      }
+      else{
+        nbResultJSX = (<div className="fixedHeader"><div id="nbResults"><p>Il y a <strong>{nbResults}</strong> résultat{nbResults>1?'s':''} pour votre recherche</p></div></div>);
+      }
     }
     return (
       <div>

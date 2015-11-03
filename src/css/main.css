@@ -20,6 +20,7 @@ button a{
 }
 .noRef{
 	color:inherit;	
+	text-decoration:none; 
 }
 
 #map{
@@ -53,6 +54,14 @@ button a{
 	max-width: 700px;
 	margin: 0 auto;
 }
+#moreResults{
+	text-align: center;
+	height: 40px;
+}
+#moreResults span{
+	vertical-align: middle;
+}
+#moreResults,
 #nbResults p, 
 .preview 
 {

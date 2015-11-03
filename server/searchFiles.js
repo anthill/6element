@@ -141,7 +141,7 @@ module.exports = function(req, res){
 
     } else if(data.geoloc !== null){
 
-        Places.getKNearest({"lon": data.geoloc.lon, "lat": data.geoloc.lat}, 10, data.categories)
+        Places.getKNearest({"lon": data.geoloc.lon, "lat": data.geoloc.lat}, data.nbPlaces, data.categories)
         .then(function(results){
             toGeoJson(results)
             .then(function(geoJson){

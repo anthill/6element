@@ -69,12 +69,13 @@ module.exports = {
     getKNearest: function(coords, k, categories){
         return databaseP.then(function (db) {
             
-            var strDistance = "st_distance_sphere(places.geom, st_makepoint(" + coords.lon + ", " + coords.lat + ")) AS distance";
-            var filters = categories[0] === "All" ? "TRUE": "places.objects ?| " + jsArrayToPg(categories);
+            var strDistance = "st_distance_sphere(places.geom, st_makepoint(" + coords.lon + ", " + coords.lat + ")) ";
+            var strDistanceAS = strDistance + "AS distance";
+            var filters = categories[0] === "All" ? "": " AND  places.objects ?| " + jsArrayToPg(categories);
             var query = places
-                .select(places.star(),networks.name.as('file'), networks.color.as('color'), strDistance)
+                .select(places.star(),networks.name.as('file'), networks.color.as('color'), strDistanceAS)
                 .from(places.join(networks).on(places.network.equals(networks.id)))
-                .where(filters)
+                .where(strDistance + "< 50000" + filters)
                 .order("distance")
                 .limit(k)
                 .toQuery();

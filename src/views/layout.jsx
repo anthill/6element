@@ -75,7 +75,7 @@ module.exports = React.createClass({
     // Re-Display the Temporary hidden the left panel
     if(this.state.status!==1 && this.state.displayList)
         this.refs.panelLeft.toggle(); 
-    this.onSearch(parameters, null, 2);// BOUNDING-BOX = NULL, STATUS = 2
+    this.onSearch(parameters, null, 2, 20);// BOUNDING-BOX = NULL, STATUS = 2
   },
   cancelDialog: function(){
     this.refs.dialogBox.dismiss();
@@ -86,14 +86,15 @@ module.exports = React.createClass({
   // Search request from 2 actions
   // - Form submit
   // - map moves (drag or zoom)
-  onSearch: function(parameters, boundingBox, status){
+  onSearch: function(parameters, boundingBox, status, nbPlaces){
 
     var self = this; 
     var data = {
       'placeName': parameters.placeName,
       'categories': [this.props.categoriesEN[parameters.what]],
       'geoloc': parameters.geoloc,
-      'boundingBox': boundingBox
+      'boundingBox': boundingBox,
+      'nbPlaces': nbPlaces
     };
 
     requestData(data)
@@ -184,6 +185,8 @@ module.exports = React.createClass({
               ref="panelLeft"
               filters={this.state.filters} 
               onShowDetail={this.onShowDetail} 
+              onSearch={this.onSearch}
+              parameters={this.state.parameters} 
               visibility={(this.state.status!==1 && !showDetail)?'visible':'hidden'}
               displayList={this.state.displayList}
               result={result} />

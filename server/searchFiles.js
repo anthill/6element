@@ -98,7 +98,7 @@ module.exports = function(req, res){
     if(data.boundingBox !== null &&
         data.geoloc !== null){
 
-        Places.getWithin(data.geoloc, data.boundingBox, data.categories)
+        Places.getWithin(data.geoloc, data.boundingBox, data.categories, 2000)
         .then(function(results){
             toGeoJson(results)
             .then(function(geoJson){
@@ -141,7 +141,7 @@ module.exports = function(req, res){
 
     } else if(data.geoloc !== null){
 
-        Places.getKNearest({"lon": data.geoloc.lon, "lat": data.geoloc.lat}, 10, data.categories)
+        Places.getKNearest({"lon": data.geoloc.lon, "lat": data.geoloc.lat}, data.nbPlaces, data.categories)
         .then(function(results){
             toGeoJson(results)
             .then(function(geoJson){

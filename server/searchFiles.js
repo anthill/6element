@@ -98,7 +98,7 @@ module.exports = function(req, res){
     if(data.boundingBox !== null &&
         data.geoloc !== null){
 
-        Places.getWithin(data.geoloc, data.boundingBox, data.categories)
+        Places.getWithin(data.geoloc, data.boundingBox, data.categories, 2000)
         .then(function(results){
             toGeoJson(results)
             .then(function(geoJson){

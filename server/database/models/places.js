@@ -39,7 +39,7 @@ module.exports = {
         });
     },
 
-    getWithin: function(coords, bbox, categories){
+    getWithin: function(coords, bbox, categories, limit){
         return databaseP.then(function (db) {
             
             var strDistance = "st_distance_sphere(places.geom, st_makepoint(" + coords.lon + ", " + coords.lat + ")) AS distance";
@@ -49,7 +49,7 @@ module.exports = {
                 .from(places.join(networks).on(places.network.equals(networks.id)))
                 .where("places.geom && ST_MakeEnvelope(" + bbox.minLon + ", " + bbox.minLat + ", " + bbox.maxLon + ", " + bbox.maxLat + ", 4326)" + filters)
                 .order("distance")
-                .limit(2000)
+                .limit(limit)
                 .toQuery();
 
    

@@ -10,6 +10,7 @@ var server 	= require('http').createServer(app);
 
 var networks = require('./database/models/networks.js');
 var search = require('./searchFiles.js');
+var stats = require('./statsFiles.js');
 var dictionnary = require('../data/dictionnary.json');
 
 var PORT = process.env.VIRTUAL_PORT ? process.env.VIRTUAL_PORT: 3500;
@@ -28,6 +29,7 @@ app.get('/Citizen-browserify-bundle.js', function(req, res){
 });
 
 app.post('/search', search);
+app.post('/stats', stats);
 app.get('/networks', function(req, res){
 	networks.getAll()
 	.then(function(data){

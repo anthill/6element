@@ -7,7 +7,7 @@ api:
    ports:
       - "3500:3500"
    environment:
-      - VIRTUAL_HOST=citizen.ants.builders
+      - VIRTUAL_HOST=6element.fr,6element.org,6element.net,6element.eu,citizen.ants.builders
       - VIRTUAL_PORT=3500
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres

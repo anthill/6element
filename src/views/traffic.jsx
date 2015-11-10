@@ -5,6 +5,7 @@ var Mui = require('material-ui');
 var ThemeManager = require('material-ui/lib/styles/theme-manager');
 var DefaultRawTheme = Mui.Styles.LightRawTheme;
 var Colors = require('material-ui/lib/styles/colors');
+var requestMeasurements = require('./../js/requestMeasurements.js');
 
 var NotEmpty = function(field){
   if(typeof field === 'undefined') return false;
@@ -15,7 +16,21 @@ var NotEmpty = function(field){
 
 module.exports = React.createClass({
   getInitialState: function() {
-    return {date: new Date()};
+    
+    var date = new Date();
+    date.setHours(0,0,0,0)
+    var max = 100;
+    var self = this;
+/*    requestMeasurements({type:['wifi'],sims:[self.props.sensorId]},'https://pheromon.ants.builders/sensorsLatestMeasurement')
+    .then(function(measures){
+    
+    })
+    .catch(function(error){
+      console.error(error);
+      self.paint(context, width, height, results);      
+    })*/
+
+    return {date: date, max: 100};
   },
   childContextTypes: {
     muiTheme: React.PropTypes.object
@@ -31,14 +46,51 @@ module.exports = React.createClass({
   },
   update: function(){
 
-    if(NotEmpty(this.props.opening_hours) === false) return;
+    if(NotEmpty(this.props.opening_hours) === false ||
+      typeof this.props.max === 0) return;
 
+    var self = this;
     var width = 400;
     var height = 100;
     var tsChart = React.findDOMNode(this.refs.tsChart);
     var context = tsChart.getContext('2d');
     context.clearRect(0, 0, width, height);
-    this.paint(context, width, height);
+    
+    var start = this.state.date;
+    var end = new Date(start);
+    end.setDate(start.getDate()+1);
+    
+    var data = {
+      sim: this.props.sensorId,
+      type: 'wifi',
+      start: start,
+      end: end
+    }
+
+    var results = [];
+    requestMeasurements(data,'https://pheromon.ants.builders/measurements/sensor/raw')
+    .then(function(measures){
+      
+      var options = {hour: "2-digit", minute: "2-digit"};
+      results = measures.map(function(measure){
+        
+        var startHour = new Date(measure.date);
+        var endHour = new Date(startHour);
+        endHour.setMinutes(endHour.getMinutes()+5); 
+        return {
+          'start': startHour.toLocaleString("fr-FR",options),
+          'end':   endHour.toLocaleString("fr-FR",options),
+          'level': measure.value.length/self.props.max
+        }
+      });
+
+      self.paint(context, width, height, results);
+    })
+    .catch(function(error){
+      console.error(error);
+      self.paint(context, width, height, results);      
+    })
+
   },
    paint2: function(ctx, width, height){
     
@@ -59,7 +111,7 @@ module.exports = React.createClass({
 
 
   },
-  paint: function(ctx, width, height){
+  paint: function(ctx, width, height, bins){
     
     ctx.globalAlpha=1;
     var margin = 10;
@@ -139,19 +191,6 @@ module.exports = React.createClass({
       }
     }
 
-    // RANDOM BINS
-    var bins = [];
-    var step = 15;
-    for(var i=9; i<18; ++i){
-      for(var j=0; j<60; j=j+step){
-        var bin = {
-          'start': i.toString()+':'+j.toString(),
-          'end': (j+step!==60)?(i.toString()+':'+(j+step).toString()):((i+1).toString()+':00'),
-          'level': Math.floor(Math.random()*100)
-        }
-        bins.push(bin);
-      }
-    }
     bins.forEach(function(bin){
       drawColumn(bin);      
     });

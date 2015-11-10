@@ -6,6 +6,7 @@ var fs   = require('fs');
 var hstore = require('pg-hstore')();
 var Places = require('./database/models/places.js');
 var dictionnary = require('../data/dictionnary.json');
+var https = require('https');
 
 var toGeoJson = function(results){
 
@@ -45,22 +46,23 @@ var withSensorMeasurements = function(list){
             return object.sensor_id;
         });
        
-        var data = { type: 'wifi', sims: sims };
-        
+        var inputs = { type: 'wifi', sims: sims };
+
         request({
             method: 'POST',
             url:'https://pheromon.ants.builders/sensorsLatestMeasurement', 
-            headers: {'Content-Type': 'application/json;charset=UTF-8'},
-            body: JSON.stringify(data)
+            headers: {'Content-Type': 'application/json;charset=UTF-8', strictSSL:false},
+            body: JSON.stringify(inputs)
         }, function(error, response, body){
             if (!error) {
-                if(response.statusCode < 400)
+                if(response !== 'undefined' &&
+                    response.statusCode < 400)
                     resolve(JSON.parse(body));
                 else {
                     reject(Object.assign(
                         new Error('HTTP error because of bad status code ' + body),
                         {
-                            HTTPstatus: response.statusCode,
+                            HTTPstatus: typeof response === 'undefined'?'':response.statusCode,
                             text: body,
                             error: error
                         }
@@ -71,7 +73,7 @@ var withSensorMeasurements = function(list){
                 reject(Object.assign(
                         new Error('HTTP error'),
                         {
-                            HTTPstatus: response.statusCode,
+                            HTTPstatus: typeof response === 'undefined'?'':response.statusCode,
                             text: body,
                             error: error
                         }
@@ -115,7 +117,7 @@ module.exports = function(req, res){
 
                     if(measures !== null){
                         measures.forEach(function(measure, index){
-                            geoJson[list[index].index]["measurements"] = (measure.latest/measure.max);
+                            geoJson[list[index].index]["measurements"] = {latest: measure.latest, max: measure.max);
                         });
                     }
                     result.objects = geoJson;
@@ -145,9 +147,32 @@ module.exports = function(req, res){
         .then(function(results){
             toGeoJson(results)
             .then(function(geoJson){
-                result.objects = geoJson;
-                res.setHeader('Content-Type', 'application/json');
-                res.send(JSON.stringify(result));
+                
+                var list = geoJson.map(function(place, index){
+                    return {'index': index, 'sensor_id': place.properties.sensor_id};
+                })
+                .filter(function(object){
+                    return (object.sensor_id !== null && 
+                            typeof object.sensor_id !== 'undefined');
+                });
+                withSensorMeasurements(list)
+                .then(function(measures){
+
+                    if(measures !== null){
+                        measures.forEach(function(measure, index){
+                            geoJson[list[index].index]["measurements"] = (measure.latest/measure.max);
+                        });
+                    }
+                    result.objects = geoJson;
+                    res.setHeader('Content-Type', 'application/json');
+                    res.send(JSON.stringify(result));
+                })
+                .catch(function(err){
+                    console.error(err);
+                    result.objects = geoJson;
+                    res.setHeader('Content-Type', 'application/json');
+                    res.send(JSON.stringify(result));
+                });
             })
             .catch(function(err){
                 console.error(err);

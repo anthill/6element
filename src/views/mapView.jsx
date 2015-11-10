@@ -136,7 +136,7 @@ module.exports = React.createClass({
         var marker = null;
         if(hasSensor && typeof point.measurements !== 'undefined'){
 
-          var value = point.measurements;
+          var value = point.measurements.latest/point.measurements.max;
           var color = 'green';
           if(value > 0.5 && value <= 0.75) color = 'orange';
           else if(value > 0.75) color = 'red';

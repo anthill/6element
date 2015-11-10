@@ -6,7 +6,6 @@ var fs   = require('fs');
 var hstore = require('pg-hstore')();
 var Places = require('./database/models/places.js');
 var dictionnary = require('../data/dictionnary.json');
-var https = require('https');
 
 var toGeoJson = function(results){
 

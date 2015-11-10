@@ -19,18 +19,7 @@ module.exports = React.createClass({
     
     var date = new Date();
     date.setHours(0,0,0,0)
-    var max = 100;
-    var self = this;
-/*    requestMeasurements({type:['wifi'],sims:[self.props.sensorId]},'https://pheromon.ants.builders/sensorsLatestMeasurement')
-    .then(function(measures){
-    
-    })
-    .catch(function(error){
-      console.error(error);
-      self.paint(context, width, height, results);      
-    })*/
-
-    return {date: date, max: 100};
+    return {date: date};
   },
   childContextTypes: {
     muiTheme: React.PropTypes.object

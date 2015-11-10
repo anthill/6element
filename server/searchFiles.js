@@ -50,7 +50,7 @@ var withSensorMeasurements = function(list){
         request({
             method: 'POST',
             url:'https://pheromon.ants.builders/sensorsLatestMeasurement', 
-            headers: {'Content-Type': 'application/json;charset=UTF-8', strictSSL:false},
+            headers: {'Content-Type': 'application/json;charset=UTF-8'},
             body: JSON.stringify(inputs)
         }, function(error, response, body){
             if (!error) {
@@ -116,7 +116,7 @@ module.exports = function(req, res){
 
                     if(measures !== null){
                         measures.forEach(function(measure, index){
-                            geoJson[list[index].index]["measurements"] = {latest: measure.latest, max: measure.max);
+                            geoJson[list[index].index]["measurements"] = {latest: measure.latest, max: measure.max};
                         });
                     }
                     result.objects = geoJson;

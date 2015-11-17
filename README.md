@@ -18,9 +18,7 @@ then watch the change in your frontend files while you're coding
 
 ```
 npm install
-node_modules/watchify/bin/cmd.js -t reactify \
-    src/main.js \
-    -o Citizen-browserify-bundle.js
+npm run watch
 ```
 
 and watch the server 

@@ -28,6 +28,7 @@ module.exports = {
                     db.query(query, function (err, result) {
                         if (err) {
                             console.log("ERROR in saving entry", query);
+                            reject(err);
                         }
                         else resolve(result.rows);
                     });
@@ -91,5 +92,5 @@ module.exports = {
         .catch(function(err){
             console.log('ERROR in getKNearest', err);
         }); 
-    },
+    }
 };

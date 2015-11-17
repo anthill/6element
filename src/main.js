@@ -25,8 +25,8 @@ requestNetworks()
 
 		var props = {networks: networks, categoriesEN: listEN, categoriesFR: listFR}; 
 		React.render( 
-		  React.createElement(Layout, props),
-		  document.body
+            React.createElement(Layout, props),
+            document.body
 		);
 	});
 });

@@ -1,0 +1,5 @@
+node_modules
+**/*-browserify-bundle.js
+server/database/management/declarations.js
+
+tests

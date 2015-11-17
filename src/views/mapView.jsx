@@ -1,4 +1,5 @@
 "use strict";
+
 var React = require('react');
 var Mui = require('material-ui');
 var IconPulse = require('../js/L.Icon.Pulse.js');

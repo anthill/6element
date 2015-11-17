@@ -1,3 +1,6 @@
+"use strict";
+
+// For a yet unknown reason, this line works while it shouldn't (L should be undefined)
 module.exports = L.Icon.Pulse = L.DivIcon.extend({
 
     options: {

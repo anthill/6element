@@ -1,8 +1,6 @@
 "use strict";
 
 var request = require('request');
-var path = require('path');
-var fs   = require('fs');
 var hstore = require('pg-hstore')();
 var Places = require('./database/models/places.js');
 var dictionnary = require('../data/dictionnary.json');
@@ -11,7 +9,7 @@ var toGeoJson = function(results){
 
     return Promise.all(
         results.map(function(result){
-            return new Promise(function(resolve, reject){
+            return new Promise(function(resolve){
 
                 hstore.parse(result["objects"], function(fromHstore) {
 

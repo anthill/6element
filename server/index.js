@@ -6,7 +6,6 @@ var path 		= require('path');
 var bodyParser	= require('body-parser');
 var express 	= require('express');
 var app 		= express();
-var server 	= require('http').createServer(app);
 
 var networks = require('./database/models/networks.js');
 var search = require('./searchFiles.js');
@@ -14,7 +13,7 @@ var stats = require('./statsFiles.js');
 var dictionnary = require('../data/dictionnary.json');
 
 var PORT = process.env.VIRTUAL_PORT ? process.env.VIRTUAL_PORT: 3500;
-var DEBUG = process.env.NODE_ENV === "development";
+// var DEBUG = process.env.NODE_ENV === "development";
 
 app.use(bodyParser.json({limit: '1000mb'}));
 app.use(bodyParser.urlencoded({extended: true}))
@@ -33,8 +32,8 @@ app.post('/stats', stats);
 app.get('/networks', function(req, res){
 	networks.getAll()
 	.then(function(data){
-	    res.setHeader('Content-Type', 'application/json');
-	    res.send(JSON.stringify(data));
+        res.setHeader('Content-Type', 'application/json');
+        res.send(JSON.stringify(data));
 	})
 	.catch(function(err){
 		console.log('/networks error', err);

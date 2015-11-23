@@ -12,25 +12,27 @@ var Layout =  require('./views/layout.jsx');
 
 requestNetworks()
 .then(function(networks){
-	requestCategories()
+	return requestCategories()
 	.then(function(categories){
+        var listFR = ['Tous'];
+        var listEN = ['All'];
 
-		var listFR = ['Tous'];
-		var listEN = ['All'];
-		categories = JSON.parse(categories);
-		Object.keys(categories).forEach(function(key){
-			listEN.push(key);
-			listFR.push(categories[key]);
-		});
+        Object.keys(categories).forEach(function(key){
+            listEN.push(key);
+            listFR.push(categories[key]);
+        });
 
 		var props = {networks: networks, categoriesEN: listEN, categoriesFR: listFR}; 
 		React.render( 
             React.createElement(Layout, props),
             document.body
 		);
-	});
+	})
+    .catch(function(err){
+        console.log('requestCategories error', err);
+    });
+
+})
+.catch(function(err){
+	console.log('requestNetworks error', err);
 });
-/*.catch(function(err){
-	console.log('/networks front error', err);
-	// TODO 404 HERE ?
-});*/

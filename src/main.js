@@ -8,23 +8,7 @@ var React = require('react');
 
 var Layout =  require('./views/layout.jsx');
 
-var networks = require('../data/networks.json');
-
-var dictionary = require('../data/dictionary.json');
-var listFR = ['Tous'];
-var listEN = ['All'];
-
-Object.keys(dictionary).forEach(function(key){
-    listEN.push(key);
-    listFR.push(dictionary[key]);
-});
-
-var categories = {
-    categoriesEN: listEN, 
-    categoriesFR: listFR
-};
-
-var props = Object.assign({networks: networks}, categories);
+var props = require('../common/layoutData');
 
 document.addEventListener('DOMContentLoaded', function(){
     React.render( 

@@ -10,12 +10,12 @@ var app 		= express();
 var networks = require('./database/models/networks.js');
 var search = require('./searchFiles.js');
 var stats = require('./statsFiles.js');
-var dictionnary = require('../data/dictionary.json');
+var dictionary = require('../data/dictionary.json');
 
 var PORT = process.env.VIRTUAL_PORT ? process.env.VIRTUAL_PORT: 3500;
 // var DEBUG = process.env.NODE_ENV === "development";
 
-app.use(bodyParser.json({limit: '1000mb'}));
+app.use(bodyParser.json({limit: '50mb'}));
 app.use(bodyParser.urlencoded({extended: true}))
 
 app.use('/', express.static(path.join(__dirname, '../src')));
@@ -41,8 +41,10 @@ app.get('/networks', function(req, res){
 	});
 });
 
+var categoriesStr = JSON.stringify(dictionary);
 app.get('/categories', function(req, res){
-	res.send(JSON.stringify(dictionnary));
+    res.setHeader('Content-Type', 'application/json');
+	res.send(categoriesStr);
 });
 
 

@@ -7,7 +7,8 @@
     "lint": "eslint .",
     "watch": "watchify -t reactify src/main.js -o Citizen-browserify-bundle.js -v -d",
     "build": "browserify -t reactify src/main.js -o Citizen-browserify-bundle.js -v",
-    "validate": "npm ls"
+    "validate": "npm ls",
+    "start": "node server/index.js"
   },
   "repository": {
     "type": "git",

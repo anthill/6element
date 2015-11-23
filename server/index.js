@@ -10,7 +10,7 @@ var app 		= express();
 var networks = require('./database/models/networks.js');
 var search = require('./searchFiles.js');
 var stats = require('./statsFiles.js');
-var dictionnary = require('../data/dictionnary.json');
+var dictionnary = require('../data/dictionary.json');
 
 var PORT = process.env.VIRTUAL_PORT ? process.env.VIRTUAL_PORT: 3500;
 // var DEBUG = process.env.NODE_ENV === "development";

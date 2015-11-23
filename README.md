@@ -14,7 +14,10 @@ docker-compose -f docker-compose-load-db.yml up
 docker-compose up --force-recreate
 ```
 
-Create a `Tokens.jsom` following the [example](Tokens.example.json)
+Create a `Tokens.json` following the [example](Tokens.example.json)
+
+Add 
+
 
 then watch the change in your frontend files while you're coding
 
@@ -28,4 +31,11 @@ and watch the server
 ```
 sudo npm install nodemon -g
 nodemon --watch server server/index.js
+```
+
+
+simple start
+
+```
+npm start
 ```

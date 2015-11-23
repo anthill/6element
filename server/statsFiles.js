@@ -2,7 +2,7 @@
 
 var hstore = require('pg-hstore')();
 var Places = require('./database/models/places.js');
-var dictionnary = require('../data/dictionnary.json');
+var dictionnary = require('../data/dictionary.json');
 
 var toGeoJson = function(results){
 

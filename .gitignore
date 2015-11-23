@@ -10,4 +10,6 @@
 *-browserify-bundle.js
 Tokens.json
 node_modules
-data
+data/*.json
+!data/dictionary.json
+!data/networks.json

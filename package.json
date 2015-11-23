@@ -5,8 +5,10 @@
   "main": "index.js",
   "scripts": {
     "lint": "eslint .",
-    "watch": "watchify -t reactify src/main.js -o Citizen-browserify-bundle.js -v -d",
-    "build": "browserify -t reactify src/main.js -o Citizen-browserify-bundle.js -v",
+    "watch": "watchify src/main.js -o Citizen-browserify-bundle.js -v -d",
+    "watch-jsx": "babel --presets react src/views/*.jsx --out-dir . --watch",
+    "build": "browserify src/main.js -o Citizen-browserify-bundle.js -v",
+    "build-jsx": "babel --presets react src/views/*.jsx --out-dir .",
     "validate": "npm ls",
     "start": "node server/index.js"
   },

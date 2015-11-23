@@ -13,3 +13,6 @@ node_modules
 data/*.json
 !data/dictionary.json
 !data/networks.json
+
+# files generated for server-side purposes
+src/views/*.js

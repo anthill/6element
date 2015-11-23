@@ -24,13 +24,13 @@ then watch the change in your frontend files while you're coding
 ```
 npm install
 npm run watch
+npm run watch-jsx
 ```
 
 and watch the server 
 
 ```
-sudo npm install nodemon -g
-nodemon --watch server server/index.js
+docker-compose up --force-recreate
 ```
 
 

@@ -10,29 +10,40 @@ var requestCategories = require('./js/requestCategories.js');// EN & FR versions
 
 var Layout =  require('./views/layout.jsx');
 
-requestNetworks()
-.then(function(networks){
-	return requestCategories()
-	.then(function(categories){
-        var listFR = ['Tous'];
-        var listEN = ['All'];
+var networksP = requestNetworks()
+.catch(function(err){
+	console.error('requestNetworks error', err);
+});
 
-        Object.keys(categories).forEach(function(key){
-            listEN.push(key);
-            listFR.push(categories[key]);
-        });
+var categoriesP = requestCategories()
+.then(function(categories){
+    var listFR = ['Tous'];
+    var listEN = ['All'];
 
-		var props = {networks: networks, categoriesEN: listEN, categoriesFR: listFR}; 
-		React.render( 
-            React.createElement(Layout, props),
-            document.body
-		);
-	})
-    .catch(function(err){
-        console.log('requestCategories error', err);
+    Object.keys(categories).forEach(function(key){
+        listEN.push(key);
+        listFR.push(categories[key]);
     });
 
+    return {
+        categoriesEN: listEN, 
+        categoriesFR: listFR
+    };
 })
 .catch(function(err){
-	console.log('requestNetworks error', err);
+    console.error('requestCategories error', err);
 });
+
+
+Promise.all([ networksP, categoriesP ])
+.then(function(result){
+    var networks = result[0];
+    var categories = result[1];
+    
+    var props = Object.assign({networks: networks}, categories); 
+    React.render( 
+        React.createElement(Layout, props),
+        document.body
+    );
+    
+})

@@ -1,13 +1,13 @@
 api:
    build: ./dockerfiles
    dockerfile: node
-   command: nodemon --watch server server/index.js
+   command: nodemon --watch server --watch src/index.html server/index.js
    links:
       - db
    ports:
       - "3500:3500"
    environment:
-      - VIRTUAL_HOST=citizen.ants.builders
+      - VIRTUAL_HOST=6element.fr,6element.org,6element.net,6element.eu,citizen.ants.builders
       - VIRTUAL_PORT=3500
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres

@@ -24,8 +24,8 @@ button a{
 }
 
 #map{
-	height: 90%;
-	position: relative;
+	height: 90vh;
+    position: relative;
 }
 .fixedHeader
 {

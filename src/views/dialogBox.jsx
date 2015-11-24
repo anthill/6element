@@ -5,8 +5,6 @@ var React = require('react');
 var Mui = require('material-ui');
 var ThemeManager = require('material-ui/lib/styles/theme-manager');
 var DefaultRawTheme = Mui.Styles.LightRawTheme;
-var Tokens = require('../../Tokens.json');
-var mapsApi = require( 'google-maps-api' )(  Tokens.google_token, ['places']);
 
 var Colors = require('material-ui/lib/styles/colors');
 
@@ -18,7 +16,14 @@ getChildContext: function() {
 	return { muiTheme: ThemeManager.getMuiTheme(DefaultRawTheme) };
 },
 getInitialState: function() {
+    if(!this.googleMapsApi && this.props.googleMapsApi)
+        this.googleMapsApi = this.props.googleMapsApi;
+    
 	return { parameters: this.props.parameters };
+},
+componentWillReceiveProps: function(newProps) {
+    if(!this.googleMapsApi && newProps.googleMapsApi)
+        this.googleMapsApi = newProps.googleMapsApi;
 },
 initDialog: function(){
 	var self = this;
@@ -28,24 +33,26 @@ initDialog: function(){
 	var val = React.findDOMNode($(where).find('input')[0]);
 
 	// Goocle API firing
-	mapsApi().then(function( maps ) {
-		
-		var autocomplete = new maps.places.Autocomplete(val, { types: ['geocode'] });
-		maps.event.addListener(autocomplete, 'place_changed', function(){
-		var place = autocomplete.getPlace();
-		var address = '';
-		if (place.address_components) {
-			address = [
-			(place.address_components[0] && place.address_components[0].short_name || ''),
-			(place.address_components[1] && place.address_components[1].short_name || ''),
-			(place.address_components[2] && place.address_components[2].short_name || '')
-			].join(' ');
-		}
-		parameters.geoloc = {lat: place.geometry.location.lat(), lon: place.geometry.location.lng()};
-		parameters.placeName = address;
-		self.setState({parameters: parameters})
-		});
-	});
+    if(this.googleMapsApi){
+        this.googleMapsApi().then(function( maps ) {
+
+            var autocomplete = new maps.places.Autocomplete(val, { types: ['geocode'] });
+            maps.event.addListener(autocomplete, 'place_changed', function(){
+            var place = autocomplete.getPlace();
+            var address = '';
+            if (place.address_components) {
+                address = [
+                (place.address_components[0] && place.address_components[0].short_name || ''),
+                (place.address_components[1] && place.address_components[1].short_name || ''),
+                (place.address_components[2] && place.address_components[2].short_name || '')
+                ].join(' ');
+            }
+            parameters.geoloc = {lat: place.geometry.location.lat(), lon: place.geometry.location.lng()};
+            parameters.placeName = address;
+            self.setState({parameters: parameters})
+            });
+        });
+    }
 },
 // Change in the what bar (fired by the dialog box)
 handleSelectWhat: function(e){

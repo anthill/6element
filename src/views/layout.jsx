@@ -1,18 +1,17 @@
 "use strict";
 
 var React = require('react');
-var L = require('leaflet');
 var Mui = require('material-ui');
 var ThemeManager = require('material-ui/lib/styles/theme-manager');
 var DefaultRawTheme = Mui.Styles.LightRawTheme;
 
 var Colors = require('material-ui/lib/styles/colors');
 
-var MapView = require('./mapView.jsx');
-var DetailView = require('./detailView.jsx');
-var PanelLeft = require('./panelLeft.jsx');
-var PanelRight = require('./panelRight.jsx');
-var DialogBox = require('./dialogBox.jsx');
+var MapView = require('./mapView.js');
+var DetailView = require('./detailView.js');
+var PanelLeft = require('./panelLeft.js');
+var PanelRight = require('./panelRight.js');
+var DialogBox = require('./dialogBox.js');
 
 var requestData = require('./../js/requestData.js');
 
@@ -173,6 +172,7 @@ module.exports = React.createClass({
           {toolBarJSX}
           <Mui.Paper>
             <MapView 
+              leaflet={this.props.leaflet}
               status={this.state.status} 
               result={result} 
               filters={this.state.filters} 
@@ -196,6 +196,7 @@ module.exports = React.createClass({
               onSelectFilter={this.onSelectFilter} />
             <DialogBox
               ref="dialogBox"
+              googleMapsApi={this.props.googleMapsApi}
               status={this.state.status}
               categoriesFR={this.props.categoriesFR}
               parameters={this.state.parameters}

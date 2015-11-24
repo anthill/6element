@@ -5,32 +5,23 @@ window.Symbol.iterator = require('core-js/fn/symbol/iterator');
 
 require('es6-shim');
 var React = require('react');
-var requestNetworks = require('./js/requestNetworks.js');
-var requestCategories = require('./js/requestCategories.js');// EN & FR versions
+var L = require('leaflet');
+var addIconPulse = require('./js/addIconPulse');
+addIconPulse(L);
 
-var Layout =  require('./views/layout.jsx');
+var Tokens = require('../Tokens.json');
+var googleMapsApi = require( 'google-maps-api' )( Tokens.google_token, ['places']);
 
-requestNetworks()
-.then(function(networks){
-	requestCategories()
-	.then(function(categories){
+var Layout =  require('./views/layout.js');
 
-		var listFR = ['Tous'];
-		var listEN = ['All'];
-		categories = JSON.parse(categories);
-		Object.keys(categories).forEach(function(key){
-			listEN.push(key);
-			listFR.push(categories[key]);
-		});
+var props = require('../common/layoutData');
+props.leaflet = L;
+props.googleMapsApi = googleMapsApi;
 
-		var props = {networks: networks, categoriesEN: listEN, categoriesFR: listFR}; 
-		React.render( 
-		  React.createElement(Layout, props),
-		  document.body
-		);
-	});
-});
-/*.catch(function(err){
-	console.log('/networks front error', err);
-	// TODO 404 HERE ?
-});*/
+document.addEventListener('DOMContentLoaded', function(){
+    React.render( 
+        React.createElement(Layout, props),
+        document.body
+    );
+})
+

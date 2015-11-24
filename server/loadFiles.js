@@ -9,10 +9,8 @@ var Places = require('./database/models/places.js');
 var Networks = require('./database/models/networks.js');
 var placesDeclaration = require('./database/management/declarations.js').places;
 
-var FileToNetworks = function(dir, file){
-
-    var sources = [];
-
+function fileToNetworks(dir, file){
+    
     return new Promise(function(resolve, reject){
 
         fs.readFile(path.join(dir,file), 'utf8', function (err, data) {
@@ -25,9 +23,9 @@ var FileToNetworks = function(dir, file){
             var networks = JSON.parse(data);
 
             Networks.createByChunk(networks)
-            .then(function(data){
-                console.log("Entries saved ", data.length);
-                resolve(data);
+            .then(function(entries){
+                console.log("Entries saved ", entries.length);
+                resolve(entries);
             })
             .catch(function(error){
                 console.log('error in network chunk creation', error);
@@ -36,13 +34,11 @@ var FileToNetworks = function(dir, file){
     });
 }
 
-var FileToObjects = function(dir, file, networks){
+function fileToObjects(dir, file, networks){
 
     return new Promise(function(resolve, reject){
-
-        
         var sources = {};
-        networks.forEach(function(network, index){
+        networks.forEach(function(network){
             network[0].sources.forEach(function(source){
                 sources[source] = network[0].id;
             });
@@ -67,11 +63,11 @@ var FileToObjects = function(dir, file, networks){
                     console.log('error network', toSave.source);
                
                 var wastes = {};
-                Object.keys(toSave.objects).filter(function(key){
-                    return toSave.objects[key] === 1;
+                Object.keys(toSave.objects).filter(function(k){
+                    return toSave.objects[k] === 1;
                 })
-                .forEach(function(key){
-                    wastes[key] = toSave.objects[key];
+                .forEach(function(k){
+                    wastes[k] = toSave.objects[k];
                 })
                 hstore.stringify(wastes, function(result) {
                     toSave.objects = result;
@@ -90,12 +86,12 @@ var FileToObjects = function(dir, file, networks){
          
             })
             .filter(function(obj){
-                return obj.lat != null && obj.lon != null;
+                return typeof obj.lat === 'number' && typeof obj.lon === 'number';
             });
 
             Places.createByChunk(objectsTosave)
-            .then(function(data){
-                console.log("Entries saved ", data.length);
+            .then(function(entries){
+                console.log("Entries saved ", entries.length);
                 resolve();
             })
             .catch(function(error){
@@ -112,9 +108,9 @@ var FileToObjects = function(dir, file, networks){
    
 var dir = path.join(__dirname,'../data/');
 
-FileToNetworks(dir, 'networks.json')
+fileToNetworks(dir, 'networks.json')
 .then(function(networks){
-    FileToObjects(dir, 'places.json', networks)
+    return fileToObjects(dir, 'places.json', networks)
     .then(function(){
         console.log('completed');
         process.exit();

@@ -4,8 +4,8 @@ var React = require('react');
 var Mui = require('material-ui');
 var ThemeManager = require('material-ui/lib/styles/theme-manager');
 var DefaultRawTheme = Mui.Styles.LightRawTheme;
-var Calendar  =  require('./calendar.jsx');
-var Traffic  =  require('./traffic.jsx');
+var Calendar  =  require('./calendar.js');
+var Traffic  =  require('./traffic.js');
 var Mui = require('material-ui');
 var Colors = require('material-ui/lib/styles/colors');
 

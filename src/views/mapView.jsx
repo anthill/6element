@@ -1,17 +1,22 @@
 "use strict";
+
 var React = require('react');
 var Mui = require('material-ui');
-var IconPulse = require('../js/L.Icon.Pulse.js');
 var ThemeManager = require('material-ui/lib/styles/theme-manager');
 var DefaultRawTheme = Mui.Styles.LightRawTheme;
-var L = require('leaflet');
+
 var Colors = require('material-ui/lib/styles/colors');
-var Preview  =  require('./preview.jsx');
-var MapCore  =  require('./mapCore.jsx');
+var Preview  =  require('./preview.js');
+var MapCore  =  require('./mapCore.js');
+
+var L; // variable where to store the leaflet global. Will be passed to props... maybe
 
 
 module.exports = React.createClass({
   getInitialState: function() {
+    if(!L && this.props.leaflet)
+        L = this.props.leaflet;
+      
     return {map: null, markers: [], selected: null, markersLayer: undefined};
   },
   childContextTypes: {
@@ -59,6 +64,9 @@ module.exports = React.createClass({
     }
   },
   componentWillReceiveProps: function(nextProps){
+    if(!L && nextProps.leaflet)
+        L = nextProps.leaflet;
+      
     if( this.state.map !== null &&
         nextProps.status !== 1){
       this.loadSelection( this.state.map, 

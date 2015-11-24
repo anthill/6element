@@ -5,7 +5,12 @@
   "main": "index.js",
   "scripts": {
     "lint": "eslint .",
-    "validate": "npm ls"
+    "watch": "watchify src/main.js -o Citizen-browserify-bundle.js -v -d",
+    "watch-jsx": "babel --presets react src/views/*.jsx --out-dir . --watch",
+    "build": "browserify src/main.js -o Citizen-browserify-bundle.js -v",
+    "build-jsx": "babel --presets react src/views/*.jsx --out-dir .",
+    "validate": "npm ls",
+    "start": "node server/index.js"
   },
   "repository": {
     "type": "git",
@@ -54,8 +59,6 @@
     "watchify": "^3.2.1"
   },
   "pre-commit": [
-    "lint",
-    "validate",
-    "test"
+    "lint"
   ]
 }

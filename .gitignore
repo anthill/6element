@@ -10,4 +10,9 @@
 *-browserify-bundle.js
 Tokens.json
 node_modules
-data
+data/*.json
+!data/dictionary.json
+!data/networks.json
+
+# files generated for server-side purposes
+src/views/*.js

@@ -1,6 +1,7 @@
 "use strict";
 
 var React = require('react');
+var ReactDOM = require('react-dom');
 var Mui = require('material-ui');
 var ThemeManager = require('material-ui/lib/styles/theme-manager');
 var DefaultRawTheme = Mui.Styles.LightRawTheme;
@@ -44,7 +45,7 @@ module.exports = React.createClass({
     var self = this;
     var width = 400;
     var height = 100;
-    var tsChart = React.findDOMNode(this.refs.tsChart);
+    var tsChart = ReactDOM.findDOMNode(this.refs.tsChart);
     var context = tsChart.getContext('2d');
     context.clearRect(0, 0, width, height);
     

@@ -1,6 +1,7 @@
 "use strict";
 
 var React = require('react');
+var ReactDOM = require('react-dom');
 var Mui = require('material-ui');
 var ThemeManager = require('material-ui/lib/styles/theme-manager');
 var DefaultRawTheme = Mui.Styles.LightRawTheme;
@@ -28,7 +29,7 @@ initDialog: function(){
 	var self = this;
 	var parameters = this.state.parameters;
 	
-	var where = React.findDOMNode(this.refs.whereField);
+	var where = ReactDOM.findDOMNode(this.refs.whereField);
 	var val = where.querySelector('input');
 
 	// Goocle API firing

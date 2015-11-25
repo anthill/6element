@@ -55,8 +55,8 @@ app.get('/', function(req, res){
     
 });
 
-app.get('/Citizen-browserify-bundle.js', function(req, res){
-    res.sendFile(path.join(__dirname, '../Citizen-browserify-bundle.js'));
+app.get('/browserify-bundle.js', function(req, res){
+    res.sendFile(path.join(__dirname, '..', 'src', 'browserify-bundle.js'));
 });
 
 app.use("/css/leaflet.css", express.static(path.join(__dirname, '../node_modules/leaflet/dist/leaflet.css')));

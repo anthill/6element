@@ -10,7 +10,8 @@
     "build": "browserify src/main.js -o Citizen-browserify-bundle.js -v",
     "build-jsx": "babel --presets react src/views/*.jsx --out-dir .",
     "validate": "npm ls",
-    "start": "node server/index.js"
+    "start-dev": "gulp dev",
+    "start-prod": "gulp prod"
   },
   "repository": {
     "type": "git",
@@ -34,10 +35,13 @@
     "babel-cli": "^6.2.0",
     "babel-preset-react": "^6.1.18",
     "body-parser": "^1.10.1",
+    "browserify": "^10.2.0",
     "core-js": "^1.2.1",
     "es6-shim": "^0.31.3",
     "express": "^4.12.4",
     "google-maps-api": "^1.1.0",
+    "gulp": "^3.9.0",
+    "gulp-bable": "^6.1.0",
     "jquery": "^2.1.4",
     "jsdom": "^7.0.2",
     "leaflet": "^0.7.5",
@@ -52,13 +56,13 @@
     "reactify": "^1.1.1",
     "request": "^2.65.0",
     "sql": "^0.60.0",
-    "sql-generate": "^1.1.0"
+    "sql-generate": "^1.1.0",
+    "vinyl-source-stream": "^1.1.0",
+    "watchify": "^3.2.1"
   },
   "devDependencies": {
-    "browserify": "^10.2.0",
     "eslint": "^1.3.1",
-    "precommit-hook-eslint": "^3.0.0",
-    "watchify": "^3.2.1"
+    "precommit-hook-eslint": "^3.0.0"
   },
   "pre-commit": [
     "lint"

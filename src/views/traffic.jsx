@@ -5,7 +5,10 @@ var Mui = require('material-ui');
 var ThemeManager = require('material-ui/lib/styles/theme-manager');
 var DefaultRawTheme = Mui.Styles.LightRawTheme;
 var Colors = require('material-ui/lib/styles/colors');
-var requestMeasurements = require('./../js/requestMeasurements.js');
+var requestMeasurements = require('../js/prepareServerAPI')(
+    require('../js/sendReq'), 
+    'https://pheromon.ants.builders'
+).measurements;
 
 var NotEmpty = function(field){
   if(typeof field === 'undefined') return false;
@@ -57,7 +60,7 @@ module.exports = React.createClass({
     }
 
     var results = [];
-    requestMeasurements(data,'https://pheromon.ants.builders/measurements/sensor/raw')
+    requestMeasurements(data)
     .then(function(measures){
       
       var options = {hour: "2-digit", minute: "2-digit"};

@@ -43,7 +43,6 @@
     "google-maps-api": "^1.1.0",
     "gulp": "^3.9.0",
     "gulp-bable": "^6.1.0",
-    "jquery": "^2.1.4",
     "jsdom": "^7.0.2",
     "leaflet": "^0.7.5",
     "material-ui": "^0.13.3",

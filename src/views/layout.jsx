@@ -13,7 +13,7 @@ var PanelLeft = require('./panelLeft.js');
 var PanelRight = require('./panelRight.js');
 var DialogBox = require('./dialogBox.js');
 
-var requestData = require('./../js/requestData.js');
+var search = require('../js/prepareServerAPI')(require('../js/sendReq')).search;
 
 
 //Needed for onTouchTap
@@ -96,7 +96,7 @@ module.exports = React.createClass({
       'nbPlaces': nbPlaces
     };
 
-    requestData(data)
+    search(data)
     .then(function(result){
       self.setState({
         parameters: parameters,

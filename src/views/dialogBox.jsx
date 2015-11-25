@@ -1,6 +1,5 @@
 "use strict";
 
-var $ = require('jquery');
 var React = require('react');
 var Mui = require('material-ui');
 var ThemeManager = require('material-ui/lib/styles/theme-manager');
@@ -30,7 +29,7 @@ initDialog: function(){
 	var parameters = this.state.parameters;
 	
 	var where = React.findDOMNode(this.refs.whereField);
-	var val = React.findDOMNode($(where).find('input')[0]);
+	var val = where.querySelector('input');
 
 	// Goocle API firing
     if(this.googleMapsApi){

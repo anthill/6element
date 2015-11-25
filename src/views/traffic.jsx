@@ -69,7 +69,7 @@ module.exports = React.createClass({
         return {
           'start': startHour.toLocaleString("fr-FR",options),
           'end':   endHour.toLocaleString("fr-FR",options),
-          'level': measure.value.length/self.props.max
+          'level': measure.value.length*100/self.props.max
         }
       });
 

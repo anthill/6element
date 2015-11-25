@@ -5,8 +5,10 @@ require('es6-shim');
 var fs = require('fs');
 var path = require('path');
 
-var bodyParser = require('body-parser');
 var express = require('express');
+var bodyParser = require('body-parser');
+var compression = require('compression')
+
 var React = require('react');
 var jsdom = require('jsdom');
 
@@ -37,7 +39,8 @@ function renderDocumentWithData(doc, data, reactComponent){
 
 
 app.use(bodyParser.json({limit: '50mb'}));
-app.use(bodyParser.urlencoded({extended: true}))
+app.use(bodyParser.urlencoded({extended: true}));
+app.use(compression());
 
 
 

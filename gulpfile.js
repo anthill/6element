@@ -15,14 +15,14 @@ function browserifyBundle(opts){
     opts = opts || {}
 
     return new Promise(function(resolve, reject){
-        var debug = opts.debug || process.env.NODE_ENV === 'production';
+        var debug = opts.debug || process.env.NODE_ENV === 'development';
                 
         var bOptions = Object.assign(
             {
                 cache: {},
                 packageCache: {},
                 fullPaths: true,
-                debug: process.env.NODE_ENV === 'development',
+                debug: debug,
                 transform: ['reactify'],
                 entries: join(__dirname, 'src', 'main.js')
             },

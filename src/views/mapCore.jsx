@@ -4,6 +4,8 @@ var Mui = require('material-ui');
 var ThemeManager = require('material-ui/lib/styles/theme-manager');
 var DefaultRawTheme = Mui.Styles.LightRawTheme;
 var React = require('react');
+var ReactDOM = require('react-dom');
+
 var Tokens = require('../../Tokens.json');
 
 module.exports = React.createClass({
@@ -14,7 +16,7 @@ module.exports = React.createClass({
     return { muiTheme: ThemeManager.getMuiTheme(DefaultRawTheme) };
   },
   componentDidMount: function() {
-    var map = this.map = L.map(this.getDOMNode(), {
+    var map = this.map = L.map(ReactDOM.findDOMNode(this), {
         minZoom: 12,
         maxZoom: 18,
         layers: [

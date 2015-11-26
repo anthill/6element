@@ -7,12 +7,17 @@
 *.doc#
 *.log
 
-*-browserify-bundle.js
-Tokens.json
 node_modules
+
+*browserify-bundle.js
+
+Tokens.json
+
 data/*.json
 !data/dictionary.json
 !data/networks.json
 
+
 # files generated for server-side purposes
+
 src/views/*.js

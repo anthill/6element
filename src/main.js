@@ -5,7 +5,9 @@ window.Symbol.iterator = require('core-js/fn/symbol/iterator');
 
 require('es6-shim');
 var React = require('react');
+var ReactDOM = require('react-dom');
 var L = require('leaflet');
+
 var addIconPulse = require('./js/addIconPulse');
 addIconPulse(L);
 
@@ -19,7 +21,7 @@ props.leaflet = L;
 props.googleMapsApi = googleMapsApi;
 
 document.addEventListener('DOMContentLoaded', function(){
-    React.render( 
+    ReactDOM.render( 
         React.createElement(Layout, props),
         document.body
     );

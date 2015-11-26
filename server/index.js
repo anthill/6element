@@ -5,8 +5,10 @@ require('es6-shim');
 var fs = require('fs');
 var path = require('path');
 
-var bodyParser = require('body-parser');
 var express = require('express');
+var bodyParser = require('body-parser');
+var compression = require('compression')
+
 var React = require('react');
 var jsdom = require('jsdom');
 
@@ -37,7 +39,8 @@ function renderDocumentWithData(doc, data, reactComponent){
 
 
 app.use(bodyParser.json({limit: '50mb'}));
-app.use(bodyParser.urlencoded({extended: true}))
+app.use(bodyParser.urlencoded({extended: true}));
+app.use(compression());
 
 
 
@@ -55,8 +58,8 @@ app.get('/', function(req, res){
     
 });
 
-app.get('/Citizen-browserify-bundle.js', function(req, res){
-    res.sendFile(path.join(__dirname, '../Citizen-browserify-bundle.js'));
+app.get('/browserify-bundle.js', function(req, res){
+    res.sendFile(path.join(__dirname, '..', 'src', 'browserify-bundle.js'));
 });
 
 app.use("/css/leaflet.css", express.static(path.join(__dirname, '../node_modules/leaflet/dist/leaflet.css')));

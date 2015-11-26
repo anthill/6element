@@ -32,7 +32,8 @@ initDialog: function(){
 	var where = ReactDOM.findDOMNode(this.refs.whereField);
 	var val = where.querySelector('input');
 
-	// Goocle API firing
+	// Google API firing
+	console.log(this.googleMapsApi);
     if(this.googleMapsApi){
         this.googleMapsApi().then(function( maps ) {
 
@@ -61,10 +62,10 @@ handleSelectWhat: function(e){
 	this.setState({ parameters: parameters });
 },
 show: function(){
-	this.refs.dialog.show();
+	this.refs.dialog.open = true;
 },
 dismiss: function(){
-	this.refs.dialog.dismiss();
+	this.refs.dialog.open = false;
 },
 onDialogSubmit: function(e){
 	this.props.submitParameters(this.state.parameters);
@@ -91,36 +92,35 @@ render: function() {
 			title="6element"
 			actions={customActions}
 			actionFocus="submit"
-			modal={true}
-			onShow={this.initDialog}
-			openImmediately={this.props.status===1}
+			show={this.initDialog}
+			defaultOpen={this.props.status===1}
 			autoDetectWindowHeight={true} 
 			autoScrollBodyContent={true}
 			contentStyle={{maxWidth: '420px'}}>
-			<div>
 			<table width="100%">
-				<tr>
-				<td><Mui.FontIcon className="material-icons" color={Colors.grey600} >description</Mui.FontIcon></td>
-				<td>
-					<Mui.SelectField
-					ref="whatField"
-					selectedIndex={this.state.parameters.what}
-					onChange={this.handleSelectWhat}
-					fullWidth={true}
-					menuItems={whatOptions} />
-				</td>
-				</tr>
-				<tr>
-				<td><Mui.FontIcon className="material-icons" color={Colors.grey600} >room</Mui.FontIcon></td>
-				<td>
-					<Mui.TextField
-					defaultValue={this.state.parameters.placeName}
-					ref="whereField" 
-					fullWidth={true}/>
-				</td>  
-				</tr>
+				<tbody>
+					<tr>
+					<td><Mui.FontIcon className="material-icons" color={Colors.grey600} >description</Mui.FontIcon></td>
+					<td>
+						<Mui.SelectField
+						ref="whatField"
+						selectedIndex={this.state.parameters.what}
+						onChange={this.handleSelectWhat}
+						fullWidth={true}
+						menuItems={whatOptions} />
+					</td>
+					</tr>
+					<tr>
+					<td><Mui.FontIcon className="material-icons" color={Colors.grey600} >room</Mui.FontIcon></td>
+					<td>
+						<Mui.TextField
+						defaultValue={this.state.parameters.placeName}
+						ref="whereField" 
+						fullWidth={true}/>
+					</td>  
+					</tr>
+				</tbody>
 			</table>
-			</div>
 		</Mui.Dialog>);
 	}
 });

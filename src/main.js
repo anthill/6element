@@ -23,7 +23,7 @@ props.googleMapsApi = googleMapsApi;
 document.addEventListener('DOMContentLoaded', function(){
     ReactDOM.render( 
         React.createElement(Layout, props),
-        document.body
+        document.getElementById('reactHere')
     );
 })
 

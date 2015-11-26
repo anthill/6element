@@ -18,38 +18,38 @@ getChildContext: function() {
 getInitialState: function() {
     if(!this.googleMapsApi && this.props.googleMapsApi)
         this.googleMapsApi = this.props.googleMapsApi;
-    
 	return { parameters: this.props.parameters };
 },
 componentWillReceiveProps: function(newProps) {
     if(!this.googleMapsApi && newProps.googleMapsApi)
         this.googleMapsApi = newProps.googleMapsApi;
 },
-initDialog: function(){
+componentDidMount: function(){
+
 	var self = this;
 	var parameters = this.state.parameters;
 	
 	var where = ReactDOM.findDOMNode(this.refs.whereField);
 	var val = where.querySelector('input');
 
-	// Goocle API firing
+	// Google API firing
     if(this.googleMapsApi){
         this.googleMapsApi().then(function( maps ) {
 
             var autocomplete = new maps.places.Autocomplete(val, { types: ['geocode'] });
             maps.event.addListener(autocomplete, 'place_changed', function(){
-            var place = autocomplete.getPlace();
-            var address = '';
-            if (place.address_components) {
-                address = [
-                (place.address_components[0] && place.address_components[0].short_name || ''),
-                (place.address_components[1] && place.address_components[1].short_name || ''),
-                (place.address_components[2] && place.address_components[2].short_name || '')
-                ].join(' ');
-            }
-            parameters.geoloc = {lat: place.geometry.location.lat(), lon: place.geometry.location.lng()};
-            parameters.placeName = address;
-            self.setState({parameters: parameters})
+	            var place = autocomplete.getPlace();
+	            var address = '';
+	            if (place.address_components) {
+	                address = [
+	                (place.address_components[0] && place.address_components[0].short_name || ''),
+	                (place.address_components[1] && place.address_components[1].short_name || ''),
+	                (place.address_components[2] && place.address_components[2].short_name || '')
+	                ].join(' ');
+	            }
+	            parameters.geoloc = {lat: place.geometry.location.lat(), lon: place.geometry.location.lng()};
+	            parameters.placeName = address;
+	            self.setState({parameters: parameters})
             });
         });
     }
@@ -91,36 +91,35 @@ render: function() {
 			title="6element"
 			actions={customActions}
 			actionFocus="submit"
-			modal={true}
-			onShow={this.initDialog}
-			openImmediately={this.props.status===1}
+			show={this.initDialog}
+			defaultOpen={this.props.status===1}
 			autoDetectWindowHeight={true} 
 			autoScrollBodyContent={true}
 			contentStyle={{maxWidth: '420px'}}>
-			<div>
 			<table width="100%">
-				<tr>
-				<td><Mui.FontIcon className="material-icons" color={Colors.grey600} >description</Mui.FontIcon></td>
-				<td>
-					<Mui.SelectField
-					ref="whatField"
-					selectedIndex={this.state.parameters.what}
-					onChange={this.handleSelectWhat}
-					fullWidth={true}
-					menuItems={whatOptions} />
-				</td>
-				</tr>
-				<tr>
-				<td><Mui.FontIcon className="material-icons" color={Colors.grey600} >room</Mui.FontIcon></td>
-				<td>
-					<Mui.TextField
-					defaultValue={this.state.parameters.placeName}
-					ref="whereField" 
-					fullWidth={true}/>
-				</td>  
-				</tr>
+				<tbody>
+					<tr>
+					<td><Mui.FontIcon className="material-icons" color={Colors.grey600} >description</Mui.FontIcon></td>
+					<td>
+						<Mui.SelectField
+						ref="whatField"
+						selectedIndex={this.state.parameters.what}
+						onChange={this.handleSelectWhat}
+						fullWidth={true}
+						menuItems={whatOptions} />
+					</td>
+					</tr>
+					<tr>
+					<td><Mui.FontIcon className="material-icons" color={Colors.grey600} >room</Mui.FontIcon></td>
+					<td>
+						<Mui.TextField
+						defaultValue={this.state.parameters.placeName}
+						ref="whereField" 
+						fullWidth={true}/>
+					</td>  
+					</tr>
+				</tbody>
 			</table>
-			</div>
 		</Mui.Dialog>);
 	}
 });

@@ -1,6 +1,6 @@
 # 6element
 
-6element is a open innovation project of waste optimisation. **[Learn more](http://ants.builders/pages/6element.html)**
+6element is a open innovation project of waste optimisation. **[Learn more](https://medium.com/ants-blog/6element-534ffbe2a60f#.wd3yf7ez6)**
 
 
 ## Getting started

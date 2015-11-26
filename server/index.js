@@ -10,6 +10,7 @@ var bodyParser = require('body-parser');
 var compression = require('compression')
 
 var React = require('react');
+var ReactDOMServer = require('react-dom/server');
 var jsdom = require('jsdom');
 
 var makeDocument = require('./makeDocument');
@@ -30,7 +31,7 @@ var PORT = process.env.VIRTUAL_PORT ? process.env.VIRTUAL_PORT: 3500;
 var indexHTMLStr = fs.readFileSync(path.join(__dirname, '..', 'src', 'index.html'), {encoding: 'utf8'});
 
 function renderDocumentWithData(doc, data, reactComponent){    
-    doc.querySelector('body').innerHTML = React.renderToString( React.createElement(reactComponent, data) );
+    doc.getElementById('reactHere').innerHTML = ReactDOMServer.renderToString( React.createElement(reactComponent, data) );
     
     var initDataInertElement = doc.querySelector('script#init-data');
     if(initDataInertElement)
@@ -45,6 +46,10 @@ app.use(compression());
 
 
 app.get('/', function(req, res){
+
+    //https://github.com/FormidableLabs/radium/commit/190ba4d6c1abac72838a63be40cd7a82d89851c8
+    global.navigator = {'userAgent': req.headers['user-agent']};
+
     // Create a fresh document every time
     makeDocument(indexHTMLStr).then(function(result){
         var doc = result.document;
@@ -64,7 +69,6 @@ app.get('/browserify-bundle.js', function(req, res){
 
 app.use("/css/leaflet.css", express.static(path.join(__dirname, '../node_modules/leaflet/dist/leaflet.css')));
 app.use("/images-leaflet", express.static(path.join(__dirname, '../node_modules/leaflet/dist/images')));
-app.use("/css/material/", express.static(path.join(__dirname, '../node_modules/material-design-lite')));
 
 
 

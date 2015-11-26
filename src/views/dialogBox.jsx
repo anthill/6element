@@ -18,14 +18,14 @@ getChildContext: function() {
 getInitialState: function() {
     if(!this.googleMapsApi && this.props.googleMapsApi)
         this.googleMapsApi = this.props.googleMapsApi;
-    
 	return { parameters: this.props.parameters };
 },
 componentWillReceiveProps: function(newProps) {
     if(!this.googleMapsApi && newProps.googleMapsApi)
         this.googleMapsApi = newProps.googleMapsApi;
 },
-initDialog: function(){
+componentDidMount: function(){
+
 	var self = this;
 	var parameters = this.state.parameters;
 	
@@ -33,24 +33,23 @@ initDialog: function(){
 	var val = where.querySelector('input');
 
 	// Google API firing
-	console.log(this.googleMapsApi);
     if(this.googleMapsApi){
         this.googleMapsApi().then(function( maps ) {
 
             var autocomplete = new maps.places.Autocomplete(val, { types: ['geocode'] });
             maps.event.addListener(autocomplete, 'place_changed', function(){
-            var place = autocomplete.getPlace();
-            var address = '';
-            if (place.address_components) {
-                address = [
-                (place.address_components[0] && place.address_components[0].short_name || ''),
-                (place.address_components[1] && place.address_components[1].short_name || ''),
-                (place.address_components[2] && place.address_components[2].short_name || '')
-                ].join(' ');
-            }
-            parameters.geoloc = {lat: place.geometry.location.lat(), lon: place.geometry.location.lng()};
-            parameters.placeName = address;
-            self.setState({parameters: parameters})
+	            var place = autocomplete.getPlace();
+	            var address = '';
+	            if (place.address_components) {
+	                address = [
+	                (place.address_components[0] && place.address_components[0].short_name || ''),
+	                (place.address_components[1] && place.address_components[1].short_name || ''),
+	                (place.address_components[2] && place.address_components[2].short_name || '')
+	                ].join(' ');
+	            }
+	            parameters.geoloc = {lat: place.geometry.location.lat(), lon: place.geometry.location.lng()};
+	            parameters.placeName = address;
+	            self.setState({parameters: parameters})
             });
         });
     }
@@ -62,10 +61,10 @@ handleSelectWhat: function(e){
 	this.setState({ parameters: parameters });
 },
 show: function(){
-	this.refs.dialog.open = true;
+	this.refs.dialog.show();
 },
 dismiss: function(){
-	this.refs.dialog.open = false;
+	this.refs.dialog.dismiss();
 },
 onDialogSubmit: function(e){
 	this.props.submitParameters(this.state.parameters);

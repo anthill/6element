@@ -8,51 +8,46 @@ var DefaultRawTheme = Mui.Styles.LightRawTheme;
 var Colors = require('material-ui/lib/styles/colors');
 
 var NotEmpty = function(field){
-  if(typeof field === 'undefined') return false;
-  if(field === null) return false;
-  if(field === '') return false;
-  return true;
+	if(typeof field === 'undefined') return false;
+	if(field === null) return false;
+	if(field === '') return false;
+	return true;
 }
 
 module.exports = React.createClass({
-  childContextTypes: {
-    muiTheme: React.PropTypes.object
-  },
-  getChildContext: function() {
-    return { muiTheme: ThemeManager.getMuiTheme(DefaultRawTheme) };
-  },
-  render: function() {
+	childContextTypes: {
+		muiTheme: React.PropTypes.object
+	},
+	getChildContext: function() {
+		return { muiTheme: ThemeManager.getMuiTheme(DefaultRawTheme) };
+	},
+	onClickPreview: function(object){
+		this.props.onShowDetail(object);
+	},
+	render: function() {
 
-    var object = this.props.object;
+		var object = this.props.object;
 
-    // Distance field
-    var distance = (object.distance > 1000) ? 
-      (object.distance/1000).toFixed(2) + " Km":
-      Math.round(object.distance).toString() + " m";
-     
-    var openJSX = "";
-    if(NotEmpty(object.properties.opening_hours)){
-      var oh = new opening_hours(object.properties.opening_hours);
-      var isOpen = oh.getState();
-      openJSX = (<label className={isOpen?"open":"closed"}><b>{isOpen?"Ouvert actuellement":"Fermé actuellement"}</b></label>);
-    }
+		// Distance field
+		var distance = (object.distance > 1000) ? 
+			(object.distance/1000).toFixed(2) + "Km":
+			Math.round(object.distance).toString() + "m";
+		 
+		var openJSX = "";
+		if(NotEmpty(object.properties.opening_hours)){
+			var oh = new opening_hours(object.properties.opening_hours);
+			var isOpen = oh.getState();
+			openJSX = (<span className={isOpen?"open":"closed"}><br/>{isOpen?"Ouvert actuellement":"Fermé actuellement"}</span>);
+		}
 
-    // Final Object render
-    return (
-      <div className="preview">
-        <div className="row clearfix styleRow">
-          <div className="pull-left text-left">
-            <Mui.CardHeader 
-              title={object.properties.name} 
-              subtitle={object.file}
-              avatar={<Mui.Avatar style={{backgroundColor: object.color}}></Mui.Avatar>}
-              style={{textAlign: "left", overflow: "hidden", padding: 0, height: '40px'}}/>
-          </div>
-          <div className="pull-right text-right">
-            <em>{distance}</em>
-          </div>
-        </div>
-        {openJSX}
-      </div>);
-  }
+		return (
+			<Mui.ListItem
+			    leftAvatar={<Mui.Avatar backgroundColor={object.color}></Mui.Avatar>}
+			    rightAvatar={<Mui.Avatar size={20} color={Colors.grey600} backgroundColor={Colors.transparent} style={{'marginRight': '15px'}}>{distance}</Mui.Avatar>}
+               	primaryText={object.properties.name}
+			    secondaryText={<span>{object.file}{openJSX}</span>}
+  				secondaryTextLines={openJSX === "" ? 1:2}
+			    onTouchTap={this.onClickPreview.bind(this,object)}/>
+		);
+	}
 });

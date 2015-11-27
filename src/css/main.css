@@ -2,6 +2,7 @@ body{
 	background-color: rgba(229,229,229,0.5);
     /*max-width: 500px;*/
     font-family: Lato, sans-serif;
+    margin: 0px;
 }
 
 button a{
@@ -21,6 +22,12 @@ button a{
 .noRef{
 	color:inherit;	
 	text-decoration:none; 
+}
+.flatIcon,
+.flatIcon:hover {
+	margin: 0px;
+	padding: 0px;
+	min-width: 0px !important;
 }
 
 #map{
@@ -65,22 +72,29 @@ button a{
 #nbResults p, 
 .preview 
 {
-	padding: 15px;
+	padding-left: 15px;
+	padding-right: 15px;
 	margin: 0px;
+	height: 40px;
 }
-.preview{
-	border-bottom: solid 1px whitesmoke;
+
+#leftNav{
+	top: 56px;
+	bottom: 0px;
+	position: absolute;
+	width: 100%;
+	max-width: 400px;
+	overflow:auto;
+	z-index: 2;
 }
+
 #sheet	{
 	margin: 0 auto;
 	max-width: 700px;
 	height: 100%;
 	background-color: white; 
 }
-/*
-#detail{
-	padding: 15px;
-}*/
+
 #groupSort {
 	margin-bottom: 20px; 
 }
@@ -118,14 +132,6 @@ button a{
 	text-align: center;
 	vertical-align: text-top;
 }
-
-.flatIcon,
-.flatIcon:hover {
-	margin: 0px;
-	padding: 0px;
-	min-width: 0px !important;
-}
-
 #tsChart {
 	text-align: center;
 	vertical-align: text-top;

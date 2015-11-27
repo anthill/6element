@@ -25,15 +25,16 @@ componentWillReceiveProps: function(newProps) {
         this.googleMapsApi = newProps.googleMapsApi;
 },
 componentDidMount: function(){
-
-	var self = this;
-	var parameters = this.state.parameters;
 	
-	var where = ReactDOM.findDOMNode(this.refs.whereField);
-	var val = where.querySelector('input');
-
 	// Google API firing
     if(this.googleMapsApi){
+
+		var self = this;
+		var parameters = this.state.parameters;
+
+		var where = ReactDOM.findDOMNode(this.refs.whereField);
+		var val = where.querySelector('input');
+
         this.googleMapsApi().then(function( maps ) {
 
             var autocomplete = new maps.places.Autocomplete(val, { types: ['geocode'] });
@@ -66,6 +67,9 @@ show: function(){
 dismiss: function(){
 	this.refs.dialog.dismiss();
 },
+isOpen: function(){
+	this.refs.dialog.isOpen();
+},
 onDialogSubmit: function(e){
 	this.props.submitParameters(this.state.parameters);
 },
@@ -92,7 +96,7 @@ render: function() {
 			actions={customActions}
 			actionFocus="submit"
 			show={this.initDialog}
-			defaultOpen={this.props.status===1}
+			defaultOpen={this.props.isStarting()}
 			autoDetectWindowHeight={true} 
 			autoScrollBodyContent={true}
 			contentStyle={{maxWidth: '420px'}}>

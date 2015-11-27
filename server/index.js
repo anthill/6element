@@ -47,19 +47,25 @@ app.use(compression());
 
 app.get('/', function(req, res){
 
-    //https://github.com/FormidableLabs/radium/commit/190ba4d6c1abac72838a63be40cd7a82d89851c8
-    global.navigator = {'userAgent': req.headers['user-agent']};
 
     // Create a fresh document every time
     makeDocument(indexHTMLStr).then(function(result){
         var doc = result.document;
         var dispose = result.dispose;
 
+        // Material-ui needs to change the global.navigator.userAgent property
+        // (just during the React  rendering)
+        // Waiting for Material team to fix it 
+        //https://github.com/callemall/material-ui/pull/2007#issuecomment-155414926
+        global.navigator = {'userAgent': req.headers['user-agent']};
         renderDocumentWithData(doc, layoutData, Layout);
+        global.navigator = undefined;
+
         res.send( jsdom.serializeDocument(doc) );
         dispose();
     })
     .catch(function(err){ console.error('/', err, err.stack); });
+
     
 });
 

@@ -15,8 +15,8 @@ module.exports = React.createClass({
 	getChildContext: function() {
 		return { muiTheme: ThemeManager.getMuiTheme(DefaultRawTheme) };
 	},
-	toggle: function(){
-		this.setState({displayed: !this.state.displayed});
+	display: function(trueOrFalse){
+		this.setState({displayed: trueOrFalse});
 	},
 	getInitialState: function() {
 		return {displayed: true, maxLength: 20};
@@ -48,8 +48,9 @@ module.exports = React.createClass({
 	},
 	render: function() {
 			 
-		//if(this.props.visibility === 'hidden')
-		//	return (<div></div>);
+		if( this.state.displayed === false ||
+			this.props.isStarting())
+			return (<div></div>);
 
 		var listFilters = this.props.filters
 		.filter(function(filter){
@@ -92,7 +93,7 @@ module.exports = React.createClass({
 			<Mui.Paper ref="leftNav" id="leftNav" zDepth={1}>
 				{noResultsJSX}
 				<Mui.List>
-				{listJSX}
+					{listJSX}
 				</Mui.List>
 			</Mui.Paper>);
 	}

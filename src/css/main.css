@@ -5,6 +5,15 @@ body{
     margin: 0px;
 }
 
+#backgroundMap{
+    background-image: url("../img/screenshot.png");
+	background-size: 2550px 1436px;
+	background-repeat: no-repeat;
+	background-position: left top;
+	height: 90vh;
+    position: relative;
+}
+
 button a{
 	color: white;
 	text-decoration: none;
@@ -38,6 +47,8 @@ button a{
 {
 	top: 56px;
 	z-index: 1;
+	position: absolute;
+	vertical-align: middle;
 }
 .fixedFooter {
 	bottom: 0px;
@@ -61,17 +72,11 @@ button a{
 	max-width: 700px;
 	margin: 0 auto;
 }
-#moreResults{
-	text-align: center;
-	height: 40px;
-}
-#moreResults span{
-	vertical-align: middle;
-}
-#moreResults,
-#nbResults p, 
+
+#nbResults, 
 .preview 
 {
+	vertical-align: middle;
 	padding-left: 15px;
 	padding-right: 15px;
 	margin: 0px;
@@ -92,7 +97,7 @@ button a{
 	margin: 0 auto;
 	max-width: 700px;
 	height: 100%;
-	background-color: white; 
+	background-color: white;
 }
 
 #groupSort {

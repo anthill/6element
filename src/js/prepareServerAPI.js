@@ -1,7 +1,7 @@
 'use strict';
 
 // Concats every paramater in a url postifx string
-/*function makeSearchString(obj){
+function makeSearchString(obj){
 
     if(obj === undefined) return '';
     
@@ -10,7 +10,7 @@
         return encodeURI(k) + '=' + encodeURI(obj[k]);
     })
     .join('&');
-};*/
+};
 
 
 module.exports = function(request, origin){
@@ -23,7 +23,7 @@ module.exports = function(request, origin){
             return request('POST', origin + '/search', data);
         },
         measurements: function(data){
-            return request('POST', origin + '/measurements/sensor/raw', data);
+            return request('GET', origin + '/measurements/place/raw' + makeSearchString(data));
         }
     };
 };

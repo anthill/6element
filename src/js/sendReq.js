@@ -11,9 +11,9 @@ module.exports = function (method, url, data){
         xhr.responseType = 'json';
 
         xhr.addEventListener('load', function(){
-            if(xhr.status < 400)
+            if(xhr.status < 400){
                 resolve(xhr.response);
-            else {
+            } else {
                 reject(Object.assign(
                     new Error('HTTP error'),
                     {

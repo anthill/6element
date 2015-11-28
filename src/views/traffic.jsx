@@ -54,7 +54,7 @@ module.exports = React.createClass({
 		end.setDate(start.getDate()+1);
 		
 		var data = {
-			sim: this.props.sensorId,
+			id: this.props.pheromonId,
 			type: 'wifi',
 			start: start,
 			end: end
@@ -63,7 +63,7 @@ module.exports = React.createClass({
 		var results = [];
 		requestMeasurements(data)
 		.then(function(measures){
-			
+
 			var options = {hour: "2-digit", minute: "2-digit"};
 			results = measures.map(function(measure){
 				
@@ -83,25 +83,6 @@ module.exports = React.createClass({
 			console.error(error);
 			self.paint(context, width, height, results);      
 		})
-
-	},
-	 paint2: function(ctx, width, height){
-		
-		ctx.globalAlpha=1;
-		var margin = 10;
-		var rectGrid = { "top": 0, "right": width, "bottom": height, "left": 0 };
-		/*var rectGrid = { "top": margin, "right": width-margin, "bottom": height-margin, "left": margin };
-		rectGrid["bottom"] -= margin; // Axe X
-		*/
-		var DIMGRAY     = '#696969';
-		// *** CLEANING ***
-		ctx.clearRect(0, 0, width, height);
-		ctx.beginPath();
-		ctx.strokeStyle = DIMGRAY;
-		ctx.lineWidth=1;
-		ctx.rect(rectGrid.left, rectGrid.top, rectGrid.right-rectGrid.left, rectGrid.bottom-rectGrid.top);
-		ctx.stroke();
-
 
 	},
 	paint: function(ctx, width, height, bins){

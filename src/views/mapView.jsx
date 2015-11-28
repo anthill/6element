@@ -11,7 +11,6 @@ var MapCore  =  require('./mapCore.js');
 
 var L; // variable where to store the leaflet global. Will be passed to props... maybe
 
-
 module.exports = React.createClass({
 	getInitialState: function() {
 		if(!L && this.props.leaflet)
@@ -126,7 +125,7 @@ module.exports = React.createClass({
 					if(box.o === null || box.o > lon) box.o = lon;
 				}
 				var isCenter = (point.properties.type === 'centre');
-				var hasSensor = (point.properties.sensor_id !== null);
+				var hasSensor = (point.properties.pheromon_id !== null);
 				var options = {
 					color: 'black',
 					fill: true,
@@ -139,14 +138,14 @@ module.exports = React.createClass({
 				
 				// Regular point or Sensor kitted point
 				var marker = null;
-				if(hasSensor && typeof point.measurements !== 'undefined'){
+				if(hasSensor && point.measurements !== undefined){
 
 					var value = point.measurements.latest/point.measurements.max;
 					var color = 'green';
 					if(value > 0.5 && value <= 0.75) color = 'orange';
 					else if(value > 0.75) color = 'red';
 
-					var pulsingIcon = new IconPulse({iconSize:[20,20],fillColor: point.color,pulseColor: color});
+					var pulsingIcon = new L.Icon.Pulse({iconSize:[20,20],fillColor: point.color,pulseColor: color});
 					marker = L.marker(new L.LatLng(lat, lon),{icon: pulsingIcon});
 				}
 				else

@@ -21,15 +21,16 @@ getInitialState: function() {
 	return { parameters: this.props.parameters };
 },
 componentWillReceiveProps: function(newProps) {
-    if(!this.googleMapsApi && newProps.googleMapsApi)
-        this.googleMapsApi = newProps.googleMapsApi;
+    if(!this.googleMapsApi && newProps.googleMapsApi){
+		    this.googleMapsApi = newProps.googleMapsApi;
+    }
 },
-componentDidMount: function(){
+startAutocomplete: function(){
 	
 	// Google API firing
     if(this.googleMapsApi){
 
-		var self = this;
+    	var self = this;
 		var parameters = this.state.parameters;
 
 		var where = ReactDOM.findDOMNode(this.refs.whereField);
@@ -60,6 +61,9 @@ handleSelectWhat: function(e){
 	var parameters = this.state.parameters;
 	parameters.what = e.target.value;
 	this.setState({ parameters: parameters });
+},
+onFocusWhere: function(){
+	this.startAutocomplete();
 },
 show: function(){
 	this.refs.dialog.show();
@@ -119,6 +123,7 @@ render: function() {
 						<Mui.TextField
 						defaultValue={this.state.parameters.placeName}
 						ref="whereField" 
+						onFocus={this.onFocusWhere}
 						fullWidth={true}/>
 					</td>  
 					</tr>

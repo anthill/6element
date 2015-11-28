@@ -6,8 +6,8 @@ body{
 }
 
 #backgroundMap{
-    background-image: url("../img/screenshot.png");
-	background-size: 2550px 1436px;
+    background-image: url("../img/screenshot.jpg");
+	background-size: 1275px 718px;
 	background-repeat: no-repeat;
 	background-position: left top;
 	height: 90vh;

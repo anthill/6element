@@ -67,7 +67,6 @@ module.exports = React.createClass({
 
             calendarJSX = (<Calendar opening_hours={object.properties.opening_hours} />);
 
-            console.log(object);
             var max = (object.measurements !== undefined) ? object.measurements.max: 0;
             detailJSX = (
                 <Mui.Tabs>

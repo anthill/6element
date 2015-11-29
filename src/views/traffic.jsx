@@ -74,6 +74,7 @@ module.exports = React.createClass({
 			end: end
 		}
 
+		var traces =[];
         var xSignals = [], ySignals = []; // Signal curve
         var xGreen = [], yGreen = []; // Colored squares
         var xOrange = [], yOrange = []; 
@@ -83,53 +84,56 @@ module.exports = React.createClass({
 		requestMeasurements(data)
 		.then(function(measures){
 
+			if(measures.length > 0){
 
-			// for ecah bin of 15 minutes we compute an averge measure
-			var now = new Date();
-			var ticks = (20-8)*4;
-			for (var i = 0; i<=ticks; ++i) {
-				
-				var beginTick = new Date(self.state.date);
-				beginTick.setHours(8+Math.floor(i/4),i*15%60, 0);
-				var endTick = new Date(self.state.date);
-				endTick.setHours(8+Math.floor((i+1)/4),(i+1)*15%60, 0);
+				// for each bin of 15 minutes we compute an averge measure
+				var now = new Date();
+				var ticks = (20-8)*4;
+				for (var i = 0; i<=ticks; ++i) {
+					
+					var beginTick = new Date(self.state.date);
+					beginTick.setHours(8+Math.floor(i/4),i*15%60, 0);
+					var endTick = new Date(self.state.date);
+					endTick.setHours(8+Math.floor((i+1)/4),(i+1)*15%60, 0);
 
-				var values = measures
-				.filter(function(measure){
-					var date = new Date(measure.date);
-					return beginTick <= date && date < endTick;
-				})
-				.map(function(measure){
-					return measure.value.length;
-				});
+					var values = measures
+					.filter(function(measure){
+						var date = new Date(measure.date);
+						return beginTick <= date && date < endTick;
+					})
+					.map(function(measure){
+						return measure.value.length;
+					});
 
-				var avg = (values.reduce(function(sum, a) {
-                    return sum + a;
-                }, 0) / (values.length || 1)) * 100/self.props.max;
+					var avg = (values.reduce(function(sum, a) {
+	                    return sum + a;
+	                }, 0) / (values.length || 1)) * 100/self.props.max;
 
 
-				var strDate = formatDate(beginTick);
-				xSignals.push(strDate);
-	            ySignals.push(avg);
+					if(beginTick <= now){
+	
+						var strDate = formatDate(beginTick);
+						xSignals.push(strDate);
+			            ySignals.push(avg);
 
-	            // Color 
-				if(beginTick <= now){
-		            if(avg < 30){
-		            	xGreen.push(strDate);
-		            	yGreen.push(-10);
-		            } else if(30 <= avg && avg < 50){
-		            	xOrange.push(strDate);
-		            	yOrange.push(-10);
-		            }
-		            else {
-		            	xRed.push(strDate);
-		            	yRed.push(-10);
-		            }
-		        }
+			            // Color 
+			            if(avg < 30){
+			            	xGreen.push(strDate);
+			            	yGreen.push(-10);
+			            } else if(30 <= avg && avg < 50){
+			            	xOrange.push(strDate);
+			            	yOrange.push(-10);
+			            }
+			            else {
+			            	xRed.push(strDate);
+			            	yRed.push(-10);
+			            }
+			        }
 
+				}
 			}
 
-			var traces = [{
+			traces = [{
 	        	type: 'scatter',
 	            name: 'trajectoires',
 	            showlegend: false,
@@ -191,21 +195,18 @@ module.exports = React.createClass({
 	            mode: 'markers'
 	        }
 	        ]
-	        //console.log(xSignals);
-	        //console.log(ySignals);
 	        Plotly.newPlot( chart, traces, 
 	        {
 	            xaxis:{
 	                type: 'date',
 	                tickformat:'%H:%M',
-	                min: formatDate(start),
-	                max: formatDate(end),
+	                range: [start.valueOf(), end.valueOf()],
 	            },
 	            yaxis:{
 	                range: [-20,80],
 	                showticklabels: false
 	            },
-	            margin: { t: 0, b: 20, l: 10, r: 20} 
+	            margin: { t: 0, b: 20, l: 20, r: 20} 
 	        }, {showLink: false, displayModeBar: false} );
 
 		})

@@ -17,6 +17,22 @@ var NotEmpty = function(field){
 	if(field === '') return false;
 	return true;
 }
+ 
+var formatDate = function(date) {
+
+    var pad = function(number) {
+      	if ( number < 10 ) {
+        	return '0' + number;
+      	}
+      	return number;
+    }
+	return date.getUTCFullYear() +
+		'-' + pad( date.getUTCMonth() + 1 ) +
+		'-' + pad( date.getUTCDate() ) +
+		' ' + pad( date.getUTCHours() ) +
+		':' + pad( date.getUTCMinutes() ) +
+		':00.000000';
+ };
 
 module.exports = React.createClass({
 	getInitialState: function() {
@@ -32,26 +48,24 @@ module.exports = React.createClass({
 		return { muiTheme: ThemeManager.getMuiTheme(DefaultRawTheme) };
 	},
 	componentDidMount: function(){
-		this.update();
-	},
-	componentDidUpdate: function(){
-		this.update();
-	},
-	update: function(){
+        this.update();
+    },
+    componentDidUpdate: function(){
+        this.update();
+    },
+    update: function () {
 
-		if(NotEmpty(this.props.opening_hours) === false ||
+    	if(NotEmpty(this.props.opening_hours) === false ||
 			typeof this.props.max === 0) return;
 
 		var self = this;
-		var width = 400;
-		var height = 100;
-		var tsChart = ReactDOM.findDOMNode(this.refs.tsChart);
-		var context = tsChart.getContext('2d');
-		context.clearRect(0, 0, width, height);
-		
-		var start = this.state.date;
-		var end = new Date(start);
-		end.setDate(start.getDate()+1);
+		var chart = ReactDOM.findDOMNode(this.refs.chart);
+			
+		// binding inputs for API
+		var start = new Date(this.state.date);
+		start.setHours(8,0,0,0);
+		var end = new Date(this.state.date);
+		end.setHours(20,0,0,0);
 		
 		var data = {
 			id: this.props.pheromonId,
@@ -60,124 +74,146 @@ module.exports = React.createClass({
 			end: end
 		}
 
+        var xSignals = [], ySignals = []; // Signal curve
+        var xGreen = [], yGreen = []; // Colored squares
+        var xOrange = [], yOrange = []; 
+        var xRed = [], yRed = []; 
+        var xGrey = [], yGrey = []; 
 		var results = [];
 		requestMeasurements(data)
 		.then(function(measures){
 
-			var options = {hour: "2-digit", minute: "2-digit"};
-			results = measures.map(function(measure){
-				
-				var startHour = new Date(measure.date);
-				var endHour = new Date(startHour);
-				endHour.setMinutes(endHour.getMinutes()+5); 
-				return {
-					'start': startHour.toLocaleString("fr-FR",options),
-					'end':   endHour.toLocaleString("fr-FR",options),
-					'level': measure.value.length*100/self.props.max
-				}
-			});
 
-			self.paint(context, width, height, results);
+			// for ecah bin of 15 minutes we compute an averge measure
+			var now = new Date();
+			var ticks = (20-8)*4;
+			for (var i = 0; i<=ticks; ++i) {
+				
+				var beginTick = new Date(self.state.date);
+				beginTick.setHours(8+Math.floor(i/4),i*15%60, 0);
+				var endTick = new Date(self.state.date);
+				endTick.setHours(8+Math.floor((i+1)/4),(i+1)*15%60, 0);
+
+				var values = measures
+				.filter(function(measure){
+					var date = new Date(measure.date);
+					return beginTick <= date && date < endTick;
+				})
+				.map(function(measure){
+					return measure.value.length;
+				});
+
+				var avg = (values.reduce(function(sum, a) {
+                    return sum + a;
+                }, 0) / (values.length || 1)) * 100/self.props.max;
+
+
+				var strDate = formatDate(beginTick);
+				xSignals.push(strDate);
+	            ySignals.push(avg);
+
+	            // Color 
+				if(beginTick <= now){
+		            if(avg < 30){
+		            	xGreen.push(strDate);
+		            	yGreen.push(-10);
+		            } else if(30 <= avg && avg < 50){
+		            	xOrange.push(strDate);
+		            	yOrange.push(-10);
+		            }
+		            else {
+		            	xRed.push(strDate);
+		            	yRed.push(-10);
+		            }
+		        }
+
+			}
+
+			var traces = [{
+	        	type: 'scatter',
+	            name: 'trajectoires',
+	            showlegend: false,
+	            x: xSignals,
+	            y: ySignals,
+	            marker: {
+	            symbol: "x",
+	                color: Colors.pink400
+	            },
+	            line: {shape: 'spline'},
+	            mode: 'lines'
+	        },
+	        {
+	        	type: 'scatter',
+	            name: 'green',
+	            showlegend: false,
+	            x: xGreen,
+	            y: yGreen,
+	            marker: {
+	            	symbol: "square",
+	                color: Colors.green400
+	            },
+	            mode: 'markers'
+	        },
+	        {
+	        	type: 'scatter',
+	            name: 'orange',
+	            showlegend: false,
+	            x: xOrange,
+	            y: yOrange,
+	            marker: {
+	            	symbol: "square",
+	                color: Colors.amber300
+	            },
+	            mode: 'markers'
+	        },
+	        {
+	        	type: 'scatter',
+	            name: 'red',
+	            showlegend: false,
+	            x: xRed,
+	            y: yRed,
+	            marker: {
+	            	symbol: "square",
+	                color: Colors.red500
+	            },
+	            mode: 'markers'
+	        },
+	        {
+	        	type: 'scatter',
+	            name: 'grey',
+	            showlegend: false,
+	            x: xGrey,
+	            y: yGrey,
+	            marker: {
+	            	symbol: "square",
+	                color: Colors.blueGrey100
+	            },
+	            mode: 'markers'
+	        }
+	        ]
+	        //console.log(xSignals);
+	        //console.log(ySignals);
+	        Plotly.newPlot( chart, traces, 
+	        {
+	            xaxis:{
+	                type: 'date',
+	                tickformat:'%H:%M',
+	                min: formatDate(start),
+	                max: formatDate(end),
+	            },
+	            yaxis:{
+	                range: [-20,80],
+	                showticklabels: false
+	            },
+	            margin: { t: 0, b: 20, l: 10, r: 20} 
+	        }, {showLink: false, displayModeBar: false} );
+
 		})
 		.catch(function(error){
 			console.error(error);
-			self.paint(context, width, height, results);      
 		})
 
-	},
-	paint: function(ctx, width, height, bins){
-		
-		ctx.globalAlpha=1;
-		var margin = 10;
-		var rectGrid = { "top": margin, "right": width-margin, "bottom": height-margin, "left": margin };
-		rectGrid["bottom"] -= margin; // Axe X
-		
-		// *** CLEANING ***
-		ctx.clearRect(0, 0, width, height);
-
-		// *** COLORS ***
-		var WHITE       = '#FFFFFF';
-		var BLACK       = '#000000';
-		var DIMGRAY     = '#696969';
-		var LIGHTGREY   = '#D3D3D3';
-		var SALMON      = '#FA8072';
-		var RED         = '#FF0000';
-		var GREEN       = '#6CC417';
-		var GREENY      = '#CCFB5D';
-		var YELLOW      = '#FFD801';
-		var ORANGE      = '#FBB117';
-		var ORANGER     = '#FBB117';
-
-		//var colors = [GREEN, GREEN, GREENY, GREENY, YELLOW, YELLOW, ORANGE, ORANGE, RED, RED, RED];
-		var colors = [Colors.grey500, Colors.grey500, Colors.grey400, Colors.grey400, Colors.pink200, Colors.pink200, Colors.pink400, Colors.pink400, Colors.pink500, Colors.pink500, Colors.pink500];
-
-		var minH = 8; // 8h
-		var maxH = 20; // 20h
-		var nbMinutes = (maxH - minH) * 60;
-
-		// X-AXIS
-		var wHour = width / (maxH-minH+1);
-		var hLevel = (rectGrid.bottom-rectGrid.top)/100;
-		for(var j=0; j<=(maxH-minH); ++j){
-				var xUnit = Math.floor(rectGrid.left + j*wHour);
-				// Tag
-				ctx.beginPath();
-				ctx.textAlign = "center"; 
-				ctx.textBaseline = "hanging";
-				ctx.fillStyle = DIMGRAY;
-				ctx.font = "10px 'Arial'";
-				ctx.fillText((minH+j).toString(), xUnit,rectGrid.bottom+6);
-				ctx.closePath();
-	 }
-		/*
-		// Vertical line
-				ctx.beginPath();
-				ctx.strokeStyle = DIMGRAY;
-				ctx.lineWidth=(j%2===0)?0.25:0.125;
-				ctx.moveTo(xUnit,rectGrid.bottom);
-				ctx.lineTo(xUnit,rectGrid.bottom+4);
-				ctx.stroke();
-				*/
-
-		var getX = function(time){
-			var temp = time.split(':');
-			return Math.floor(rectGrid.left+(parseInt(temp[0])-minH)*wHour + (parseInt(temp[1])*wHour/60));
-		}
-		var getY = function(level){
-			return Math.floor(rectGrid.bottom-level*hLevel);
-		}
-		var drawColumn = function(bin){
-			var x0 = getX(bin.start);
-			var x1 = getX(bin.end);
-			var y1 = getY(bin.level);
-
-			for(var k=0; k<bin.level; k=k+10){
-				var y0 = getY(Math.min(bin.level,k+10));
-				var y1 = getY(k);
-				ctx.beginPath();
-				ctx.fillStyle = colors[k/10];
-				ctx.strokeStyle = BLACK;
-				ctx.lineWidth = 0.25;
-				ctx.rect(x0,y0,x1-x0,y1-y0);
-				ctx.fill();
-				ctx.stroke();
-				ctx.closePath();
-			}
-		}
-
-		bins.forEach(function(bin){
-			drawColumn(bin);      
-		});
-
-		ctx.beginPath();
-		ctx.strokeStyle = BLACK;
-		ctx.lineWidth=0.25;
-		ctx.moveTo(rectGrid.left,rectGrid.bottom);
-		ctx.lineTo(rectGrid.right,rectGrid.bottom);
-		ctx.stroke();
-		ctx.closePath();
-
-	},
+    },
 	onPrev: function(){
 		var date = this.state.date;
 		date.setDate(date.getDate()-1);
@@ -201,8 +237,7 @@ module.exports = React.createClass({
 					<Mui.FlatButton label={dayStr}/>
 					<Mui.FlatButton onTouchTap={this.onNext} label="&#x25BA;" className="flatIcon"/>
 				</Mui.CardActions> 
-				<canvas ref="tsChart" id="tsChart" width="400" height="100">
-				</canvas>
+				<div ref="chart" style={{'textAlign': 'center','width':'100%','height':'150px'}}></div>
 			</div>
 		);
 	}

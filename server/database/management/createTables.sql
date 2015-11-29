@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS places (
     id           SERIAL PRIMARY KEY,
     name         text NOT NULL,
     type         text DEFAULT NULL,
-    sensor_id    text DEFAULT NULL,
+    pheromon_id  integer DEFAULT NULL,
     dechet_non_dangereux boolean DEFAULT NULL,
     opening_hours text DEFAULT NULL,
     phone text DEFAULT NULL,

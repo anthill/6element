@@ -21,19 +21,21 @@ getInitialState: function() {
 	return { parameters: this.props.parameters };
 },
 componentWillReceiveProps: function(newProps) {
-    if(!this.googleMapsApi && newProps.googleMapsApi)
-        this.googleMapsApi = newProps.googleMapsApi;
+    if(!this.googleMapsApi && newProps.googleMapsApi){
+		    this.googleMapsApi = newProps.googleMapsApi;
+    }
 },
-componentDidMount: function(){
-
-	var self = this;
-	var parameters = this.state.parameters;
+startAutocomplete: function(){
 	
-	var where = ReactDOM.findDOMNode(this.refs.whereField);
-	var val = where.querySelector('input');
-
 	// Google API firing
     if(this.googleMapsApi){
+
+    	var self = this;
+		var parameters = this.state.parameters;
+
+		var where = ReactDOM.findDOMNode(this.refs.whereField);
+		var val = where.querySelector('input');
+
         this.googleMapsApi().then(function( maps ) {
 
             var autocomplete = new maps.places.Autocomplete(val, { types: ['geocode'] });
@@ -60,11 +62,17 @@ handleSelectWhat: function(e){
 	parameters.what = e.target.value;
 	this.setState({ parameters: parameters });
 },
+onFocusWhere: function(){
+	this.startAutocomplete();
+},
 show: function(){
 	this.refs.dialog.show();
 },
 dismiss: function(){
 	this.refs.dialog.dismiss();
+},
+isOpen: function(){
+	this.refs.dialog.isOpen();
 },
 onDialogSubmit: function(e){
 	this.props.submitParameters(this.state.parameters);
@@ -92,7 +100,7 @@ render: function() {
 			actions={customActions}
 			actionFocus="submit"
 			show={this.initDialog}
-			defaultOpen={this.props.status===1}
+			defaultOpen={this.props.isStarting()}
 			autoDetectWindowHeight={true} 
 			autoScrollBodyContent={true}
 			contentStyle={{maxWidth: '420px'}}>
@@ -115,6 +123,7 @@ render: function() {
 						<Mui.TextField
 						defaultValue={this.state.parameters.placeName}
 						ref="whereField" 
+						onFocus={this.onFocusWhere}
 						fullWidth={true}/>
 					</td>  
 					</tr>

@@ -35,49 +35,49 @@ var toGeoJson = function(results){
     );     
 }
 
-var withSensorMeasurements = function(list){
+var withPlacesMeasurements = function(list){
 
-    return new Promise(function(resolve, reject){
-        
-        var sims = list.map(function(object){
-            return object.sensor_id;
-        });
-       
-        var inputs = { type: 'wifi', sims: sims };
+    
+    return Promise.all(
 
-        request({
-            method: 'POST',
-            url:'https://pheromon.ants.builders/sensorsLatestMeasurement', 
-            headers: {'Content-Type': 'application/json;charset=UTF-8'},
-            body: JSON.stringify(inputs)
-        }, function(error, response, body){
-            if (!error) {
-                if(response !== 'undefined' &&
-                    response.statusCode < 400)
-                    resolve(JSON.parse(body));
-                else {
-                    reject(Object.assign(
-                        new Error('HTTP error because of bad status code ' + body),
-                        {
-                            HTTPstatus: typeof response === 'undefined'?'':response.statusCode,
-                            text: body,
-                            error: error
+        list.map(function(object){
+
+            return new Promise(function(resolve, reject){
+                
+                request({
+                    method: 'GET',
+                    url:'https://pheromon.ants.builders/placeLatestMeasurement/'+object.pheromon_id+'/wifi', 
+                    headers: {'Content-Type': 'application/json;charset=UTF-8'},
+                }, function(error, response, body){
+                    if (!error) {
+                        if(response !== undefined &&
+                            response.statusCode < 400){
+                            resolve(JSON.parse(body));
+                        } else {
+                            reject(Object.assign(
+                                new Error('HTTP error because of bad status code ' + body),
+                                {
+                                    HTTPstatus: typeof response === 'undefined'?'':response.statusCode,
+                                    text: body,
+                                    error: error
+                                }
+                            ));
                         }
-                    ));
-                }
-            }
-            else {
-                reject(Object.assign(
-                        new Error('HTTP error'),
-                        {
-                            HTTPstatus: typeof response === 'undefined'?'':response.statusCode,
-                            text: body,
-                            error: error
-                        }
-                    ));
-            }
-        });
-    });     
+                    }
+                    else {
+                        reject(Object.assign(
+                                new Error('HTTP error'),
+                                {
+                                    HTTPstatus: typeof response === 'undefined'?'':response.statusCode,
+                                    text: body,
+                                    error: error
+                                }
+                            ));
+                    }
+                });
+            })
+        })
+    );  
 }
 
 module.exports = function(req, res){
@@ -103,13 +103,14 @@ module.exports = function(req, res){
             .then(function(geoJson){
 
                 var list = geoJson.map(function(place, index){
-                    return {'index': index, 'sensor_id': place.properties.sensor_id};
+                    return {'index': index, 'pheromon_id': place.properties.pheromon_id};
                 })
                 .filter(function(object){
-                    return (object.sensor_id !== null && 
-                            typeof object.sensor_id !== 'undefined');
+                    return (object.pheromon_id !== null && 
+                            object.pheromon_id !== undefined);
                 });
-                withSensorMeasurements(list)
+
+                withPlacesMeasurements(list)
                 .then(function(measures){
 
                     if(measures !== null){
@@ -146,18 +147,19 @@ module.exports = function(req, res){
             .then(function(geoJson){
                 
                 var list = geoJson.map(function(place, index){
-                    return {'index': index, 'sensor_id': place.properties.sensor_id};
+                    return {'index': index, 'pheromon_id': place.properties.pheromon_id};
                 })
                 .filter(function(object){
-                    return (object.sensor_id !== null && 
-                            typeof object.sensor_id !== 'undefined');
+                    return (object.pheromon_id !== null && 
+                            object.pheromon_id !== undefined);
                 });
-                withSensorMeasurements(list)
+
+                withPlacesMeasurements(list)
                 .then(function(measures){
 
                     if(measures !== null){
                         measures.forEach(function(measure, index){
-                            geoJson[list[index].index]["measurements"] = (measure.latest/measure.max);
+                            geoJson[list[index].index]["measurements"] = {latest: measure.latest, max: measure.max};
                         });
                     }
                     result.objects = geoJson;

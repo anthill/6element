@@ -12,7 +12,7 @@ api:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
       - PGPASSWORD=postgres
-      - NODE_ENV=development
+      - NODE_ENV=production
    volumes:
       - ./:/6element
    tty: true

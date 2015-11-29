@@ -67,12 +67,12 @@ module.exports = React.createClass({
 
             calendarJSX = (<Calendar opening_hours={object.properties.opening_hours} />);
 
-            var max = (typeof object.measurements !== 'undefined') ? object.measurements.max: 0;
+            var max = (object.measurements !== undefined) ? object.measurements.max: 0;
             detailJSX = (
                 <Mui.Tabs>
                     <Mui.Tab label="Affluence" style={{backgroundColor: Colors.blueGrey200}}>
                       <br/>
-                        <Traffic opening_hours={object.properties.opening_hours} sensorId={object.properties.sensor_id} max={max}/>
+                        <Traffic opening_hours={object.properties.opening_hours} pheromonId={object.properties.pheromon_id} max={max}/>
                     </Mui.Tab>
                     <Mui.Tab label="Elements acceptés" style={{backgroundColor: Colors.blueGrey200}}>
                         <div id="allowedObjects" className="row clearfix styleRow">

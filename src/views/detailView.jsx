@@ -66,13 +66,17 @@ module.exports = React.createClass({
         if(NotEmpty(object.properties.opening_hours)){
 
             calendarJSX = (<Calendar opening_hours={object.properties.opening_hours} />);
-
             var max = (object.measurements !== undefined) ? object.measurements.max: 0;
+            var trafficJSX = (object.properties.pheromon_id !== undefined && 
+                            object.properties.pheromon_id !== null) ?
+                            (<Traffic opening_hours={object.properties.opening_hours} pheromonId={object.properties.pheromon_id} max={max}/>) 
+                            :
+                            (<p id="traffic"><em>Ce centre n&apos;est pas équipé de capteur d&apos;affluence</em></p>);  
             detailJSX = (
                 <Mui.Tabs>
                     <Mui.Tab label="Affluence" style={{backgroundColor: Colors.blueGrey200}}>
-                      <br/>
-                        <Traffic opening_hours={object.properties.opening_hours} pheromonId={object.properties.pheromon_id} max={max}/>
+                        <br/>
+                        {trafficJSX}
                     </Mui.Tab>
                     <Mui.Tab label="Elements acceptés" style={{backgroundColor: Colors.blueGrey200}}>
                         <div id="allowedObjects" className="row clearfix styleRow">

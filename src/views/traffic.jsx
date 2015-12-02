@@ -17,7 +17,22 @@ var NotEmpty = function(field){
 	if(field === '') return false;
 	return true;
 }
- 
+
+var fromUTC = function(str){
+
+	var tmp = str.split('T');
+	var vDate = tmp[0].split('-');
+	var vTime = tmp[1].split(':');
+
+	var yyyy = parseInt(vDate[0]);
+	var MM = parseInt(vDate[1]);
+	var dd = parseInt(vDate[2]);
+	var hh = parseInt(vTime[0]);
+	var mm = parseInt(vTime[1]);
+
+	return new Date(Date.UTC(yyyy,MM-1,dd,hh,mm));
+}
+
 var formatDate = function(date) {
 
     var pad = function(number) {
@@ -26,11 +41,11 @@ var formatDate = function(date) {
       	}
       	return number;
     }
-	return date.getUTCFullYear() +
-		'-' + pad( date.getUTCMonth() + 1 ) +
-		'-' + pad( date.getUTCDate() ) +
-		' ' + pad( date.getUTCHours() ) +
-		':' + pad( date.getUTCMinutes() ) +
+	return date.getFullYear() +
+		'-' + pad( date.getMonth() + 1 ) +
+		'-' + pad( date.getDate() ) +
+		' ' + pad( date.getHours() ) +
+		':' + pad( date.getMinutes() ) +
 		':00.000000';
  };
 
@@ -81,10 +96,19 @@ module.exports = React.createClass({
         var xRed = [], yRed = []; 
         var xGrey = [], yGrey = []; 
 		var results = [];
+		var offset = new Date().getTimezoneOffset();
 		requestMeasurements(data)
 		.then(function(measures){
 
-			if(measures.length > 0){
+			var results = measures.map(function(measure){
+				var date = fromUTC(measure.date);					
+				return {
+					date: date, // UTC -> Local
+					cpt: measure.value.length
+				}
+			});
+
+			if(results.length > 0){
 
 				// for each bin of 15 minutes we compute an averge measure
 				var now = new Date();
@@ -96,13 +120,12 @@ module.exports = React.createClass({
 					var endTick = new Date(self.state.date);
 					endTick.setHours(8+Math.floor((i+1)/4),(i+1)*15%60, 0);
 
-					var values = measures
-					.filter(function(measure){
-						var date = new Date(measure.date);
-						return beginTick <= date && date < endTick;
+					var values = results
+					.filter(function(result){
+						return beginTick <= result.date && result.date < endTick;
 					})
-					.map(function(measure){
-						return measure.value.length;
+					.map(function(result){
+						return result.cpt;
 					});
 
 					var avg = (values.reduce(function(sum, a) {
@@ -231,6 +254,7 @@ module.exports = React.createClass({
 
 		var options = {weekday: "long", month: "long", day: "numeric"};
 		var dayStr = this.state.date.toLocaleDateString("fr-FR",options); 
+
 		return (
 			<div id="traffic">
 				<Mui.CardActions> 

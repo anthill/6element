@@ -58,15 +58,18 @@ module.exports = React.createClass({
 	},
 	// Display the left list panel
 	handleLeftNav: function(e){
+		if(e !== undefined) e.preventDefault();
 		this.refs.panelLeft.display(!this.state.listMode);
 		this.setState({listMode: !this.state.listMode});
 	},
 	// Display the right networks panel
 	handleRightNav: function(e){
+		if(e !== undefined) e.preventDefault();
 		this.refs.panelRight.toggle();
 	},
 	// popup the form dialog
 	handleSearchNav: function(e){
+		if(e !== undefined) e.preventDefault();
 		// Temporary hide the left panel
 		if(!this.isStarting() && this.state.listMode)
 				this.refs.panelLeft.display(false); 

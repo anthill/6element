@@ -48,17 +48,6 @@ function browserifyBundle(opts){
     });
 }
 
-/*
-;
-        
-        
-        console.log('debug', debug);
-        if(!debug)
-            bundle = bundle.pipe(uglify());
-        
-        bundle
-*/
-
 gulp.task('build-client', function(){
     return browserifyBundle({debug: false});
 });
@@ -102,7 +91,7 @@ gulp.task('watch', ['watch-client', 'watch-server']);
 gulp.task('build', ['build-client', 'build-server']);
 
 gulp.task('start-containers-dev', ['build'], function(){
-    spawn('docker-compose', ['-f', 'compose-dev.yml', 'up', '--force-recreate'], {stdio: 'inherit'});
+    spawn('docker-compose', ['-f', 'compose-dev.yml', 'up', '-d', '--force-recreate'], {stdio: 'inherit'});
 });
 
 gulp.task('start-containers-prod', ['build'], function(){

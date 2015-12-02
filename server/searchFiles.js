@@ -5,31 +5,61 @@ var hstore = require('pg-hstore')();
 var Places = require('./database/models/places.js');
 var dictionnary = require('../data/dictionary.json');
 
+// Avalaible objects
+var parseObjects = function(row){
+    return new Promise(function(resolve){
+
+        hstore.parse(row.objects, function(fromHstore) {
+
+            var objects = {};
+            Object.keys(fromHstore).forEach(function(key){
+                var fr = dictionnary[key];
+                objects[fr]= fromHstore[key];
+            });
+            resolve(objects);
+        });
+    });
+}
+
+// Bins status
+var parseBins = function(row){
+    return new Promise(function(resolve){
+
+        if(row.bins == undefined) resolve (undefined);
+        else {
+            hstore.parse(row.bins, function(fromHstore) {
+                resolve(fromHstore);
+            });
+        }
+    });
+}
+
 var toGeoJson = function(results){
 
     return Promise.all(
         results.map(function(result){
             return new Promise(function(resolve){
 
-                hstore.parse(result["objects"], function(fromHstore) {
+                parseObjects(result)
+                .then(function(objects){
 
-                    result["objects"] = {}
-                    Object.keys(fromHstore).forEach(function(key){
-                        var fr = dictionnary[key];
-                        result.objects[fr]= fromHstore[key];
+                    parseBins(result)
+                    .then(function(bins){
+
+                        result["objects"] = objects;
+                        result["bins"] = bins;
+                        var geoJson = { 
+                            type: 'Feature',
+                            properties: result,
+                            geometry: { "type": "Point", "coordinates": {"lat":result["lat"], "lon": result["lon"]} },
+                            distance: result.distance,
+                            color: result.color,
+                            file: result.file,
+                            rate: 3 
+                        }
+                        resolve(geoJson);
                     });
-
-                    var geoJson = { 
-                        type: 'Feature',
-                        properties: result,
-                        geometry: { "type": "Point", "coordinates": {"lat":result["lat"], "lon": result["lon"]} },
-                        distance: result.distance,
-                        color: result.color,
-                        file: result.file,
-                        rate: 3 
-                    }
-                    resolve(geoJson);
-                })
+                });
             })
         })
     );     

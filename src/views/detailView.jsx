@@ -34,12 +34,13 @@ module.exports = React.createClass({
             Math.round(object.distance).toString() + " m";
 
         // Categories list
-        var allowedJSX = Object.keys(object.properties.objects)
-        /*.filter(function(category){
-        return object.properties.objects[category] === "1";
-        })*/
+        console.log(object.properties);
+        var list = (object.properties.bins !== undefined) ?
+                    object.properties.bins :
+                    object.properties.objects;
+        var allowedJSX = Object.keys(list)
         .map(function(category, id){
-            return (<li key={'allow'+id.toString()}><label className="open">&bull;</label> {category}</li>);
+            return (<li key={'allow'+id.toString()}><label className={(list[category] === "1")?"open":"closed"}>&bull;</label> {category}</li>);
         });
 
         // Address

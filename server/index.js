@@ -15,12 +15,14 @@ var jsdom = require('jsdom');
 
 var makeDocument = require('./makeDocument');
 var networks = require('./database/models/networks.js');
+var places = require('./database/models/places.js');
 var search = require('./searchFiles.js');
 var stats = require('./statsFiles.js');
 var dictionary = require('../data/dictionary.json');
 var layoutData = require('../common/layoutData');
 
 var Layout = require('../src/views/layout');
+var PRIVATE = require('../PRIVATE.json');
 
 var app = express();
 var PORT = process.env.VIRTUAL_PORT ? process.env.VIRTUAL_PORT: 3500;
@@ -46,8 +48,6 @@ app.use(compression());
 
 
 app.get('/', function(req, res){
-
-
     // Create a fresh document every time
     makeDocument(indexHTMLStr).then(function(result){
         var doc = result.document;
@@ -64,9 +64,54 @@ app.get('/', function(req, res){
         res.send( jsdom.serializeDocument(doc) );
         dispose();
     })
-    .catch(function(err){ console.error('/', err, err.stack); });
+    .catch(function(err){ console.error('/', err, err.stack); }); 
+});
 
-    
+app.get('/bins/get/:pheromonId', function(req, res){
+    if(req.query.s === PRIVATE.secret) {
+        var pheromonId = req.params.pheromonId;
+        console.log('requesting bins for pheromonId', pheromonId);
+
+        places.getBins(pheromonId)
+        .then(function(data){
+            res.status(200).send(data);
+        })
+        .catch(function(error){
+            res.status(500).send('Couldn\'t get bins from database');
+            console.log('error in GET /bins/' + pheromonId, error);
+        });
+    } else res.status(403).send({success: false, message: 'No token provided.'});
+});
+
+app.post('/bins/update/:pheromonId', function(req, res){
+    if(req.query.s === PRIVATE.secret) {
+        var pheromonId = req.params.pheromonId;
+        console.log('requesting bins for pheromonId', pheromonId);
+
+        places.getBins(pheromonId)
+        .then(function(data){
+            res.status(200).send(data);
+        })
+        .catch(function(error){
+            res.status(500).send('Couldn\'t get bins from database');
+            console.log('error in GET /bins/' + pheromonId, error);
+        });
+    } else res.status(403).send({success: false, message: 'No token provided.'});
+});
+
+app.post('/bins/update', function(req, res){
+    if(req.query.s === PRIVATE.secret) {
+        var pheromonId = req.body.pheromonId;
+
+        places.updateBins(pheromonId, req.body.bins)
+        .then(function(data){
+            res.status(200).send(data);
+        })
+        .catch(function(error){
+            res.status(500).send('Couldn\'t update Bins');
+            console.log('error in /bins/update/' + pheromonId, error);
+        });
+    } else res.status(403).send({success: false, message: 'No token provided.'});
 });
 
 app.get('/browserify-bundle.js', function(req, res){

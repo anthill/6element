@@ -12,6 +12,7 @@ node_modules
 *browserify-bundle.js
 
 Tokens.json
+PRIVATE.json
 
 data/*.json
 !data/dictionary.json

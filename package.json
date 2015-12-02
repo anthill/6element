@@ -11,7 +11,9 @@
     "build-jsx": "babel --presets react src/views/*.jsx --out-dir .",
     "validate": "npm ls",
     "start-dev": "gulp dev",
-    "start-prod": "gulp prod"
+    "start-prod": "gulp prod",
+    "stop-dev": "docker-compose -f compose-dev.yml stop",
+    "stop-prod": "docker-compose -f compose-prod.yml stop"
   },
   "repository": {
     "type": "git",

@@ -70,23 +70,7 @@ app.get('/', function(req, res){
 app.get('/bins/get/:pheromonId', function(req, res){
     if(req.query.s === PRIVATE.secret) {
         var pheromonId = req.params.pheromonId;
-        console.log('requesting bins for pheromonId', pheromonId);
-
-        places.getBins(pheromonId)
-        .then(function(data){
-            res.status(200).send(data);
-        })
-        .catch(function(error){
-            res.status(500).send('Couldn\'t get bins from database');
-            console.log('error in GET /bins/' + pheromonId, error);
-        });
-    } else res.status(403).send({success: false, message: 'No token provided.'});
-});
-
-app.post('/bins/update/:pheromonId', function(req, res){
-    if(req.query.s === PRIVATE.secret) {
-        var pheromonId = req.params.pheromonId;
-        console.log('requesting bins for pheromonId', pheromonId);
+        console.log('requesting GET bins for pheromonId', pheromonId);
 
         places.getBins(pheromonId)
         .then(function(data){
@@ -103,6 +87,8 @@ app.post('/bins/update', function(req, res){
     if(req.query.s === PRIVATE.secret) {
         var pheromonId = req.body.pheromonId;
 
+        console.log('requesting UPDATE bins for pheromonId', pheromonId);
+        
         places.updateBins(pheromonId, req.body.bins)
         .then(function(data){
             res.status(200).send(data);

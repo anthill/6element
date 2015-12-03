@@ -34,14 +34,21 @@ module.exports = React.createClass({
             Math.round(object.distance).toString() + " m";
 
         // Categories list
-        console.log(object.properties);
-        var list = (object.properties.bins !== undefined) ?
-                    object.properties.bins :
-                    object.properties.objects;
-        var allowedJSX = Object.keys(list)
-        .map(function(category, id){
-            return (<li key={'allow'+id.toString()}><label className={(list[category] === "1")?"open":"closed"}>&bull;</label> {category}</li>);
-        });
+        var allowedJSX = "";
+        if(object.properties.bins !== undefined  && 
+            object.properties.bins !== null)
+        {
+            allowedJSX = object.properties.bins
+                        .map(function(bin){
+                            return (<li key={'allow'+bin.p.toString()}><label className={bin.a?"open":"closed"}>&bull;</label> {bin.t}</li>);
+                        });
+        } else {
+            allowedJSX =  Object.keys(object.properties.objects)
+                        .map(function(category, id){
+                            return (<li key={'allow'+id.toString()}><label className={(object.properties.objects[category] === "1")?"open":"closed"}>&bull;</label> {category}</li>);
+                        });
+
+        }
 
         // Address
         var coordinatesJSX = [];

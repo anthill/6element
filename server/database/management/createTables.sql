@@ -37,7 +37,7 @@ CREATE TABLE IF NOT EXISTS places (
     phone text DEFAULT NULL,
     website text DEFAULT NULL,
     objects hstore,
-    bins hstore,
+    bins json[],
     address_1 text DEFAULT NULL,
     address_2 text DEFAULT NULL,
     owner text DEFAULT NULL,

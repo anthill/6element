@@ -72,17 +72,6 @@ function fileToObjects(dir, file, networks){
                 hstore.stringify(wastes, function(result) {
                     toSave.objects = result;
                 });
-
-                if(toSave.bins !== undefined){
-                    var bins = {};
-                    Object.keys(toSave.bins)
-                    .forEach(function(k){
-                        bins[k] = toSave.bins[k];
-                    })
-                    hstore.stringify(bins, function(result) {
-                        toSave.bins = result;
-                    });    
-                }
                 
                 var filteredObject = {};
                 placesDeclaration
@@ -92,7 +81,6 @@ function fileToObjects(dir, file, networks){
                         filteredObject[name] = toSave[name];
                     })
 
-                // console.log(toSave)
                 return filteredObject;
          
             })

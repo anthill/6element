@@ -21,19 +21,6 @@ var parseObjects = function(row){
     });
 }
 
-// Bins status
-var parseBins = function(row){
-    return new Promise(function(resolve){
-
-        if(row.bins == undefined) resolve (undefined);
-        else {
-            hstore.parse(row.bins, function(fromHstore) {
-                resolve(fromHstore);
-            });
-        }
-    });
-}
-
 var toGeoJson = function(results){
 
     return Promise.all(
@@ -43,22 +30,17 @@ var toGeoJson = function(results){
                 parseObjects(result)
                 .then(function(objects){
 
-                    parseBins(result)
-                    .then(function(bins){
-
-                        result["objects"] = objects;
-                        result["bins"] = bins;
-                        var geoJson = { 
-                            type: 'Feature',
-                            properties: result,
-                            geometry: { "type": "Point", "coordinates": {"lat":result["lat"], "lon": result["lon"]} },
-                            distance: result.distance,
-                            color: result.color,
-                            file: result.file,
-                            rate: 3 
-                        }
-                        resolve(geoJson);
-                    });
+                    result["objects"] = objects;
+                    var geoJson = { 
+                        type: 'Feature',
+                        properties: result,
+                        geometry: { "type": "Point", "coordinates": {"lat":result["lat"], "lon": result["lon"]} },
+                        distance: result.distance,
+                        color: result.color,
+                        file: result.file,
+                        rate: 3 
+                    }
+                    resolve(geoJson);
                 });
             })
         })

@@ -111,11 +111,7 @@ module.exports = {
                     }
                     else{
                         if(result.rows[0].bins == null) resolve (undefined);
-                        else {
-                            hstore.parse(result.rows[0].bins, function(fromHstore) {
-                                resolve(fromHstore);
-                            });
-                        }
+                        else resolve(result.rows[0].bins);
                     } 
                 });
             });
@@ -127,20 +123,17 @@ module.exports = {
 
     updateBins: function(pheromonId, bins){
         return databaseP.then(function (db) {
+            
+            var query = places
+            .update({'bins': bins})
+            .where(places.pheromon_id.equals(pheromonId))
+            .returning('*')
+            .toQuery();
 
-            hstore.stringify(bins, function(result) {
-                
-                var query = places
-                .update({'bins': result})
-                .where(places.pheromon_id.equals(pheromonId))
-                .returning('*')
-                .toQuery();
-
-                return new Promise(function (resolve, reject) {
-                    db.query(query, function (err, result) {
-                        if (err) reject(err);
-                        else resolve(result.rows[0]);
-                    });
+            return new Promise(function (resolve, reject) {
+                db.query(query, function (err, result) {
+                    if (err) reject(err);
+                    else resolve(result.rows[0]);
                 });
             });
         })

@@ -144,6 +144,7 @@ module.exports = {
 
     updateBin: function(pheromonId, bin){
 
+        var self = this;
         return this.getBins(pheromonId)
             .then(function(bins){
 
@@ -155,7 +156,7 @@ module.exports = {
                     if(index === -1) reject('Bin with id=' + bin.id + ' unfound');
                     else {
                         bins[index] = bin;
-                        this.updateBins(bins)
+                        self.updateBins(bins)
                         .then (function(){
                             resolve(true);
                         })

@@ -72,7 +72,7 @@ function fileToObjects(dir, file, networks){
                 hstore.stringify(wastes, function(result) {
                     toSave.objects = result;
                 });
-
+                
                 var filteredObject = {};
                 placesDeclaration
                     .columns.map(function(obj){return obj.name})
@@ -81,7 +81,6 @@ function fileToObjects(dir, file, networks){
                         filteredObject[name] = toSave[name];
                     })
 
-                // console.log(toSave)
                 return filteredObject;
          
             })

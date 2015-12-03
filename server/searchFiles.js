@@ -5,20 +5,32 @@ var hstore = require('pg-hstore')();
 var Places = require('./database/models/places.js');
 var dictionnary = require('../data/dictionary.json');
 
+// Avalaible objects
+var parseObjects = function(row){
+    return new Promise(function(resolve){
+
+        hstore.parse(row.objects, function(fromHstore) {
+
+            var objects = {};
+            Object.keys(fromHstore).forEach(function(key){
+                var fr = dictionnary[key];
+                objects[fr]= fromHstore[key];
+            });
+            resolve(objects);
+        });
+    });
+}
+
 var toGeoJson = function(results){
 
     return Promise.all(
         results.map(function(result){
             return new Promise(function(resolve){
 
-                hstore.parse(result["objects"], function(fromHstore) {
+                parseObjects(result)
+                .then(function(objects){
 
-                    result["objects"] = {}
-                    Object.keys(fromHstore).forEach(function(key){
-                        var fr = dictionnary[key];
-                        result.objects[fr]= fromHstore[key];
-                    });
-
+                    result["objects"] = objects;
                     var geoJson = { 
                         type: 'Feature',
                         properties: result,
@@ -29,7 +41,7 @@ var toGeoJson = function(results){
                         rate: 3 
                     }
                     resolve(geoJson);
-                })
+                });
             })
         })
     );     

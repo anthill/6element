@@ -2,6 +2,7 @@
 
 var sql = require('sql');
 sql.setDialect('postgres');
+var hstore = require('pg-hstore')();
 var databaseP = require('../management/databaseClientP');
 var places = require('../management/declarations.js').places;
 var networks = require('../management/declarations.js').networks;
@@ -92,5 +93,52 @@ module.exports = {
         .catch(function(err){
             console.log('ERROR in getKNearest', err);
         }); 
+    },
+
+    getBins: function(pheromonId){
+        return databaseP.then(function (db) {
+
+            var query = places
+                .select(places.bins)
+                .where(places.pheromon_id.equals(pheromonId))
+                .toQuery();
+
+            return new Promise(function (resolve, reject) {
+                db.query(query, function (err, result) {
+                    if (err) {
+                        console.log("ERROR in searching bins", query);
+                        reject(err);
+                    }
+                    else{
+                        if(result.rows[0].bins == null) resolve (undefined);
+                        else resolve(result.rows[0].bins);
+                    } 
+                });
+            });
+        })
+        .catch(function(err){
+            console.log('ERROR in get Bins', err);
+        });
+    },
+
+    updateBins: function(pheromonId, bins){
+        return databaseP.then(function (db) {
+            
+            var query = places
+            .update({'bins': bins})
+            .where(places.pheromon_id.equals(pheromonId))
+            .returning('*')
+            .toQuery();
+
+            return new Promise(function (resolve, reject) {
+                db.query(query, function (err, result) {
+                    if (err) reject(err);
+                    else resolve(result.rows[0]);
+                });
+            });
+        })
+        .catch(function(err){
+            console.log('ERROR in update Bins', err);
+        });
     }
 };

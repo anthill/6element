@@ -16,7 +16,8 @@ var NotEmpty = function(field){
     return true;
 }
 
-var io6element = require('socket.io-client')('http://192.168.99.100:3500/');
+// for dev: http://192.168.99.100:3500/
+var io6element = require('socket.io-client')('http://6element.fr');
 io6element.connect();
 
 module.exports = React.createClass({

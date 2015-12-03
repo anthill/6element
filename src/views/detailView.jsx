@@ -67,8 +67,8 @@ module.exports = React.createClass({
             this.state.bins !== null)
         {
             allowedJSX = this.state.bins
-                        .map(function(bin){
-                            return (<li key={'allow'+bin.p.toString()}><label className={bin.a?"open":"closed"}>&bull;</label> {bin.t}</li>);
+                        .map(function(bin, id){
+                            return (<li key={'allow'+id.toString()}><label className={bin.a?"open":"closed"}>&bull;</label> {bin.t}</li>);
                         });
         } else {
             allowedJSX =  Object.keys(object.properties.objects)

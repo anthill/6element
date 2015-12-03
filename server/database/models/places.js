@@ -127,7 +127,7 @@ module.exports = {
             var query = places
             .update({'bins': bins})
             .where(places.pheromon_id.equals(pheromonId))
-            .returning('*')
+            .returning(places.bins)
             .toQuery();
 
             return new Promise(function (resolve, reject) {
@@ -147,15 +147,23 @@ module.exports = {
         return this.getBins(pheromonId)
             .then(function(bins){
 
-                var index = bins.findIndex(function(elt){
-                    return elt.id === bin.id;
-                })
+                return new Promise(function (resolve, reject) {
+                    var index = bins.findIndex(function(elt){
+                        return elt.id === bin.id;
+                    })
 
-                if(index === -1) reject('Bin with id=' + bin.id + ' unfound');
-                else {
-                    bins[index] = bin;
-                    resolve(bins);
-                }
+                    if(index === -1) reject('Bin with id=' + bin.id + ' unfound');
+                    else {
+                        bins[index] = bin;
+                        this.updateBins(bins)
+                        .then (function(){
+                            resolve(true);
+                        })
+                        .catch(function(err){
+                            reject(err);
+                        })
+                    }
+                });
             })
             .catch(function(err){
                 console.log('ERROR in getting Bin', err);

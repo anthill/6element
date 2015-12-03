@@ -25,8 +25,27 @@ var Layout = require('../src/views/layout');
 var PRIVATE = require('../PRIVATE.json');
 
 var app = express();
+
 var PORT = process.env.VIRTUAL_PORT ? process.env.VIRTUAL_PORT: 3500;
-// var DEBUG = process.env.NODE_ENV === "development";
+
+// Sockets
+var server  = require('http').createServer(app);
+var io6element = require('socket.io')(server);
+io6element.on('connection', function(){ });
+
+var ioPheromon = require('socket.io-client')('https://pheromon.ants.builders');
+ioPheromon.connect();
+
+// On 'bin' socket received from Pheromon, we will update the concerned bin status
+// + transfer the socket to the client in case of the recycling center being displayed
+ioPheromon.on('bin', function(data){
+    
+    places.updateBin(data.installed_at, data.bin)
+    .then(function(){
+        io6element.emit('bin', data); 
+    })
+    .catch(function(err){ console.error('/', err, err.stack); }); 
+});
 
 
 // Doesn't make sense to start the server if this file doesn't exist. *Sync is fine.
@@ -106,8 +125,6 @@ app.get('/browserify-bundle.js', function(req, res){
 
 app.use("/css/leaflet.css", express.static(path.join(__dirname, '../node_modules/leaflet/dist/leaflet.css')));
 app.use("/images-leaflet", express.static(path.join(__dirname, '../node_modules/leaflet/dist/images')));
-
-
 
 app.post('/search', search);
 app.post('/stats', stats);

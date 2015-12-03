@@ -140,5 +140,25 @@ module.exports = {
         .catch(function(err){
             console.log('ERROR in update Bins', err);
         });
+    },
+
+    updateBin: function(pheromonId, bin){
+
+        return this.getBins(pheromonId)
+            .then(function(bins){
+
+                var index = bins.findIndex(function(elt){
+                    return elt.id === bin.id;
+                })
+
+                if(index === -1) reject('Bin with id=' + bin.id + ' unfound');
+                else {
+                    bins[index] = bin;
+                    resolve(bins);
+                }
+            })
+            .catch(function(err){
+                console.log('ERROR in getting Bin', err);
+            });
     }
 };

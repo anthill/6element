@@ -16,12 +16,39 @@ var NotEmpty = function(field){
     return true;
 }
 
+var io6element = require('socket.io-client')('http://192.168.99.100:3500');
+io6element.connect();
+
 module.exports = React.createClass({
     childContextTypes: {
         muiTheme: React.PropTypes.object
     },
     getChildContext: function() {
         return { muiTheme: ThemeManager.getMuiTheme(DefaultRawTheme) };
+    },
+    getInitialState: function() {
+        // On 'bin' socket received from Pheromon by the server and transferred, 
+        // we will update the concerned bin status
+        io6element.on('bin', this.updateBin);
+        return {bins: this.props.object.properties.bins};
+    },
+    updateBin: function(data){
+
+        var object = this.props.object;
+        if( object.properties.pheromon_id === null ||
+            object.properties.pheromon_id !== data.installed_at)
+            return;
+
+        var bins = this.state.bins;
+        var index = bins.findIndex(function(elt){
+            return elt.id === data.bin.id;
+        })
+
+        if(index === -1) console.log('Bin with id=' + data.bin.id + ' unfound');
+        else {
+            bins[index] = data.bin;
+            this.setState({bins: bins});
+        }
     },
     render: function() {
 
@@ -35,10 +62,10 @@ module.exports = React.createClass({
 
         // Categories list
         var allowedJSX = "";
-        if(object.properties.bins !== undefined  && 
-            object.properties.bins !== null)
+        if(this.state.bins !== undefined  && 
+            this.state.bins !== null)
         {
-            allowedJSX = object.properties.bins
+            allowedJSX = this.state.bins.bins
                         .map(function(bin){
                             return (<li key={'allow'+bin.p.toString()}><label className={bin.a?"open":"closed"}>&bull;</label> {bin.t}</li>);
                         });

@@ -16,7 +16,7 @@ var NotEmpty = function(field){
     return true;
 }
 
-var io6element = require('socket.io-client')('http://192.168.99.100:3500');
+var io6element = require('socket.io-client')('http://192.168.99.100:3500/');
 io6element.connect();
 
 module.exports = React.createClass({
@@ -65,7 +65,7 @@ module.exports = React.createClass({
         if(this.state.bins !== undefined  && 
             this.state.bins !== null)
         {
-            allowedJSX = this.state.bins.bins
+            allowedJSX = this.state.bins
                         .map(function(bin){
                             return (<li key={'allow'+bin.p.toString()}><label className={bin.a?"open":"closed"}>&bull;</label> {bin.t}</li>);
                         });

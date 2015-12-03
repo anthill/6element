@@ -149,7 +149,7 @@ app.get('/categories', function(req, res){
 app.use('/', express.static(path.join(__dirname, '../src')));
 
 
-app.listen(PORT, function () {
+server.listen(PORT, function () {
     console.log('Server running on', [
         'http://localhost:',
         PORT

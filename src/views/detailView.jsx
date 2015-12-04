@@ -63,17 +63,20 @@ module.exports = React.createClass({
 
         // Categories list
         var allowedJSX = "";
-        if(this.state.bins !== undefined  && 
+        var labelTab = "";
+        if(this.state.bins !== undefined  &&
             this.state.bins !== null)
         {
+            labelTab = "Disponibilité";
             allowedJSX = this.state.bins
                         .map(function(bin, id){
                             return (<li key={'allow'+id.toString()}><label className={bin.a?"open":"closed"}>&bull;</label> {bin.t}</li>);
                         });
         } else {
+            labelTab = "Elements acceptés";
             allowedJSX =  Object.keys(object.properties.objects)
                         .map(function(category, id){
-                            return (<li key={'allow'+id.toString()}><label className={(object.properties.objects[category] === "1")?"open":"closed"}>&bull;</label> {category}</li>);
+                            return (<li key={'allow'+id.toString()}>{category}</li>);
                         });
 
         }
@@ -114,7 +117,7 @@ module.exports = React.createClass({
                         <br/>
                         {trafficJSX}
                     </Mui.Tab>
-                    <Mui.Tab label="Elements acceptés" style={{backgroundColor: Colors.blueGrey200}}>
+                    <Mui.Tab label={labelTab} style={{backgroundColor: Colors.blueGrey200}}>
                         <div id="allowedObjects" className="row clearfix styleRow">
                             <br/>
                             <ul>{allowedJSX}</ul>

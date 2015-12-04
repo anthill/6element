@@ -156,7 +156,7 @@ module.exports = {
                     if(index === -1) reject('Bin with id=' + bin.id + ' unfound');
                     else {
                         bins[index] = bin;
-                        self.updateBins(bins)
+                        self.updateBins(pheromonId, bins)
                         .then (function(){
                             resolve(true);
                         })

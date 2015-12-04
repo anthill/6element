@@ -124,6 +124,8 @@ module.exports = {
     updateBins: function(pheromonId, bins){
         return databaseP.then(function (db) {
             
+            console.log(pheromonId);
+            console.log(bins);
             var query = places
             .update({'bins': bins})
             .where(places.pheromon_id.equals(pheromonId))
@@ -156,7 +158,7 @@ module.exports = {
                     if(index === -1) reject('Bin with id=' + bin.id + ' unfound');
                     else {
                         bins[index] = bin;
-                        self.updateBins(bins)
+                        self.updateBins(pheromonId, bins)
                         .then (function(){
                             resolve(true);
                         })

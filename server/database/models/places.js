@@ -124,8 +124,6 @@ module.exports = {
     updateBins: function(pheromonId, bins){
         return databaseP.then(function (db) {
             
-            console.log(pheromonId);
-            console.log(bins);
             var query = places
             .update({'bins': bins})
             .where(places.pheromon_id.equals(pheromonId))

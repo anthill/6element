@@ -13,10 +13,13 @@ var jsArrayToPg = function(nodeArray) {
 
 module.exports = {
 
-    createByChunk: function (datas) {
+    create: function(placesData){
+        if(!Array.isArray(placesData))
+            placesData = [placesData];
+        
         return databaseP.then(function (db) {
 
-            return Promise.all(datas.map(function(data){
+            return Promise.all(placesData.map(function(data){
 
                 var query = places
                     .insert(data)
@@ -28,7 +31,7 @@ module.exports = {
                 return new Promise(function (resolve, reject) {
                     db.query(query, function (err, result) {
                         if (err) {
-                            console.log("ERROR in saving entry", query);
+                            console.log("ERROR in createByChunk", query, err);
                             reject(err);
                         }
                         else resolve(result.rows);
@@ -37,7 +40,27 @@ module.exports = {
             }))
         })
         .catch(function(err){
-            console.log('ERROR in create bulk', err);
+            console.error('ERROR in createByChunk', err);
+        });
+    },
+
+    count: function () {
+        return databaseP.then(function (db) {
+            var query = places
+                .select(places.count().as('count'))
+                .toQuery();
+
+            // console.log('places count query', query);
+
+            return new Promise(function (resolve, reject) {
+                db.query(query, function (err, result) {
+                    if (err) {
+                        console.error("ERROR in count", query, err);
+                        reject(err);
+                    }
+                    else resolve(Number(result.rows[0].count));
+                });
+            });
         });
     },
 

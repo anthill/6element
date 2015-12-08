@@ -2,7 +2,6 @@
 
 var sql = require('sql');
 sql.setDialect('postgres');
-var hstore = require('pg-hstore')();
 var databaseP = require('../management/databaseClientP');
 var places = require('../management/declarations.js').places;
 var networks = require('../management/declarations.js').networks;
@@ -133,7 +132,7 @@ module.exports = {
                         reject(err);
                     }
                     else{
-                        if(result.rows[0].bins == null) resolve (undefined);
+                        if(result.rows[0].bins === null) resolve (undefined);
                         else resolve(result.rows[0].bins);
                     } 
                 });

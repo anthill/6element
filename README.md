@@ -39,5 +39,5 @@ npm run start-dev
 ### Deploying in production
 
 ````
-npm run start-prod
+npm start
 ````

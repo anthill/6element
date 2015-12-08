@@ -15,7 +15,7 @@
     "build:jsx-for-server-side": "babel src/views/*.jsx --out-dir .",
     "stop-dev": "docker-compose -f compose-dev.yml stop",
     "stop-prod": "docker-compose -f compose-prod.yml stop",
-    "start": "docker-compose -f compose-prod.yml up --force-recreate",
+    "start-prod": "docker-compose -f compose-prod.yml up -d --force-recreate",
     "prestart": "npm run build-prod",
     "serve-dev": "docker-compose -f compose-dev.yml up --force-recreate",
     "start-dev": "npm-run-all --parallel serve-dev watch"

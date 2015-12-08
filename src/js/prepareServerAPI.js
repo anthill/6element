@@ -10,7 +10,7 @@ function makeSearchString(obj){
         return encodeURI(k) + '=' + encodeURI(obj[k]);
     })
     .join('&');
-};
+}
 
 
 module.exports = function(request, origin){

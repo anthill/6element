@@ -59,7 +59,7 @@ var withPlacesMeasurements = function(list){
                 request({
                     method: 'GET',
                     url:'https://pheromon.ants.builders/placeLatestMeasurement/'+object.pheromon_id+'/wifi', 
-                    headers: {'Content-Type': 'application/json;charset=UTF-8'},
+                    headers: {'Content-Type': 'application/json;charset=UTF-8'}
                 }, function(error, response, body){
                     if (!error) {
                         if(response !== undefined &&

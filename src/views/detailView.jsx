@@ -70,7 +70,7 @@ module.exports = React.createClass({
             labelTab = "Disponibilité";
             allowedJSX = this.state.bins
                         .map(function(bin, id){
-                            return (<li key={'allow'+id.toString()}><label className={bin.a?"open":"closed"}>&bull;</label> {bin.t}</li>);
+                            return (<li key={'allow'+id.toString()} className={bin.a?"border-open":"border-closed"}>{bin.t}</li>);
                         });
         } else {
             labelTab = "Elements acceptés";

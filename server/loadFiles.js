@@ -9,6 +9,15 @@ var Places = require('./database/models/places.js');
 var Networks = require('./database/models/networks.js');
 var placesDeclaration = require('./database/management/declarations.js').places;
 
+var CREATE_CHUNK_SIZE = 1000;
+
+function createPlacesByChunk(entries){
+    return entries.length === 0 ? undefined : Places.create(entries.slice(0, CREATE_CHUNK_SIZE))
+        .then(function(){
+            return createPlacesByChunk(entries.slice(CREATE_CHUNK_SIZE))
+        });
+}
+
 function fileToNetworks(dir, file){
     
     return new Promise(function(resolve, reject){
@@ -44,15 +53,34 @@ function fileToObjects(dir, file, networks){
             });
         });
 
-        fs.readFile(path.join(dir,file), 'utf8', function (err, data) {
+        var filepath = path.join(dir,file);
+        console.log('loading', filepath)
+        fs.readFile(filepath, 'utf8', function (err, data) {
           
             if ( err !== null ) {
                 console.log("ERROR in file ", file, '', err);
                 reject(err);
             }
 
+            (function timeout(){
+                Places.count()
+                .then(function(count){
+                    console.log(count, 'places in database');
+                })
+                .catch(function(e){
+                    console.error('count error', e);
+                })
+                .then(function(){
+                    setTimeout(timeout, 5*1000)
+                })
+            })();
+            
+            
+            
             var doc = JSON.parse(data);
-            var objectsTosave = Object.keys(doc).map(function(key){
+            console.log(filepath, 'loaded and parsed')
+
+            var placesData = Object.keys(doc).map(function(key){
 
                 var toSave = doc[key].properties;
                 toSave.lat = doc[key].geometry.coordinates.lat;
@@ -88,9 +116,10 @@ function fileToObjects(dir, file, networks){
                 return typeof obj.lat === 'number' && typeof obj.lon === 'number';
             });
 
-            Places.createByChunk(objectsTosave)
-            .then(function(entries){
-                console.log("Entries saved ", entries.length);
+            console.log('Ready to insert', placesData.length, 'places in database');
+            
+            createPlacesByChunk(placesData)
+            .then(function(){
                 resolve();
             })
             .catch(function(error){

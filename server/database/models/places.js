@@ -132,7 +132,7 @@ module.exports = {
                         reject(err);
                     }
                     else{
-                        if(result.rows[0].bins === null) resolve (undefined);
+                        if(result.rows[0].bins === undefined) resolve (undefined);
                         else resolve(result.rows[0].bins);
                     } 
                 });

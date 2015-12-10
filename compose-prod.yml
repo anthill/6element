@@ -11,7 +11,6 @@ api:
       - VIRTUAL_PORT=3500
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
-      - PGPASSWORD=postgres
       - NODE_ENV=production
    volumes:
       - ./:/6element

@@ -69,7 +69,7 @@ What to do with the backup data (file, send to the network, etc.) and when to ge
 
 ### Restore
 
-The backup docker service has a directory where it expects backup files for restore use at `/usr/6element-backups` (in the container, so you don't need to know about this). However, you should provide in the docker-compose file which directory in the host machine corresponds to this directory
+The backup docker service has a directory where it expects a single backup file for restore use at `/usr/6element-backups/6element.bak` (in the container, so you don't need to know about this). However, you should provide in the docker-compose file which directory in the host machine corresponds to this directory
 
 ```
 docker exec 6element_backup_1 tools/restore.js

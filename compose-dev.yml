@@ -26,3 +26,17 @@ db:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
    tty: true
+   
+backup:
+   build: ./dockerfiles
+   dockerfile: node
+   # command: nodemon --watch server --watch src/index.html server/index.js
+   links:
+      - db
+   environment:
+      - POSTGRES_USER=postgres
+      - PGPASSWORD=postgres
+   volumes:
+      - ./:/6element
+      - ./backups:/usr/6element-backups:ro
+   tty: true

@@ -18,7 +18,9 @@ data/*.json
 !data/dictionary.json
 !data/networks.json
 
+*.bak
 
 # files generated for server-side purposes
 
 src/views/*.js
+

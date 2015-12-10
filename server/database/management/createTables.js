@@ -30,7 +30,7 @@ module.exports = function(){
                 setTimeout(resolve, 3000); // <-- not a beautiful patch, but it works
                 
             } else {
-                console.log('== Resetting the database ==');
+                console.log('== Creating the database tables ==');
                 var createTableScript = fs.readFileSync( require.resolve('./createTables.sql') ).toString();
                 db.query(createTableScript, function(err, result) {
                     if(err) reject(err); else resolve(result);

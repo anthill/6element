@@ -26,3 +26,16 @@ db:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
    tty: true
+   
+backup:
+   build: ./dockerfiles
+   dockerfile: node
+   links:
+      - db
+   environment:
+      - POSTGRES_USER=postgres
+      - PGPASSWORD=postgres
+   volumes:
+      - ./:/6element
+      - ./backups:/usr/6element-backups:ro
+   tty: true

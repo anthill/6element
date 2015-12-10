@@ -30,7 +30,6 @@ db:
 backup:
    build: ./dockerfiles
    dockerfile: node
-   # command: nodemon --watch server --watch src/index.html server/index.js
    links:
       - db
    environment:

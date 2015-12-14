@@ -7,6 +7,7 @@ require('es6-shim');
 var React = require('react');
 var ReactDOM = require('react-dom');
 var L = require('leaflet');
+var page = require('page');
 
 var addIconPulse = require('./js/addIconPulse');
 addIconPulse(L);
@@ -20,10 +21,14 @@ var props = require('../common/layoutData');
 props.leaflet = L;
 props.googleMapsApi = googleMapsApi;
 
-document.addEventListener('DOMContentLoaded', function(){
-    ReactDOM.render( 
-        React.createElement(Layout, props),
-        document.getElementById('reactHere')
-    );
-})
 
+page("/", function(){
+    ReactDOM.render( 
+        React.createElement(Layout, props), document.getElementById('reactHere')
+    );
+});
+
+document.addEventListener('DOMContentLoaded', function l(){
+    document.removeEventListener('DOMContentLoaded', l);
+    page();
+});

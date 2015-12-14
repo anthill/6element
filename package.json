@@ -21,10 +21,14 @@
     "start-dev": "npm-run-all --parallel serve-dev watch"
   },
   "babel": {
-      "presets": ["react"]
+    "presets": [
+      "react"
+    ]
   },
   "browserify": {
-      "transform": ["reactify"]
+    "transform": [
+      "reactify"
+    ]
   },
   "repository": {
     "type": "git",
@@ -61,6 +65,7 @@
     "material-ui": "^0.13.3",
     "minifyify": "^7.1.0",
     "opening_hours": "^3.3.0",
+    "page": "^1.6.4",
     "pg": "^4.4.2",
     "pg-hstore": "^2.3.2",
     "proj4": "^2.3.10",

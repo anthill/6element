@@ -2,6 +2,7 @@
 
 var React = require('react');
 var Mui = require('material-ui');
+var page = require('page');
 var queryString = require('query-string');
 var ThemeManager = require('material-ui/lib/styles/theme-manager');
 var DefaultRawTheme = Mui.Styles.LightRawTheme;
@@ -52,7 +53,9 @@ module.exports = React.createClass({
         // -3- Filled map, no Zoom, no BoundingBox, no centered
     },
     componentDidMount: function() {
-        if (this.props.geoloc){
+        if (this.props.boundingBox)
+            this.onSearch(this.state.parameters, this.props.boundingBox, 3, 20);
+        else if (this.props.geoloc && !this.props.boundingBox){
             this.onSearch(this.state.parameters, null, 2, 20);
         }
     },
@@ -114,9 +117,13 @@ module.exports = React.createClass({
         .then(function(result){
 
             // set url
-            var qp = Object.assign({}, parameters.geoloc);
+            console.log("====", boundingBox, parameters.geoloc)
+            if (boundingBox == null)
+                var qp = Object.assign({}, parameters.geoloc);
+            else
+                var qp = Object.assign({}, boundingBox);
             qp.category = self.props.categoriesFR[parameters.what];
-            window.history.pushState(parameters, "6element", "?" + queryString.stringify(qp));
+            page("?" + queryString.stringify(qp));
 
             self.setState({
                 parameters: parameters,

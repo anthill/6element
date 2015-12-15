@@ -26,9 +26,17 @@ props.googleMapsApi = googleMapsApi;
 page("/", function (ctx){
 	var qp = queryString.parse(ctx.querystring);
 
-	if (qp.lon && qp.lat){
-		props.geoloc = { lon: Number(qp.lon), lat: Number(qp.lat)};
-	}
+    if (qp.maxLat && qp.maxLon && qp.minLon && qp.minLat) {
+        props.boundingBox = {
+            'maxLat': qp.maxLat,
+            'minLat': qp.minLat,
+            'maxLon': qp.maxLon,
+            'minLon': qp.minLon
+        }
+    }
+    else if (qp.lon && qp.lat)
+        props.geoloc = { lon: Number(qp.lon), lat: Number(qp.lat)};
+    
     if (qp.category){
         props.category = qp.category;
     }

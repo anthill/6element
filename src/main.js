@@ -8,6 +8,7 @@ var React = require('react');
 var ReactDOM = require('react-dom');
 var L = require('leaflet');
 var page = require('page');
+var queryString = require('query-string');
 
 var addIconPulse = require('./js/addIconPulse');
 addIconPulse(L);
@@ -22,11 +23,19 @@ props.leaflet = L;
 props.googleMapsApi = googleMapsApi;
 
 
-page("/", function(){
+page("/", function (ctx){
+	var qp = queryString.parse(ctx.querystring);
+
+	if (qp.lon && qp.lat){
+		props.geoloc = { lon: Number(qp.lon), lat: Number(qp.lat)};
+	}
     ReactDOM.render( 
         React.createElement(Layout, props), document.getElementById('reactHere')
     );
 });
+
+// page("/index.html", "/");
+
 
 document.addEventListener('DOMContentLoaded', function l(){
     document.removeEventListener('DOMContentLoaded', l);

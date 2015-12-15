@@ -29,12 +29,17 @@ page("/", function (ctx){
 	if (qp.lon && qp.lat){
 		props.geoloc = { lon: Number(qp.lon), lat: Number(qp.lat)};
 	}
+    if (qp.categories){
+        props.categories = qp.categories;
+    }
     ReactDOM.render( 
         React.createElement(Layout, props), document.getElementById('reactHere')
     );
 });
 
-// page("/index.html", "/");
+page("/index.html", "/");
+
+
 
 
 document.addEventListener('DOMContentLoaded', function l(){

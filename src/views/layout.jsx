@@ -32,7 +32,7 @@ module.exports = React.createClass({
         })        
         return {
             parameters: {
-            what:  this.props.categories ?  this.props.categoriesFR.indexOf(this.props.categories) : 0, 
+            what:  this.props.category ?  this.props.categoriesFR.indexOf(this.props.category) : 0, 
             placeName: '', 
             geoloc: this.props.geoloc ? this.props.geoloc : {lat: 44.8404507, lon: -0.5704909} // Le Node centered
         },
@@ -115,7 +115,7 @@ module.exports = React.createClass({
 
             // set url
             var qp = Object.assign({}, parameters.geoloc);
-            qp.categories = self.props.categoriesFR[parameters.what];
+            qp.category = self.props.categoriesFR[parameters.what];
             window.history.pushState(parameters, "6element", "?" + queryString.stringify(qp));
 
             self.setState({

@@ -29,8 +29,8 @@ page("/", function (ctx){
 	if (qp.lon && qp.lat){
 		props.geoloc = { lon: Number(qp.lon), lat: Number(qp.lat)};
 	}
-    if (qp.categories){
-        props.categories = qp.categories;
+    if (qp.category){
+        props.category = qp.category;
     }
     ReactDOM.render( 
         React.createElement(Layout, props), document.getElementById('reactHere')

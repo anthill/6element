@@ -44,7 +44,7 @@ module.exports = React.createClass({
                 objects: [] 
             }, 
             filters: filters, 
-            status: this.props.geoloc ? 2 : 1, // INI Status
+            status: this.props.geoloc || this.props.boundingBox ? 2 : 1, // INI Status
             listMode: true
         };
         // STATUS Definition
@@ -53,11 +53,8 @@ module.exports = React.createClass({
         // -3- Filled map, no Zoom, no BoundingBox, no centered
     },
     componentDidMount: function() {
-        if (this.props.boundingBox)
+        if (this.props.boundingBox || this.props.boundingBox)
             this.onSearch(this.state.parameters, this.props.boundingBox, 3, 20);
-        else if (this.props.geoloc && !this.props.boundingBox){
-            this.onSearch(this.state.parameters, null, 2, 20);
-        }
     },
     childContextTypes: {
         muiTheme: React.PropTypes.object
@@ -117,19 +114,23 @@ module.exports = React.createClass({
         .then(function(result){
 
             // set url
-            console.log("====", boundingBox, parameters.geoloc)
+            console.log("> Search <");
+            /*console.log("- status", status);
+            console.log("- boundingBox", boundingBox);
+            console.log("- parameters", parameters);*/
             if (boundingBox == null)
                 var qp = Object.assign({}, parameters.geoloc);
             else
                 var qp = Object.assign({}, boundingBox);
             qp.category = self.props.categoriesFR[parameters.what];
             page("?" + queryString.stringify(qp));
-
+           
             self.setState({
                 parameters: parameters,
                 result: result, 
                 status: status
             });
+            console.log("- status(*)", status);
         })
         .catch(function(error){
             console.log(error);

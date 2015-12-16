@@ -25,7 +25,7 @@ module.exports = React.createClass({
 		return { muiTheme: ThemeManager.getMuiTheme(DefaultRawTheme) };
 	},
 	getMapInfos: function(map){
-		this.loadSelection(map, 1, this.props.result.objects, this.props.filters, this.props.parameters.geoloc, null);
+		this.loadSelection(map, 1, this.props.result.objects, this.props.filters, this.props.parameters.geoloc, null, false);
 	},
 	onClickPreview: function(object){
 		var self = this;
@@ -61,19 +61,28 @@ module.exports = React.createClass({
 	},
 	componentWillReceiveProps: function(nextProps){
 		if(!L && nextProps.leaflet)
-				L = nextProps.leaflet;
-			
+			L = nextProps.leaflet;
+
+		// To improve
+		if(this.props === nextProps)
+			return;
+
+		// First results, from Geoloc to Bounding box
+		var fitBounds = (this.props.status === 1 && nextProps.status === 2);
+		console.log(nextProps);	
 		if( this.state.map !== null &&
 				nextProps.status !== 1){
+			console.log("-> WillReceive");
 			this.loadSelection( this.state.map, 
-													nextProps.status, 
-													nextProps.result.objects, 
-													nextProps.filters, 
-													nextProps.parameters.geoloc, 
-													this.state.selected);
+				nextProps.status, 
+				nextProps.result.objects, 
+				nextProps.filters, 
+				nextProps.parameters.geoloc, 
+				this.state.selected,
+				fitBounds);
 		}
 	},
-	loadSelection: function(map, status, points, filters, center, selected ){
+	loadSelection: function(map, status, points, filters, center, selected, fitBounds ){
 		var self = this;
 		// STATUS Definition
 		// -1- Empty map, Zoom 13, no BoundingBox, geoloc centered
@@ -91,6 +100,7 @@ module.exports = React.createClass({
 		var selected = null;
 		// -> STATUS 1
 		if(status === 1){
+			console.log('-> map.setView');
 			map.setView([center.lat, center.lon], Math.min(13, map.getZoom()));
 			this.setState({map: map, markersLayer: null, selected: selected});
 			return;
@@ -158,15 +168,16 @@ module.exports = React.createClass({
 				markers.push(marker);
 		});
 	
-		if(status === 2 && points.length > 0){
+		if(fitBounds){
 				
 				var southWest = L.latLng(box.s, box.o);
 				var northEast = L.latLng(box.n, box.e);
 				map.off('dragend', this.onMoveMap);
 				map.off('zoomend', this.onMoveMap);
+				//console.log('-> map.fitBounds', status);
 				map.fitBounds(L.latLngBounds(southWest, northEast));
 				map.on('dragend', this.onMoveMap);
-				map.off('zoomend', this.onMoveMap);
+				map.on('zoomend', this.onMoveMap);
 		}
 
 		var CentroidIcon = L.Icon.Default.extend({

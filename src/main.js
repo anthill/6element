@@ -48,8 +48,6 @@ page("/", function (ctx){
 page("/index.html", "/");
 
 
-
-
 document.addEventListener('DOMContentLoaded', function l(){
     document.removeEventListener('DOMContentLoaded', l);
     page();

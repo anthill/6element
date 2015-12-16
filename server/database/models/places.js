@@ -143,6 +143,32 @@ module.exports = {
         });
     },
 
+    getPlaceById: function(placeId){
+        return databaseP.then(function (db) {
+
+            var query = places
+                .select(places.star(),networks.name.as('file'), networks.color.as('color'))
+                .from(places.join(networks).on(places.network.equals(networks.id)))
+                .where(places.id.equals(placeId))
+                .toQuery();
+
+            return new Promise(function (resolve, reject) {
+                db.query(query, function (err, result) {
+                    if (err) {
+                        console.log("ERROR in searching place", query);
+                        reject(err);
+                    }
+                    else {
+                        resolve(result.rows);
+                    } 
+                });
+            });
+        })
+        .catch(function(err){
+            console.log('ERROR in get Place', err);
+        });
+    },
+
     updateBins: function(pheromonId, bins){
         return databaseP.then(function (db) {
             

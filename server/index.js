@@ -18,6 +18,7 @@ var networks = require('./database/models/networks.js');
 var places = require('./database/models/places.js');
 var search = require('./searchFiles.js');
 var stats = require('./statsFiles.js');
+var toGeoJson = require('./toGeoJson.js');
 var dictionary = require('../data/dictionary.json');
 var layoutData = require('../common/layoutData');
 
@@ -86,6 +87,40 @@ app.get('/', function(req, res){
     .catch(function(err){ console.error('/', err, err.stack); }); 
 });
 
+app.get('/place/:placeId/', function(req, res){
+    // Create a fresh document every time
+    makeDocument(indexHTMLStr).then(function(result){
+        var doc = result.document;
+        var dispose = result.dispose;
+
+        var placeId = Number(req.params.placeId);
+        places.getPlaceById(placeId)
+        .then(function(data){
+            toGeoJson(data)
+            .then(function(geoJson){
+            
+                layoutData.detailedObject = geoJson[0];
+
+                // Material-ui needs to change the global.navigator.userAgent property
+                // (just during the React  rendering)
+                // Waiting for Material team to fix it 
+                //https://github.com/callemall/material-ui/pull/2007#issuecomment-155414926
+                global.navigator = {'userAgent': req.headers['user-agent']};
+                renderDocumentWithData(doc, layoutData, Layout);
+                global.navigator = undefined;
+
+                res.send( jsdom.serializeDocument(doc) );
+                dispose();
+            });
+        })
+        .catch(function(error){
+            res.status(500).send('Couldn\'t get place from database');
+            console.log('error in GET /place/' + placeId, error);
+        });
+    })
+    .catch(function(err){ console.error('/place/:placeId', err, err.stack); }); 
+});
+
 app.get('/bins/get/:pheromonId', function(req, res){
     if(req.query.s === PRIVATE.secret) {
         var pheromonId = req.params.pheromonId;
@@ -119,7 +154,7 @@ app.post('/bins/update', function(req, res){
     } else res.status(403).send({success: false, message: 'No token provided.'});
 });
 
-app.get('/browserify-bundle.js', function(req, res){
+app.get('/bundle/browserify-bundle.js', function(req, res){
     res.sendFile(path.join(__dirname, '..', 'src', 'browserify-bundle.js'));
 });
 

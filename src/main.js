@@ -36,7 +36,7 @@ page("/", function (ctx){
     }
     else if (qp.lon && qp.lat)
         props.geoloc = { lon: Number(qp.lon), lat: Number(qp.lat)};
-    
+
     if (qp.category){
         props.category = qp.category;
     }
@@ -47,10 +47,25 @@ page("/", function (ctx){
 
 page("/index.html", "/");
 
+page("/place/:placeId", function (){
+    ReactDOM.render( 
+        React.createElement(Layout, props), document.getElementById('reactHere')
+    );
+});
 
 
 
 document.addEventListener('DOMContentLoaded', function l(){
     document.removeEventListener('DOMContentLoaded', l);
+
+    var initDataElement = document.querySelector('script#init-data');
+    var initDataStr = initDataElement.textContent.trim();
+    
+    if(initDataElement && initDataStr.length >= 2){
+        var data = JSON.parse(initDataStr);
+        for (var attrname in data) { props[attrname] = data[attrname]; }
+        initDataElement.remove();
+    }
+
     page();
 });

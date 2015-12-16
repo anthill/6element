@@ -1,7 +1,7 @@
 api:
    build: ./dockerfiles
    dockerfile: node
-   command: nodemon --watch server --watch src/index.html server/index.js
+   command: nodemon -L --watch server --watch src/index.html server/index.js
    links:
       - db
    ports:

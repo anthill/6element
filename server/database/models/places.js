@@ -121,7 +121,7 @@ module.exports = {
         return databaseP.then(function (db) {
 
             var query = places
-                .select(places.bins)
+                .select(places.bins, places.owner)
                 .where(places.pheromon_id.equals(pheromonId))
                 .toQuery();
 
@@ -133,7 +133,7 @@ module.exports = {
                     }
                     else{
                         if(result.rows[0].bins === undefined) resolve (undefined);
-                        else resolve(result.rows[0].bins);
+                        else resolve(result.rows[0]);
                     } 
                 });
             });

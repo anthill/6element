@@ -31,7 +31,6 @@ module.exports = React.createClass({
         var filters = this.props.networks.map(function(network){
             return { name: network.name, color: network.color, checked: true };
         });
-        console.log(this.props.detailedObject)
         return {
             parameters: {
             what:  this.props.category ?  this.props.categoriesFR.indexOf(this.props.category) : 0, 
@@ -41,13 +40,15 @@ module.exports = React.createClass({
             // First empty results to display
             result: { 
                 categories: [this.props.categoriesEN[0]], 
-                placeName: '', 
+                placeName: '',
                 objects: [] 
             }, 
             filters: filters, 
-            status: this.props.geoloc || this.props.detailedObject ? 2 : 1, // INI Status
-            listMode: this.props.detailedObject ? false : true,
-            detailedObject: this.props.detailedObject ? this.props.detailedObject : undefined
+            status: this.props.geoloc || 
+                    this.props.boundingBox || 
+                    this.props.detailedObject? 2 : 1, // INI Status
+            listMode: true,
+            detailedObject: undefined
         };
         // STATUS Definition
         // -1- Empty map, Zoom 13, no BoundingBox, geoloc centered
@@ -55,11 +56,12 @@ module.exports = React.createClass({
         // -3- Filled map, no Zoom, no BoundingBox, no centered
     },
     componentDidMount: function() {
-        if (this.props.boundingBox)
+        // For specific urls with geoloc or bounding box, we launch search on start 
+        if (this.props.boundingBox || this.props.boundingBox)
             this.onSearch(this.state.parameters, this.props.boundingBox, 3, 20);
-        else if (this.props.geoloc && !this.props.boundingBox){
-            this.onSearch(this.state.parameters, null, 2, 20);
-        }
+
+        if(this.props.detailedObject)
+            this.onShowDetail(this.props.detailedObject);
     },
     childContextTypes: {
         muiTheme: React.PropTypes.object
@@ -84,6 +86,7 @@ module.exports = React.createClass({
         // Temporary hide the left panel
         if(!this.isStarting() && this.state.listMode)
                 this.refs.panelLeft.display(false); 
+
         this.refs.dialogBox.show();
     },
     // Form submit
@@ -92,6 +95,7 @@ module.exports = React.createClass({
         // Re-Display the Temporary hidden the left panel
         if(!this.isStarting() && this.state.listMode)
                 this.refs.panelLeft.display(true);
+
         this.onSearch(parameters, null, 2, 20);// BOUNDING-BOX = NULL, STATUS = 2
     },
     // Form cancel
@@ -118,14 +122,15 @@ module.exports = React.createClass({
         search(data)
         .then(function(result){
 
-            // set url
+            // Set url
             if (boundingBox == null)
                 var qp = Object.assign({}, parameters.geoloc);
             else
                 var qp = Object.assign({}, boundingBox);
             qp.category = self.props.categoriesFR[parameters.what];
             page("?" + queryString.stringify(qp));
-
+           
+            // Refresh with new results
             self.setState({
                 parameters: parameters,
                 result: result, 
@@ -143,17 +148,26 @@ module.exports = React.createClass({
             filter.checked = false;
         });
         e.forEach(function(row){
-         filters[row].checked = true;
+            filters[row].checked = true;
         });
         this.setState({filters: filters});
     },
     // Popup the detailed sheet of the clicked point
     onShowDetail: function(object){
         page("/place/" + object.properties.id);
+
         // Temporary hide the left panel
         if(!this.isStarting() && this.state.listMode)
             this.refs.panelLeft.display(object === null); 
+
         this.setState({detailedObject: object});
+    },
+    onHideDetail: function(){
+        // Temporary hide the left panel
+        if(!this.isStarting() && this.state.listMode)
+            this.refs.panelLeft.display(true); 
+
+        this.setState({detailedObject: undefined});
     },
     isStarting: function(){
         return this.state.status===1;
@@ -161,28 +175,27 @@ module.exports = React.createClass({
     render: function() {
 
         // If a point has been selected, we popup a detailed sheet
-        var showDetail = (this.state.detailedObject !== null &&
-            this.state.detailedObject !== undefined);
+        var showDetail = (this.state.detailedObject !== undefined);
 
-        // when user commes with a place url there is no arrow to show
-        var showArrow = ((this.state.boundingBox || this.state.geoloc) || !this.state.detailedObject);
+        // Toolbars
+        if (showDetail) {
 
-        var ttStyle = {'zIndex': 100};
-
-        console.log("showArrow", showArrow)
-        console.log("showDetail", showDetail)
-        if (!showArrow) {
-            var toolBarJSX = <div id="toolbar"></div>
-        } else if (showDetail) {
+            // when user commes with a place url there is no back arrow to show
+            var arrowJSX =  ((this.state.boundingBox || this.state.geoloc) || !this.props.detailedObject) ?
+                            (<Mui.IconButton onTouchTap={this.onHideDetail}>
+                                <Mui.FontIcon className="material-icons" color={Colors.pink400} >arrow_back</Mui.FontIcon>
+                            </Mui.IconButton>) : "";
             var toolBarJSX =
             <div id="toolbar">
                 <Mui.Toolbar>
-                    <Mui.ToolbarGroup key={0} float="left">
-                        <Mui.IconButton onTouchTap={this.onShowDetail.bind(this, null)}><Mui.FontIcon className="material-icons" color={Colors.pink400} >arrow_back</Mui.FontIcon></Mui.IconButton>
+                    <Mui.ToolbarGroup key={0} float="left" >
+                        {arrowJSX}
                     </Mui.ToolbarGroup>
                 </Mui.Toolbar>
             </div>
         } else {
+
+            var ttStyle = {'zIndex': 100};
             var toolBarJSX = 
             <div id="toolbar">
                 <Mui.Toolbar>
@@ -198,6 +211,8 @@ module.exports = React.createClass({
             </div>
         }
 
+        // For serverside rendering (without components activated), 
+        // we display a map picture on background
         var isLoaded = (this.props.googleMapsApi !== undefined);
         if(!isLoaded){
             return (

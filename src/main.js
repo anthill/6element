@@ -53,8 +53,6 @@ page("/place/:placeId", function (){
     );
 });
 
-
-
 document.addEventListener('DOMContentLoaded', function l(){
     document.removeEventListener('DOMContentLoaded', l);
 

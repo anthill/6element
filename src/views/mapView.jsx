@@ -69,10 +69,10 @@ module.exports = React.createClass({
 
 		// First results, from Geoloc to Bounding box
 		var fitBounds = (this.props.status === 1 && nextProps.status === 2);
-		console.log(nextProps);	
+		//console.log(nextProps);	
 		if( this.state.map !== null &&
 				nextProps.status !== 1){
-			console.log("-> WillReceive");
+			//console.log("-> WillReceive");
 			this.loadSelection( this.state.map, 
 				nextProps.status, 
 				nextProps.result.objects, 

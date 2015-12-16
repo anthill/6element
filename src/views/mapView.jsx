@@ -100,7 +100,6 @@ module.exports = React.createClass({
 		var selected = null;
 		// -> STATUS 1
 		if(status === 1){
-			console.log('-> map.setView');
 			map.setView([center.lat, center.lon], Math.min(13, map.getZoom()));
 			this.setState({map: map, markersLayer: null, selected: selected});
 			return;

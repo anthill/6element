@@ -68,6 +68,7 @@ app.use(compression());
 
 
 app.get('/', function(req, res){
+    console.log('==== calling /')
     // Create a fresh document every time
     makeDocument(indexHTMLStr).then(function(result){
         var doc = result.document;
@@ -88,6 +89,8 @@ app.get('/', function(req, res){
 });
 
 app.get('/place/:placeId/', function(req, res){
+
+    console.log('==== calling /place/:placeId/')
     // Create a fresh document every time
     makeDocument(indexHTMLStr).then(function(result){
         var doc = result.document;

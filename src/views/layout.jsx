@@ -57,7 +57,7 @@ module.exports = React.createClass({
     },
     componentDidMount: function() {
         // For specific urls with geoloc or bounding box, we launch search on start 
-        if (this.props.boundingBox || this.props.boundingBox)
+        if (this.props.boundingBox)
             this.onSearch(this.state.parameters, this.props.boundingBox, 3, 20);
 
         if(this.props.detailedObject)
@@ -122,15 +122,16 @@ module.exports = React.createClass({
         search(data)
         .then(function(result){
 
-            // Set url
+            // get the qp for the url
             if (boundingBox == null)
                 var qp = Object.assign({}, parameters.geoloc);
             else
                 var qp = Object.assign({}, boundingBox);
             qp.category = self.props.categoriesFR[parameters.what];
-            page("?" + queryString.stringify(qp));
+            
            
             // Refresh with new results
+            page("?" + queryString.stringify(qp));
             self.setState({
                 parameters: parameters,
                 result: result, 
@@ -154,12 +155,12 @@ module.exports = React.createClass({
     },
     // Popup the detailed sheet of the clicked point
     onShowDetail: function(object){
-        page("/place/" + object.properties.id);
 
         // Temporary hide the left panel
         if(!this.isStarting() && this.state.listMode)
             this.refs.panelLeft.display(object === null); 
 
+        page("/place/" + object.properties.id);
         this.setState({detailedObject: object});
     },
     onHideDetail: function(){
@@ -186,13 +187,15 @@ module.exports = React.createClass({
                                 <Mui.FontIcon className="material-icons" color={Colors.pink400} >arrow_back</Mui.FontIcon>
                             </Mui.IconButton>) : "";
             var toolBarJSX =
-            <div id="toolbar">
-                <Mui.Toolbar>
-                    <Mui.ToolbarGroup key={0} float="left" >
+                <div id="toolbar">
+                    <Mui.Toolbar>
+                        <Mui.ToolbarGroup key={0} float="left" >
                         {arrowJSX}
-                    </Mui.ToolbarGroup>
-                </Mui.Toolbar>
-            </div>
+                        <Mui.ToolbarTitle text={<a href="/" className="noRef">6element</a>} />
+                        </Mui.ToolbarGroup>
+                    </Mui.Toolbar>
+                </div>
+
         } else {
 
             var ttStyle = {'zIndex': 100};
@@ -200,7 +203,7 @@ module.exports = React.createClass({
             <div id="toolbar">
                 <Mui.Toolbar>
                     <Mui.ToolbarGroup key={0} float="left">
-                        <Mui.ToolbarTitle text="6element" />
+                        <Mui.ToolbarTitle text={<a href="/" className="noRef">6element</a>} />
                     </Mui.ToolbarGroup>
                     <Mui.ToolbarGroup key={1} float="right">
                         <Mui.IconButton tooltip={this.state.listMode?"Afficher la carte":"Afficher la liste"} tooltipStyles={ttStyle} onTouchTap={this.handleLeftNav}><Mui.FontIcon className="material-icons" color={Colors.pink400} >{this.state.listMode?"map":"storage"}</Mui.FontIcon></Mui.IconButton>

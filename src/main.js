@@ -23,8 +23,8 @@ props.leaflet = L;
 props.googleMapsApi = googleMapsApi;
 
 
-page("/", function (ctx){
-	var qp = queryString.parse(ctx.querystring);
+page("/", function (context){
+	var qp = queryString.parse(context.querystring);
 
     if (qp.maxLat && qp.maxLon && qp.minLon && qp.minLat) {
         props.boundingBox = {
@@ -40,6 +40,7 @@ page("/", function (ctx){
     if (qp.category){
         props.category = qp.category;
     }
+    console.log("frontend page /", context)
     ReactDOM.render( 
         React.createElement(Layout, props), document.getElementById('reactHere')
     );

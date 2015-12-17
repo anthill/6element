@@ -63,6 +63,7 @@ var withPlacesMeasurements = function(list){
                 }, function(error, response, body){
                     if (!error) {
                         if(response !== undefined &&
+                            body !== "" &&
                             response.statusCode < 400){
                             resolve(JSON.parse(body));
                         } else {

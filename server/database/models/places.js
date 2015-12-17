@@ -168,17 +168,17 @@ module.exports = {
 
         var self = this;
         return this.getBins(pheromonId)
-            .then(function(bins){
+            .then(function(object){
 
                 return new Promise(function (resolve, reject) {
-                    var index = bins.findIndex(function(elt){
+                    var index = object.bins.findIndex(function(elt){
                         return elt.id === bin.id;
                     })
 
                     if(index === -1) reject('Bin with id=' + bin.id + ' unfound');
                     else {
-                        bins[index] = bin;
-                        self.updateBins(pheromonId, bins)
+                        object.bins[index] = bin;
+                        self.updateBins(pheromonId, object.bins)
                         .then (function(){
                             resolve(true);
                         })

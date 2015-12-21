@@ -65,6 +65,7 @@
     "leaflet": "^0.7.5",
     "material-ui": "^0.13.3",
     "minifyify": "^7.1.0",
+    "node-schedule": "^0.6.0",
     "opening_hours": "^3.3.0",
     "pg": "^4.4.2",
     "pg-hstore": "^2.3.2",

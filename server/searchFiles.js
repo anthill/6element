@@ -47,10 +47,30 @@ var toGeoJson = function(results){
     );     
 }
 
+
+function allResolved(promises){    
+    if(!Array.isArray(promises))
+        throw new TypeError('promises is not an array');
+            
+    var actuallyPromises = promises.map(function(v){
+        return Promise.resolve(v);
+    });
+    
+    return Promise.all(actuallyPromises.map(function(p){        
+        return p.then(function(res){
+                return res;
+            })
+            .catch(function(error){
+                console.log("Error in allResolved: ", error)
+                return undefined; // move to "resolve channel"
+            });
+    }));   
+}
+
 var withPlacesMeasurements = function(list){
 
     
-    return Promise.all(
+    return allResolved(
 
         list.map(function(object){
 

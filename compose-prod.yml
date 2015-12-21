@@ -14,6 +14,7 @@ api:
       - NODE_ENV=production
    volumes:
       - ./:/6element
+      - /data/6element/backups:/usr/6element-backups/
    tty: true
 
 db:
@@ -25,7 +26,7 @@ db:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
    tty: true
-   
+
 backup:
    build: ./dockerfiles
    dockerfile: node

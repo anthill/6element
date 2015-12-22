@@ -32,7 +32,7 @@ docker exec 6elementdev_api_1 tools/init-database.js
 docker exec 6elementdev_api_1 tools/loadFiles.js
 ```
 
-in production you can use `npm run start` and change the names of the containers in the exec commands.
+in production you can use `npm run prod` and change the names of the containers in the exec commands.
 
 #### Load from a backup
 

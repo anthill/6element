@@ -134,6 +134,23 @@ button a{
 	background-color: #cfd8dc;
 	border-radius: 5px;
 }
+
+.allowedObjects{
+	text-align: left;
+	padding: 0px;
+}
+.allowedObjects ul{
+	padding: 0px;
+}
+.allowedObjects li{
+	list-style-type: none;
+	margin: 5px;
+	display: inline-block;
+	padding: 5px;
+	background-color: #cfd8dc;
+	border-radius: 5px;
+}
+
 #traffic {
 	text-align: center;
 	vertical-align: text-top;

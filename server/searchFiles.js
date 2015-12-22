@@ -4,6 +4,8 @@ var request = require('request');
 var hstore = require('pg-hstore')();
 var Places = require('./database/models/places.js');
 var dictionnary = require('../data/dictionary.json');
+var toGeoJson = require('./toGeoJson.js');
+var withPlacesMeasurements = require('./withPlacesMeasurements.js');
 
 // Avalaible objects
 var parseObjects = function(row){
@@ -21,77 +23,6 @@ var parseObjects = function(row){
     });
 }
 
-var toGeoJson = function(results){
-
-    return Promise.all(
-        results.map(function(result){
-            return new Promise(function(resolve){
-
-                parseObjects(result)
-                .then(function(objects){
-
-                    result["objects"] = objects;
-                    var geoJson = { 
-                        type: 'Feature',
-                        properties: result,
-                        geometry: { "type": "Point", "coordinates": {"lat":result["lat"], "lon": result["lon"]} },
-                        distance: result.distance,
-                        color: result.color,
-                        file: result.file,
-                        rate: 3 
-                    }
-                    resolve(geoJson);
-                });
-            })
-        })
-    );     
-}
-
-var withPlacesMeasurements = function(list){
-
-    
-    return Promise.all(
-
-        list.map(function(object){
-
-            return new Promise(function(resolve, reject){
-                
-                request({
-                    method: 'GET',
-                    url:'https://pheromon.ants.builders/placeLatestMeasurement/'+object.pheromon_id+'/wifi', 
-                    headers: {'Content-Type': 'application/json;charset=UTF-8'}
-                }, function(error, response, body){
-                    if (!error) {
-                        if(response !== undefined &&
-                            body !== "" &&
-                            response.statusCode < 400){
-                            resolve(JSON.parse(body));
-                        } else {
-                            reject(Object.assign(
-                                new Error('HTTP error because of bad status code ' + body),
-                                {
-                                    HTTPstatus: typeof response === 'undefined'?'':response.statusCode,
-                                    text: body,
-                                    error: error
-                                }
-                            ));
-                        }
-                    }
-                    else {
-                        reject(Object.assign(
-                                new Error('HTTP error'),
-                                {
-                                    HTTPstatus: typeof response === 'undefined'?'':response.statusCode,
-                                    text: body,
-                                    error: error
-                                }
-                            ));
-                    }
-                });
-            })
-        })
-    );  
-}
 
 module.exports = function(req, res){
 

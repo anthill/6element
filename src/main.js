@@ -15,6 +15,7 @@ var Tokens = require('../Tokens.json');
 var googleMapsApi = require( 'google-maps-api' )( Tokens.google_token, ['places']);
 
 var Layout =  require('./views/layout.js');
+var Dashboard =  require('./views/dashboard.js');
 
 var props = require('../common/layoutData');
 props.leaflet = L;
@@ -22,7 +23,7 @@ props.googleMapsApi = googleMapsApi;
 
 document.addEventListener('DOMContentLoaded', function(){
     ReactDOM.render( 
-        React.createElement(Layout, props),
+        React.createElement(Dashboard, props),
         document.getElementById('reactHere')
     );
 })

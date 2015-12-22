@@ -20,7 +20,8 @@ var search = require('./searchFiles.js');
 var stats = require('./statsFiles.js');
 var dictionary = require('../data/dictionary.json');
 var layoutData = require('../common/layoutData');
-
+var toGeoJson = require('./toGeoJson.js');
+var withPlacesMeasurements = require('./withPlacesMeasurements.js');
 var Layout = require('../src/views/layout');
 var PRIVATE = require('../PRIVATE.json');
 
@@ -85,6 +86,40 @@ app.get('/', function(req, res){
     })
     .catch(function(err){ console.error('/', err, err.stack); }); 
 });
+
+app.get('/place/:placeId/', function(req, res){
+
+    var placeId = Number(req.params.placeId);
+    places.getPlaceById(placeId)
+    .then(function(data){
+        toGeoJson(data)
+        .then(function(geoJson){
+
+            var place = geoJson[0];
+            var list = [{'index': 0, 'pheromon_id': place.properties.pheromon_id}]
+            withPlacesMeasurements(list)
+            .then(function(measures){
+
+                if(measures !== null && measures.length > 0){
+                    place["measurements"] = {latest: measures[0].latest, max: measures[0].max};
+                }
+                res.setHeader('Content-Type', 'application/json');
+                res.send(JSON.stringify(place));
+            })
+            .catch(function(err){
+                console.error(err);
+                res.setHeader('Content-Type', 'application/json');
+                res.send(JSON.stringify(place));
+            });
+        });
+    })
+    .catch(function(error){
+        res.status(500).send('Couldn\'t get place from database');
+        console.log('error in GET /place/' + placeId, error);
+    });
+   
+});
+
 
 app.get('/bins/get/:pheromonId', function(req, res){
     if(req.query.s === PRIVATE.secret) {

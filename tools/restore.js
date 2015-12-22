@@ -5,7 +5,7 @@
 require('es6-shim');
 
 var child_process = require('child_process');
-var os = require('os')
+var fs = require('fs')
 var spawn = child_process.spawn;
 var zlib = require('zlib');
 

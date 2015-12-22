@@ -5,36 +5,23 @@ api:
    links:
       - db
    ports:
-      - "3500:3500"
+      - "35000:35000"
    environment:
-      - VIRTUAL_HOST=6element.fr,6element.org,6element.net,6element.eu,citizen.ants.builders
-      - VIRTUAL_PORT=3500
+      - VIRTUAL_HOST=6element.ants.builders
+      - VIRTUAL_PORT=35000
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
+      - PGPASSWORD=postgres
       - NODE_ENV=development
    volumes:
       - ./:/6element
+      - ./backups:/backups/
    tty: true
 
 db:
    build: ./dockerfiles
    dockerfile: postgis
-   ports:
-      - "5432:5432"
    environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
-   tty: true
-
-backup:
-   build: ./dockerfiles
-   dockerfile: node
-   links:
-      - db
-   environment:
-      - POSTGRES_USER=postgres
-      - PGPASSWORD=postgres
-   volumes:
-      - ./:/6element
-      - ./backups:/usr/6element-backups:ro
    tty: true

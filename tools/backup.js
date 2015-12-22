@@ -4,4 +4,4 @@
 
 var spawn = require('child_process').spawn;
 
-spawn('pg_dump', ['-p', process.env.DB_PORT_5432_TCP_PORT, '-h', process.env.DB_PORT_5432_TCP_ADDR, '-U', process.env.POSTGRES_USER, '-d', 'postgres'], {stdio: 'inherit'});
+spawn('pg_dump', ['-p', process.env.DB_PORT_5432_TCP_PORT, '-h', process.env.DB_PORT_5432_TCP_ADDR, '-U', process.env.POSTGRES_USER, '-w'], {stdio: 'inherit'});

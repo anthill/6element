@@ -12,11 +12,7 @@ var conString = [
     process.env.POSTGRES_USER,
     ':', 
     process.env.POSTGRES_PASSWORD,
-    '@',
-    process.env.DB_PORT_5432_TCP_ADDR,
-    ':',
-    process.env.DB_PORT_5432_TCP_PORT,
-    '/postgres'
+    '@db/postgres'
 ].join('');
 
 generateSqlDefinition({ dsn: conString }, function(err, definitions) {

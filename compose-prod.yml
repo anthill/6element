@@ -1,41 +1,27 @@
 api:
    build: ./dockerfiles
    dockerfile: node
-   command: nodemon --watch server --watch src/index.html server/index.js
+   command: node server/index.js
    links:
       - db
    ports:
       - "3500:3500"
    environment:
-      - VIRTUAL_HOST=6element.fr,6element.org,6element.net,6element.eu,citizen.ants.builders
+      - VIRTUAL_HOST=6element.fr,6element.org,6element.net,6element.eu
       - VIRTUAL_PORT=3500
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
+      - PGPASSWORD=postgres
       - NODE_ENV=production
    volumes:
       - ./:/6element
-      - /data/6element/backups:/usr/6element-backups/
+      - /data/6element/backups:/backups/
    tty: true
 
 db:
    build: ./dockerfiles
    dockerfile: postgis
-   ports:
-      - "5432:5432"
    environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
-   tty: true
-
-backup:
-   build: ./dockerfiles
-   dockerfile: node
-   links:
-      - db
-   environment:
-      - POSTGRES_USER=postgres
-      - PGPASSWORD=postgres
-   volumes:
-      - ./:/6element
-      - ./backups:/usr/6element-backups:ro
    tty: true

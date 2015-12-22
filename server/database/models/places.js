@@ -121,7 +121,7 @@ module.exports = {
         return databaseP.then(function (db) {
 
             var query = places
-                .select(places.bins, places.owner)
+                .select(places.bins)
                 .where(places.pheromon_id.equals(pheromonId))
                 .toQuery();
 
@@ -133,7 +133,7 @@ module.exports = {
                     }
                     else{
                         if(result.rows[0].bins === undefined) resolve (undefined);
-                        else resolve(result.rows[0]);
+                        else resolve(result.rows[0].bins);
                     } 
                 });
             });
@@ -194,17 +194,17 @@ module.exports = {
 
         var self = this;
         return this.getBins(pheromonId)
-            .then(function(object){
+            .then(function(bins){
 
                 return new Promise(function (resolve, reject) {
-                    var index = object.bins.findIndex(function(elt){
+                    var index = bins.findIndex(function(elt){
                         return elt.id === bin.id;
                     })
 
                     if(index === -1) reject('Bin with id=' + bin.id + ' unfound');
                     else {
-                        object.bins[index] = bin;
-                        self.updateBins(pheromonId, object.bins)
+                        bins[index] = bin;
+                        self.updateBins(pheromonId, bins)
                         .then (function(){
                             resolve(true);
                         })

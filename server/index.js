@@ -86,7 +86,7 @@ app.use(bodyParser.json({limit: '50mb'}));
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(compression());
 
-var basicResponse = function(req, res){
+var basicRoute = function(req, res){
     console.log('==== calling /')
     // Create a fresh document every time
     makeDocument(indexHTMLStr).then(function(result){
@@ -107,9 +107,26 @@ var basicResponse = function(req, res){
     .catch(function(err){ console.error('/', err, err.stack); }); 
 }
 
-app.get('/', basicResponse);
+app.get('/', basicRoute);
 
-app.get('/operateur/:name', basicResponse);
+// app.get('/operator/:name', basicRoute);
+
+app.get('/operator/:name', function(req, res){
+
+    var name = req.params.name;
+
+    console.log('==== calling /operator/' + name)
+    places.getPlacesByOperator(name)
+    .then(function(data){
+        res.setHeader('Content-Type', 'application/json');
+        res.send(JSON.stringify(data));
+    })
+    .catch(function(error){
+        res.status(500).send('Couldn\'t get place of operator from database');
+        console.log('error in GET /operator/' + name, error);
+    });
+
+});
 
 app.get('/place/:placeId/', function(req, res){
 

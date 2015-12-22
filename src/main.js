@@ -16,7 +16,8 @@ addIconPulse(L);
 var Tokens = require('../Tokens.json');
 var googleMapsApi = require( 'google-maps-api' )( Tokens.google_token, ['places']);
 
-var getPlace = require('./js/prepareServerAPI')(require('./js/sendReq')).get;
+var getPlace = require('./js/prepareServerAPI')(require('./js/sendReq')).getPlace;
+var getPlacesByOperator = require('./js/prepareServerAPI')(require('./js/sendReq')).getPlacesByOperator;
 
 var mapScreen =  require('./views/mapScreen');
 var placeScreen =  require('./views/placeScreen');
@@ -50,12 +51,22 @@ page("/", function (context){
     );
 });
 
-page("/operateur/:name", function (context){
+page("/operator/:name", function (context){
 
-    // props.operateur = 
-    ReactDOM.render( 
-        React.createElement(operatorScreen, props), document.getElementById('reactHere')
-    );
+    var name = context.params.name;
+
+    getPlacesByOperator(name).then(function(result){
+
+        props.operator = result;
+        ReactDOM.render( 
+            React.createElement(operatorScreen, props), document.getElementById('reactHere')
+        );
+
+    })
+    .catch(function(error){
+        console.log("Error in place: ", error);
+    });
+
 });
 
 page("/index.html", "/");

@@ -6,7 +6,7 @@ var ThemeManager = require('material-ui/lib/styles/theme-manager');
 var DefaultRawTheme = Mui.Styles.LightRawTheme;
 
 var Colors = require('material-ui/lib/styles/colors');
-var get = require('../js/prepareServerAPI')(require('../js/sendReq')).get;
+var getPlace = require('../js/prepareServerAPI')(require('../js/sendReq')).getPlace;
 
 var Traffic = require('./traffic.js');
 var Calendar  =  require('./calendar.js');
@@ -36,7 +36,7 @@ module.exports = React.createClass({
 	},
 	componentDidMount: function() {
 		var self = this;
-		get(this.props.placeId)
+		getPlace(this.props.placeId)
 		.then(function(place){ 
 			self.setState({place: place});
 		})

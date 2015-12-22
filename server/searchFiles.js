@@ -4,10 +4,30 @@ var request = require('request');
 var toGeoJson = require('./toGeoJson.js');
 var Places = require('./database/models/places.js');
 
+
+function allResolved(promises){    
+    if(!Array.isArray(promises))
+        throw new TypeError('promises is not an array');
+            
+    var actuallyPromises = promises.map(function(v){
+        return Promise.resolve(v);
+    });
+    
+    return Promise.all(actuallyPromises.map(function(p){        
+        return p.then(function(res){
+                return res;
+            })
+            .catch(function(error){
+                console.log("Error in allResolved: ", error)
+                return undefined; // move to "resolve channel"
+            });
+    }));   
+}
+
 var withPlacesMeasurements = function(list){
 
     
-    return Promise.all(
+    return allResolved(
 
         list.map(function(object){
 
@@ -85,7 +105,10 @@ module.exports = function(req, res){
 
                     if(measures !== null){
                         measures.forEach(function(measure, index){
-                            geoJson[list[index].index]["measurements"] = {latest: measure.latest, max: measure.max};
+                            if (measure)
+                                geoJson[list[index].index]["measurements"] = {latest: measure.latest, max: measure.max};
+                            else
+                                geoJson[list[index].index]["measurements"] = undefined;
                         });
                     }
                     result.objects = geoJson;
@@ -129,7 +152,10 @@ module.exports = function(req, res){
 
                     if(measures !== null){
                         measures.forEach(function(measure, index){
-                            geoJson[list[index].index]["measurements"] = {latest: measure.latest, max: measure.max};
+                            if (measure)
+                                geoJson[list[index].index]["measurements"] = {latest: measure.latest, max: measure.max};
+                            else
+                                geoJson[list[index].index]["measurements"] = undefined;
                         });
                     }
                     result.objects = geoJson;

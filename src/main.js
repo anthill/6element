@@ -16,7 +16,7 @@ addIconPulse(L);
 var Tokens = require('../Tokens.json');
 var googleMapsApi = require( 'google-maps-api' )( Tokens.google_token, ['places']);
 
-var Layout =  require('./views/layout.js');
+var Layout =  require('./views/layout');
 
 var props = require('../common/layoutData');
 props.leaflet = L;

@@ -6,8 +6,8 @@ var ThemeManager = require('material-ui/lib/styles/theme-manager');
 var DefaultRawTheme = Mui.Styles.LightRawTheme;
 
 var Colors = require('material-ui/lib/styles/colors');
-var Preview  =  require('./preview.js');
-var MapCore  =  require('./mapCore.js');
+var Preview  =  require('./preview');
+var MapCore  =  require('./mapCore');
 
 var L; // variable where to store the leaflet global. Will be passed to props... maybe
 

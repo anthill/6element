@@ -4,7 +4,7 @@ var React = require('react');
 var Mui = require('material-ui');
 var ThemeManager = require('material-ui/lib/styles/theme-manager');
 var DefaultRawTheme = Mui.Styles.LightRawTheme;
-var Preview  =  require('./preview.js');
+var Preview  =  require('./preview');
 
 var Colors = require('material-ui/lib/styles/colors');
 

@@ -86,9 +86,7 @@ app.use(bodyParser.json({limit: '50mb'}));
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(compression());
 
-
-
-app.get('/', function(req, res){
+var basicResponse = function(req, res){
     console.log('==== calling /')
     // Create a fresh document every time
     makeDocument(indexHTMLStr).then(function(result){
@@ -107,36 +105,55 @@ app.get('/', function(req, res){
         dispose();
     })
     .catch(function(err){ console.error('/', err, err.stack); }); 
-});
+}
+
+app.get('/', basicResponse);
+
+app.get('/operateur/:name', basicResponse);
 
 app.get('/place/:placeId/', function(req, res){
 
     var placeId = Number(req.params.placeId);
+
+    console.log('==== calling /place/:placeId', placeId)
     places.getPlaceById(placeId)
     .then(function(data){
         toGeoJson(data)
         .then(function(geoJson){
 
             var place = geoJson[0];
-            var list = [{'index': 0, 'pheromon_id': place.properties.pheromon_id}]
-            withPlacesMeasurements(list)
-            .then(function(measures){
 
-                if(measures !== null && measures.length > 0){
-                    place["measurements"] = {latest: measures[0].latest, max: measures[0].max};
-                }
+            if (place.properties.pheromon_id){
+
+                
+                var list = [{'index': 0, 'pheromon_id': place.properties.pheromon_id}]
+                withPlacesMeasurements(list)
+                .then(function(measures){
+
+                    if(measures !== null && measures.length > 0){
+                        place["measurements"] = {latest: measures[0].latest, max: measures[0].max};
+                    }
+                    res.setHeader('Content-Type', 'application/json');
+                    res.send(JSON.stringify(place));
+                })
+                .catch(function(err){
+                    console.error(err);
+                    res.setHeader('Content-Type', 'application/json');
+                    res.send(JSON.stringify(place));
+                });
+            }
+            else {
                 res.setHeader('Content-Type', 'application/json');
                 res.send(JSON.stringify(place));
-            })
-            .catch(function(err){
-                console.error(err);
-                res.setHeader('Content-Type', 'application/json');
-                res.send(JSON.stringify(place));
-            });
+            }
+        })
+        .catch(function(error){
+            res.status(500).send('Couldn\'t get place from database');
+            console.log('error in GET /place/' + placeId, error);
         });
     })
     .catch(function(error){
-        res.status(500).send('Couldn\'t get place from database');
+        res.status(500).send('Couldn\'t get place and measurements from database');
         console.log('error in GET /place/' + placeId, error);
     });
    

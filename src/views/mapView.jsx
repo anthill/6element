@@ -148,7 +148,6 @@ module.exports = React.createClass({
 				// Regular point or Sensor kitted point
 				var marker = null;
 				if(hasSensor && point.measurements !== undefined){
-
 					var value = point.measurements.latest/point.measurements.max;
 					var color = 'green';
 					if(value > 0.5 && value <= 0.75) color = 'orange';

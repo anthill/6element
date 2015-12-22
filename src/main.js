@@ -16,8 +16,11 @@ addIconPulse(L);
 var Tokens = require('../Tokens.json');
 var googleMapsApi = require( 'google-maps-api' )( Tokens.google_token, ['places']);
 
-var Layout =  require('./views/layout');
-var Dashboard =  require('./views/dashboard');
+var getPlace = require('./js/prepareServerAPI')(require('./js/sendReq')).get;
+
+var mapScreen =  require('./views/mapScreen');
+var placeScreen =  require('./views/placeScreen');
+var operatorScreen =  require('./views/operatorScreen');
 
 var props = require('../common/layoutData');
 props.leaflet = L;
@@ -43,17 +46,36 @@ page("/", function (context){
     }
 
     ReactDOM.render( 
-        // React.createElement(Layout, props), document.getElementById('reactHere')
-        React.createElement(Dashboard, props), document.getElementById('reactHere')
+        React.createElement(mapScreen, props), document.getElementById('reactHere')  
+    );
+});
+
+page("/operateur/:name", function (context){
+
+    // props.operateur = 
+    ReactDOM.render( 
+        React.createElement(operatorScreen, props), document.getElementById('reactHere')
     );
 });
 
 page("/index.html", "/");
 
-page("/place/:placeId", function (){
-    ReactDOM.render( 
-        React.createElement(Layout, props), document.getElementById('reactHere')
-    );
+page("/place/:placeId", function (context){
+    var placeId = context.params.placeId;
+
+    getPlace(placeId).then(function(result){
+
+        props.detailedObject = result;
+        ReactDOM.render( 
+            React.createElement(placeScreen, props), document.getElementById('reactHere')
+        );
+
+    })
+    .catch(function(error){
+        console.log("Error in place: ", error);
+    });
+
+    
 });
 
 document.addEventListener('DOMContentLoaded', function l(){

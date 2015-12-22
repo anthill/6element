@@ -84,33 +84,6 @@ function renderDocumentWithData(doc, data, reactComponent){
         initDataInertElement.textContent = JSON.stringify(data);
 }
 
-
-app.use(bodyParser.json({limit: '50mb'}));
-app.use(bodyParser.urlencoded({extended: true}));
-app.use(compression());
-
-
-app.get('/', function(req, res){
-    console.log('==== calling /')
-    // Create a fresh document every time
-    makeDocument(indexHTMLStr).then(function(result){
-        var doc = result.document;
-        var dispose = result.dispose;
-
-        // Material-ui needs to change the global.navigator.userAgent property
-        // (just during the React  rendering)
-        // Waiting for Material team to fix it 
-        //https://github.com/callemall/material-ui/pull/2007#issuecomment-155414926
-        global.navigator = {'userAgent': req.headers['user-agent']};
-        renderDocumentWithData(doc, layoutData, mapScreen);
-        global.navigator = undefined;
-
-        res.send( jsdom.serializeDocument(doc) );
-        dispose();
-    })
-    .catch(function(err){ console.error('/', err, err.stack); }); 
-});
-
 function renderAndSend (req, res, props, view) {
         makeDocument(indexHTMLStr).then(function(result){
             var doc = result.document;
@@ -129,6 +102,17 @@ function renderAndSend (req, res, props, view) {
         })
         .catch(function(err){ console.error('/', err, err.stack); }); 
 }
+
+app.use(bodyParser.json({limit: '50mb'}));
+app.use(bodyParser.urlencoded({extended: true}));
+app.use(compression());
+
+
+app.get('/', function(req, res){
+    console.log('==== calling /')
+    renderAndSend(req, res, layoutData, mapScreen);
+});
+
 
 app.get('/operator/:name', function(req, res){
 

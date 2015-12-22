@@ -27,7 +27,7 @@ module.exports = React.createClass({
 		return { muiTheme: ThemeManager.getMuiTheme(DefaultRawTheme) };
 	},
 	getInitialState: function() {
-		var placeIds = [977,996,924,943,956];
+		var placeIds = this.props.centerIds;
 		return {
 			placeIds: placeIds,
 			width: 0

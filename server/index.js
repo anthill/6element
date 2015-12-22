@@ -24,9 +24,12 @@ var search = require('./searchFiles.js');
 var stats = require('./statsFiles.js');
 var dictionary = require('../data/dictionary.json');
 var layoutData = require('../common/layoutData');
+var mapScreen =  require('../src/views/mapScreen');
+// var placeScreen =  require('../src/views/placeScreen');
+var operatorScreen =  require('../src/views/operatorScreen');
+
 var toGeoJson = require('./toGeoJson.js');
 var withPlacesMeasurements = require('./withPlacesMeasurements.js');
-var Layout = require('../src/views/layout');
 var PRIVATE = require('../PRIVATE.json');
 
 var app = express();
@@ -86,7 +89,8 @@ app.use(bodyParser.json({limit: '50mb'}));
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(compression());
 
-var basicRoute = function(req, res){
+
+app.get('/', function(req, res){
     console.log('==== calling /')
     // Create a fresh document every time
     makeDocument(indexHTMLStr).then(function(result){
@@ -98,18 +102,33 @@ var basicRoute = function(req, res){
         // Waiting for Material team to fix it 
         //https://github.com/callemall/material-ui/pull/2007#issuecomment-155414926
         global.navigator = {'userAgent': req.headers['user-agent']};
-        renderDocumentWithData(doc, layoutData, Layout);
+        renderDocumentWithData(doc, layoutData, mapScreen);
         global.navigator = undefined;
 
         res.send( jsdom.serializeDocument(doc) );
         dispose();
     })
     .catch(function(err){ console.error('/', err, err.stack); }); 
+});
+
+function renderAndSend (req, res, props, view) {
+        makeDocument(indexHTMLStr).then(function(result){
+            var doc = result.document;
+            var dispose = result.dispose;
+
+            // Material-ui needs to change the global.navigator.userAgent property
+            // (just during the React  rendering)
+            // Waiting for Material team to fix it 
+            //https://github.com/callemall/material-ui/pull/2007#issuecomment-155414926
+            global.navigator = {'userAgent': req.headers['user-agent']};
+            renderDocumentWithData(doc, props, view);
+            global.navigator = undefined;
+
+            res.send( jsdom.serializeDocument(doc) );
+            dispose();
+        })
+        .catch(function(err){ console.error('/', err, err.stack); }); 
 }
-
-app.get('/', basicRoute);
-
-// app.get('/operator/:name', basicRoute);
 
 app.get('/operator/:name', function(req, res){
 
@@ -118,8 +137,8 @@ app.get('/operator/:name', function(req, res){
     console.log('==== calling /operator/' + name)
     places.getPlacesByOperator(name)
     .then(function(data){
-        res.setHeader('Content-Type', 'application/json');
-        res.send(JSON.stringify(data));
+        layoutData.centerIds = data.map(function(object){return object.id});
+        renderAndSend(req, res, layoutData, operatorScreen);
     })
     .catch(function(error){
         res.status(500).send('Couldn\'t get place of operator from database');
@@ -220,21 +239,21 @@ app.use("/images-leaflet", express.static(path.join(__dirname, '../node_modules/
 app.post('/search', search);
 app.post('/stats', stats);
 app.get('/networks', function(req, res){
-	networks.getAll()
-	.then(function(data){
+    networks.getAll()
+    .then(function(data){
         res.setHeader('Content-Type', 'application/json');
         res.send(JSON.stringify(data));
-	})
-	.catch(function(err){
-		console.log('/networks error', err);
-		res.status(500).send(err);
-	});
+    })
+    .catch(function(err){
+        console.log('/networks error', err);
+        res.status(500).send(err);
+    });
 });
 
 var categoriesStr = JSON.stringify(dictionary);
 app.get('/categories', function(req, res){
     res.setHeader('Content-Type', 'application/json');
-	res.send(categoriesStr);
+    res.send(categoriesStr);
 });
 
 app.use('/', express.static(path.join(__dirname, '../src')));

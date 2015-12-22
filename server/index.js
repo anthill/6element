@@ -25,7 +25,7 @@ var stats = require('./statsFiles.js');
 var dictionary = require('../data/dictionary.json');
 var layoutData = require('../common/layoutData');
 var mapScreen =  require('../src/views/mapScreen');
-// var placeScreen =  require('../src/views/placeScreen');
+var placeScreen =  require('../src/views/placeScreen');
 var operatorScreen =  require('../src/views/operatorScreen');
 
 var toGeoJson = require('./toGeoJson.js');
@@ -131,7 +131,7 @@ app.get('/operator/:name', function(req, res){
 
 });
 
-app.get('/place/:placeId/', function(req, res){
+function getPlace(req, res, raw){
 
     var placeId = Number(req.params.placeId);
 
@@ -153,18 +153,33 @@ app.get('/place/:placeId/', function(req, res){
                     if(measures !== null && measures.length > 0){
                         place["measurements"] = {latest: measures[0].latest, max: measures[0].max};
                     }
-                    res.setHeader('Content-Type', 'application/json');
-                    res.send(JSON.stringify(place));
+                    if(raw){
+                        res.setHeader('Content-Type', 'application/json');
+                        res.send(JSON.stringify(place));
+                    } else {
+                        layoutData.detailedObject = place;
+                        renderAndSend(req, res, layoutData, placeScreen);
+                    }
                 })
                 .catch(function(err){
                     console.error(err);
-                    res.setHeader('Content-Type', 'application/json');
-                    res.send(JSON.stringify(place));
+                    if(raw){
+                        res.setHeader('Content-Type', 'application/json');
+                        res.send(JSON.stringify(place));
+                    } else {
+                        layoutData.detailedObject = place;
+                        renderAndSend(req, res, layoutData, placeScreen);
+                    }
                 });
             }
             else {
-                res.setHeader('Content-Type', 'application/json');
-                res.send(JSON.stringify(place));
+                if(raw){
+                    res.setHeader('Content-Type', 'application/json');
+                    res.send(JSON.stringify(place));
+                } else {
+                    layoutData.detailedObject = place;
+                    renderAndSend(req, res, layoutData, placeScreen);
+                }
             }
         })
         .catch(function(error){
@@ -177,8 +192,15 @@ app.get('/place/:placeId/', function(req, res){
         console.log('error in GET /place/' + placeId, error);
     });
    
+}
+
+app.get('/place/:placeId/', function(req, res){
+    getPlace(req, res, false)
 });
 
+app.get('/rawPlace/:placeId/', function(req, res){
+    getPlace(req, res, true)
+});
 
 app.get('/bins/get/:pheromonId', function(req, res){
     if(req.query.s === PRIVATE.secret) {

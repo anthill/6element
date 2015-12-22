@@ -16,7 +16,7 @@ addIconPulse(L);
 var Tokens = require('../Tokens.json');
 var googleMapsApi = require( 'google-maps-api' )( Tokens.google_token, ['places']);
 
-var getPlace = require('./js/prepareServerAPI')(require('./js/sendReq')).getPlace;
+var getRawPlace = require('./js/prepareServerAPI')(require('./js/sendReq')).getRawPlace;
 var getPlacesByOperator = require('./js/prepareServerAPI')(require('./js/sendReq')).getPlacesByOperator;
 
 var mapScreen =  require('./views/mapScreen');
@@ -74,7 +74,7 @@ page("/index.html", "/");
 page("/place/:placeId", function (context){
     var placeId = context.params.placeId;
 
-    getPlace(placeId).then(function(result){
+    getRawPlace(placeId).then(function(result){
 
         props.detailedObject = result;
         ReactDOM.render( 

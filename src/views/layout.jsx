@@ -7,11 +7,11 @@ var DefaultRawTheme = Mui.Styles.LightRawTheme;
 
 var Colors = require('material-ui/lib/styles/colors');
 
-var MapView = require('./mapView.js');
-var DetailView = require('./detailView.js');
-var PanelLeft = require('./panelLeft.js');
-var PanelRight = require('./panelRight.js');
-var DialogBox = require('./dialogBox.js');
+var MapView = require('./mapView');
+var DetailView = require('./detailView');
+var PanelLeft = require('./panelLeft');
+var PanelRight = require('./panelRight');
+var DialogBox = require('./dialogBox');
 
 var search = require('../js/prepareServerAPI')(require('../js/sendReq')).search;
 

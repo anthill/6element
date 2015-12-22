@@ -5,6 +5,10 @@ require('es6-shim');
 var fs = require('fs');
 var path = require('path');
 
+var spawn = require('child_process').spawn;
+var zlib = require('zlib');
+var schedule = require('node-schedule');
+
 var express = require('express');
 var bodyParser = require('body-parser');
 var compression = require('compression')
@@ -27,6 +31,23 @@ var PRIVATE = require('../PRIVATE.json');
 var app = express();
 
 var PORT = process.env.VIRTUAL_PORT ? process.env.VIRTUAL_PORT: 3500;
+
+// Backup database everyday at 3AM
+if (process.env.NODE_ENV === "production") {
+    schedule.scheduleJob('0 3 * * *', function(){
+        console.log('Backup database');
+        var gzip = zlib.createGzip();
+        var today = new Date();
+        var wstream = fs.createWriteStream('/backups/' + today.getDay() + '.sql.gz');
+        var proc = spawn('pg_dump', ['-p', process.env.DB_PORT_5432_TCP_PORT, '-h', process.env.DB_PORT_5432_TCP_ADDR, '-U', process.env.POSTGRES_USER, '-w']);
+        proc.stdout
+            .pipe(gzip)
+            .pipe(wstream);
+        proc.stderr.on('data', function(buffer) {
+            console.log(buffer.toString().replace('\n', ''));
+        });
+    });
+}
 
 // Sockets
 var server  = require('http').createServer(app);

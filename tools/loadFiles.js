@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 "use strict";
 
 require('es6-shim');
@@ -5,9 +7,9 @@ require('es6-shim');
 var path = require('path');
 var fs   = require('fs');
 var hstore = require('pg-hstore')();
-var Places = require('./database/models/places.js');
-var Networks = require('./database/models/networks.js');
-var placesDeclaration = require('./database/management/declarations.js').places;
+var Places = require('../server/database/models/places.js');
+var Networks = require('../server/database/models/networks.js');
+var placesDeclaration = require('../server/database/management/declarations.js').places;
 
 var CREATE_CHUNK_SIZE = 1000;
 

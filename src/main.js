@@ -17,6 +17,7 @@ var Tokens = require('../Tokens.json');
 var googleMapsApi = require( 'google-maps-api' )( Tokens.google_token, ['places']);
 
 var Layout =  require('./views/layout');
+var Dashboard =  require('./views/dashboard');
 
 var props = require('../common/layoutData');
 props.leaflet = L;
@@ -40,9 +41,10 @@ page("/", function (context){
     if (qp.category){
         props.category = qp.category;
     }
-    console.log("frontend page /", context)
+
     ReactDOM.render( 
-        React.createElement(Layout, props), document.getElementById('reactHere')
+        // React.createElement(Layout, props), document.getElementById('reactHere')
+        React.createElement(Dashboard, props), document.getElementById('reactHere')
     );
 });
 

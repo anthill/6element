@@ -51,17 +51,20 @@ module.exports = React.createClass({
 	      this.setState({width: width, nbColumns: nbColumns});    
 	    }
 	},*/
-	onPrevDate: function(){
+	onPrevDate: function(e){
+		e.preventDefault();
 		var date = this.state.date;
 		date.setDate(date.getDate()-1);
 		this.updateDate(date);
 	},
-	onNextDate: function(){
+	onNextDate: function(e){
+		e.preventDefault();
 		var date = this.state.date;
 		date.setDate(date.getDate()+1);
 		this.updateDate(date);
 	},
 	onChangeDate: function(nill, date){
+		nill.preventDefault();
         this.updateDate(date);
     },
 	updateDate: function(date){

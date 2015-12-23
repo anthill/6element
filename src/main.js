@@ -16,7 +16,12 @@ addIconPulse(L);
 var Tokens = require('../Tokens.json');
 var googleMapsApi = require( 'google-maps-api' )( Tokens.google_token, ['places']);
 
-var Layout =  require('./views/layout.js');
+var getRawPlace = require('./js/prepareServerAPI')(require('./js/sendReq')).getRawPlace;
+var getPlacesByOperator = require('./js/prepareServerAPI')(require('./js/sendReq')).getPlacesByOperator;
+
+var mapScreen =  require('./views/mapScreen');
+var placeScreen =  require('./views/placeScreen');
+var operatorScreen =  require('./views/operatorScreen');
 
 var props = require('../common/layoutData');
 props.leaflet = L;
@@ -40,18 +45,48 @@ page("/", function (context){
     if (qp.category){
         props.category = qp.category;
     }
-    console.log("frontend page /", context)
+
     ReactDOM.render( 
-        React.createElement(Layout, props), document.getElementById('reactHere')
+        React.createElement(mapScreen, props), document.getElementById('reactHere')  
     );
+});
+
+page("/operator/:name", function (context){
+
+    var name = context.params.name;
+
+    getPlacesByOperator(name).then(function(result){
+
+        props.operator = result;
+        ReactDOM.render( 
+            React.createElement(operatorScreen, props), document.getElementById('reactHere')
+        );
+
+    })
+    .catch(function(error){
+        console.log("Error in place: ", error);
+    });
+
 });
 
 page("/index.html", "/");
 
-page("/place/:placeId", function (){
-    ReactDOM.render( 
-        React.createElement(Layout, props), document.getElementById('reactHere')
-    );
+page("/place/:placeId", function (context){
+    var placeId = context.params.placeId;
+
+    getRawPlace(placeId).then(function(result){
+
+        props.detailedObject = result;
+        ReactDOM.render( 
+            React.createElement(placeScreen, props), document.getElementById('reactHere')
+        );
+
+    })
+    .catch(function(error){
+        console.log("Error in place: ", error);
+    });
+
+    
 });
 
 document.addEventListener('DOMContentLoaded', function l(){

@@ -24,6 +24,15 @@ module.exports = function(request, origin){
         },
         measurements: function(data){
             return request('GET', origin + '/measurements/place/raw' + makeSearchString(data));
+        },
+        getPlace: function(id){
+            return request('GET', origin + '/place/' + id);
+        },
+        getRawPlace: function(id){
+            return request('GET', origin + '/rawPlace/' + id);
+        },
+        getPlacesByOperator: function(name){
+            return request('GET', origin + '/operator/' + name);
         }
     };
 };

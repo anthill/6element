@@ -5,6 +5,10 @@ require('es6-shim');
 var fs = require('fs');
 var path = require('path');
 
+var spawn = require('child_process').spawn;
+var zlib = require('zlib');
+var schedule = require('node-schedule');
+
 var express = require('express');
 var bodyParser = require('body-parser');
 var compression = require('compression')
@@ -18,16 +22,36 @@ var networks = require('./database/models/networks.js');
 var places = require('./database/models/places.js');
 var search = require('./searchFiles.js');
 var stats = require('./statsFiles.js');
-var toGeoJson = require('./toGeoJson.js');
 var dictionary = require('../data/dictionary.json');
 var layoutData = require('../common/layoutData');
+var mapScreen =  require('../src/views/mapScreen');
+var placeScreen =  require('../src/views/placeScreen');
+var operatorScreen =  require('../src/views/operatorScreen');
 
-var Layout = require('../src/views/layout');
+var toGeoJson = require('./toGeoJson.js');
+var withPlacesMeasurements = require('./withPlacesMeasurements.js');
 var PRIVATE = require('../PRIVATE.json');
 
 var app = express();
 
 var PORT = process.env.VIRTUAL_PORT ? process.env.VIRTUAL_PORT: 3500;
+
+// Backup database everyday at 3AM
+if (process.env.NODE_ENV === "production") {
+    schedule.scheduleJob('0 3 * * *', function(){
+        console.log('Backup database');
+        var gzip = zlib.createGzip();
+        var today = new Date();
+        var wstream = fs.createWriteStream('/backups/' + today.getDay() + '.sql.gz');
+        var proc = spawn('pg_dump', ['-p', process.env.DB_PORT_5432_TCP_PORT, '-h', process.env.DB_PORT_5432_TCP_ADDR, '-U', process.env.POSTGRES_USER, '-w']);
+        proc.stdout
+            .pipe(gzip)
+            .pipe(wstream);
+        proc.stderr.on('data', function(buffer) {
+            console.log(buffer.toString().replace('\n', ''));
+        });
+    });
+}
 
 // Sockets
 var server  = require('http').createServer(app);
@@ -60,68 +84,122 @@ function renderDocumentWithData(doc, data, reactComponent){
         initDataInertElement.textContent = JSON.stringify(data);
 }
 
+function renderAndSend (req, res, props, view) {
+        makeDocument(indexHTMLStr).then(function(result){
+            var doc = result.document;
+            var dispose = result.dispose;
+
+            // Material-ui needs to change the global.navigator.userAgent property
+            // (just during the React  rendering)
+            // Waiting for Material team to fix it 
+            //https://github.com/callemall/material-ui/pull/2007#issuecomment-155414926
+            global.navigator = {'userAgent': req.headers['user-agent']};
+            renderDocumentWithData(doc, props, view);
+            global.navigator = undefined;
+
+            res.send( jsdom.serializeDocument(doc) );
+            dispose();
+        })
+        .catch(function(err){ console.error('/', err, err.stack); }); 
+}
 
 app.use(bodyParser.json({limit: '50mb'}));
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(compression());
 
 
-
 app.get('/', function(req, res){
     console.log('==== calling /')
-    // Create a fresh document every time
-    makeDocument(indexHTMLStr).then(function(result){
-        var doc = result.document;
-        var dispose = result.dispose;
-
-        // Material-ui needs to change the global.navigator.userAgent property
-        // (just during the React  rendering)
-        // Waiting for Material team to fix it 
-        //https://github.com/callemall/material-ui/pull/2007#issuecomment-155414926
-        global.navigator = {'userAgent': req.headers['user-agent']};
-        renderDocumentWithData(doc, layoutData, Layout);
-        global.navigator = undefined;
-
-        res.send( jsdom.serializeDocument(doc) );
-        dispose();
-    })
-    .catch(function(err){ console.error('/', err, err.stack); }); 
+    renderAndSend(req, res, layoutData, mapScreen);
 });
 
-app.get('/place/:placeId/', function(req, res){
 
-    console.log('==== calling /place/:placeId/')
-    // Create a fresh document every time
-    makeDocument(indexHTMLStr).then(function(result){
-        var doc = result.document;
-        var dispose = result.dispose;
+app.get('/operator/:name', function(req, res){
 
-        var placeId = Number(req.params.placeId);
-        places.getPlaceById(placeId)
-        .then(function(data){
-            toGeoJson(data)
-            .then(function(geoJson){
-            
-                layoutData.detailedObject = geoJson[0];
+    var name = req.params.name;
 
-                // Material-ui needs to change the global.navigator.userAgent property
-                // (just during the React  rendering)
-                // Waiting for Material team to fix it 
-                //https://github.com/callemall/material-ui/pull/2007#issuecomment-155414926
-                global.navigator = {'userAgent': req.headers['user-agent']};
-                renderDocumentWithData(doc, layoutData, Layout);
-                global.navigator = undefined;
+    console.log('==== calling /operator/' + name)
+    places.getPlacesByOperator(name)
+    .then(function(data){
+        layoutData.centerIds = data.map(function(object){return object.id});
+        renderAndSend(req, res, layoutData, operatorScreen);
+    })
+    .catch(function(error){
+        res.status(500).send('Couldn\'t get place of operator from database');
+        console.log('error in GET /operator/' + name, error);
+    });
 
-                res.send( jsdom.serializeDocument(doc) );
-                dispose();
-            });
+});
+
+function getPlace(req, res, raw){
+
+    var placeId = Number(req.params.placeId);
+
+    console.log('==== calling /place/:placeId', placeId)
+    places.getPlaceById(placeId)
+    .then(function(data){
+        toGeoJson(data)
+        .then(function(geoJson){
+
+            var place = geoJson[0];
+
+            if (place.properties.pheromon_id){
+
+                
+                var list = [{'index': 0, 'pheromon_id': place.properties.pheromon_id}]
+                withPlacesMeasurements(list)
+                .then(function(measures){
+
+                    if(measures !== null && measures.length > 0){
+                        place["measurements"] = {latest: measures[0].latest, max: measures[0].max};
+                    }
+                    if(raw){
+                        res.setHeader('Content-Type', 'application/json');
+                        res.send(JSON.stringify(place));
+                    } else {
+                        layoutData.detailedObject = place;
+                        renderAndSend(req, res, layoutData, placeScreen);
+                    }
+                })
+                .catch(function(err){
+                    console.error(err);
+                    if(raw){
+                        res.setHeader('Content-Type', 'application/json');
+                        res.send(JSON.stringify(place));
+                    } else {
+                        layoutData.detailedObject = place;
+                        renderAndSend(req, res, layoutData, placeScreen);
+                    }
+                });
+            }
+            else {
+                if(raw){
+                    res.setHeader('Content-Type', 'application/json');
+                    res.send(JSON.stringify(place));
+                } else {
+                    layoutData.detailedObject = place;
+                    renderAndSend(req, res, layoutData, placeScreen);
+                }
+            }
         })
         .catch(function(error){
             res.status(500).send('Couldn\'t get place from database');
             console.log('error in GET /place/' + placeId, error);
         });
     })
-    .catch(function(err){ console.error('/place/:placeId', err, err.stack); }); 
+    .catch(function(error){
+        res.status(500).send('Couldn\'t get place and measurements from database');
+        console.log('error in GET /place/' + placeId, error);
+    });
+   
+}
+
+app.get('/place/:placeId/', function(req, res){
+    getPlace(req, res, false)
+});
+
+app.get('/rawPlace/:placeId/', function(req, res){
+    getPlace(req, res, true)
 });
 
 app.get('/bins/get/:pheromonId', function(req, res){
@@ -167,21 +245,21 @@ app.use("/images-leaflet", express.static(path.join(__dirname, '../node_modules/
 app.post('/search', search);
 app.post('/stats', stats);
 app.get('/networks', function(req, res){
-	networks.getAll()
-	.then(function(data){
+    networks.getAll()
+    .then(function(data){
         res.setHeader('Content-Type', 'application/json');
         res.send(JSON.stringify(data));
-	})
-	.catch(function(err){
-		console.log('/networks error', err);
-		res.status(500).send(err);
-	});
+    })
+    .catch(function(err){
+        console.log('/networks error', err);
+        res.status(500).send(err);
+    });
 });
 
 var categoriesStr = JSON.stringify(dictionary);
 app.get('/categories', function(req, res){
     res.setHeader('Content-Type', 'application/json');
-	res.send(categoriesStr);
+    res.send(categoriesStr);
 });
 
 app.use('/', express.static(path.join(__dirname, '../src')));

@@ -121,7 +121,7 @@ module.exports = {
         return databaseP.then(function (db) {
 
             var query = places
-                .select(places.bins, places.owner)
+                .select(places.bins)
                 .where(places.pheromon_id.equals(pheromonId))
                 .toQuery();
 
@@ -133,7 +133,7 @@ module.exports = {
                     }
                     else{
                         if(result.rows[0].bins === undefined) resolve (undefined);
-                        else resolve(result.rows[0]);
+                        else resolve(result.rows[0].bins);
                     } 
                 });
             });
@@ -166,6 +166,32 @@ module.exports = {
         })
         .catch(function(err){
             console.log('ERROR in get Place', err);
+        });
+    },
+
+    getPlacesByOperator: function(operatorName){
+        return databaseP.then(function (db) {
+
+            var query = places
+                .select(places.id)
+                .from(places)
+                .where(places.owner.equals(operatorName))
+                .toQuery();
+
+            return new Promise(function (resolve, reject) {
+                db.query(query, function (err, result) {
+                    if (err) {
+                        console.log("ERROR in searching place by operatorName", query);
+                        reject(err);
+                    }
+                    else {
+                        resolve(result.rows);
+                    } 
+                });
+            });
+        })
+        .catch(function(err){
+            console.log('ERROR in get getPlacesByOperator', err);
         });
     },
 

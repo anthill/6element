@@ -36,7 +36,8 @@ module.exports = React.createClass({
             parameters: {
             what:  this.props.category ?  this.props.categoriesFR.indexOf(this.props.category) : 0, 
             placeName: '', 
-            geoloc: this.props.geoloc ? this.props.geoloc : {lat: 44.8404507, lon: -0.5704909} // Le Node centered
+            geoloc: this.props.geoloc ? this.props.geoloc : {lat: 44.8404507, lon: -0.5704909}, // Le Node centered
+            boundingBox: this.props.boundingBox
         },
             // First empty results to display
             result: { 
@@ -45,8 +46,8 @@ module.exports = React.createClass({
                 objects: [] 
             }, 
             filters: filters, 
-            status: this.props.geoloc || 
-                    this.props.boundingBox ? 2 : 1, // INI Status
+            status: this.props.boundingBox ? 3 :
+                    this.props.geoloc ? 2 : 1, // INI Status
             listMode: true
         };
         // STATUS Definition
@@ -173,7 +174,6 @@ module.exports = React.createClass({
     },
     render: function() {
 
-
         var ttStyle = {'zIndex': 100};
         var toolBarJSX = 
         <div id="toolbar">
@@ -218,7 +218,7 @@ module.exports = React.createClass({
                             status={this.state.status} 
                             result={result} 
                             filters={this.state.filters} 
-                            parameters={this.state.parameters} 
+                            parameters={this.state.parameters}
                             onShowDetail={this.onShowDetail} 
                             onSearch={this.onSearch}
                             showHeaderAndFooter={true}

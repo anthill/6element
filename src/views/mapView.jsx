@@ -25,7 +25,21 @@ module.exports = React.createClass({
 		return { muiTheme: ThemeManager.getMuiTheme(DefaultRawTheme) };
 	},
 	getMapInfos: function(map){
-		this.loadSelection(map, 1, this.props.result.objects, this.props.filters, this.props.parameters.geoloc, null, false);
+		// Initialization of map
+		// Activate map events
+		var withBoundingBox = false;
+		if(this.props.parameters.boundingBox !== undefined){
+			map.off('dragend', this.onMoveMap);
+			map.off('zoomend', this.onMoveMap);
+			withBoundingBox = true;
+			var box = this.props.parameters.boundingBox;
+			var southWest = L.latLng(box.minLat, box.minLon);
+			var northEast = L.latLng(box.maxLat, box.maxLon);
+			map.fitBounds(L.latLngBounds(southWest, northEast));
+		}
+		map.on('dragend', this.onMoveMap);
+		map.on('zoomend', this.onMoveMap);
+		this.loadSelection(map, 1, this.props.result.objects, this.props.filters, withBoundingBox ? undefined:this.props.parameters.geoloc, null, false);
 	},
 	onClickPreview: function(object){
 		var self = this;
@@ -47,8 +61,12 @@ module.exports = React.createClass({
 		}
 	},
 	onMoveMap: function(e){
+		
 		if(this.state.map !== null && 
 			e.hard === undefined){ // Move is fired by User, not FitBounds
+
+			console.log('move fired');
+			
 			var bounds = this.state.map.getBounds(); 
 			var box = {
 				'maxLat': bounds.getNorth(),
@@ -60,6 +78,7 @@ module.exports = React.createClass({
 		}
 	},
 	componentWillReceiveProps: function(nextProps){
+
 		if(!L && nextProps.leaflet)
 			L = nextProps.leaflet;
 
@@ -69,7 +88,6 @@ module.exports = React.createClass({
 
 		// First results, from Geoloc to Bounding box
 		var fitBounds = (this.props.status === 1 && nextProps.status === 2);
-		//console.log(nextProps);	
 		if( this.state.map !== null &&
 				nextProps.status !== 1){
 			//console.log("-> WillReceive");
@@ -100,7 +118,9 @@ module.exports = React.createClass({
 		var selected = null;
 		// -> STATUS 1
 		if(status === 1){
-			map.setView([center.lat, center.lon], Math.min(13, map.getZoom()));
+			if(center !== undefined){
+				map.setView([center.lat, center.lon], Math.min(13, map.getZoom()));
+			}
 			this.setState({map: map, markersLayer: null, selected: selected});
 			return;
 		}
@@ -119,51 +139,51 @@ module.exports = React.createClass({
 			return (list.indexOf(point.file) !== -1);
 		})
 		.forEach(function(point){
-				// Confirm that the selected point is still on the map
-				if(self.state.selected !== null &&
-					self.state.selected === point.properties.id){
-					selected = self.state.selected;
-				}
-				var lat = point.geometry.coordinates.lat;
-				var lon = point.geometry.coordinates.lon;
-				// Fit extrem points to the bounds
-				if(status === 2){
-					if(box.n === null || box.n < lat) box.n = lat;
-					if(box.s === null || box.s > lat) box.s = lat;
-					if(box.e === null || box.e < lon) box.e = lon;
-					if(box.o === null || box.o > lon) box.o = lon;
-				}
-				var isCenter = (point.properties.type === 'centre');
-				var hasSensor = (point.properties.pheromon_id !== null);
-				var options = {
-					color: 'black',
-					fill: true,
-					fillColor: point.color, 
-					fillOpacity: isCenter?1:0.7,
-					radius: isCenter?10:7,
-					clickable: true,
-					weight: isCenter?5:3
-				};
-				
-				// Regular point or Sensor kitted point
-				var marker = null;
-				if(hasSensor && point.measurements !== undefined){
-					var value = point.measurements.latest/point.measurements.max;
-					var color = 'green';
-					if(value > 0.5 && value <= 0.75) color = 'orange';
-					else if(value > 0.75) color = 'red';
+			// Confirm that the selected point is still on the map
+			if(self.state.selected !== null &&
+				self.state.selected === point.properties.id){
+				selected = self.state.selected;
+			}
+			var lat = point.geometry.coordinates.lat;
+			var lon = point.geometry.coordinates.lon;
+			// Fit extrem points to the bounds
+			if(status === 2){
+				if(box.n === null || box.n < lat) box.n = lat;
+				if(box.s === null || box.s > lat) box.s = lat;
+				if(box.e === null || box.e < lon) box.e = lon;
+				if(box.o === null || box.o > lon) box.o = lon;
+			}
+			var isCenter = (point.properties.type === 'centre');
+			var hasSensor = (point.properties.pheromon_id !== null);
+			var options = {
+				color: 'black',
+				fill: true,
+				fillColor: point.color, 
+				fillOpacity: isCenter?1:0.7,
+				radius: isCenter?10:7,
+				clickable: true,
+				weight: isCenter?5:3
+			};
+			
+			// Regular point or Sensor kitted point
+			var marker = null;
+			if(hasSensor && point.measurements !== undefined){
+				var value = point.measurements.latest/point.measurements.max;
+				var color = 'green';
+				if(value > 0.5 && value <= 0.75) color = 'orange';
+				else if(value > 0.75) color = 'red';
 
-					var pulsingIcon = new L.Icon.Pulse({iconSize:[20,20],fillColor: point.color,pulseColor: color});
-					marker = L.marker(new L.LatLng(lat, lon),{icon: pulsingIcon});
-				}
-				else
-				{
-					marker =  new L.CircleMarker(new L.LatLng(lat, lon), options);
-				} 
+				var pulsingIcon = new L.Icon.Pulse({iconSize:[20,20],fillColor: point.color,pulseColor: color});
+				marker = L.marker(new L.LatLng(lat, lon),{icon: pulsingIcon});
+			}
+			else
+			{
+				marker =  new L.CircleMarker(new L.LatLng(lat, lon), options);
+			} 
 
-				marker["idPoint"] = point.properties.id;
-				marker.on("click", self.onClickMarker);
-				markers.push(marker);
+			marker["idPoint"] = point.properties.id;
+			marker.on("click", self.onClickMarker);
+			markers.push(marker);
 		});
 	
 		if(fitBounds){
@@ -178,19 +198,23 @@ module.exports = React.createClass({
 				map.on('zoomend', this.onMoveMap);
 		}
 
-		var CentroidIcon = L.Icon.Default.extend({
-			options: {
-				iconUrl:     '/img/centroid.png',
-				iconSize:     [25, 25],
-				shadowSize:   [0, 0], // size of the shadow
-				iconAnchor:   [10, 10], // point of the icon which will correspond to marker's location
-				shadowAnchor: [10, 10], // the same for the shadow
-				popupAnchor:  [-3, -40] // point from which the popup should open relative to the iconAnchor
-			}
-		});
+		if(center !== undefined){
+			var CentroidIcon = L.Icon.Default.extend({
+				options: {
+					iconUrl:     '/img/centroid.png',
+					iconSize:     [25, 25],
+					shadowSize:   [0, 0], // size of the shadow
+					iconAnchor:   [10, 10], // point of the icon which will correspond to marker's location
+					shadowAnchor: [10, 10], // the same for the shadow
+					popupAnchor:  [-3, -40] // point from which the popup should open relative to the iconAnchor
+				}
+			});
+		}
 		var centroid = new L.Marker(new L.LatLng(center.lat, center.lon), {icon: new CentroidIcon()});
 		markers.push(centroid);
 		centroid.addTo(map);
+
+
 		map.on('click',   this.onClickMap); 
 		
 		var markersLayer = L.layerGroup(markers);

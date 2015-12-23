@@ -27,7 +27,7 @@ module.exports = React.createClass({
 		return { muiTheme: ThemeManager.getMuiTheme(DefaultRawTheme) };
 	},
 	getInitialState: function() {
-		var placeIds = [985,977,996,924,943,956];
+		var placeIds = this.props.centerIds;
 		var date = new Date();
 		date.setHours(0,0,0,0)
 		return {

@@ -169,6 +169,32 @@ module.exports = {
         });
     },
 
+    getPlacesByOperator: function(operatorName){
+        return databaseP.then(function (db) {
+
+            var query = places
+                .select(places.id)
+                .from(places)
+                .where(places.owner.equals(operatorName))
+                .toQuery();
+
+            return new Promise(function (resolve, reject) {
+                db.query(query, function (err, result) {
+                    if (err) {
+                        console.log("ERROR in searching place by operatorName", query);
+                        reject(err);
+                    }
+                    else {
+                        resolve(result.rows);
+                    } 
+                });
+            });
+        })
+        .catch(function(err){
+            console.log('ERROR in get getPlacesByOperator', err);
+        });
+    },
+
     updateBins: function(pheromonId, bins){
         return databaseP.then(function (db) {
             

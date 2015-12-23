@@ -27,6 +27,7 @@ injectTapEventPlugin();
 
 module.exports = React.createClass({
     getInitialState: function() {
+
         // List of networks from endpoint
         var filters = this.props.networks.map(function(network){
             return { name: network.name, color: network.color, checked: true };
@@ -35,7 +36,8 @@ module.exports = React.createClass({
             parameters: {
             what:  this.props.category ?  this.props.categoriesFR.indexOf(this.props.category) : 0, 
             placeName: '', 
-            geoloc: this.props.geoloc ? this.props.geoloc : {lat: 44.8404507, lon: -0.5704909} // Le Node centered
+            geoloc: this.props.geoloc ? this.props.geoloc : {lat: 44.8404507, lon: -0.5704909}, // Le Node centered
+            boundingBox: this.props.boundingBox
         },
             // First empty results to display
             result: { 
@@ -44,11 +46,9 @@ module.exports = React.createClass({
                 objects: [] 
             }, 
             filters: filters, 
-            status: this.props.geoloc || 
-                    this.props.boundingBox || 
-                    this.props.detailedObject? 2 : 1, // INI Status
-            listMode: true,
-            detailedObject: undefined
+            status: this.props.boundingBox ? 3 :
+                    this.props.geoloc ? 2 : 1, // INI Status
+            listMode: true
         };
         // STATUS Definition
         // -1- Empty map, Zoom 13, no BoundingBox, geoloc centered
@@ -59,9 +59,8 @@ module.exports = React.createClass({
         // For specific urls with geoloc or bounding box, we launch search on start 
         if (this.props.boundingBox)
             this.onSearch(this.state.parameters, this.props.boundingBox, 3, 20);
-
-        if(this.props.detailedObject)
-            this.onShowDetail(this.props.detailedObject);
+        if (this.props.geoloc)
+            this.onSearch(this.state.parameters, null, 3, 20);
     },
     childContextTypes: {
         muiTheme: React.PropTypes.object
@@ -161,58 +160,35 @@ module.exports = React.createClass({
             this.refs.panelLeft.display(object === null); 
 
         page("/place/" + object.properties.id);
-        this.setState({detailedObject: object});
+        // this.setState({detailedObject: object});
     },
-    onHideDetail: function(){
-        // Temporary hide the left panel
-        if(!this.isStarting() && this.state.listMode)
-            this.refs.panelLeft.display(true); 
+    // onHideDetail: function(){
+    //     // Temporary hide the left panel
+    //     if(!this.isStarting() && this.state.listMode)
+    //         this.refs.panelLeft.display(true); 
 
-        this.setState({detailedObject: undefined});
-    },
+    //     this.setState({detailedObject: undefined});
+    // },
     isStarting: function(){
         return this.state.status===1;
     },
     render: function() {
 
-        // If a point has been selected, we popup a detailed sheet
-        var showDetail = (this.state.detailedObject !== undefined);
-
-        // Toolbars
-        if (showDetail) {
-
-            // when user commes with a place url there is no back arrow to show
-            var arrowJSX =  ((this.state.boundingBox || this.state.geoloc) || !this.props.detailedObject) ?
-                            (<Mui.IconButton onTouchTap={this.onHideDetail}>
-                                <Mui.FontIcon className="material-icons" color={Colors.pink400} >arrow_back</Mui.FontIcon>
-                            </Mui.IconButton>) : "";
-            var toolBarJSX =
-                <div id="toolbar">
-                    <Mui.Toolbar>
-                        <Mui.ToolbarGroup key={0} float="left" >
-                        {arrowJSX}
-                        <Mui.ToolbarTitle text={<a href="/" className="noRef">6element</a>} />
-                        </Mui.ToolbarGroup>
-                    </Mui.Toolbar>
-                </div>
-
-        } else {
-
-            var ttStyle = {'zIndex': 100};
-            var toolBarJSX = 
-            <div id="toolbar">
-                <Mui.Toolbar>
-                    <Mui.ToolbarGroup key={0} float="left">
-                        <Mui.ToolbarTitle text={<a href="/" className="noRef">6element</a>} />
-                    </Mui.ToolbarGroup>
-                    <Mui.ToolbarGroup key={1} float="right">
-                        <Mui.IconButton tooltip={this.state.listMode?"Afficher la carte":"Afficher la liste"} tooltipStyles={ttStyle} onTouchTap={this.handleLeftNav}><Mui.FontIcon className="material-icons" color={Colors.pink400} >{this.state.listMode?"map":"storage"}</Mui.FontIcon></Mui.IconButton>
-                        <Mui.IconButton tooltip="Rechercher"  tooltipStyles={ttStyle} onTouchTap={this.handleSearchNav}><Mui.FontIcon className="material-icons" color={Colors.pink400} >search</Mui.FontIcon></Mui.IconButton>
-                        <Mui.IconButton tooltip="Filtrer par source"  tooltipStyles={ttStyle} onTouchTap={this.handleRightNav}><Mui.FontIcon className="material-icons" color={Colors.pink400} >filter_list</Mui.FontIcon></Mui.IconButton>
-                    </Mui.ToolbarGroup>
-                </Mui.Toolbar>
-            </div>
-        }
+        var ttStyle = {'zIndex': 100};
+        var toolBarJSX = 
+        <div id="toolbar">
+            <Mui.Toolbar>
+                <Mui.ToolbarGroup key={0} float="left">
+                    <Mui.ToolbarTitle text={<a href="/" className="noRef">6element</a>} />
+                </Mui.ToolbarGroup>
+                <Mui.ToolbarGroup key={1} float="right">
+                    <Mui.IconButton tooltip={this.state.listMode?"Afficher la carte":"Afficher la liste"} tooltipStyles={ttStyle} onTouchTap={this.handleLeftNav}><Mui.FontIcon className="material-icons" color={Colors.pink400} >{this.state.listMode?"map":"storage"}</Mui.FontIcon></Mui.IconButton>
+                    <Mui.IconButton tooltip="Rechercher"  tooltipStyles={ttStyle} onTouchTap={this.handleSearchNav}><Mui.FontIcon className="material-icons" color={Colors.pink400} >search</Mui.FontIcon></Mui.IconButton>
+                    <Mui.IconButton tooltip="Filtrer par source"  tooltipStyles={ttStyle} onTouchTap={this.handleRightNav}><Mui.FontIcon className="material-icons" color={Colors.pink400} >filter_list</Mui.FontIcon></Mui.IconButton>
+                </Mui.ToolbarGroup>
+            </Mui.Toolbar>
+        </div>
+        
 
         // For serverside rendering (without components activated), 
         // we display a map picture on background
@@ -231,15 +207,10 @@ module.exports = React.createClass({
         // List of points & Filters
         var result = JSON.parse(JSON.stringify(this.state.result));
         
-        var detailedJSX = showDetail ? (
-                <DetailView 
-                    object={this.state.detailedObject} 
-                    onShowDetail={this.onShowDetail} />) : "";
                         
         return (
             <div flex layout="row">
                 <md-content flex >
-                    {detailedJSX}
                     {toolBarJSX}
                     <Mui.Paper>
                         <MapView 
@@ -247,10 +218,10 @@ module.exports = React.createClass({
                             status={this.state.status} 
                             result={result} 
                             filters={this.state.filters} 
-                            parameters={this.state.parameters} 
+                            parameters={this.state.parameters}
                             onShowDetail={this.onShowDetail} 
                             onSearch={this.onSearch}
-                            showHeaderAndFooter={!showDetail}
+                            showHeaderAndFooter={true}
                             hideListIfDisplayed={this.state.listMode?this.handleLeftNav:null} />
                         <PanelLeft 
                             ref="panelLeft"

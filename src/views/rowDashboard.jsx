@@ -9,13 +9,9 @@ var DefaultRawTheme = Mui.Styles.LightRawTheme;
 
 var Colors = require('material-ui/lib/styles/colors');
 
-var Calendar  =  require('./calendar.js');
+var getRawPlace = require('../js/prepareServerAPI')(require('../js/sendReq')).getRawPlace;
 
-var get = require('../js/prepareServerAPI')(require('../js/sendReq')).get;
-var requestMeasurements = require('../js/prepareServerAPI')(
-		require('../js/sendReq'), 
-		'https://pheromon.ants.builders'
-).measurements;
+var Calendar  =  require('./calendar.js');
 
 var computeCharts = require('../js/computeCharts');
 
@@ -47,7 +43,7 @@ module.exports = React.createClass({
 	componentDidMount: function() {
 		
 		var self = this;
-		get(this.props.placeId)
+		getRawPlace(this.props.placeId)
 		.then(function(place){ 
 			self.computeChart(place, self.state.date);
 		})

@@ -54,6 +54,9 @@ module.exports = React.createClass({
 		
 		var date = new Date();
 		date.setHours(0,0,0,0)
+		if(this.props.date){
+			date = this.props.date;	
+		}
 		return {date: date};
 	},
 	childContextTypes: {
@@ -255,13 +258,15 @@ module.exports = React.createClass({
 		var options = {weekday: "long", month: "long", day: "numeric"};
 		var dayStr = this.state.date.toLocaleDateString("fr-FR",options); 
 
-		return (
-			<div id="traffic">
-				<Mui.CardActions> 
+		var dateJSX = (this.props.date) ? "" :
+				(<Mui.CardActions> 
 					<Mui.FlatButton onTouchTap={this.onPrev} label="&#x25C0;" className="flatIcon"/>
 					<Mui.FlatButton label={dayStr}/>
 					<Mui.FlatButton onTouchTap={this.onNext} label="&#x25BA;" className="flatIcon"/>
-				</Mui.CardActions> 
+				</Mui.CardActions>);
+
+		return (
+			<div id="traffic">
 				<div ref="chart" style={{'textAlign': 'center','width':'100%','height':'150px'}}></div>
 			</div>
 		);

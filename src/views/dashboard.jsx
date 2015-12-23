@@ -27,13 +27,16 @@ module.exports = React.createClass({
 		return { muiTheme: ThemeManager.getMuiTheme(DefaultRawTheme) };
 	},
 	getInitialState: function() {
-		var placeIds = [977,996,924,943,956];
+		var placeIds = [985,977,996,924,943,956];
+		var date = new Date();
+		date.setHours(0,0,0,0)
 		return {
 			placeIds: placeIds,
+			date: date,
 			width: 0
 		};
 	},
-	componentDidMount: function() {
+	/*componentDidMount: function() {
 		this.updateDimensions();
 		window.addEventListener("resize", this.updateDimensions);
 	},
@@ -47,23 +50,62 @@ module.exports = React.createClass({
 	      var nbColumns = Math.min(5,Math.floor(width/200));
 	      this.setState({width: width, nbColumns: nbColumns});    
 	    }
+	},*/
+	onPrevDate: function(){
+		var date = this.state.date;
+		date.setDate(date.getDate()-1);
+		this.updateDate(date);
+	},
+	onNextDate: function(){
+		var date = this.state.date;
+		date.setDate(date.getDate()+1);
+		this.updateDate(date);
+	},
+	onChangeDate: function(nill, date){
+        this.updateDate(date);
+    },
+	updateDate: function(date){
+		this.setState({date: date});
 	},
 	render: function() {
 
+		var self = this;
 		var rowsJSX = this.state.placeIds.map(function(placeId){
-			return (<RowDashboard key={'place'+placeId.toString()} placeId={placeId} />)
+			return (<RowDashboard key={'place'+placeId.toString()} placeId={placeId} date={self.state.date}/>)
 		});
 
 		return (
 			<div id="layout">
-				<div id="toolbar">
-					<Mui.Toolbar>
+				<div style={{	'position':'fixed', 
+								'width': '100%', 
+								'top': '0px', 
+								'zIndex': 2
+							}}>
+					<Mui.Toolbar style={{'maxWidth': '700px', 'margin': '0 auto'}}>
 						<Mui.ToolbarGroup key={0} float="left">
 							<Mui.ToolbarTitle text={<a href="/" className="noRef">6element</a>} />
 						</Mui.ToolbarGroup>
+						<Mui.ToolbarGroup key={3} float="right">
+		                    <Mui.IconButton onTouchTap={this.onNextDate} iconClassName="material-icons">keyboard_arrow_right</Mui.IconButton>
+		                </Mui.ToolbarGroup>
+		                <Mui.ToolbarGroup key={2} float="right">
+		                    <Mui.DatePicker
+		                    ref="datePicker"
+		                    hintText="Landscape Dialog"
+		                    autoOk={true}
+		                    wordings={{ok: 'OK', cancel: 'Annuler'}}
+		                    defaultDate={this.state.date}
+		                    locale="fr-FR"
+		                    textFieldStyle={{width: '90px'}}
+		                    mode="landscape"
+		                    onChange={this.onChangeDate}/>
+		                </Mui.ToolbarGroup>
+		                <Mui.ToolbarGroup key={1} float="right">
+		                    <Mui.IconButton onTouchTap={this.onPrevDate} iconClassName="material-icons">keyboard_arrow_left</Mui.IconButton>
+		                </Mui.ToolbarGroup>
 					</Mui.Toolbar>
 				</div>
-				<div style={{'maxWidth': '700px', 'margin': '0 auto'}}>
+				<div style={{'maxWidth': '700px', 'margin': '0 auto', 'marginTop': '60px'}}>
 					{rowsJSX}
 				</div>
 			</div>

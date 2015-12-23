@@ -1,22 +1,31 @@
 "use strict";
 
 var React = require('react');
+var ReactDOM = require('react-dom');
+
 var Mui = require('material-ui');
 var ThemeManager = require('material-ui/lib/styles/theme-manager');
 var DefaultRawTheme = Mui.Styles.LightRawTheme;
 
 var Colors = require('material-ui/lib/styles/colors');
-var get = require('../js/prepareServerAPI')(require('../js/sendReq')).get;
 
-var Traffic = require('./traffic.js');
 var Calendar  =  require('./calendar.js');
 
+var get = require('../js/prepareServerAPI')(require('../js/sendReq')).get;
+var requestMeasurements = require('../js/prepareServerAPI')(
+		require('../js/sendReq'), 
+		'https://pheromon.ants.builders'
+).measurements;
+
+var computeCharts = require('../js/computeCharts');
+
 var NotEmpty = function(field){
-    if(typeof field === 'undefined') return false;
-    if(field === null) return false;
-    if(field === '') return false;
-    return true;
+	if(typeof field === 'undefined') return false;
+	if(field === null) return false;
+	if(field === '') return false;
+	return true;
 }
+
 //Needed for onTouchTap
 //Can go away when react 1.0 release
 //Check this repo:
@@ -32,21 +41,98 @@ module.exports = React.createClass({
 		return { muiTheme: ThemeManager.getMuiTheme(DefaultRawTheme) };
 	},
 	getInitialState: function() {
-		return { place: undefined };
+		var date = new Date(this.props.date);
+		return { place: undefined, date: date, results: undefined };
 	},
 	componentDidMount: function() {
+		
 		var self = this;
 		get(this.props.placeId)
 		.then(function(place){ 
-			self.setState({place: place});
+			self.computeChart(place, self.state.date);
 		})
 		.catch(function(error){
 			console.error('get place on '+self.props.placeId.toString(), error);
 		})
+    },
+    componentWillReceiveProps: function(nextProps){
+		
+		if( this.state.date !== nextProps.date){
+        	var date = new Date(nextProps.date);
+			this.computeChart(this.state.place, date);
+		}
 	},
-	render: function() {
+    componentDidUpdate: function(){
+        
+    	if(this.state.results === undefined) return;
+        this.drawChart();
+    },
+    computeChart: function(place, date){
 
-		if(this.state.place === undefined) return (<div></div>);
+    	if(place === undefined) return;
+
+    	var self = this;
+    	
+    	// binding inputs for API
+		var start = new Date(date);
+		start.setHours(8,0,0,0);
+		var end = new Date(date);
+		end.setHours(20,0,0,0);
+
+		computeCharts(place, start, end)
+        .then(function(results){
+
+        	self.setState({place, date, results: results});
+    	})
+        .catch(function(error){
+        	console.error(error);
+        })
+    },
+    drawChart: function () {
+
+		if(this.state.results === undefined) return;
+
+		var results = this.state.results;
+        var start = new Date(this.state.date);
+		start.setHours(8,0,0,0);
+		var end = new Date(this.state.date);
+		end.setHours(20,0,0,0);
+
+		var chart = ReactDOM.findDOMNode(this.refs.chart);
+        
+    	// Legend on left
+    	var tickvals = [-10];
+    	var ticktext = ['Affluence'];
+    	var nbCaractMax = 9; // 'A' 'f' 'f' 'l' 'u' 'e' 'n' 'c' 'e'
+    	results.ticksY.forEach(function(tickY, index){
+    		tickvals.push(-20*index-50);
+    		ticktext.push(tickY);
+    		if(tickY.length > nbCaractMax)
+    			nbCaractMax = tickY.length;
+    	});
+    	var minTick = results.ticksY.length*-20 - 50;
+
+    	Plotly.newPlot( chart, results.traces, 
+        {
+            xaxis:{
+                type: 'date',
+                tickformat:'%H:%M',
+                range: [start.valueOf(), end.valueOf()],
+            },
+            yaxis:{
+                range: [minTick,100],
+                tickvals: tickvals,
+                ticktext: ticktext,
+                showline: false
+            },
+            margin: { t: 0, b: 20, l: nbCaractMax*8, r: 20} 
+        }, {showLink: false, displayModeBar: false} );
+
+       
+    },
+    render: function() {
+
+    	if(this.state.place === undefined) return (<div></div>);
 
 		var place = this.state.place;
 
@@ -71,25 +157,33 @@ module.exports = React.createClass({
 
         var calendarJSX = NotEmpty(place.properties.opening_hours) ?
         		(<Calendar opening_hours={place.properties.opening_hours} />) : "";
-        
-       	var max = (place.measurements !== undefined) ? place.measurements.max: 0;
+               	
+       	var chartJSX = (<p><em>Ce centre n&apos;est pas équipé de capteur d&apos;affluence</em></p>);
+       	if(place.properties.pheromon_id !== undefined && 
+            place.properties.pheromon_id !== null){
+
+       		var height = 150;
+       		if(this.state.results !== undefined){
+       			height += this.state.results.ticksY.length * 20;
+       		}
+       		chartJSX = (<div ref="chart" style={{'textAlign': 'center','width':'100%','height':height.toString()+'px'}}></div>);
+       	} 
        	
-       	var trafficJSX = (place.properties.pheromon_id !== undefined && 
-            place.properties.pheromon_id !== null) ?
-            (<Traffic opening_hours={place.properties.opening_hours} pheromonId={place.properties.pheromon_id} max={max}/>) 
-            :
-            (<p id="traffic"><em>Ce centre n&apos;est pas équipé de capteur d&apos;affluence</em></p>);  
- 
- 		var allowedJSX = place.properties.bins
-                        .map(function(bin, id){
-                            return (<li key={'allow'+id.toString()} className={bin.a?"border-open":"border-closed"}>{bin.t}</li>);
-                        });
+       	var color = 'grey';
+       	if(this.state.results !== undefined){
+       		var ySignals = this.state.results.traces[0].y; 
+       		var value = ySignals[ySignals.length-1]/100; // Signals
+       		if(value >= 0 && value <= 0.3) color = 'green';
+			else if(value > 0.3 && value <= 0.5) color = 'orange';
+			else if(value > 0.5) color = 'red';
+       	}	
+       	
 		return (
 			<Mui.Card style={{'marginTop': '10px'}}>
 	            <Mui.CardHeader 
                     title={place.properties.name} 
-                    subtitle={place.file}
-                    avatar={<Mui.Avatar style={{backgroundColor: place.color}}></Mui.Avatar>}
+                    subtitle={place.properties.owner}
+                    avatar={<Mui.Avatar style={{backgroundColor: color}}></Mui.Avatar>}
                     style={{textAlign: "left", overflow: "hidden"}}
                     actAsExpander={true}
     				showExpandableButton={true}/>
@@ -108,10 +202,7 @@ module.exports = React.createClass({
 	                </table>
     			</Mui.CardText>
     			<Mui.CardText>
-	            	{trafficJSX}
-	            </Mui.CardText>
-	            <Mui.CardText className="allowedObjects">
-	            	<ul>{allowedJSX}</ul>
+    				{chartJSX}
 	            </Mui.CardText>
 	        </Mui.Card>
 		);

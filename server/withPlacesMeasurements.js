@@ -36,7 +36,7 @@ module.exports = function(list){
                     headers: {'Content-Type': 'application/json;charset=UTF-8'}
                 }, function(error, response, body){
                     if (!error) {
-                        if(response !== undefined && response.statusCode < 400){
+                        if(response !== undefined  && body !== "" && response.statusCode < 400){
                             try {
                                 var json = JSON.parse(body);
                                 resolve(json);

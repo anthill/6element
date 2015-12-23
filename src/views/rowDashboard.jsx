@@ -77,8 +77,7 @@ module.exports = React.createClass({
 
 		computeCharts(place, start, end)
         .then(function(results){
-
-        	self.setState({place, date, results: results});
+        	self.setState({place: place, date: date, results: results});
     	})
         .catch(function(error){
         	console.error(error);
@@ -123,8 +122,6 @@ module.exports = React.createClass({
             },
             margin: { t: 0, b: 20, l: nbCaractMax*8, r: 20} 
         }, {showLink: false, displayModeBar: false} );
-
-       
     },
     render: function() {
 

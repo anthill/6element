@@ -93,16 +93,16 @@ module.exports = React.createClass({
 		                </Mui.ToolbarGroup>
 		                <Mui.ToolbarGroup key={2} float="right">
 		                    <Mui.DatePicker
-		                    ref="datePicker"
-		                    hintText="Landscape Dialog"
-		                    autoOk={true}
-		                    wordings={{ok: 'OK', cancel: 'Annuler'}}
-		                    defaultDate={this.state.date}
-		                    locale="fr-FR"
-		                    textFieldStyle={{width: '90px'}}
-		                    mode="landscape"
-		                    onChange={this.onChangeDate}/>
-		                </Mui.ToolbarGroup>
+			                    ref="datePicker"
+			                    hintText="Calendrier"
+			                    autoOk={true}
+			                    wordings={{ok: 'OK', cancel: 'Annuler'}}
+			                    defaultDate={this.state.date}
+			                    DateTimeFormat={Intl.DateTimeFormat}
+			                    locale="fr"
+			                    textFieldStyle={{width: '90px'}}
+			                    onChange={this.onChangeDate}/>
+			            </Mui.ToolbarGroup>
 		                <Mui.ToolbarGroup key={1} float="right">
 		                    <Mui.IconButton onTouchTap={this.onPrevDate} iconClassName="material-icons">keyboard_arrow_left</Mui.IconButton>
 		                </Mui.ToolbarGroup>

@@ -52,10 +52,7 @@ module.exports = React.createClass({
         // -3- Filled map, no Zoom, no BoundingBox, no centered
     },
     componentDidMount: function() {
-        // For specific urls with geoloc or bounding box, we launch search on start 
-        if (this.props.boundingBox)
-            this.onSearch(this.state.parameters, this.props.boundingBox, 3, 20);
-
+        
         if(this.props.detailedObject)
             this.onShowDetail(this.props.detailedObject);
     },

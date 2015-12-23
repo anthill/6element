@@ -13,11 +13,6 @@ var getRawPlace = require('../js/prepareServerAPI')(require('../js/sendReq')).ge
 
 var Calendar  =  require('./calendar.js');
 
-var requestMeasurements = require('../js/prepareServerAPI')(
-		require('../js/sendReq'), 
-		'https://pheromon.ants.builders'
-).measurements;
-
 var computeCharts = require('../js/computeCharts');
 
 var NotEmpty = function(field){

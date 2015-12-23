@@ -36,9 +36,13 @@ module.exports = function(list){
                     headers: {'Content-Type': 'application/json;charset=UTF-8'}
                 }, function(error, response, body){
                     if (!error) {
-                        if(response !== undefined &&
-                            response.statusCode < 400){
-                            resolve(JSON.parse(body));
+                        if(response !== undefined && response.statusCode < 400){
+                            try {
+                                var json = JSON.parse(body);
+                                resolve(json);
+                            } catch(e) {
+                                reject("Cannot parse body in withPlaceMeasurements: ", e);
+                            }  
                         } else {
                             reject(Object.assign(
                                 new Error('HTTP error because of bad status code ' + body),

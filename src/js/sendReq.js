@@ -18,7 +18,7 @@ module.exports = function (method, url, data){
                     new Error('HTTP error'),
                     {
                         HTTPstatus: xhr.status,
-                        text: xhr.responseText,
+                        // text: xhr.responseText,
                         error: 'unknown'
                     }
                 ));

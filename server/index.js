@@ -135,7 +135,7 @@ function getPlace(req, res, raw){
 
     var placeId = Number(req.params.placeId);
 
-    console.log('==== calling /place/:placeId', placeId)
+    console.log('==== calling /place/:placeId', placeId, raw)
     places.getPlaceById(placeId)
     .then(function(data){
         toGeoJson(data)
@@ -151,7 +151,11 @@ function getPlace(req, res, raw){
                 .then(function(measures){
 
                     if(measures !== null && measures.length > 0){
-                        place["measurements"] = {latest: measures[0].latest, max: measures[0].max};
+                        var measure = measures[0];
+                        if(measure)
+                            place["measurements"] = {latest: measure.latest, max: measure.max};
+                        else
+                            place["measurements"] = undefined;
                     }
                     if(raw){
                         res.setHeader('Content-Type', 'application/json');

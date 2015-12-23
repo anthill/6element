@@ -87,15 +87,13 @@ module.exports = React.createClass({
     render: function() {
 
         // when user commes with a place url there is no back arrow to show
-        var arrowJSX =  <Mui.IconButton onTouchTap={this.onHideDetail}>
-                            <Mui.FontIcon className="material-icons" color={Colors.pink400} >arrow_back</Mui.FontIcon>
-                        </Mui.IconButton>
         var toolBarJSX =
             <div id="toolbar">
                 <Mui.Toolbar>
                     <Mui.ToolbarGroup key={0} float="left" >
-                    {arrowJSX}
-                    <Mui.ToolbarTitle text={<a href="/" className="noRef">6element</a>} />
+                        <Mui.IconButton onTouchTap={this.onHideDetail}>
+                            <Mui.FontIcon className="material-icons" color={Colors.pink400} >arrow_back</Mui.FontIcon>
+                        </Mui.IconButton>
                     </Mui.ToolbarGroup>
                 </Mui.Toolbar>
             </div>

@@ -29,6 +29,8 @@ module.exports = React.createClass({
 		// Activate map events
 		var withBoundingBox = false;
 		if(this.props.parameters.boundingBox !== undefined){
+			map.off('dragend', this.onMoveMap);
+			map.off('zoomend', this.onMoveMap);
 			withBoundingBox = true;
 			var box = this.props.parameters.boundingBox;
 			var southWest = L.latLng(box.minLat, box.minLon);
@@ -62,6 +64,9 @@ module.exports = React.createClass({
 		
 		if(this.state.map !== null && 
 			e.hard === undefined){ // Move is fired by User, not FitBounds
+
+			console.log('move fired');
+			
 			var bounds = this.state.map.getBounds(); 
 			var box = {
 				'maxLat': bounds.getNorth(),

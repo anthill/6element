@@ -118,24 +118,45 @@ app.get('/operator/:name', function(req, res){
 
     var name = req.params.name;
 
-    console.log('==== calling /operator/' + name)
-    places.getPlacesByOperator(name)
-    .then(function(data){
-        layoutData.centerIds = data.map(function(object){return object.id});
-        renderAndSend(req, res, layoutData, operatorScreen);
-    })
-    .catch(function(error){
-        res.status(500).send('Couldn\'t get place of operator from database');
-        console.log('error in GET /operator/' + name, error);
-    });
+    var dataP = places.getPlacesByOperator(name);
+
+    if(req.headers.accept.includes('application/json')){
+        console.log('==== calling /operator/ for JSON');
+
+        dataP
+        .then(function(data){
+            res.send(data);
+        })
+        .catch(function(error){
+            res.status(500).send('Couldn\'t get place of operator from database');
+            console.log('error in GET /operator/' + name, error);
+        });
+    }
+    else{
+        console.log('==== calling /operator/ for HTML');
+
+        dataP
+        .then(function(data){
+            layoutData.centerIds = data.map(function(object){return object.id});
+            renderAndSend(req, res, layoutData, operatorScreen);
+        })
+        .catch(function(error){
+            res.status(500).send('Couldn\'t get place of operator from database');
+            console.log('error in GET /operator/' + name, error);
+        });
+    }
 
 });
+   
 
-function getPlace(req, res, raw){
-
+app.get('/place/:placeId/', function(req, res){
     var placeId = Number(req.params.placeId);
 
-    console.log('==== calling /place/:placeId', placeId, raw)
+    if(req.headers.accept.includes('application/json'))
+        console.log('==== calling /place/ for JSON');
+    else
+        console.log('==== calling /place/ for HTML');
+
     places.getPlaceById(placeId)
     .then(function(data){
         toGeoJson(data)
@@ -157,7 +178,7 @@ function getPlace(req, res, raw){
                         else
                             place["measurements"] = undefined;
                     }
-                    if(raw){
+                    if(req.headers.accept.includes('application/json')){
                         res.setHeader('Content-Type', 'application/json');
                         res.send(JSON.stringify(place));
                     } else {
@@ -167,7 +188,7 @@ function getPlace(req, res, raw){
                 })
                 .catch(function(err){
                     console.error(err);
-                    if(raw){
+                    if(req.headers.accept.includes('application/json')){
                         res.setHeader('Content-Type', 'application/json');
                         res.send(JSON.stringify(place));
                     } else {
@@ -177,7 +198,7 @@ function getPlace(req, res, raw){
                 });
             }
             else {
-                if(raw){
+                if(req.headers.accept.includes('application/json')){
                     res.setHeader('Content-Type', 'application/json');
                     res.send(JSON.stringify(place));
                 } else {
@@ -195,16 +216,8 @@ function getPlace(req, res, raw){
         res.status(500).send('Couldn\'t get place and measurements from database');
         console.log('error in GET /place/' + placeId, error);
     });
-   
-}
-
-app.get('/place/:placeId/', function(req, res){
-    getPlace(req, res, false)
 });
 
-app.get('/rawPlace/:placeId/', function(req, res){
-    getPlace(req, res, true)
-});
 
 app.get('/bins/get/:pheromonId', function(req, res){
     if(req.query.s === PRIVATE.secret) {

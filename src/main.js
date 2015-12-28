@@ -54,18 +54,28 @@ page("/", function (context){
 page("/operator/:name", function (context){
 
     var name = context.params.name;
+    var qp = queryString.parse(context.querystring);
 
-    getPlacesByOperator(name).then(function(result){
+    if (qp.date)
+        props.date = qp.date;
 
-        props.operator = result;
+    if (!props.centerIds){
+        // if data is not in the page, fetch it
+        getPlacesByOperator(name).then(function(result){
+            props.operator = result;
+            ReactDOM.render( 
+                React.createElement(operatorScreen, props), document.getElementById('reactHere')
+            );
+
+        })
+        .catch(function(error){
+            console.log("Error in place: ", error);
+        });
+    } else {
         ReactDOM.render( 
             React.createElement(operatorScreen, props), document.getElementById('reactHere')
         );
-
-    })
-    .catch(function(error){
-        console.log("Error in place: ", error);
-    });
+    }
 
 });
 

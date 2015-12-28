@@ -26,10 +26,10 @@ module.exports = function(request, origin){
             return request('GET', origin + '/measurements/place/raw' + makeSearchString(data));
         },
         getPlace: function(id){
-            return request('GET', origin + '/place/' + id);
+            return request('GET', origin + '/place/' + id, {Accept: 'text/html'});
         },
         getRawPlace: function(id){
-            return request('GET', origin + '/rawPlace/' + id);
+            return request('GET', origin + '/place/' + id, undefined);
         },
         getPlacesByOperator: function(name){
             return request('GET', origin + '/operator/' + name);

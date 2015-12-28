@@ -147,12 +147,16 @@ app.get('/operator/:name', function(req, res){
     }
 
 });
+   
 
-function getPlace(req, res, raw){
-
+app.get('/place/:placeId/', function(req, res){
     var placeId = Number(req.params.placeId);
 
-    console.log('==== calling /place/:placeId', placeId, raw)
+    if(req.headers.accept.includes('application/json'))
+        console.log('==== calling /place/ for JSON');
+    else
+        console.log('==== calling /place/ for HTML');
+
     places.getPlaceById(placeId)
     .then(function(data){
         toGeoJson(data)
@@ -174,7 +178,7 @@ function getPlace(req, res, raw){
                         else
                             place["measurements"] = undefined;
                     }
-                    if(raw){
+                    if(req.headers.accept.includes('application/json')){
                         res.setHeader('Content-Type', 'application/json');
                         res.send(JSON.stringify(place));
                     } else {
@@ -184,7 +188,7 @@ function getPlace(req, res, raw){
                 })
                 .catch(function(err){
                     console.error(err);
-                    if(raw){
+                    if(req.headers.accept.includes('application/json')){
                         res.setHeader('Content-Type', 'application/json');
                         res.send(JSON.stringify(place));
                     } else {
@@ -194,7 +198,7 @@ function getPlace(req, res, raw){
                 });
             }
             else {
-                if(raw){
+                if(req.headers.accept.includes('application/json')){
                     res.setHeader('Content-Type', 'application/json');
                     res.send(JSON.stringify(place));
                 } else {
@@ -212,16 +216,8 @@ function getPlace(req, res, raw){
         res.status(500).send('Couldn\'t get place and measurements from database');
         console.log('error in GET /place/' + placeId, error);
     });
-   
-}
-
-app.get('/place/:placeId/', function(req, res){
-    getPlace(req, res, false)
 });
 
-app.get('/rawPlace/:placeId/', function(req, res){
-    getPlace(req, res, true)
-});
 
 app.get('/bins/get/:pheromonId', function(req, res){
     if(req.query.s === PRIVATE.secret) {

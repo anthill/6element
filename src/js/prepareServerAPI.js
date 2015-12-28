@@ -20,7 +20,7 @@ module.exports = function(request, origin){
     return {
         // SENSORS
         search: function(data){
-            return request('POST', origin + '/search', data);
+            return request('POST', origin + '/search', undefined, data);
         },
         measurements: function(data){
             return request('GET', origin + '/measurements/place/raw' + makeSearchString(data));

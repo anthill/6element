@@ -118,16 +118,33 @@ app.get('/operator/:name', function(req, res){
 
     var name = req.params.name;
 
-    console.log('==== calling /operator/' + name)
-    places.getPlacesByOperator(name)
-    .then(function(data){
-        layoutData.centerIds = data.map(function(object){return object.id});
-        renderAndSend(req, res, layoutData, operatorScreen);
-    })
-    .catch(function(error){
-        res.status(500).send('Couldn\'t get place of operator from database');
-        console.log('error in GET /operator/' + name, error);
-    });
+    var dataP = places.getPlacesByOperator(name);
+
+    if(req.headers.accept.includes('application/json')){
+        console.log('==== calling /operator/ for JSON');
+
+        dataP
+        .then(function(data){
+            res.send(data);
+        })
+        .catch(function(error){
+            res.status(500).send('Couldn\'t get place of operator from database');
+            console.log('error in GET /operator/' + name, error);
+        });
+    }
+    else{
+        console.log('==== calling /operator/ for HTML');
+
+        dataP
+        .then(function(data){
+            layoutData.centerIds = data.map(function(object){return object.id});
+            renderAndSend(req, res, layoutData, operatorScreen);
+        })
+        .catch(function(error){
+            res.status(500).send('Couldn\'t get place of operator from database');
+            console.log('error in GET /operator/' + name, error);
+        });
+    }
 
 });
 

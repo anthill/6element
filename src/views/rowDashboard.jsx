@@ -178,8 +178,7 @@ module.exports = React.createClass({
                     subtitle={place.properties.owner}
                     avatar={<Mui.Avatar style={{backgroundColor: color}}></Mui.Avatar>}
                     style={{textAlign: "left", overflow: "hidden"}}
-                    actAsExpander={true}
-    				showExpandableButton={true}/>
+                    actAsExpander={true} />
     			<Mui.CardText expandable={true}>
     			    <table style={{width:"100%", backgroundColor: Colors.blueGrey100}}>
 	                    <tbody>

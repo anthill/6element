@@ -63,7 +63,7 @@
     "gulp-babel": "^6.1.0",
     "jsdom": "^7.0.2",
     "leaflet": "^0.7.5",
-    "material-ui": "^0.13.3",
+    "material-ui": "^0.14.0",
     "minifyify": "^7.1.0",
     "node-schedule": "^0.6.0",
     "opening_hours": "^3.3.0",

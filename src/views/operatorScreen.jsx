@@ -33,7 +33,8 @@ module.exports = React.createClass({
 		return {
 			placeIds: placeIds,
 			date: date,
-			width: 0
+			width: 0,
+			openPanelFilters: false
 		};
 	},
 	/*componentDidMount: function() {
@@ -70,21 +71,28 @@ module.exports = React.createClass({
 	updateDate: function(date){
 		this.setState({date: date});
 	},
+	onChangePanelFilters: function(open){
+		this.setState({openPanelFilters: open});
+	},
 	render: function() {
+
+		// CSS to move in a dedicated JSON file
+		var styleHeaderToolbar	= {	'position':'fixed', 'width': '100%', 'top': '0px', 'zIndex': 2 }
+		var styleToolbar 		= {'maxWidth': '700px', 'margin': '0 auto'}
+		var styleFilter 		= {'listStyleType': 'none', 'margin': '5px', 'display': 'inline-block', 'padding': '5px'};
+		var styleFilterToolbar 	= {'maxWidth': '700px', 'margin': '0 auto', 'backgroundColor': 'white'}
+		var styleRow 			= {'maxWidth': '700px', 'margin': '0 auto', 'marginTop': '60px'}
 
 		var self = this;
 		var rowsJSX = this.state.placeIds.map(function(placeId){
 			return (<RowDashboard key={'place'+placeId.toString()} placeId={placeId} date={self.state.date}/>)
 		});
 
+		console.log('openPanelFilters', this.state.openPanelFilters);
 		return (
 			<div id="layout">
-				<div style={{	'position':'fixed', 
-								'width': '100%', 
-								'top': '0px', 
-								'zIndex': 2
-							}}>
-					<Mui.Toolbar style={{'maxWidth': '700px', 'margin': '0 auto'}}>
+				<div style={styleHeaderToolbar}>
+					<Mui.Toolbar style={styleToolbar} zDepth={2}>
 						<Mui.ToolbarGroup key={0} float="left">
 							<Mui.ToolbarTitle text={<a href="/" className="noRef">6element</a>} />
 						</Mui.ToolbarGroup>
@@ -107,8 +115,22 @@ module.exports = React.createClass({
 		                    <Mui.IconButton onTouchTap={this.onPrevDate} iconClassName="material-icons">keyboard_arrow_left</Mui.IconButton>
 		                </Mui.ToolbarGroup>
 					</Mui.Toolbar>
+					<Mui.Toolbar style={styleFilterToolbar}>
+						<span>Recherche </span>
+						<Mui.FlatButton 
+							label="par agglomération" 
+							primary={true} 
+							style={'textTransform': 'lowercase'}
+							onTouchTap={this.onChangePanelFilters.bind(this,true)}/>
+					</Mui.Toolbar>
 				</div>
-				<div style={{'maxWidth': '700px', 'margin': '0 auto', 'marginTop': '60px'}}>
+				<Mui.LeftNav
+					open={this.state.openPanelFilters} 
+					onRequestChange={this.onChangePanelFilters}>
+					<Mui.MenuItem index={0} >Menu Item</Mui.MenuItem>
+					<Mui.MenuItem  index={1}>Menu Item 2</Mui.MenuItem>
+				</Mui.LeftNav>
+				<div style={styleRow}>
 					{rowsJSX}
 				</div>
 			</div>

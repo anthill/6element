@@ -87,6 +87,7 @@ module.exports = React.createClass({
 
 		if(this.state.results === undefined) return;
 
+        var self = this;
 		var results = this.state.results;
         var start = new Date(this.state.date);
 		start.setHours(8,0,0,0);
@@ -100,7 +101,11 @@ module.exports = React.createClass({
     	var ticktext = ['Affluence'];
     	var nbCaractMax = 9; // 'A' 'f' 'f' 'l' 'u' 'e' 'n' 'c' 'e'
     	results.ticksY.forEach(function(tickY, index){
-    		tickvals.push(-20*index-50);
+
+            if(self.props.width < 350 && tickY.length > 10)
+    		  tickY = tickY.substr(0,9)+'.';
+
+            tickvals.push(-20*index-50);
     		ticktext.push(tickY);
     		if(tickY.length > nbCaractMax)
     			nbCaractMax = tickY.length;
@@ -171,9 +176,10 @@ module.exports = React.createClass({
 			else if(value > 0.5) color = 'red';
        	}	
        	
+        // Undisplay avatar under 350px
         var avatarJSX = this.props.width < 350 ? undefined :
             (<Mui.Avatar style={{backgroundColor: color}}></Mui.Avatar>);
-            
+
 		return (
 			<Mui.Card style={{'marginTop': '10px'}}>
 	            <Mui.CardHeader 

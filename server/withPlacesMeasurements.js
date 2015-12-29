@@ -29,6 +29,8 @@ module.exports = function(list){
         list.map(function(object){
 
             return new Promise(function(resolve, reject){
+
+                console.log('==== calling pheromon from server for ', object.pheromon_id);
                 
                 request({
                     method: 'GET',
@@ -36,12 +38,12 @@ module.exports = function(list){
                     headers: {'Content-Type': 'application/json;charset=UTF-8'}
                 }, function(error, response, body){
                     if (!error) {
-                        if(response !== undefined  && body !== "" && response.statusCode < 400){
+                        if(response !== undefined && response.statusCode < 400){
                             try {
                                 var json = JSON.parse(body);
                                 resolve(json);
                             } catch(e) {
-                                reject("Cannot parse body in withPlaceMeasurements: ", e);
+                                reject("Cannot parse body in withPlaceMeasurements ", e);
                             }  
                         } else {
                             reject(Object.assign(

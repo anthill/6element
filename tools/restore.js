@@ -23,13 +23,24 @@ connectToDB()
     })
     .then(function(){
         console.log("Loading the data");
-        if (inputFile.indexOf("gz") > -1) {
+        if (inputFile.includes("gz")) {
+            console.log("Gz format")
             var gzip = zlib.createGunzip();
             var readStream = fs.createReadStream(inputFile);
             var proc = spawn('psql', ['-p', process.env.DB_PORT_5432_TCP_PORT, '-h', process.env.DB_PORT_5432_TCP_ADDR, '-U', process.env.POSTGRES_USER, '-d', process.env.POSTGRES_USER]);
-            readStream
-                .pipe(gzip)
-                .pipe(proc.stdin);
+            
+            return new Promise(function(resolve, reject){
+                readStream
+                    .pipe(gzip)
+                    .pipe(proc.stdin);
+                readStream.on('end', function() {
+                    resolve();
+                })
+                readStream.on('error', function() {
+                    reject();
+                })
+            });
+            
         }
         else
             spawn('psql', ['-p', process.env.DB_PORT_5432_TCP_PORT, '-h', process.env.DB_PORT_5432_TCP_ADDR, '-U', process.env.POSTGRES_USER, '-w', '-f', inputFile]);

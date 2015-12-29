@@ -136,7 +136,7 @@ var getOperator = function(req, res){
 
         dataP
         .then(function(data){
-            layoutData.centerIds = data.map(function(object){return object.id});
+            layoutData.centerIds = data.map(function(object){return object});
             renderAndSend(req, res, layoutData, operatorScreen);
         })
         .catch(function(error){

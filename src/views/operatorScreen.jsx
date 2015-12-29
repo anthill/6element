@@ -53,7 +53,9 @@ module.exports = React.createClass({
 		return {
 			placeIds: placeIds,
 			date: date,
-			width: 0
+			width: 0,
+			openPanelFilters: false,
+			operator: 'all'
 		};
 	},
 	/*componentDidMount: function() {
@@ -97,21 +99,44 @@ module.exports = React.createClass({
 			var currentOperator = url.split("/").pop();
 		page("/operator/" + currentOperator + "?" + queryString.stringify(qp));
 	},
+	onChangePanelFilters: function(open){
+		this.setState({openPanelFilters: open});
+	},
+	onSelectOperator: function(operator){
+		this.setState({operator: operator, openPanelFilters:false});
+	},
 	render: function() {
 
+		// CSS to move in a dedicated JSON file
+		var styleHeaderToolbar	= {	'position':'fixed', 'width': '100%', 'top': '0px', 'zIndex': 2 };
+		var styleToolbar 		= {'maxWidth': '700px', 'margin': '0 auto'};
+		var styleFilter 		= {'listStyleType': 'none', 'margin': '5px', 'display': 'inline-block', 'padding': '5px'};
+		var styleFilterToolbar 	= {'maxWidth': '700px', 'margin': '0 auto', 'backgroundColor': 'white', 'marginBottom': '0px', 'borderBottom': 'solid 1px Grey'};
+		var styleRow 			= {'maxWidth': '700px', 'margin': '0 auto', 'marginTop': '120px'};
+
 		var self = this;
-		var rowsJSX = this.state.placeIds.map(function(placeId){
-			return (<RowDashboard key={'place'+placeId.toString()} placeId={placeId} date={self.state.date}/>)
+				
+		var activePlaceIds = this.state.operator === 'all' ? this.state.placeIds :
+			 this.state.placeIds.filter(function(placeId){
+				return placeId.owner === self.state.operator;
+			});
+
+		var rowsJSX = activePlaceIds.map(function(placeId){
+			return (<RowDashboard key={'place'+placeId.id.toString()} placeId={placeId.id} date={self.state.date}/>);
+		});
+
+		var operators = [];
+		this.state.placeIds.forEach(function(placeId){
+			if(operators.indexOf(placeId.owner) === -1) operators.push(placeId.owner);
+		});
+		var menuItemsJSX = operators.map(function(operator, index){
+			return (<Mui.MenuItem index={index} onTouchTap={self.onSelectOperator.bind(self,operator)}>{operator}</Mui.MenuItem>);
 		});
 
 		return (
 			<div id="layout">
-				<div style={{	'position':'fixed', 
-								'width': '100%', 
-								'top': '0px', 
-								'zIndex': 2
-							}}>
-					<Mui.Toolbar style={{'maxWidth': '700px', 'margin': '0 auto'}}>
+				<div style={styleHeaderToolbar}>
+					<Mui.Toolbar style={styleToolbar} zDepth={2}>
 						<Mui.ToolbarGroup key={0} float="left">
 							<Mui.ToolbarTitle text={<a href="/" className="noRef">6element</a>} />
 						</Mui.ToolbarGroup>
@@ -135,8 +160,22 @@ module.exports = React.createClass({
 		                    <Mui.IconButton onTouchTap={this.onPrevDate} iconClassName="material-icons">keyboard_arrow_left</Mui.IconButton>
 		                </Mui.ToolbarGroup>
 					</Mui.Toolbar>
+					<Mui.Toolbar style={styleFilterToolbar}>
+						<span>Recherche </span>
+						<Mui.FlatButton 
+							label="par agglomération" 
+							primary={true} 
+							style={{'textTransform': 'lowercase'}}
+							onTouchTap={this.onChangePanelFilters.bind(this,true)}/>
+					</Mui.Toolbar>
 				</div>
-				<div style={{'maxWidth': '700px', 'margin': '0 auto', 'marginTop': '60px'}}>
+				<Mui.LeftNav
+					docked={false}
+					open={this.state.openPanelFilters} 
+					onRequestChange={this.onChangePanelFilters}>
+					{menuItemsJSX}
+				</Mui.LeftNav>
+				<div style={styleRow}>
 					{rowsJSX}
 				</div>
 			</div>

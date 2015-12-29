@@ -58,21 +58,15 @@ module.exports = React.createClass({
 			operator: 'all'
 		};
 	},
-	/*componentDidMount: function() {
+	componentDidMount: function() {
 		this.updateDimensions();
-		window.addEventListener("resize", this.updateDimensions);
-	},
-	componentWillUnmount: function() {
-		window.removeEventListener("resize", this.updateDimensions);
 	},
 	updateDimensions: function() {
 	    var width = ReactDOM.findDOMNode(this).getBoundingClientRect().width;
 	    if(this.state.width != width){
-
-	      var nbColumns = Math.min(5,Math.floor(width/200));
-	      this.setState({width: width, nbColumns: nbColumns});    
+	      	this.setState({width: width});    
 	    }
-	},*/
+	},
 	onPrevDate: function(e){
 		e.preventDefault();
 		var date = this.state.date;
@@ -85,8 +79,8 @@ module.exports = React.createClass({
 		date.setDate(date.getDate()+1);
 		this.updateDate(date);
 	},
-	onChangeDate: function(nill, date){
-		nill.preventDefault();
+	onChangeDate: function(e, date){
+		e.preventDefault();
         this.updateDate(date);
     },
 	updateDate: function(date){
@@ -102,7 +96,8 @@ module.exports = React.createClass({
 	onChangePanelFilters: function(open){
 		this.setState({openPanelFilters: open});
 	},
-	onSelectOperator: function(operator){
+	onSelectOperator: function(operator, e){
+		e.preventDefault();
 		this.setState({operator: operator, openPanelFilters:false});
 	},
 	render: function() {
@@ -116,15 +111,17 @@ module.exports = React.createClass({
 
 		var self = this;
 				
+		// Rows to display
 		var activePlaceIds = this.state.operator === 'all' ? this.state.placeIds :
 			 this.state.placeIds.filter(function(placeId){
 				return placeId.owner === self.state.operator;
 			});
 
 		var rowsJSX = activePlaceIds.map(function(placeId){
-			return (<RowDashboard key={'place'+placeId.id.toString()} placeId={placeId.id} date={self.state.date}/>);
+			return (<RowDashboard key={'place'+placeId.id.toString()} placeId={placeId.id} date={self.state.date} width={self.state.width} />);
 		});
 
+		// Panel of filters
 		var operators = [];
 		this.state.placeIds.forEach(function(placeId){
 			if(operators.indexOf(placeId.owner) === -1) operators.push(placeId.owner);
@@ -133,6 +130,35 @@ module.exports = React.createClass({
 			return (<Mui.MenuItem index={index} onTouchTap={self.onSelectOperator.bind(self,operator)}>{operator}</Mui.MenuItem>);
 		});
 
+		// Toolbar
+		var less350px = this.state.width < 350;
+		var toolbarGroupsJSX = [];
+		// 1) '<' icon 
+		if(!less350px) toolbarGroupsJSX.push(
+			<Mui.ToolbarGroup key={3} float="right">
+                <Mui.IconButton onTouchTap={this.onNextDate} iconClassName="material-icons">keyboard_arrow_right</Mui.IconButton>
+            </Mui.ToolbarGroup>);
+        // 2)
+		toolbarGroupsJSX.push(
+			<Mui.ToolbarGroup key={2} float="right">
+			    <Mui.DatePicker
+			        ref="datePicker"
+			        hintText="Calendrier"
+			        autoOk={true}
+			        wordings={{ok: 'OK', cancel: 'Annuler'}}
+			        defaultDate={this.state.date}
+			        locale="fr"
+			        formatDate={dateToString}
+			        textFieldStyle={{'maxWidth': '85px'}}
+			        mode="portrait"
+			        onChange={this.onChangeDate}/>
+			</Mui.ToolbarGroup>);
+		// 3) '>' icon 
+		if(!less350px) toolbarGroupsJSX.push(
+			<Mui.ToolbarGroup key={1} float="right">
+                <Mui.IconButton onTouchTap={this.onPrevDate} iconClassName="material-icons">keyboard_arrow_left</Mui.IconButton>
+            </Mui.ToolbarGroup>);
+
 		return (
 			<div id="layout">
 				<div style={styleHeaderToolbar}>
@@ -140,25 +166,7 @@ module.exports = React.createClass({
 						<Mui.ToolbarGroup key={0} float="left">
 							<Mui.ToolbarTitle text={<a href="/" className="noRef">6element</a>} />
 						</Mui.ToolbarGroup>
-						<Mui.ToolbarGroup key={3} float="right">
-		                    <Mui.IconButton onTouchTap={this.onNextDate} iconClassName="material-icons">keyboard_arrow_right</Mui.IconButton>
-		                </Mui.ToolbarGroup>
-		                <Mui.ToolbarGroup key={2} float="right">
-		                    <Mui.DatePicker
-		                    ref="datePicker"
-		                    hintText="Landscape Dialog"
-		                    autoOk={true}
-		                    wordings={{ok: 'OK', cancel: 'Annuler'}}
-		                    defaultDate={this.state.date}
-		                    locale="fr-FR"
-		                    formatDate={dateToString}
-		                    textFieldStyle={{width: '90px'}}
-		                    mode="landscape"
-		                    onChange={this.onChangeDate}/>
-		                </Mui.ToolbarGroup>
-		                <Mui.ToolbarGroup key={1} float="right">
-		                    <Mui.IconButton onTouchTap={this.onPrevDate} iconClassName="material-icons">keyboard_arrow_left</Mui.IconButton>
-		                </Mui.ToolbarGroup>
+						{toolbarGroupsJSX}
 					</Mui.Toolbar>
 					<Mui.Toolbar style={styleFilterToolbar}>
 						<span>Recherche </span>

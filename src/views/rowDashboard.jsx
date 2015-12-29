@@ -171,12 +171,15 @@ module.exports = React.createClass({
 			else if(value > 0.5) color = 'red';
        	}	
        	
+        var avatarJSX = this.props.width < 350 ? undefined :
+            (<Mui.Avatar style={{backgroundColor: color}}></Mui.Avatar>);
+            
 		return (
 			<Mui.Card style={{'marginTop': '10px'}}>
 	            <Mui.CardHeader 
                     title={place.properties.name} 
                     subtitle={place.properties.owner}
-                    avatar={<Mui.Avatar style={{backgroundColor: color}}></Mui.Avatar>}
+                    avatar={avatarJSX}
                     style={{textAlign: "left", overflow: "hidden"}}
                     actAsExpander={true} 
                     showExpandableButton={true}/>

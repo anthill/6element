@@ -24,8 +24,8 @@ var search = require('./searchFiles.js');
 var stats = require('./statsFiles.js');
 var dictionary = require('../data/dictionary.json');
 var layoutData = require('../common/layoutData');
-var mapScreen =  require('../src/views/mapScreen');
-var placeScreen =  require('../src/views/placeScreen');
+// var mapScreen =  require('../src/views/mapScreen');
+// var placeScreen =  require('../src/views/placeScreen');
 var operatorScreen =  require('../src/views/operatorScreen');
 
 var toGeoJson = require('./toGeoJson.js');
@@ -108,14 +108,12 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(compression());
 
 
-app.get('/', function(req, res){
-    console.log('==== calling /')
-    renderAndSend(req, res, layoutData, mapScreen);
-});
-
 var getOperator = function(req, res){
 
-    var name = req.params.name;
+    var name = "all";
+    if (req.params.name)
+        name = req.params.name;
+
 
     var dataP = places.getPlacesByOperator(name);
 
@@ -145,7 +143,7 @@ var getOperator = function(req, res){
                     withPlacesMeasurements(list)
                     .then(function(measures){
 
-                        var places = geoJson.map(function(place, index){
+                        var placesData = geoJson.map(function(place, index){
                             var measure = measures[index];
                             if(measure)
                                 place["measurements"] = {latest: measure.latest, max: measure.max};
@@ -154,7 +152,7 @@ var getOperator = function(req, res){
                             return place;
                         });                          
 
-                        layoutData.places = places;
+                        layoutData.places = placesData;
                         renderAndSend(req, res, layoutData, operatorScreen);
                     })
                     .catch(function(error){
@@ -175,78 +173,79 @@ var getOperator = function(req, res){
 
 }
 
+app.get('/', getOperator);
 app.get('/operator/:name', getOperator);
 app.get('/operateur/:name', getOperator);
    
 
-app.get('/place/:placeId/', function(req, res){
-    var placeId = Number(req.params.placeId);
+// app.get('/place/:placeId/', function(req, res){
+//     var placeId = Number(req.params.placeId);
 
-    if(req.headers.accept.includes('application/json'))
-        console.log('==== calling /place/ for JSON');
-    else
-        console.log('==== calling /place/ for HTML');
+//     if(req.headers.accept.includes('application/json'))
+//         console.log('==== calling /place/ for JSON');
+//     else
+//         console.log('==== calling /place/ for HTML');
 
-    places.getPlaceById(placeId)
-    .then(function(data){
-        toGeoJson(data)
-        .then(function(geoJson){
+//     places.getPlaceById(placeId)
+//     .then(function(data){
+//         toGeoJson(data)
+//         .then(function(geoJson){
 
-            var place = geoJson[0];
+//             var place = geoJson[0];
 
-            if (place.properties.pheromon_id){
+//             if (place.properties.pheromon_id){
 
                 
-                var list = [{'index': 0, 'pheromon_id': place.properties.pheromon_id}]
-                withPlacesMeasurements(list)
-                .then(function(measures){
+//                 var list = [{'index': 0, 'pheromon_id': place.properties.pheromon_id}]
+//                 withPlacesMeasurements(list)
+//                 .then(function(measures){
 
-                    if(measures !== null && measures.length > 0){
-                        var measure = measures[0];
-                        if(measure)
-                            place["measurements"] = {latest: measure.latest, max: measure.max};
-                        else
-                            place["measurements"] = undefined;
-                    }
-                    if(req.headers.accept.includes('application/json')){
-                        res.setHeader('Content-Type', 'application/json');
-                        res.send(JSON.stringify(place));
-                    } else {
-                        layoutData.detailedObject = place;
-                        renderAndSend(req, res, layoutData, placeScreen);
-                    }
-                })
-                .catch(function(err){
-                    console.error(err);
-                    if(req.headers.accept.includes('application/json')){
-                        res.setHeader('Content-Type', 'application/json');
-                        res.send(JSON.stringify(place));
-                    } else {
-                        layoutData.detailedObject = place;
-                        renderAndSend(req, res, layoutData, placeScreen);
-                    }
-                });
-            }
-            else {
-                if(req.headers.accept.includes('application/json')){
-                    res.setHeader('Content-Type', 'application/json');
-                    res.send(JSON.stringify(place));
-                } else {
-                    layoutData.detailedObject = place;
-                    renderAndSend(req, res, layoutData, placeScreen);
-                }
-            }
-        })
-        .catch(function(error){
-            res.status(500).send('Couldn\'t get place from database');
-            console.log('error in GET /place/' + placeId, error);
-        });
-    })
-    .catch(function(error){
-        res.status(500).send('Couldn\'t get place and measurements from database');
-        console.log('error in GET /place/' + placeId, error);
-    });
-});
+//                     if(measures !== null && measures.length > 0){
+//                         var measure = measures[0];
+//                         if(measure)
+//                             place["measurements"] = {latest: measure.latest, max: measure.max};
+//                         else
+//                             place["measurements"] = undefined;
+//                     }
+//                     if(req.headers.accept.includes('application/json')){
+//                         res.setHeader('Content-Type', 'application/json');
+//                         res.send(JSON.stringify(place));
+//                     } else {
+//                         layoutData.detailedObject = place;
+//                         renderAndSend(req, res, layoutData, placeScreen);
+//                     }
+//                 })
+//                 .catch(function(err){
+//                     console.error(err);
+//                     if(req.headers.accept.includes('application/json')){
+//                         res.setHeader('Content-Type', 'application/json');
+//                         res.send(JSON.stringify(place));
+//                     } else {
+//                         layoutData.detailedObject = place;
+//                         renderAndSend(req, res, layoutData, placeScreen);
+//                     }
+//                 });
+//             }
+//             else {
+//                 if(req.headers.accept.includes('application/json')){
+//                     res.setHeader('Content-Type', 'application/json');
+//                     res.send(JSON.stringify(place));
+//                 } else {
+//                     layoutData.detailedObject = place;
+//                     renderAndSend(req, res, layoutData, placeScreen);
+//                 }
+//             }
+//         })
+//         .catch(function(error){
+//             res.status(500).send('Couldn\'t get place from database');
+//             console.log('error in GET /place/' + placeId, error);
+//         });
+//     })
+//     .catch(function(error){
+//         res.status(500).send('Couldn\'t get place and measurements from database');
+//         console.log('error in GET /place/' + placeId, error);
+//     });
+// });
 
 
 app.get('/bins/get/:pheromonId', function(req, res){

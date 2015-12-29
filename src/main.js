@@ -16,11 +16,11 @@ addIconPulse(L);
 var Tokens = require('../Tokens.json');
 var googleMapsApi = require( 'google-maps-api' )( Tokens.google_token, ['places']);
 
-var getRawPlace = require('./js/prepareServerAPI')(require('./js/sendReq')).getRawPlace;
+// var getRawPlace = require('./js/prepareServerAPI')(require('./js/sendReq')).getRawPlace;
 var getPlacesByOperator = require('./js/prepareServerAPI')(require('./js/sendReq')).getPlacesByOperator;
 
-var mapScreen =  require('./views/mapScreen');
-var placeScreen =  require('./views/placeScreen');
+// var mapScreen =  require('./views/mapScreen');
+// var placeScreen =  require('./views/placeScreen');
 var operatorScreen =  require('./views/operatorScreen');
 
 var props = require('../common/layoutData');
@@ -28,32 +28,35 @@ props.leaflet = L;
 props.googleMapsApi = googleMapsApi;
 
 
-page("/", function (context){
-	var qp = queryString.parse(context.querystring);
+// page("/", function (context){
+// 	var qp = queryString.parse(context.querystring);
 
-    if (qp.maxLat && qp.maxLon && qp.minLon && qp.minLat) {
-        props.boundingBox = {
-            'maxLat': qp.maxLat,
-            'minLat': qp.minLat,
-            'maxLon': qp.maxLon,
-            'minLon': qp.minLon
-        }
-    }
-    else if (qp.lon && qp.lat)
-        props.geoloc = { lon: Number(qp.lon), lat: Number(qp.lat)};
+//     if (qp.maxLat && qp.maxLon && qp.minLon && qp.minLat) {
+//         props.boundingBox = {
+//             'maxLat': qp.maxLat,
+//             'minLat': qp.minLat,
+//             'maxLon': qp.maxLon,
+//             'minLon': qp.minLon
+//         }
+//     }
+//     else if (qp.lon && qp.lat)
+//         props.geoloc = { lon: Number(qp.lon), lat: Number(qp.lat)};
 
-    if (qp.category){
-        props.category = qp.category;
-    }
+//     if (qp.category){
+//         props.category = qp.category;
+//     }
 
-    ReactDOM.render( 
-        React.createElement(mapScreen, props), document.getElementById('reactHere')  
-    );
-});
+//     ReactDOM.render( 
+//         React.createElement(mapScreen, props), document.getElementById('reactHere')  
+//     );
+// });
 
 var operatorRoute = function (context){
 
-    var name = context.params.name;
+    var name = "all";
+    if (context.params.name)
+        name = context.params.name;
+
     var qp = queryString.parse(context.querystring);
 
     if (qp.date)
@@ -78,6 +81,7 @@ var operatorRoute = function (context){
     }
 
 }
+page("/", operatorRoute);
 
 page("/operator/:name", operatorRoute);
 
@@ -85,23 +89,23 @@ page("/operateur/:name", operatorRoute)
 
 page("/index.html", "/");
 
-page("/place/:placeId", function (context){
-    var placeId = context.params.placeId;
+// page("/place/:placeId", function (context){
+//     var placeId = context.params.placeId;
 
-    getRawPlace(placeId).then(function(result){
+//     getRawPlace(placeId).then(function(result){
 
-        props.detailedObject = result;
-        ReactDOM.render( 
-            React.createElement(placeScreen, props), document.getElementById('reactHere')
-        );
+//         props.detailedObject = result;
+//         ReactDOM.render( 
+//             React.createElement(placeScreen, props), document.getElementById('reactHere')
+//         );
 
-    })
-    .catch(function(error){
-        console.log("Error in place: ", error);
-    });
+//     })
+//     .catch(function(error){
+//         console.log("Error in place: ", error);
+//     });
 
     
-});
+// });
 
 document.addEventListener('DOMContentLoaded', function l(){
     document.removeEventListener('DOMContentLoaded', l);

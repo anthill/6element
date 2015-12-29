@@ -8,6 +8,7 @@ var DefaultRawTheme = Mui.Styles.LightRawTheme;
 var Colors = require('material-ui/lib/styles/colors');
 var Preview  =  require('./preview');
 var MapCore  =  require('./mapCore');
+var getColor = require('../js/getColor');
 
 var L; // variable where to store the leaflet global. Will be passed to props... maybe
 
@@ -168,10 +169,7 @@ module.exports = React.createClass({
 			// Regular point or Sensor kitted point
 			var marker = null;
 			if(hasSensor && point.measurements !== undefined){
-				var value = point.measurements.latest/point.measurements.max;
-				var color = 'green';
-				if(value > 0.5 && value <= 0.75) color = 'orange';
-				else if(value > 0.75) color = 'red';
+				var color = getColor(point.measurements.latest, 0, point.measurements.max);
 
 				var pulsingIcon = new L.Icon.Pulse({iconSize:[20,20],fillColor: point.color,pulseColor: color});
 				marker = L.marker(new L.LatLng(lat, lon),{icon: pulsingIcon});

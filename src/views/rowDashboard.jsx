@@ -11,6 +11,7 @@ var Colors = require('material-ui/lib/styles/colors');
 var Calendar  =  require('./calendar.js');
 
 var computeCharts = require('../js/computeCharts');
+var getColor = require('../js/getColor');
 
 var NotEmpty = function(field){
 	if(typeof field === 'undefined') return false;
@@ -150,14 +151,9 @@ module.exports = React.createClass({
        		chartJSX = (<div ref="chart" style={{'textAlign': 'center','width':'100%','height':height.toString()+'px'}}></div>);
        	} 
        	
-       	var color = 'grey';
-       	if(this.state.results !== undefined){
-       		var ySignals = this.state.results.traces[0].y; 
-       		var value = ySignals[ySignals.length-1]/100; // Signals
-       		if(value >= 0 && value <= 0.3) color = 'green';
-			else if(value > 0.3 && value <= 0.5) color = 'orange';
-			else if(value > 0.5) color = 'red';
-       	}	
+        var color = "grey";
+        if (this.state.place.measurements)
+   		   var color = getColor(this.state.place.measurements.latest, 0, this.state.place.measurements.max);
        	
 		return (
 			<Mui.Card style={{'marginTop': '10px'}}>

@@ -57,7 +57,6 @@ module.exports = function(list){
                         }
                     }
                     else {
-                        console.log('ici');
                         reject(Object.assign(
                                 new Error('HTTP error'),
                                 {

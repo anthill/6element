@@ -136,8 +136,36 @@ var getOperator = function(req, res){
 
         dataP
         .then(function(data){
-            layoutData.centerIds = data.map(function(object){return object});
-            renderAndSend(req, res, layoutData, operatorScreen);
+            toGeoJson(data)
+                .then(function(geoJson){
+                
+                    var list = geoJson.map(function(place){
+                        return {'index': 0, 'pheromon_id': place.properties.pheromon_id};
+                    })
+                    withPlacesMeasurements(list)
+                    .then(function(measures){
+
+                        var places = geoJson.map(function(place, index){
+                            var measure = measures[index];
+                            if(measure)
+                                place["measurements"] = {latest: measure.latest, max: measure.max};
+                            else
+                                place["measurements"] = undefined;
+                            return place;
+                        });                          
+
+                        layoutData.places = places;
+                        renderAndSend(req, res, layoutData, operatorScreen);
+                    })
+                    .catch(function(error){
+                        res.status(500).send('Couldn\'t get latest measurements');
+                        console.log('error in GET /operator/' + name, error);
+                    });
+                })
+                .catch(function(error){
+                    res.status(500).send('Couldn\'t convert to geojson');
+                    console.log('error in GET /operator/' + name, error);
+                });
         })
         .catch(function(error){
             res.status(500).send('Couldn\'t get place of operator from database');

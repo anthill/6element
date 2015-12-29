@@ -59,7 +59,7 @@ var operatorRoute = function (context){
     if (qp.date)
         props.date = qp.date;
 
-    if (!props.centerIds){
+    if (!props.places){
         // if data is not in the page, fetch it
         getPlacesByOperator(name).then(function(result){
             props.operator = result;

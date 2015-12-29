@@ -72,8 +72,6 @@ module.exports = function(place, start, end) {
                 return { date: date, signals: measureWifi.value.length }
             });
 
-            //console.log(resultsWifi)
-
             if(resultsWifi.length > 0){
 
                 // For each tick of 15 minutes

@@ -8,12 +8,10 @@ var ThemeManager = require('material-ui/lib/styles/theme-manager');
 var DefaultRawTheme = Mui.Styles.LightRawTheme;
 
 var Colors = require('material-ui/lib/styles/colors');
-
-var getRawPlace = require('../js/prepareServerAPI')(require('../js/sendReq')).getRawPlace;
-
 var Calendar  =  require('./calendar.js');
 
 var computeCharts = require('../js/computeCharts');
+var getColor = require('../js/getColor');
 
 var NotEmpty = function(field){
 	if(typeof field === 'undefined') return false;
@@ -37,19 +35,10 @@ module.exports = React.createClass({
 		return { muiTheme: ThemeManager.getMuiTheme(DefaultRawTheme) };
 	},
 	getInitialState: function() {
-		var date = new Date(this.props.date);
-		return { place: undefined, date: date, results: undefined };
+		return { place: this.props.place, date: this.props.date, results: undefined };
 	},
 	componentDidMount: function() {
-		
-		var self = this;
-		getRawPlace(this.props.placeId)
-		.then(function(place){ 
-			self.computeChart(place, self.state.date);
-		})
-		.catch(function(error){
-			console.error('get place on '+self.props.placeId.toString(), error);
-		})
+		this.computeChart(this.state.place, this.state.date);
     },
     componentWillReceiveProps: function(nextProps){
 		
@@ -167,14 +156,9 @@ module.exports = React.createClass({
        		chartJSX = (<div ref="chart" style={{'textAlign': 'center','width':'100%','height':height.toString()+'px'}}></div>);
        	} 
        	
-       	var color = 'grey';
-       	if(this.state.results !== undefined){
-       		var ySignals = this.state.results.traces[0].y; 
-       		var value = ySignals[ySignals.length-1]/100; // Signals
-       		if(value >= 0 && value <= 0.3) color = 'green';
-			else if(value > 0.3 && value <= 0.5) color = 'orange';
-			else if(value > 0.5) color = 'red';
-       	}	
+        var color = "grey";
+        if (this.state.place.measurements)
+   		   var color = getColor(this.state.place.measurements.latest, 0, this.state.place.measurements.max);
        	
         // Undisplay avatar under 350px
         var avatarJSX = this.props.width < 350 ? undefined :

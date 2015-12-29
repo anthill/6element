@@ -122,12 +122,21 @@ module.exports = React.createClass({
 		});
 
 		// Panel of filters
+		var operatorToRegion = {
+			"Agglo_Pau": "Pau",
+			"USTOM": "Castillonnais-Réolais",
+			"SMICVAL": "Libournais",
+			"Sinoe": "Bordeaux Métropole"
+		}
 		var operators = ['Tous'];
 		self.state.places.forEach(function(place){
 			if(operators.indexOf(place.properties.owner) === -1) operators.push(place.properties.owner);
 		});
 		var menuItemsJSX = operators.map(function(operator, index){
-			return (<Mui.MenuItem index={index} onTouchTap={self.onSelectOperator.bind(self,operator)}>{operator}</Mui.MenuItem>);
+			var regionLabel = (<span><strong>Tous</strong></span>)
+			if (operator !== "Tous")
+				regionLabel = (<span><strong>{operatorToRegion[operator]}</strong> <small>({operator})</small></span>);
+			return (<Mui.MenuItem index={index} onTouchTap={self.onSelectOperator.bind(self,operator)}>{regionLabel}</Mui.MenuItem>);
 		});
 
 		// Toolbar

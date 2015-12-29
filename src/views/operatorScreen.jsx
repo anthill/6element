@@ -54,7 +54,8 @@ module.exports = React.createClass({
 			placeIds: placeIds,
 			date: date,
 			width: 0,
-			openPanelFilters: false
+			openPanelFilters: false,
+			operator: 'all'
 		};
 	},
 	/*componentDidMount: function() {
@@ -101,18 +102,35 @@ module.exports = React.createClass({
 	onChangePanelFilters: function(open){
 		this.setState({openPanelFilters: open});
 	},
+	onSelectOperator: function(operator){
+		this.setState({operator: operator, openPanelFilters:false});
+	},
 	render: function() {
 
 		// CSS to move in a dedicated JSON file
-		var styleHeaderToolbar	= {	'position':'fixed', 'width': '100%', 'top': '0px', 'zIndex': 2 }
-		var styleToolbar 		= {'maxWidth': '700px', 'margin': '0 auto'}
+		var styleHeaderToolbar	= {	'position':'fixed', 'width': '100%', 'top': '0px', 'zIndex': 2 };
+		var styleToolbar 		= {'maxWidth': '700px', 'margin': '0 auto'};
 		var styleFilter 		= {'listStyleType': 'none', 'margin': '5px', 'display': 'inline-block', 'padding': '5px'};
-		var styleFilterToolbar 	= {'maxWidth': '700px', 'margin': '0 auto', 'backgroundColor': 'white'}
-		var styleRow 			= {'maxWidth': '700px', 'margin': '0 auto', 'marginTop': '60px'}
+		var styleFilterToolbar 	= {'maxWidth': '700px', 'margin': '0 auto', 'backgroundColor': 'white', 'marginBottom': '0px', 'borderBottom': 'solid 1px Grey'};
+		var styleRow 			= {'maxWidth': '700px', 'margin': '0 auto', 'marginTop': '120px'};
 
 		var self = this;
-		var rowsJSX = this.state.placeIds.map(function(placeId){
-			return (<RowDashboard key={'place'+placeId.id.toString()} placeId={placeId.id} date={self.state.date}/>)
+				
+		var activePlaceIds = this.state.operator === 'all' ? this.state.placeIds :
+			 this.state.placeIds.filter(function(placeId){
+				return placeId.owner === self.state.operator;
+			});
+
+		var rowsJSX = activePlaceIds.map(function(placeId){
+			return (<RowDashboard key={'place'+placeId.id.toString()} placeId={placeId.id} date={self.state.date}/>);
+		});
+
+		var operators = [];
+		this.state.placeIds.forEach(function(placeId){
+			if(operators.indexOf(placeId.owner) === -1) operators.push(placeId.owner);
+		});
+		var menuItemsJSX = operators.map(function(operator, index){
+			return (<Mui.MenuItem index={index} onTouchTap={self.onSelectOperator.bind(self,operator)}>{operator}</Mui.MenuItem>);
 		});
 
 		return (
@@ -155,8 +173,7 @@ module.exports = React.createClass({
 					docked={false}
 					open={this.state.openPanelFilters} 
 					onRequestChange={this.onChangePanelFilters}>
-					<Mui.MenuItem index={0} >Menu Item</Mui.MenuItem>
-					<Mui.MenuItem  index={1}>Menu Item 2</Mui.MenuItem>
+					{menuItemsJSX}
 				</Mui.LeftNav>
 				<div style={styleRow}>
 					{rowsJSX}

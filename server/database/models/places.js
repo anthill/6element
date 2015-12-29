@@ -186,7 +186,7 @@ module.exports = {
             } else {
 
                 query = places
-                    .select(places.id)
+                    .select(places.id, places.owner)
                     .from(places)
                     .where(places.owner.equals(operatorName))
                     .toQuery();

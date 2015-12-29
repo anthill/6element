@@ -8,9 +8,6 @@ var ThemeManager = require('material-ui/lib/styles/theme-manager');
 var DefaultRawTheme = Mui.Styles.LightRawTheme;
 
 var Colors = require('material-ui/lib/styles/colors');
-
-var getRawPlace = require('../js/prepareServerAPI')(require('../js/sendReq')).getRawPlace;
-
 var Calendar  =  require('./calendar.js');
 
 var computeCharts = require('../js/computeCharts');
@@ -37,19 +34,10 @@ module.exports = React.createClass({
 		return { muiTheme: ThemeManager.getMuiTheme(DefaultRawTheme) };
 	},
 	getInitialState: function() {
-		var date = new Date(this.props.date);
-		return { place: undefined, date: date, results: undefined };
+		return { place: this.props.place, date: this.props.date, results: undefined };
 	},
 	componentDidMount: function() {
-		
-		var self = this;
-		getRawPlace(this.props.placeId)
-		.then(function(place){ 
-			self.computeChart(place, self.state.date);
-		})
-		.catch(function(error){
-			console.error('get place on '+self.props.placeId.toString(), error);
-		})
+		this.computeChart(this.state.place, this.state.date);
     },
     componentWillReceiveProps: function(nextProps){
 		

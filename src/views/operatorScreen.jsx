@@ -44,14 +44,14 @@ module.exports = React.createClass({
 		return { muiTheme: ThemeManager.getMuiTheme(DefaultRawTheme) };
 	},
 	getInitialState: function() {
-		var placeIds = this.props.centerIds;
+		var places = this.props.places;
 		if (this.props.date)
 			var date = stringToDate(this.props.date);
 		else
 			var date = new Date();
 		date.setHours(0,0,0,0)
 		return {
-			placeIds: placeIds,
+			places: places,
 			date: date,
 			width: 0,
 			openPanelFilters: false,
@@ -116,18 +116,18 @@ module.exports = React.createClass({
 
 		var self = this;
 				
-		var activePlaceIds = this.state.operator === 'all' ? this.state.placeIds :
-			 this.state.placeIds.filter(function(placeId){
-				return placeId.owner === self.state.operator;
+		var activePlaces = self.state.operator === 'all' ? self.state.places :
+			 self.state.places.filter(function(place){
+				return place.properties.owner === self.state.operator;
 			});
 
-		var rowsJSX = activePlaceIds.map(function(placeId){
-			return (<RowDashboard key={'place'+placeId.id.toString()} placeId={placeId.id} date={self.state.date}/>);
+		var rowsJSX = activePlaces.map(function(place){
+			return (<RowDashboard key={'place'+place.properties.id.toString()} place={place} date={self.state.date}/>);
 		});
 
 		var operators = [];
-		this.state.placeIds.forEach(function(placeId){
-			if(operators.indexOf(placeId.owner) === -1) operators.push(placeId.owner);
+		self.state.places.forEach(function(place){
+			if(operators.indexOf(place.properties.owner) === -1) operators.push(place.properties.owner);
 		});
 		var menuItemsJSX = operators.map(function(operator, index){
 			return (<Mui.MenuItem index={index} onTouchTap={self.onSelectOperator.bind(self,operator)}>{operator}</Mui.MenuItem>);

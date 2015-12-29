@@ -76,6 +76,7 @@ module.exports = React.createClass({
 
 		if(this.state.results === undefined) return;
 
+        var self = this;
 		var results = this.state.results;
         var start = new Date(this.state.date);
 		start.setHours(8,0,0,0);
@@ -89,7 +90,11 @@ module.exports = React.createClass({
     	var ticktext = ['Affluence'];
     	var nbCaractMax = 9; // 'A' 'f' 'f' 'l' 'u' 'e' 'n' 'c' 'e'
     	results.ticksY.forEach(function(tickY, index){
-    		tickvals.push(-20*index-50);
+
+            if(self.props.width < 350 && tickY.length > 10)
+    		  tickY = tickY.substr(0,9)+'.';
+
+            tickvals.push(-20*index-50);
     		ticktext.push(tickY);
     		if(tickY.length > nbCaractMax)
     			nbCaractMax = tickY.length;
@@ -155,12 +160,16 @@ module.exports = React.createClass({
         if (this.state.place.measurements)
    		   var color = getColor(this.state.place.measurements.latest, 0, this.state.place.measurements.max);
        	
+        // Undisplay avatar under 350px
+        var avatarJSX = this.props.width < 350 ? undefined :
+            (<Mui.Avatar style={{backgroundColor: color}}></Mui.Avatar>);
+
 		return (
 			<Mui.Card style={{'marginTop': '10px'}}>
 	            <Mui.CardHeader 
                     title={place.properties.name} 
                     subtitle={place.properties.owner}
-                    avatar={<Mui.Avatar style={{backgroundColor: color}}></Mui.Avatar>}
+                    avatar={avatarJSX}
                     style={{textAlign: "left", overflow: "hidden"}}
                     actAsExpander={true} 
                     showExpandableButton={true}/>

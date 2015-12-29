@@ -51,7 +51,7 @@ page("/", function (context){
     );
 });
 
-page("/operator/:name", function (context){
+var operatorRoute = function (context){
 
     var name = context.params.name;
     var qp = queryString.parse(context.querystring);
@@ -77,7 +77,11 @@ page("/operator/:name", function (context){
         );
     }
 
-});
+}
+
+page("/operator/:name", operatorRoute);
+
+page("/operateur/:name", operatorRoute)
 
 page("/index.html", "/");
 

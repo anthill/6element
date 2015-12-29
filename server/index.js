@@ -113,8 +113,7 @@ app.get('/', function(req, res){
     renderAndSend(req, res, layoutData, mapScreen);
 });
 
-
-app.get('/operator/:name', function(req, res){
+var getOperator = function(req, res){
 
     var name = req.params.name;
 
@@ -146,7 +145,10 @@ app.get('/operator/:name', function(req, res){
         });
     }
 
-});
+}
+
+app.get('/operator/:name', getOperator);
+app.get('/operateur/:name', getOperator);
    
 
 app.get('/place/:placeId/', function(req, res){

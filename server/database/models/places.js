@@ -172,11 +172,25 @@ module.exports = {
     getPlacesByOperator: function(operatorName){
         return databaseP.then(function (db) {
 
-            var query = places
-                .select(places.id)
-                .from(places)
-                .where(places.owner.equals(operatorName))
-                .toQuery();
+            var query;
+
+            if (operatorName === "all"){
+
+                query = places
+                    .select(places.id, places.owner)
+                    .from(places)
+                    .where(places.pheromon_id.isNotNull())
+                    .order(places.owner)
+                    .toQuery();
+
+            } else {
+
+                query = places
+                    .select(places.id, places.owner)
+                    .from(places)
+                    .where(places.owner.equals(operatorName))
+                    .toQuery();
+            }
 
             return new Promise(function (resolve, reject) {
                 db.query(query, function (err, result) {

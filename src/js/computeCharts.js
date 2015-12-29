@@ -39,7 +39,75 @@ var formatDate = function(date) {
         '.000000';
  };
 
-module.exports = function(place, start, end) {
+ var getSeries = function(xSignals, ySignals, xGreen, yGreen, xOrange, yOrange, xRed, yRed, xGrey, yGrey){
+
+    // Bind chart structure
+    return [{
+            type: 'scatter',
+            name: 'Saturation(%)',
+            showlegend: false,
+            x: xSignals,
+            y: ySignals,
+            marker: {
+            symbol: "x",
+                color: Colors.pink400
+            },
+            line: {shape: 'spline'},
+            mode: 'lines'
+        },
+        {
+            type: 'scatter',
+            name: 'green',
+            showlegend: false,
+            x: xGreen,
+            y: yGreen,
+            marker: {
+                symbol: "square",
+                color: Colors.green400
+            },
+            mode: 'markers'
+        },
+        {
+            type: 'scatter',
+            name: 'orange',
+            showlegend: false,
+            x: xOrange,
+            y: yOrange,
+            marker: {
+                symbol: "square",
+                color: Colors.amber300
+            },
+            mode: 'markers'
+        },
+        {
+            type: 'scatter',
+            name: 'red',
+            showlegend: false,
+            x: xRed,
+            y: yRed,
+            marker: {
+                symbol: "square",
+                color: Colors.red500
+            },
+            mode: 'markers'
+        },
+        {
+            type: 'scatter',
+            name: 'grey',
+            showlegend: false,
+            x: xGrey,
+            y: yGrey,
+            marker: {
+                symbol: "square",
+                color: Colors.blueGrey100
+            },
+            mode: 'markers'
+        }
+    ];
+
+ } 
+
+module.exports = function(place, start, end, mode) {
 
     return new Promise(function(resolve, reject){
         
@@ -118,6 +186,12 @@ module.exports = function(place, start, end) {
                         }
                     }
                 }
+            }
+
+            if(mode === 'citizen'){
+                // Bind chart structure
+                var traces = getSeries(xSignals, ySignals, xGreen, yGreen, xOrange, yOrange, xRed, yRed, xGrey, yGrey);
+                return resolve({traces: traces, ticksY: []});
             }
             
             // Calling API for bins
@@ -221,70 +295,9 @@ module.exports = function(place, start, end) {
                 });
                 
                 // Bind chart structure
-                var traces = [{
-                        type: 'scatter',
-                        name: 'Saturation(%)',
-                        showlegend: false,
-                        x: xSignals,
-                        y: ySignals,
-                        marker: {
-                        symbol: "x",
-                            color: Colors.pink400
-                        },
-                        line: {shape: 'spline'},
-                        mode: 'lines'
-                    },
-                    {
-                        type: 'scatter',
-                        name: 'green',
-                        showlegend: false,
-                        x: xGreen,
-                        y: yGreen,
-                        marker: {
-                            symbol: "square",
-                            color: Colors.green400
-                        },
-                        mode: 'markers'
-                    },
-                    {
-                        type: 'scatter',
-                        name: 'orange',
-                        showlegend: false,
-                        x: xOrange,
-                        y: yOrange,
-                        marker: {
-                            symbol: "square",
-                            color: Colors.amber300
-                        },
-                        mode: 'markers'
-                    },
-                    {
-                        type: 'scatter',
-                        name: 'red',
-                        showlegend: false,
-                        x: xRed,
-                        y: yRed,
-                        marker: {
-                            symbol: "square",
-                            color: Colors.red500
-                        },
-                        mode: 'markers'
-                    },
-                    {
-                        type: 'scatter',
-                        name: 'grey',
-                        showlegend: false,
-                        x: xGrey,
-                        y: yGrey,
-                        marker: {
-                            symbol: "square",
-                            color: Colors.blueGrey100
-                        },
-                        mode: 'markers'
-                    }
-                ];
-
+                var traces = getSeries(xSignals, ySignals, xGreen, yGreen, xOrange, yOrange, xRed, yRed, xGrey, yGrey);
                 resolve({traces: traces, ticksY: ticksY});
+
             })
             .catch(function(error){
                 reject(error);

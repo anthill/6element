@@ -27,6 +27,10 @@ var NotEmpty = function(field){
 var injectTapEventPlugin = require("react-tap-event-plugin");
 injectTapEventPlugin();
 
+// for dev: http://192.168.99.100:3500/
+var io6element = require('socket.io-client')('http://6element.fr');
+io6element.connect();
+
 module.exports = React.createClass({
 	childContextTypes: {
 		muiTheme: React.PropTypes.object
@@ -35,16 +39,39 @@ module.exports = React.createClass({
 		return { muiTheme: ThemeManager.getMuiTheme(DefaultRawTheme) };
 	},
 	getInitialState: function() {
-		return { place: this.props.place, date: this.props.date, results: undefined };
+
+        // On 'bin' socket received from Pheromon by the server and transferred, 
+        // we will update the concerned bin status
+        if(this.props.mode === 'citizen')
+            io6element.on('bin', this.updateBin);
+
+		return { place: this.props.place, date: this.props.date, results: undefined, bins: this.props.place.properties.bins };
 	},
+    updateBin: function(data){
+
+        var place = this.props.place;
+        if( place.properties.pheromon_id === null ||
+            place.properties.pheromon_id !== data.installed_at)
+            return;
+
+        var bins = this.state.bins;
+        var index = bins.findIndex(function(elt){
+            return elt.id === data.bin.id;
+        })
+
+        if(index === -1) console.log('Bin with id=' + data.bin.id + ' unfound');
+        else {
+            bins[index] = data.bin;
+            this.setState({bins: bins});
+        }
+    },
 	componentDidMount: function() {
-		this.computeChart(this.state.place, this.state.date);
+		this.computeChart(this.state.place, this.state.date, this.props.mode);
     },
     componentWillReceiveProps: function(nextProps){
-		
 		if( this.state.date !== nextProps.date){
         	var date = new Date(nextProps.date);
-			this.computeChart(this.state.place, date);
+			this.computeChart(this.state.place, date, this.props.mode);
 		}
 	},
     componentDidUpdate: function(){
@@ -52,7 +79,7 @@ module.exports = React.createClass({
     	if(this.state.results === undefined) return;
         this.drawChart();
     },
-    computeChart: function(place, date){
+    computeChart: function(place, date, mode){
 
     	if(place === undefined) return;
 
@@ -64,9 +91,9 @@ module.exports = React.createClass({
 		var end = new Date(date);
 		end.setHours(20,0,0,0);
 
-		computeCharts(place, start, end)
+		computeCharts(place, start, end, mode)
         .then(function(results){
-        	self.setState({place: place, date: date, results: results});
+            self.setState({place: place, date: date, results: results});
     	})
         .catch(function(error){
         	console.error(error);
@@ -164,6 +191,18 @@ module.exports = React.createClass({
         var avatarJSX = this.props.width < 350 ? undefined :
             (<Mui.Avatar style={{backgroundColor: color}}></Mui.Avatar>);
 
+        // Bins if mode citizen activated
+        var binsJSX = "";
+        if(this.props.mode === 'citizen' &&
+            this.state.bins !== undefined)
+        {
+            binsJSX = this.state.bins
+            .map(function(bin, id){
+                return (<li key={'allow'+id.toString()} className={bin.a?"border-open":"border-closed"}>{bin.t}</li>);
+            });
+        }
+
+
 		return (
 			<Mui.Card style={{'marginTop': '10px'}}>
 	            <Mui.CardHeader 
@@ -189,6 +228,9 @@ module.exports = React.createClass({
     			</Mui.CardText>
     			<Mui.CardText>
     				{chartJSX}
+                    <div className="allowedObjects">
+                        <ul>{binsJSX}</ul>
+                    </div>
 	            </Mui.CardText>
 	        </Mui.Card>
 		);

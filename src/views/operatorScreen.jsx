@@ -28,6 +28,7 @@ module.exports = React.createClass({
 	},
 	getInitialState: function() {
 		var placeIds = this.props.centerIds;
+		console.log(placeIds);
 		var date = new Date();
 		date.setHours(0,0,0,0)
 		return {
@@ -85,10 +86,9 @@ module.exports = React.createClass({
 
 		var self = this;
 		var rowsJSX = this.state.placeIds.map(function(placeId){
-			return (<RowDashboard key={'place'+placeId.toString()} placeId={placeId} date={self.state.date}/>)
+			return (<RowDashboard key={'place'+placeId.id.toString()} placeId={placeId.id} date={self.state.date}/>)
 		});
 
-		console.log('openPanelFilters', this.state.openPanelFilters);
 		return (
 			<div id="layout">
 				<div style={styleHeaderToolbar}>
@@ -120,11 +120,12 @@ module.exports = React.createClass({
 						<Mui.FlatButton 
 							label="par agglomération" 
 							primary={true} 
-							style={'textTransform': 'lowercase'}
+							style={{'textTransform': 'lowercase'}}
 							onTouchTap={this.onChangePanelFilters.bind(this,true)}/>
 					</Mui.Toolbar>
 				</div>
 				<Mui.LeftNav
+					docked={false}
 					open={this.state.openPanelFilters} 
 					onRequestChange={this.onChangePanelFilters}>
 					<Mui.MenuItem index={0} >Menu Item</Mui.MenuItem>

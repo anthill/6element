@@ -177,7 +177,7 @@ module.exports = {
             if (operatorName === "all"){
 
                 query = places
-                    .select(places.id)
+                    .select(places.id, places.owner)
                     .from(places)
                     .where(places.pheromon_id.isNotNull())
                     .order(places.owner)

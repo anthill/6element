@@ -66,11 +66,13 @@ module.exports = React.createClass({
         }
     },
 	componentDidMount: function() {
+        //console.log("didMount", this.state.place);
 		this.computeChart(this.state.place, this.state.date, this.props.mode);
     },
     componentWillReceiveProps: function(nextProps){
-		if( this.state.date !== nextProps.date){
-        	var date = new Date(nextProps.date);
+		//console.log('willReceive', this.state.date, nextProps.date);
+        if( this.state.date !== nextProps.date){
+            var date = new Date(nextProps.date);
 			this.computeChart(this.state.place, date, this.props.mode);
 		}
 	},
@@ -198,7 +200,7 @@ module.exports = React.createClass({
         {
             binsJSX = this.state.bins
             .map(function(bin, id){
-                return (<li key={'allow'+id.toString()} className={bin.a?"border-open":"border-closed"}>{bin.t}</li>);
+                return (<li key={'allow'+place.properties.id.toString()+id.toString()} className={bin.a?"border-open":"border-closed"}>{bin.t}</li>);
             });
         }
 
@@ -213,7 +215,7 @@ module.exports = React.createClass({
                     actAsExpander={true} 
                     showExpandableButton={true}/>
     			<Mui.CardText expandable={true}>
-    			    <table style={{width:"100%", backgroundColor: Colors.blueGrey100}}>
+    			    <table style={{width:"100%", backgroundColor: Colors.blueGrey50}}>
 	                    <tbody>
 	                        <tr>
 	                            <td id="address"style={{width:"50%", padding:"10px", verticalAlign: "top"}}>

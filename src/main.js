@@ -10,11 +10,11 @@ var L = require('leaflet');
 var page = require('page');
 var queryString = require('query-string');
 
-var addIconPulse = require('./js/addIconPulse');
-addIconPulse(L);
+//var addIconPulse = require('./js/addIconPulse');
+//addIconPulse(L);
 
-var Tokens = require('../Tokens.json');
-var googleMapsApi = require( 'google-maps-api' )( Tokens.google_token, ['places']);
+//var Tokens = require('../Tokens.json');
+//var googleMapsApi = require( 'google-maps-api' )( Tokens.google_token, ['places']);
 
 // var getRawPlace = require('./js/prepareServerAPI')(require('./js/sendReq')).getRawPlace;
 var getPlacesByOperator = require('./js/prepareServerAPI')(require('./js/sendReq')).getPlacesByOperator;
@@ -24,8 +24,8 @@ var getPlacesByOperator = require('./js/prepareServerAPI')(require('./js/sendReq
 var operatorScreen =  require('./views/operatorScreen');
 
 var props = require('../common/layoutData');
-props.leaflet = L;
-props.googleMapsApi = googleMapsApi;
+//props.leaflet = L;
+//props.googleMapsApi = googleMapsApi;
 
 
 // page("/", function (context){

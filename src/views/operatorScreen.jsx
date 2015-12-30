@@ -51,29 +51,22 @@ module.exports = React.createClass({
 		else
 			var date = new Date();
 		date.setHours(0,0,0,0);
-		// Citizen or Operator mode
-		var operators = [];
-		places.forEach(function(place){
-			if(operators.indexOf(place.properties.owner) === -1) 
-				operators.push(place.properties.owner);
-		});
-
+		
 		return {
 			places: places,
 			date: date,
 			width: 0,
 			openPanelFilters: false,
-			operator: 'Tous',
-			mode: operators.length > 1 ? 'citizen' : 'operator'
+			operator: 'Tous'
 		};
 	},
 	componentDidMount: function() {
 		this.updateDimensions();
 	},
 	updateDimensions: function() {
-	    var width = ReactDOM.findDOMNode(this).getBoundingClientRect().width;
+		var width = ReactDOM.findDOMNode(this).getBoundingClientRect().width;
 	    if(this.state.width != width){
-	      	this.setState({width: width});    
+	    	this.setState({width: width});
 	    }
 	},
 	onPrevDate: function(e){
@@ -102,7 +95,8 @@ module.exports = React.createClass({
 			var origin = url;
 		page(origin + "?" + queryString.stringify(qp));
 	},
-	onChangePanelFilters: function(open){
+	onChangePanelFilters: function(open,e){
+		if(open === true) e.preventDefault();
 		this.setState({openPanelFilters: open});
 	},
 	onSelectOperator: function(operator, e){
@@ -116,7 +110,7 @@ module.exports = React.createClass({
 		var styleToolbar 		= {'maxWidth': '700px', 'margin': '0 auto'};
 		var styleFilter 		= {'listStyleType': 'none', 'margin': '5px', 'display': 'inline-block', 'padding': '5px'};
 		var styleFilterToolbar 	= {'maxWidth': '700px', 'margin': '0 auto', 'backgroundColor': 'white', 'marginBottom': '0px', 'borderBottom': 'solid 1px Grey'};
-		var styleRow 			= {'maxWidth': '700px', 'margin': '0 auto', 'marginTop': this.state.mode === 'citizen' ? '120px' : '60px'};
+		var styleRow 			= {'maxWidth': '700px', 'margin': '0 auto', 'marginTop': this.props.mode === 'citizen' ? '120px' : '60px'};
 
 		var self = this;
 				
@@ -127,7 +121,7 @@ module.exports = React.createClass({
 			});
 
 		var rowsJSX = activePlaces.map(function(place){
-			return (<RowDashboard key={'place'+place.properties.id.toString()} place={place} date={self.state.date} mode={self.state.mode} />);
+			return (<RowDashboard key={'place'+place.properties.id.toString()} place={place} date={self.state.date} mode={self.props.mode} />);
 		});
 
 		// Panel of filters
@@ -177,7 +171,7 @@ module.exports = React.createClass({
                 <Mui.IconButton onTouchTap={this.onPrevDate} iconClassName="material-icons">keyboard_arrow_left</Mui.IconButton>
             </Mui.ToolbarGroup>);
 
-        var filterToolbarJSX = this.state.mode === 'operator' ? "" :
+        var filterToolbarJSX = this.props.mode === 'operator' ? "" :
     		(<Mui.Toolbar style={styleFilterToolbar}>
 				<span>Recherche </span>
 				<Mui.FlatButton 

@@ -95,11 +95,12 @@ module.exports = React.createClass({
 		var qp = {date: dateToString(date)};
 		// DIRTY but i guess will change all that after
 		var url = window.location.toString().split("?");
+		//http://6element.fr/opertator/ustom
 		if (url.length > 0)
-			var currentOperator = url[0].split("/").pop();
+			var origin = url[0];
 		else
-			var currentOperator = url.split("/").pop();
-		page("/operator/" + currentOperator + "?" + queryString.stringify(qp));
+			var origin = url;
+		page(origin + "?" + queryString.stringify(qp));
 	},
 	onChangePanelFilters: function(open){
 		this.setState({openPanelFilters: open});

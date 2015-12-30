@@ -13,7 +13,7 @@
     "build:client-prod": "browserify src/main.js -p [minifyify --no-map] -o src/browserify-bundle.js -v",
     "build:client-dev": "browserify src/main.js -o src/browserify-bundle.js -v",
     "build:jsx-for-server-side": "babel src/views/*.jsx --out-dir .",
-    "stop-dev": "docker-compose -f compose-dev.yml stop",
+    "stop-dev": "docker-compose -p 6elementdev -f compose-dev.yml stop",
     "stop-prod": "docker-compose -f compose-prod.yml stop",
     "prod": "docker-compose -p 6element -f compose-prod.yml up -d --force-recreate",
     "preprod": "npm run build-prod",

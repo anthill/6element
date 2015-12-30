@@ -95,7 +95,7 @@ function renderAndSend (req, res, props, view) {
             //https://github.com/callemall/material-ui/pull/2007#issuecomment-155414926
             global.navigator = {'userAgent': req.headers['user-agent']};
             renderDocumentWithData(doc, props, view);
-            global.navigator = undefined;
+            //global.navigator = undefined;
 
             res.send( jsdom.serializeDocument(doc) );
             dispose();
@@ -108,7 +108,9 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(compression());
 
 
-var getOperator = function(req, res){
+var getOperator = function(req, res, mode){
+
+    layoutData['mode'] = mode === 'operator' ? 'operator' : 'citizen';
 
     var name = "all";
     if (req.params.name)
@@ -174,8 +176,12 @@ var getOperator = function(req, res){
 }
 
 app.get('/', getOperator);
-app.get('/operator/:name', getOperator);
-app.get('/operateur/:name', getOperator);
+app.get('/operator/:name', function(req,res){
+    getOperator(req,res,'operator')
+});
+app.get('/operateur/:name', function(req,res){
+    getOperator(req,res,'operator')
+});
    
 
 // app.get('/place/:placeId/', function(req, res){

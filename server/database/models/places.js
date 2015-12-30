@@ -180,7 +180,7 @@ module.exports = {
                     .select("*")
                     .from(places)
                     .where(places.pheromon_id.isNotNull())
-                    .order(places.owner)
+                    .order(places.owner.desc)
                     .toQuery();
 
             } else {

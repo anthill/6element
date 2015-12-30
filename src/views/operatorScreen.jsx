@@ -89,8 +89,7 @@ module.exports = React.createClass({
 		this.updateDate(date);
 	},
 	onChangeDate: function(e, date){
-		e.preventDefault();
-        this.updateDate(date);
+		this.updateDate(date);
     },
 	updateDate: function(date){
 		var qp = {date: dateToString(date)};
@@ -110,7 +109,6 @@ module.exports = React.createClass({
 		this.setState({operator: operator, openPanelFilters:false});
 	},
 	render: function() {
-
 
 		// CSS to move in a dedicated JSON file
 		var styleHeaderToolbar	= {	'position':'fixed', 'width': '100%', 'top': '0px', 'zIndex': 2 };

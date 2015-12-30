@@ -18,10 +18,10 @@ button a{
 	color: white;
 	text-decoration: none;
 }
-.open { border-color: green; font-size: 15px;}
-.closed { border-color: red; font-size: 15px;}
-.border-open {  border: solid green 3px; font-size: 15px; }
-.border-closed { border: solid red 3px;  font-size: 15px; text-decoration : line-through;}
+.open { color: #7fdc2b; font-size: 15px;}
+.closed { color: #ff3b6c; font-size: 15px;}
+.border-open {  border: solid #7fdc2b 2px; font-size: 15px; }
+.border-closed { border: solid #ff3b6c 2px;  font-size: 15px; text-decoration : line-through;}
 .star { color: gold; }
 .no-star { color: lightgray; }
 .clickable { cursor: pointer;}
@@ -147,8 +147,7 @@ button a{
 	margin: 5px;
 	display: inline-block;
 	padding: 5px;
-	background-color: #cfd8dc;
-	border-radius: 5px;
+	background-color: white;
 }
 
 #traffic {

@@ -55,8 +55,9 @@ if (process.env.NODE_ENV === "production") {
 
 // Sockets
 var server  = require('http').createServer(app);
+/*
 var io6element = require('socket.io')(server);
-io6element.on('connection', function(){ });
+io6element.on('connection', function(){ });*/
 
 var ioPheromon = require('socket.io-client')('https://pheromon.ants.builders');
 ioPheromon.connect();
@@ -67,8 +68,8 @@ ioPheromon.on('bin', function(data){
     
     places.updateBin(data.installed_at, data.bin)
     .then(function(){
-        console.log('emit socket');
-        io6element.emit('bin', data); 
+        //console.log('emit socket');
+        //io6element.emit('bin', data); 
     })
     .catch(function(err){ console.error('/', err, err.stack); }); 
 });

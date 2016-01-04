@@ -28,8 +28,8 @@ var injectTapEventPlugin = require("react-tap-event-plugin");
 injectTapEventPlugin();
 
 // for dev: http://192.168.99.100:3500/
-var io6element = require('socket.io-client')('http://6element.fr');
-io6element.connect();
+//var io6element = require('socket.io-client')('http://6element.fr');
+//io6element.connect();
 
 module.exports = React.createClass({
 	childContextTypes: {
@@ -42,8 +42,8 @@ module.exports = React.createClass({
 
         // On 'bin' socket received from Pheromon by the server and transferred, 
         // we will update the concerned bin status
-        if(this.props.mode === 'citizen')
-            io6element.on('bin', this.updateBin);
+        /*if(this.props.mode === 'citizen')
+            io6element.on('bin', this.updateBin);*/
 
 		return { place: this.props.place, date: this.props.date, results: undefined, bins: this.props.place.properties.bins };
 	},

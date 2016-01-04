@@ -6,7 +6,7 @@ window.Symbol.iterator = require('core-js/fn/symbol/iterator');
 require('es6-shim');
 var React = require('react');
 var ReactDOM = require('react-dom');
-var L = require('leaflet');
+//var L = require('leaflet');
 var page = require('page');
 var queryString = require('query-string');
 

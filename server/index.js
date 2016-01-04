@@ -67,6 +67,7 @@ ioPheromon.on('bin', function(data){
     
     places.updateBin(data.installed_at, data.bin)
     .then(function(){
+        console.log('emit socket');
         io6element.emit('bin', data); 
     })
     .catch(function(err){ console.error('/', err, err.stack); }); 
@@ -76,7 +77,8 @@ ioPheromon.on('bin', function(data){
 // Doesn't make sense to start the server if this file doesn't exist. *Sync is fine.
 var indexHTMLStr = fs.readFileSync(path.join(__dirname, '..', 'src', 'index.html'), {encoding: 'utf8'});
 
-function renderDocumentWithData(doc, data, reactComponent){    
+function renderDocumentWithData(doc, data, reactComponent){   
+    console.log('server side rendering'); 
     doc.getElementById('reactHere').innerHTML = ReactDOMServer.renderToString( React.createElement(reactComponent, data) );
     
     var initDataInertElement = doc.querySelector('script#init-data');

@@ -28,8 +28,8 @@ var injectTapEventPlugin = require("react-tap-event-plugin");
 injectTapEventPlugin();
 
 // for dev: http://192.168.99.100:3500/
-var io6element = require('socket.io-client')('http://6element.fr');
-io6element.connect();
+//var io6element = require('socket.io-client')('http://6element.fr');
+//io6element.connect();
 
 module.exports = React.createClass({
 	childContextTypes: {
@@ -42,8 +42,8 @@ module.exports = React.createClass({
 
         // On 'bin' socket received from Pheromon by the server and transferred, 
         // we will update the concerned bin status
-        if(this.props.mode === 'citizen')
-            io6element.on('bin', this.updateBin);
+        /*if(this.props.mode === 'citizen')
+            io6element.on('bin', this.updateBin);*/
 
 		return { place: this.props.place, date: this.props.date, results: undefined, bins: this.props.place.properties.bins };
 	},
@@ -112,7 +112,7 @@ module.exports = React.createClass({
 		var end = new Date(this.state.date);
 		end.setHours(20,0,0,0);
 
-		var chart = ReactDOM.findDOMNode(this.refs.chart);
+		var chart = ReactDOM.findDOMNode(this.refs['chart'+this.state.place.properties.id.toString()]);
         
     	// Legend on left
     	var tickvals = [-10];
@@ -145,6 +145,7 @@ module.exports = React.createClass({
             },
             margin: { t: 0, b: 20, l: nbCaractMax*8, r: 20} 
         }, {showLink: false, displayModeBar: false} );
+        //console.log('draw final', this.state.place.properties.id);
     },
     render: function() {
 
@@ -182,7 +183,7 @@ module.exports = React.createClass({
        		if(this.state.results !== undefined){
        			height += this.state.results.ticksY.length * 20;
        		}
-       		chartJSX = (<div ref="chart" style={{'textAlign': 'center','width':'100%','height':height.toString()+'px'}}></div>);
+       		chartJSX = (<div ref={'chart'+this.state.place.properties.id.toString()} style={{'textAlign': 'center','width':'100%','height':height.toString()+'px'}}></div>);
        	} 
        	
         var color = "grey";
@@ -206,7 +207,7 @@ module.exports = React.createClass({
 
 
 		return (
-			<Mui.Card style={{'marginTop': '10px'}}>
+			<Mui.Card style={{'marginTop': '10px'}} key={place.properties.id}>
 	            <Mui.CardHeader 
                     title={place.properties.name} 
                     subtitle={place.properties.owner}

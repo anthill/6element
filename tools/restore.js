@@ -32,15 +32,14 @@ connectToDB()
             return new Promise(function(resolve, reject){
                 readStream
                     .pipe(gzip)
-                    .pipe(proc.stdin);
-                readStream.on('end', function() {
-                    resolve();
-                })
-                readStream.on('error', function() {
-                    reject();
-                })
+                    .pipe(proc.stdin)
+                    .on('finish', function() {
+                        resolve();
+                    })
+                    .on('error', function(error) {
+                        reject(error);
+                    })
             });
-            
         }
         else
             spawn('psql', ['-p', process.env.DB_PORT_5432_TCP_PORT, '-h', process.env.DB_PORT_5432_TCP_ADDR, '-U', process.env.POSTGRES_USER, '-w', '-f', inputFile]);

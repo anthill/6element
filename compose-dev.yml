@@ -1,7 +1,7 @@
 api:
    build: ./dockerfiles
    dockerfile: node
-   command: nodemon -L --watch server --watch client/index.html server/index.js
+   command: nodemon -L --watch server --watch client/* server/index.js
    links:
       - db
    ports:
@@ -17,6 +17,8 @@ api:
       - ./:/6element
       - ./backups:/backups/
    tty: true
+   dns:
+      - 8.8.8.8
 
 db:
    build: ./dockerfiles

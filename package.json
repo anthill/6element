@@ -11,8 +11,10 @@
     "stop-prod": "docker-compose -f compose-prod.yml stop",
     "prod": "docker-compose -p 6element -f compose-prod.yml up -d --force-recreate",
     "preprod": "npm run build",
-    "serve-dev": "docker-compose -p 6elementdev -f compose-dev.yml up --force-recreate",
-    "start-dev": "npm-run-all --parallel serve-dev watch",
+    "alpha": "docker-compose -p 6element-alpha -f compose-alpha.yml up -d --force-recreate",
+    "prealpha": "npm run build",
+    "serve-dev": "docker-compose -p 6element-dev -f compose-dev.yml up --force-recreate",
+    "dev": "npm-run-all --parallel serve-dev watch",
     "validate": "npm ls"
   },
   "babel": {

@@ -8,6 +8,7 @@
     "watch": "babel client/views/*.jsx --out-dir . --watch",
     "build": "babel client/views/*.jsx --out-dir .",
     "stop-dev": "docker-compose -p 6elementdev -f compose-dev.yml stop",
+    "stop-alpha": "docker-compose -f compose-alpha.yml stop",
     "stop-prod": "docker-compose -f compose-prod.yml stop",
     "prod": "docker-compose -p 6element -f compose-prod.yml up -d --force-recreate",
     "preprod": "npm run build",

@@ -188,7 +188,7 @@ function draw(node, data){
     // Legend on left
     var tickvals = []; 
     var ticktext = [];
-	var nbCaractMax = width > 350 ? 15 : 9; // 'A' 'f' 'f' 'l' 'u' 'e' 'n' 'c' 'e'
+	var nbCaractMax = width > 350 ? 12 : 9; // 'A' 'f' 'f' 'l' 'u' 'e' 'n' 'c' 'e'
 	ticksY.forEach(function(tickY, index){
 
         tickY = tickY.replace("_1","");
@@ -222,7 +222,7 @@ function draw(node, data){
             showline: false,
             showgrid: false
         },
-        margin: { t: 0, b: 30, l: nbCaractMax*8, r: 20} 
+        margin: { t: 0, b: 30, l: nbCaractMax*7, r: 20} 
     }, {showLink: false, displayModeBar: false} );
 
 }

@@ -6,11 +6,14 @@ var databaseP = require('../management/databaseClientP');
 var places = require('../management/declarations.js').places;
 var networks = require('../management/declarations.js').networks;
 
+
 var jsArrayToPg = function(nodeArray) {
     return "ARRAY['" + nodeArray.join("','") + "']";
 }
 
 module.exports = {
+
+    // ------------- BASICS ---------------
 
     create: function(placesData){
         if(!Array.isArray(placesData))
@@ -63,43 +66,18 @@ module.exports = {
         });
     },
 
-    getWithin: function(coords, bbox, categories, limit){
-        return databaseP.then(function (db) {
-            
-            var strDistance = "st_distance_sphere(places.geom, st_makepoint(" + coords.lon + ", " + coords.lat + ")) AS distance";
-            var filters = categories[0] === "All" ? "": " AND  places.objects ?| " + jsArrayToPg(categories);
-            var query = places
-                .select(places.star(),networks.name.as('file'), networks.color.as('color'), strDistance)
-                .from(places.join(networks).on(places.network.equals(networks.id)))
-                .where("places.geom && ST_MakeEnvelope(" + bbox.minLon + ", " + bbox.minLat + ", " + bbox.maxLon + ", " + bbox.maxLat + ", 4326)" + filters)
-                .order("distance")
-                .limit(limit)
-                .toQuery();
 
-   
-            return new Promise(function (resolve, reject) {
-                db.query(query, function (err, result) {
-                    if (err) reject(err);
+    // ------------- GETTERS ---------------
 
-                    else resolve(result.rows);
-                });
-            });
-        })
-        .catch(function(err){
-            console.log('ERROR in getWithin', err);
-        }); 
-    },
-
-    getKNearest: function(coords, k, categories){
+    getKNearest: function(coords, k){
         return databaseP.then(function (db) {
             
             var strDistance = "st_distance_sphere(places.geom, st_makepoint(" + coords.lon + ", " + coords.lat + ")) ";
             var strDistanceAS = strDistance + "AS distance";
-            var filters = categories[0] === "All" ? "": " AND  places.objects ?| " + jsArrayToPg(categories);
             var query = places
-                .select(places.star(),networks.name.as('file'), networks.color.as('color'), strDistanceAS)
-                .from(places.join(networks).on(places.network.equals(networks.id)))
-                .where(strDistance + "< 50000" + filters)
+                .select(places.star(), strDistanceAS)
+                .from(places)
+                .where(strDistance + "< 50000 and type = 'centre'")
                 .order("distance")
                 .limit(k)
                 .toQuery();
@@ -107,7 +85,6 @@ module.exports = {
             return new Promise(function (resolve, reject) {
                 db.query(query, function (err, result) {
                     if (err) reject(err);
-
                     else resolve(result.rows);
                 });
             });
@@ -116,6 +93,62 @@ module.exports = {
             console.log('ERROR in getKNearest', err);
         }); 
     },
+
+    getByIds: function(placeIds){
+        return databaseP.then(function (db) {
+
+            var query = places
+                .select(places.star())
+                .from(places)
+                .where(places.id.in(placeIds))
+                .toQuery();
+
+            return new Promise(function (resolve, reject) {
+                db.query(query, function (err, result) {
+                    if (err) {
+                        console.log("ERROR in searching place", query);
+                        reject(err);
+                    }
+                    else {
+                        resolve(result.rows);
+                    } 
+                });
+            });
+        })
+        .catch(function(err){
+            console.log('ERROR in get Place', err);
+        });
+    },
+
+    getByOperator: function(operatorName){
+        return databaseP.then(function (db) {
+
+            var query = places
+                        .select("*")
+                        .from(places)
+                        .where(places.owner.equals(operatorName))
+                        .toQuery();
+
+            return new Promise(function (resolve, reject) {
+                db.query(query, function (err, result) {
+                    if (err) {
+                        console.log("ERROR in searching place by operatorName", query);
+                        reject(err);
+                    }
+                    else {
+                        resolve(result.rows);
+                    } 
+                });
+            });
+        })
+        .catch(function(err){
+            console.log('ERROR in get getByOperator', err);
+        });
+    },
+
+
+
+    // ------------- BINS ---------------
 
     getBins: function(pheromonId){
         return databaseP.then(function (db) {
@@ -140,72 +173,6 @@ module.exports = {
         })
         .catch(function(err){
             console.log('ERROR in get Bins', err);
-        });
-    },
-
-    getPlaceById: function(placeId){
-        return databaseP.then(function (db) {
-
-            var query = places
-                .select(places.star(),networks.name.as('file'), networks.color.as('color'))
-                .from(places.join(networks).on(places.network.equals(networks.id)))
-                .where(places.id.equals(placeId))
-                .toQuery();
-
-            return new Promise(function (resolve, reject) {
-                db.query(query, function (err, result) {
-                    if (err) {
-                        console.log("ERROR in searching place", query);
-                        reject(err);
-                    }
-                    else {
-                        resolve(result.rows);
-                    } 
-                });
-            });
-        })
-        .catch(function(err){
-            console.log('ERROR in get Place', err);
-        });
-    },
-
-    getPlacesByOperator: function(operatorName){
-        return databaseP.then(function (db) {
-
-            var query;
-
-            if (operatorName === "all"){
-
-                query = places
-                    .select("*")
-                    .from(places)
-                    .where(places.pheromon_id.isNotNull())
-                    .order(places.owner.desc)
-                    .toQuery();
-
-            } else {
-
-                query = places
-                    .select("*")
-                    .from(places)
-                    .where(places.owner.equals(operatorName))
-                    .toQuery();
-            }
-
-            return new Promise(function (resolve, reject) {
-                db.query(query, function (err, result) {
-                    if (err) {
-                        console.log("ERROR in searching place by operatorName", query);
-                        reject(err);
-                    }
-                    else {
-                        resolve(result.rows);
-                    } 
-                });
-            });
-        })
-        .catch(function(err){
-            console.log('ERROR in get getPlacesByOperator', err);
         });
     },
 

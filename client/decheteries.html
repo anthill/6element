@@ -1,0 +1,43 @@
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta content="" name="6Element" />
+		<title>6Element</title>
+		<link rel="stylesheet" media="screen" href="./css/main.css" />
+		<script defer src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+		<script defer type="text/javascript"
+		  src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyCLuhubHWNbDgBhmj61OUo07L-zjHsVkKw">
+		</script>
+		<script defer src="./js/location.js"></script>
+		<script defer src="./js/panels.js"></script>
+		<script defer src="./js/favorite.js"></script>
+		<script defer src="./js/charts.js"></script>
+		<!--<script src="./js/map.js"></script>-->
+		<!--<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css" />
+		<script defer src="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js"></script>-->
+	</head>
+	<body>
+		<header>
+			<div class="adapt-width">
+				<a id="back" href="/"><img src='./img/back.svg'/></a>
+				<form id="searchbar"> 
+					<input type="text" id="where-input" placeholder="adresse, ville, code postal"/>
+				</form>
+			</div>
+		</header>
+		<article class="overflow">
+			<div class="adapt-width">
+				<div id="sheet" />
+			</div>
+		</article>
+		<!--<nav>
+			<div class="adapt-width">
+				<div id="navigation">
+					<button class="btn-recycling-center">Déchèteries</button>
+					<button class="btn-container">Containeurs</button>
+				</div>
+			</div>
+		</nav>-->
+	</body>
+</html>

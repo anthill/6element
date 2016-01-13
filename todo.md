@@ -1,0 +1,31 @@
+- [ ] le watch sur JSX fontionne mais ne modifie par le serveur
+- [ ] Sockets
+- [ ] debugger css sur tel Romain
+- [ ] Photo d'accueil
+- [ ] Plotly.relayout(graphDiv, update)
+- [ ] Bug android geoloc
+- [ ] Ajouter lien vers google maps et téléphone
+- [ ] Meilleur alignement des coordonées et horaires
+
+- [x] Mettre les scripts en defer
+- [x] Ajouter la date à l'url
+- [x] Afficher la carte ?
+- [x] Ajouter l'url operateur
+- [x] Retirer la key Google API (inutile)
+- [x] Enlever les warnings React (inutile)
+- [x] Mettre les scripts en defer
+- [x] Enlever le bandeau (menu) du bas
+- [x] Scroll déborde sur favoris
+- [x] Ajouter les horaires sur le graph
+- [x] Les cases rouge ne sont pas affichées
+- [x] Quid des décheteries non installées comme Bordeaux
+- [x] -> Ce centre n'est pas équipé 
+- [x] Mettre Pro/Publique dans les infos
+- [x] Bins operateur
+- [x] Change la hauteur du graph en fonction du nombre de labels
+- [x] Adapter la largeur des labels sur le graph
+- [x] Bug Bennes double
+- [x] Page pour les status > 404 -> index
+- [x] Mettre le owner dans les infos  ? -> (Les noms sont bizarres Agglo_Pau)
+- [x] redirect operator:name
+- [x] Il n'y a aucune décheterie à proximité

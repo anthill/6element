@@ -9,7 +9,6 @@
 
 node_modules
 
-*browserify-bundle.js
 
 Tokens.json
 PRIVATE.json
@@ -22,5 +21,5 @@ data/*.json
 
 # files generated for server-side purposes
 
-src/views/*.js
+client/views/*.js
 

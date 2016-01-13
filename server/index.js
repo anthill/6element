@@ -5,37 +5,41 @@ require('es6-shim');
 var fs = require('fs');
 var path = require('path');
 
+// Dumps
 var spawn = require('child_process').spawn;
 var zlib = require('zlib');
 var schedule = require('node-schedule');
 
+// Express
 var express = require('express');
 var bodyParser = require('body-parser');
 var compression = require('compression')
 
-var React = require('react');
-var ReactDOMServer = require('react-dom/server');
-var jsdom = require('jsdom');
+// Server side rendering
+var jsdom       = require('jsdom');
+var react       = require('react');
+var reactServer = require('react-dom/server');
+var parseHtml   = require('./parseHtml');
+var placesView  = require('../client/views/placesView.js');
 
-var makeDocument = require('./makeDocument');
-var networks = require('./database/models/networks.js');
+// Database
 var places = require('./database/models/places.js');
-var search = require('./searchFiles.js');
-var stats = require('./statsFiles.js');
-var dictionary = require('../data/dictionary.json');
-var layoutData = require('../common/layoutData');
-// var mapScreen =  require('../src/views/mapScreen');
-// var placeScreen =  require('../src/views/placeScreen');
-var operatorScreen =  require('../src/views/operatorScreen');
 
-var toGeoJson = require('./toGeoJson.js');
-var withPlacesMeasurements = require('./withPlacesMeasurements.js');
-var PRIVATE = require('../PRIVATE.json');
+// Pheromon API calls
+var getMeasures     = require('./getMeasures');
 
-var app = express();
 
+// ------- INIT SERVER ---------
 var PORT = process.env.VIRTUAL_PORT ? process.env.VIRTUAL_PORT: 3500;
+var app = express();
+var server  = require('http').createServer(app);
 
+app.use(bodyParser.json({limit: '50mb'}));
+app.use(bodyParser.urlencoded({extended: true}));
+app.use(compression());
+
+
+// ---------- BACKUPS ----------
 // Backup database everyday at 3AM
 if (process.env.NODE_ENV === "production") {
     schedule.scheduleJob('0 3 * * *', function(){
@@ -53,17 +57,16 @@ if (process.env.NODE_ENV === "production") {
     });
 }
 
-// Sockets
-var server  = require('http').createServer(app);
-/*
-var io6element = require('socket.io')(server);
-io6element.on('connection', function(){ });*/
 
-var ioPheromon = require('socket.io-client')('https://pheromon.ants.builders');
-ioPheromon.connect();
+// ---------- SOCKETS ----------
+// Frontside sockets to activate
+//var io6element = require('socket.io')(server);
+//io6element.on('connection', function(){ });
 
 // On 'bin' socket received from Pheromon, we will update the concerned bin status
 // + transfer the socket to the client in case of the recycling center being displayed
+var ioPheromon = require('socket.io-client')('https://pheromon.ants.builders');
+ioPheromon.connect();
 ioPheromon.on('bin', function(data){
     
     places.updateBin(data.installed_at, data.bin)
@@ -75,187 +78,105 @@ ioPheromon.on('bin', function(data){
 });
 
 
-// Doesn't make sense to start the server if this file doesn't exist. *Sync is fine.
-var indexHTMLStr = fs.readFileSync(path.join(__dirname, '..', 'src', 'index.html'), {encoding: 'utf8'});
+// ---------- SERVER RENDERING ----------
+// Doesn't make sense to start the server if these files don't exist. 
+var decheteriesHtml = fs.readFileSync(path.join(__dirname, '..', 'client', 'decheteries.html'), {encoding: 'utf8'});
+var indexHtml       = fs.readFileSync(path.join(__dirname, '..', 'client', 'index.html'), {encoding: 'utf8'});
 
-function renderDocumentWithData(doc, data, reactComponent){   
-    console.log('server side rendering'); 
-    doc.getElementById('reactHere').innerHTML = ReactDOMServer.renderToString( React.createElement(reactComponent, data) );
-    
-    var initDataInertElement = doc.querySelector('script#init-data');
-    if(initDataInertElement)
-        initDataInertElement.textContent = JSON.stringify(data);
-}
-
-function renderAndSend (req, res, props, view) {
-        makeDocument(indexHTMLStr).then(function(result){
-            var doc = result.document;
-            var dispose = result.dispose;
-
-            // Material-ui needs to change the global.navigator.userAgent property
-            // (just during the React  rendering)
-            // Waiting for Material team to fix it 
-            //https://github.com/callemall/material-ui/pull/2007#issuecomment-155414926
-            global.navigator = {'userAgent': req.headers['user-agent']};
-            renderDocumentWithData(doc, props, view);
-            //global.navigator = undefined;
-
-            res.send( jsdom.serializeDocument(doc) );
-            dispose();
-        })
-        .catch(function(err){ console.error('/', err, err.stack); }); 
-}
-
-app.use(bodyParser.json({limit: '50mb'}));
-app.use(bodyParser.urlencoded({extended: true}));
-app.use(compression());
-
-
-var getOperator = function(req, res, mode){
-
-    layoutData['mode'] = mode === 'operator' ? 'operator' : 'citizen';
-
-    var name = "all";
-    if (req.params.name)
-        name = req.params.name;
-
-
-    var dataP = places.getPlacesByOperator(name);
-
-    if(req.headers.accept.includes('application/json')){
-        console.log('==== calling /operator/ for JSON');
-
-        dataP
-        .then(function(data){
-            res.send(data);
-        })
-        .catch(function(error){
-            res.status(500).send('Couldn\'t get place of operator from database');
-            console.log('error in GET /operator/' + name, error);
-        });
+// Redirecting previous url
+app.get('/operator/:name', function(req,res){
+    if (req.params.name){
+        var now = new Date();
+        var strDate = now.getDate().toString()+'-'+(now.getMonth()+1).toString()+'-'+now.getFullYear().toString();
+        res.redirect("/decheteries.html?operateur="+req.params.name+"&date="+strDate);
     }
     else{
-        console.log('==== calling /operator/ for HTML');
+        redirectError(res, "La page que vous recherchez n'existe pas");
+    }
+});
 
-        dataP
-        .then(function(data){
-            toGeoJson(data)
-                .then(function(geoJson){
-                
-                    var list = geoJson.map(function(place){
-                        return {'index': 0, 'pheromon_id': place.properties.pheromon_id};
-                    })
-                    withPlacesMeasurements(list)
-                    .then(function(measures){
+// Main routing path
+app.get('/decheteries.html', function(req,res){
+    
+    var selection = {
+        date: new Date(),
+        mode: 'citizen',
+        places: undefined
+    }
+   
+    // Default date = today
+    if(req.query.date !== undefined){
+        
+        var strDate = req.query.date.split('-');
+        selection.date = new Date(strDate[2],strDate[1]-1, strDate[0]);
+    }
+    
+    var getPlaces = undefined;// Find the good method
 
-                        var placesData = geoJson.map(function(place, index){
-                            var measure = measures[index];
-                            if(measure)
-                                place["measurements"] = {latest: measure.latest, max: measure.max};
-                            else
-                                place["measurements"] = undefined;
-                            return place;
-                        });                          
-
-                        layoutData.places = placesData;
-                        renderAndSend(req, res, layoutData, operatorScreen);
-                    })
-                    .catch(function(error){
-                        res.status(500).send('Couldn\'t get latest measurements');
-                        console.log('error in GET /operator/' + name, error);
-                    });
-                })
-                .catch(function(error){
-                    res.status(500).send('Couldn\'t convert to geojson');
-                    console.log('error in GET /operator/' + name, error);
-                });
-        })
-        .catch(function(error){
-            res.status(500).send('Couldn\'t get place of operator from database');
-            console.log('error in GET /operator/' + name, error);
-        });
+    // 'A proximité' or search activated
+    if(req.query.position !== undefined){
+        
+        var position = JSON.parse(req.query.position);
+        getPlaces = places.getKNearest({ lat: position[0], lon: position[1] }, 20);
+    }
+    // 'Mes déchèteries' activated
+    else if(req.query.places !== undefined){
+        
+        var ids = JSON.parse(req.query.places);
+        getPlaces = places.getByIds(ids);
+    }
+    // Operateur path
+    else if(req.query.operateur !== undefined){
+        
+        selection.mode = 'operator';
+        var operator = req.query.operateur;
+        getPlaces = places.getByOperator(operator);
     }
 
-}
+    if(getPlaces === undefined) 
+        return redirectError(res, "Erreur de traitement, veuillez renouveller votre recherche");
+  
+    // DB places
+    getPlaces
+    .then(function(placesFromDB){
 
-app.get('/', getOperator);
-app.get('/operator/:name', function(req,res){
-    getOperator(req,res,'operator')
+        selection.places = placesFromDB;
+        
+        // + measures
+        getMeasures(selection)
+        .then(function(placesWithMeasures){
+
+            selection.places = placesWithMeasures;
+            
+            // 1. parse the html template
+            parseHtml(decheteriesHtml).
+            then(function(result){
+                // 2. insert the react component rendered
+                result.document.getElementById('sheet').innerHTML = reactServer.renderToString( react.createElement(placesView, selection) );
+                // 3. send Html 
+                res.send( jsdom.serializeDocument(result.document) );
+                // 4. Free memory
+                result.dispose();
+            })
+            .catch(function(err){ 
+                console.error('/', err, err.stack); 
+                redirectError(res, "Erreur de traitement, veuillez renouveller votre recherche");
+            }); 
+        })
+        .catch(function(err){
+            console.error('/', err, err.stack); 
+            redirectError(res, "Erreur de traitement, veuillez renouveller votre recherche");
+        });
+    })
+    .catch(function(err){
+        console.error('/', err, err.stack); 
+        redirectError(res, "Erreur de traitement, veuillez renouveller votre recherche");
+    });
 });
-app.get('/operateur/:name', function(req,res){
-    getOperator(req,res,'operator')
-});
-   
 
-// app.get('/place/:placeId/', function(req, res){
-//     var placeId = Number(req.params.placeId);
 
-//     if(req.headers.accept.includes('application/json'))
-//         console.log('==== calling /place/ for JSON');
-//     else
-//         console.log('==== calling /place/ for HTML');
 
-//     places.getPlaceById(placeId)
-//     .then(function(data){
-//         toGeoJson(data)
-//         .then(function(geoJson){
-
-//             var place = geoJson[0];
-
-//             if (place.properties.pheromon_id){
-
-                
-//                 var list = [{'index': 0, 'pheromon_id': place.properties.pheromon_id}]
-//                 withPlacesMeasurements(list)
-//                 .then(function(measures){
-
-//                     if(measures !== null && measures.length > 0){
-//                         var measure = measures[0];
-//                         if(measure)
-//                             place["measurements"] = {latest: measure.latest, max: measure.max};
-//                         else
-//                             place["measurements"] = undefined;
-//                     }
-//                     if(req.headers.accept.includes('application/json')){
-//                         res.setHeader('Content-Type', 'application/json');
-//                         res.send(JSON.stringify(place));
-//                     } else {
-//                         layoutData.detailedObject = place;
-//                         renderAndSend(req, res, layoutData, placeScreen);
-//                     }
-//                 })
-//                 .catch(function(err){
-//                     console.error(err);
-//                     if(req.headers.accept.includes('application/json')){
-//                         res.setHeader('Content-Type', 'application/json');
-//                         res.send(JSON.stringify(place));
-//                     } else {
-//                         layoutData.detailedObject = place;
-//                         renderAndSend(req, res, layoutData, placeScreen);
-//                     }
-//                 });
-//             }
-//             else {
-//                 if(req.headers.accept.includes('application/json')){
-//                     res.setHeader('Content-Type', 'application/json');
-//                     res.send(JSON.stringify(place));
-//                 } else {
-//                     layoutData.detailedObject = place;
-//                     renderAndSend(req, res, layoutData, placeScreen);
-//                 }
-//             }
-//         })
-//         .catch(function(error){
-//             res.status(500).send('Couldn\'t get place from database');
-//             console.log('error in GET /place/' + placeId, error);
-//         });
-//     })
-//     .catch(function(error){
-//         res.status(500).send('Couldn\'t get place and measurements from database');
-//         console.log('error in GET /place/' + placeId, error);
-//     });
-// });
-
+// ---------- API ----------
 
 app.get('/bins/get/:pheromonId', function(req, res){
     if(req.query.s === PRIVATE.secret) {
@@ -290,35 +211,36 @@ app.post('/bins/update', function(req, res){
     } else res.status(403).send({success: false, message: 'No token provided.'});
 });
 
-app.get('/bundle/browserify-bundle.js', function(req, res){
-    res.sendFile(path.join(__dirname, '..', 'src', 'browserify-bundle.js'));
-});
 
-app.use("/css/leaflet.css", express.static(path.join(__dirname, '../node_modules/leaflet/dist/leaflet.css')));
-app.use("/images-leaflet", express.static(path.join(__dirname, '../node_modules/leaflet/dist/images')));
 
-app.post('/search', search);
-app.post('/stats', stats);
-app.get('/networks', function(req, res){
-    networks.getAll()
-    .then(function(data){
-        res.setHeader('Content-Type', 'application/json');
-        res.send(JSON.stringify(data));
+app.use(express.static(__dirname + '/../client'));
+
+// ---------- CATCH ERRORS ----------
+
+function redirectError(res, error){
+    // 1. parse the html template
+    parseHtml(indexHtml).
+    then(function(result){
+        // 2. insert the react component rendered
+        result.document.getElementById('errorposition').innerHTML = error;
+        // 3. send Html 
+        res.send( jsdom.serializeDocument(result.document) );
+        // 4. Free memory
+        result.dispose();
     })
-    .catch(function(err){
-        console.log('/networks error', err);
+    .catch(function(err){ 
+        console.error('/', err, err.stack); 
         res.status(500).send(err);
-    });
+    }); 
+}
+
+// catchall
+app.use(function(req, res){
+    redirectError(res, "La page que vous recherchez n'existe pas");
 });
 
-var categoriesStr = JSON.stringify(dictionary);
-app.get('/categories', function(req, res){
-    res.setHeader('Content-Type', 'application/json');
-    res.send(categoriesStr);
-});
 
-app.use('/', express.static(path.join(__dirname, '../src')));
-
+// -------- SERVER LISTENING --------
 
 server.listen(PORT, function () {
     console.log('Server running on', [
@@ -326,4 +248,5 @@ server.listen(PORT, function () {
         PORT
     ].join(''));
 });
+
 

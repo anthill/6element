@@ -1,0 +1,50 @@
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta content="" name="6Element" />
+		<title>6Element</title>
+		<link rel="stylesheet" media="screen" href="./css/main.css" />
+		<script defer type="text/javascript"
+		  src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyCLuhubHWNbDgBhmj61OUo07L-zjHsVkKw">
+		</script>
+		<script defer src="./js/location.js"></script>
+		<script defer src="./js/favorite.js"></script>
+	</head>
+	<body>
+		<header>
+			<div class="adapt-width">
+				<form id="searchbar"> 
+					<input type="text" id="where-input" placeholder="adresse, ville, code postal"/>
+				</form>
+			</div>
+		</header>
+		<article>
+			<div class="adapt-width">
+				<div id="sheet">
+					<menu id="location">
+						<button class="btn-favorite" onclick="getFavorites()">Mes déchèteries</button>
+						<button class="btn-locate" onclick="getCurrentPosition()">A proximité</button>
+						<div id="errorposition"></div>
+					</menu>
+					<div id="mvp">
+						<p>
+							Trouvez la déchèterie la plus proche.<br/>
+							Visualisez son affluence en direct.<br/>
+							Suivez la disponibilité de ses bennes.
+						</p>
+						<div class="background">
+					</div>
+				</div>
+			</div>
+		</article>
+		<!--<nav>
+			<div class="adapt-width">
+				<div id="navigation">
+					<button class="btn-recycling-center">Déchèteries</button>
+					<button class="btn-container">Containeurs</button>
+				</div>
+			</div>
+		</nav>-->
+	</body>
+</html>

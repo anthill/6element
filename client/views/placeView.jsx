@@ -23,7 +23,6 @@ module.exports = React.createClass({
 	 	var oh = place.opening_hours === null ? undefined :
             	new opening_hours(place.opening_hours);
     	var isOpen = oh ? oh.getState() : true;
-        console.log(place.name, place.opening_hours);
     	var calendarJSX = NotEmpty(place.opening_hours) ?
 		(<Calendar opening_hours={place.opening_hours} />) : "";
 
@@ -60,7 +59,8 @@ module.exports = React.createClass({
             coordinatesJSX.push(<br/>);
         }
         
-        coordinatesJSX.push(<a id={'pos-'+id} href={"geo:"+place.lat+","+place.lon} target="_blank"><em>afficher le plan</em></a>);
+        coordinatesJSX.push(<a id={'pos-'+id} href={"http://maps.apple.com/?q="
+			+place.lat+","+place.lon}><em>afficher le plan</em></a>);
         coordinatesJSX.push(<br/>);
 
         coordinatesJSX.push(<br/>);

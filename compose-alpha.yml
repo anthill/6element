@@ -7,6 +7,7 @@ api:
    ports:
       - "8001:8001"
    environment:
+      - VIRTUAL_HOST=6element-alpha.ants.builders
       - VIRTUAL_PORT=8001
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres

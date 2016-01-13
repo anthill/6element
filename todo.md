@@ -3,13 +3,13 @@
 - [ ] debugger css sur tel Romain
 - [ ] Photo d'accueil
 - [ ] Plotly.relayout(graphDiv, update)
-- [ ] Bug android geoloc
-- [ ] Ajouter lien vers google maps et téléphone
 - [ ] Meilleur alignement des coordonées et horaires
 
 - [x] Mettre les scripts en defer
 - [x] Ajouter la date à l'url
 - [x] Afficher la carte ?
+- [x] Bug android geoloc
+- [x] Ajouter lien vers google maps et téléphone
 - [x] Ajouter l'url operateur
 - [x] Retirer la key Google API (inutile)
 - [x] Enlever les warnings React (inutile)
@@ -29,3 +29,6 @@
 - [x] Mettre le owner dans les infos  ? -> (Les noms sont bizarres Agglo_Pau)
 - [x] redirect operator:name
 - [x] Il n'y a aucune décheterie à proximité
+
+
+delete from places where opening_hours is null;

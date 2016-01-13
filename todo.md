@@ -29,3 +29,6 @@
 - [x] Mettre le owner dans les infos  ? -> (Les noms sont bizarres Agglo_Pau)
 - [x] redirect operator:name
 - [x] Il n'y a aucune décheterie à proximité
+
+
+delete from places where opening_hours is null;

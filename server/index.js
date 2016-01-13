@@ -30,7 +30,7 @@ var getMeasures     = require('./getMeasures');
 
 
 // ------- INIT SERVER ---------
-var PORT = process.env.VIRTUAL_PORT ? process.env.VIRTUAL_PORT: 3500;
+var PORT = process.env.VIRTUAL_PORT ? process.env.VIRTUAL_PORT: 8000;
 var app = express();
 var server  = require('http').createServer(app);
 

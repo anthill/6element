@@ -5,10 +5,10 @@ api:
    links:
       - db
    ports:
-      - "3500:3500"
+      - "8000:8000"
    environment:
-      - VIRTUAL_HOST=6element.fr,6element.org,6element.net,6element.eu
-      - VIRTUAL_PORT=3500
+      - VIRTUAL_HOST=6element.fr
+      - VIRTUAL_PORT=8000
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
       - PGPASSWORD=postgres

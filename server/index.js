@@ -5,6 +5,8 @@ require('es6-shim');
 var fs = require('fs');
 var path = require('path');
 
+var PRIVATE = require('../PRIVATE.json');
+
 // Dumps
 var spawn = require('child_process').spawn;
 var zlib = require('zlib');

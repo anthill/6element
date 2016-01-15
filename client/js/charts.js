@@ -1,24 +1,8 @@
 'use strict';
 
-var fromUTC = function(str){
+function formatDate (date) {
 
-    var tmp = str.split('T');
-    var vDate = tmp[0].split('-');
-    var vTime = tmp[1].split(':');
-
-    var yyyy = parseInt(vDate[0]);
-    var MM = parseInt(vDate[1]);
-    var dd = parseInt(vDate[2]);
-    var hh = parseInt(vTime[0]);
-    var mm = parseInt(vTime[1]);
-    var ss = parseInt(vTime[2]);
-
-    return new Date(Date.UTC(yyyy,MM-1,dd,hh,mm,ss));
-}
-
-var formatDate = function(date) {
-
-    var pad = function(number) {
+    function pad (number) {
         if ( number < 10 ) {
             return '0' + number;
         }
@@ -33,7 +17,7 @@ var formatDate = function(date) {
         '.000000';
  }
 
- var getSeries = function(xSignals, ySignals, xGreen, yGreen, xOrange, yOrange, xRed, yRed, xGrey, yGrey){
+ function getSeries (xSignals, ySignals, xGreen, yGreen, xOrange, yOrange, xRed, yRed, xGrey, yGrey){
 
     // Bind chart structure
     return [{
@@ -43,12 +27,12 @@ var formatDate = function(date) {
             x: xSignals,
             y: ySignals,
             marker: {
-            symbol: "x",
+            symbol: 'x',
                 color: '#E400B9'
             },
             line: {shape: 'spline'},
             mode: 'lines',
-            hoverinfo: "none"
+            hoverinfo: 'none'
         },
         {
             type: 'scatter',
@@ -57,11 +41,11 @@ var formatDate = function(date) {
             x: xGreen,
             y: yGreen,
             marker: {
-                symbol: "square",
+                symbol: 'square',
                 color: '#7fdc2b'
             },
             mode: 'markers',
-            hoverinfo: "none"
+            hoverinfo: 'none'
         },
         {
             type: 'scatter',
@@ -70,11 +54,11 @@ var formatDate = function(date) {
             x: xOrange,
             y: yOrange,
             marker: {
-                symbol: "square",
+                symbol: 'square',
                 color: '#ffb800'
             },
             mode: 'markers',
-            hoverinfo: "none"
+            hoverinfo: 'none'
         },
         {
             type: 'scatter',
@@ -83,11 +67,11 @@ var formatDate = function(date) {
             x: xRed,
             y: yRed,
             marker: {
-                symbol: "square",
+                symbol: 'square',
                 color: '#ff3b6c'
             },
             mode: 'markers',
-            hoverinfo: "none"
+            hoverinfo: 'none'
         },
         {
             type: 'scatter',
@@ -96,11 +80,11 @@ var formatDate = function(date) {
             x: xGrey,
             y: yGrey,
             marker: {
-                symbol: "square",
+                symbol: 'square',
                 color: '#FFFFFF'
             },
             mode: 'markers',
-            hoverinfo: "none"
+            hoverinfo: 'none'
         }
     ];
 
@@ -117,19 +101,19 @@ function draw(node, data){
     var xRed = [], yRed = []; 
     var xGrey = [], yGrey = []; 
 
-	var now = new Date();
-	// binding inputs for API
-	var start = new Date(now);
-	start.setHours(8,0,0,0);
-	var end = new Date(now);
-	end.setHours(20,0,0,0);
+    var now = new Date();
+    // binding inputs for API
+    var start = new Date(now);
+    start.setHours(8,0,0,0);
+    var end = new Date(now);
+    end.setHours(20,0,0,0);
 
     var ticksX = [];
     var ticksY = Object.keys(data);
 
     ticksY.forEach(function(tickY, index){
 
-        var isAffluence = tickY === "Affluence"; 
+        var isAffluence = tickY === 'Affluence'; 
 
         var prev = -2;
  
@@ -183,15 +167,15 @@ function draw(node, data){
     
     });
     
-   	var traces = getSeries(xSignals, ySignals, xGreen, yGreen, xOrange, yOrange, xRed, yRed, xGrey, yGrey);
+    var traces = getSeries(xSignals, ySignals, xGreen, yGreen, xOrange, yOrange, xRed, yRed, xGrey, yGrey);
     
     // Legend on left
     var tickvals = []; 
     var ticktext = [];
-	var nbCaractMax = width > 350 ? 12 : 9; // 'A' 'f' 'f' 'l' 'u' 'e' 'n' 'c' 'e'
-	ticksY.forEach(function(tickY, index){
+    var nbCaractMax = width > 350 ? 12 : 9; // 'A' 'f' 'f' 'l' 'u' 'e' 'n' 'c' 'e'
+    ticksY.forEach(function(tickY, index){
 
-        tickY = tickY.replace("_1","");
+        tickY = tickY.replace('_1','');
 
         // Value on Yaxis
         if(index === 0) tickvals.push(-10);
@@ -201,12 +185,12 @@ function draw(node, data){
         if(tickY.length > nbCaractMax+1)
             tickY = tickY.substr(0,nbCaractMax)+'.';
         ticktext.push(tickY);
-		if(tickY.length > nbCaractMax)
-			nbCaractMax = tickY.length;
-	});
-	var minTick = ticksY.length*-20 - 40;
-	    
-    Plotly.newPlot( node, traces, 
+        if(tickY.length > nbCaractMax)
+            nbCaractMax = tickY.length;
+    });
+    var minTick = ticksY.length*-20 - 40;
+        
+    Plotly.newPlot( node, traces, // eslint-disable-line
     {
         xaxis:{
             type: 'date',
@@ -229,17 +213,17 @@ function draw(node, data){
 
 function drawAllCharts(){
 
-	var list = document.getElementsByClassName("data");
-	for(var i= 0; i<list.length; ++i){
+    var list = document.getElementsByClassName('data');
+    for(var i= 0; i<list.length; ++i){
 
-		var node = list[i];
+        var node = list[i];
         var id = node.id.replace('data-','');
         var data = [];
         if(node.innerHTML !== ''){
             data = JSON.parse(node.innerHTML);
         }
         draw(document.getElementById('chart-'+id), data);
-	}
+    }
 }
 
 drawAllCharts();

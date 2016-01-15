@@ -23,6 +23,8 @@ process.on('exit', function() {
 	// I haven't found how to output actual error code... so this will do the trick for now
 	if (report.errorCount > 0)
 		process.exit(99); 
-	else
+	else {
+		console.log('--- Valid ---');
 		process.exit();
+	}
 });

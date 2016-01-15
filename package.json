@@ -10,7 +10,7 @@
     "stop-dev": "docker-compose -p dev6element -f compose-dev.yml stop",
     "stop-alpha": "docker-compose -p alpha6element -f compose-alpha.yml stop",
     "stop-prod": "docker-compose -f compose-prod.yml stop",
-    "prod": "docker-compose -p alpha6element -f compose-prod.yml up -d --force-recreate",
+    "prod": "docker-compose -f compose-prod.yml up -d --force-recreate",
     "preprod": "npm run build",
     "alpha": "docker-compose -p alpha6element -f compose-alpha.yml up -d --force-recreate",
     "prealpha": "npm run build",

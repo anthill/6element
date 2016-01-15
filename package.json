@@ -4,6 +4,7 @@
   "description": "Reducing waste with sensors and an app",
   "main": "index.js",
   "scripts": {
+    "postinstall": "if [ -d .git ]; then cp ./git-hooks/pre-commit ./.git/hooks/pre-commit; chmod a+x ./.git/hooks/pre-commit; fi",
     "lint": "eslint .",
     "watch": "babel client/views/*.jsx --out-dir . --watch",
     "build": "babel client/views/*.jsx --out-dir .",

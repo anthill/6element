@@ -1,6 +1,5 @@
 {
     rules: {
-        strict: [2, "global"],
         eqeqeq: 2,
         dot-notation: 0,
         no-shadow: 1,
@@ -11,7 +10,7 @@
         ],
         no-native-reassign: 1,
         no-process-exit: 0,
-        no-func-assign: 0,
+        no-func-assign: 1,
         eol-last: 1,
         no-trailing-spaces: 1,
         semi-spacing: 1,
@@ -23,30 +22,33 @@
                 ]
             }
         ],
-        semi: 0,
-        quotes: 0,
+        semi: 2,
+        quotes: [1, "single"],
         no-trailing-spaces: 0,
         no-multi-spaces: 0,
         space-infix-ops: 0,
         no-underscore-dangle: 0,
         key-spacing: 0,
         camelcase: 0,
+        no-extra-strict: 0,
         no-spaced-func: 0,
         consistent-return: 0,
         no-loop-func: 1,
-        no-console: 0
+        no-console: 0,
+        no-redeclare: 1,
+        func-style: [2, "declaration"]
     },
     "env": {
         "es6": true,
         "browser": true,
         "node": true
     },
-    "globals": {
-        "L": true
-    },
     "extends": "eslint:recommended",
     "ecmaFeatures": {
         "jsx": true,
         "experimentalObjectRestSpread": true
-    }
+    },
+    "plugins": [
+        "react"
+    ]
 }

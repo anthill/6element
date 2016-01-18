@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 var React = require('react');
 var opening_hours = require('opening_hours');
@@ -6,13 +6,13 @@ var opening_hours = require('opening_hours');
 function getMonday(d) {
   d = new Date(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate());
   var day = d.getDay(),
-      diff = d.getDate() - day + (day == 0 ? -6:1); // adjust when day is sunday
+      diff = d.getDate() - day + (day === 0 ? -6:1); // adjust when day is sunday
   return new Date(d.setDate(diff));
 }
 
 function getHour(date){
-  var hours = date.getHours() < 10 ? "0" + date.getHours() : date.getHours();
-  var minutes = date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes();
+  var hours = date.getHours() < 10 ? '0' + date.getHours() : date.getHours();
+  var minutes = date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes();
   return hours + ':' + minutes;  
 }
 
@@ -48,7 +48,7 @@ module.exports = React.createClass({
     calendar = calendar.map(function(day){
       return {
         name: day.name,
-        slots: day.slots.length===0?"Fermé":day.slots.join(' '),
+        slots: day.slots.length===0?'Fermé':day.slots.join(' '),
         index: -1
       }
     });
@@ -78,7 +78,7 @@ module.exports = React.createClass({
         })
       }
       else{
-        var name = "Tous les jours";
+        var name = 'Tous les jours';
         if(times.length !== 1){
           name = days.map(function(day){
             return days.length===1?day.name:day.name.substring(0,2);

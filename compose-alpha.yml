@@ -1,7 +1,7 @@
 api:
    build: ./dockerfiles
    dockerfile: node
-   command: nodemon -L --watch server --watch client/* server/index.js
+   command: node server/index.js
    links:
       - db
    ports:
@@ -12,13 +12,11 @@ api:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
       - PGPASSWORD=postgres
-      - NODE_ENV=development
+      - NODE_ENV=alpha
    volumes:
       - ./:/6element
       - ./backups:/backups/
    tty: true
-   dns:
-      - 8.8.8.8
 
 db:
    build: ./dockerfiles

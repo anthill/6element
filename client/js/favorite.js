@@ -30,7 +30,7 @@ function changeFavorite(e){
 	  hitType: 'event',
 	  eventCategory: 'Favorites',
 	  eventAction: 'changeFavorite',
-	  eventLabel: id + ':' + isFavorite ? 'false' : true;
+	  eventLabel: id + ':' + (isFavorite ? 'false' : 'true')
 	});
 }
 

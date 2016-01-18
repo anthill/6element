@@ -26,11 +26,11 @@ function formatDate (date) {
             showlegend: false,
             x: xSignals,
             y: ySignals,
-            marker: {
-            symbol: 'x',
-                color: '#E400B9'
+            line: {
+                shape: 'spline',
+                color: '#E400B9',
+                connectgaps: false
             },
-            line: {shape: 'spline'},
             mode: 'lines',
             hoverinfo: 'none'
         },
@@ -134,9 +134,9 @@ function draw(node, data){
                     ticksX.push(strDate);
             }
         
-            if(value >= 0 && isAffluence){
+            if(isAffluence){
                 xSignals.push(strDate);
-                ySignals.push(value);
+                ySignals.push(value >= 0 ? value : {undefined});
             }
 
              // Color 

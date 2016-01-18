@@ -86,6 +86,23 @@ var fromUTC = function(str){
     return new Date(Date.UTC(yyyy,MM-1,dd,hh,mm,ss));
 }
 
+function formatDate (date) {
+
+    function pad (number) {
+        if ( number < 10 ) {
+            return '0' + number;
+        }
+        return number;
+    }
+    return date.getFullYear() +
+        '-' + pad( date.getMonth() + 1 ) +
+        '-' + pad( date.getDate() ) +
+        ' ' + pad( date.getHours() ) +
+        ':' + pad( date.getMinutes() ) +
+        ':' + pad( date.getSeconds() ) +
+        '.000000';
+ }
+
 function processMeasures(place, start, end, mode){
 
     var oh = place.opening_hours === null ? undefined :
@@ -99,7 +116,8 @@ function processMeasures(place, start, end, mode){
         place.measures.today !== undefined){
 
         measures = place.measures.today.map(function(measure){
-            var date = fromUTC(measure.date); // UTC -> Local               
+            //console.log(measure.date, '->', measure.value.length);
+            var date = new Date(measure.date);              
             return { date: date, signals: measure.value.length }
         });
     }
@@ -178,7 +196,7 @@ function processMeasures(place, start, end, mode){
             return measure.value.id === binName;
         })
         .map(function(measure){
-            var date = fromUTC(measure.date); // UTC -> Local                   
+            var date = new Date(measure.date); // UTC -> Local                   
             return { date: date, bin: measure.value }
         })
         .sort(function(m1, m2){

@@ -136,7 +136,7 @@ app.get('/decheteries.html', function(req,res){
     }
 
     if(getPlaces === undefined) 
-        return redirectError(res, "Erreur de traitement, veuillez renouveller votre recherche");
+        return redirectError(res, "Erreur de traitement, veuillez renouveler votre recherche");
   
     // DB places
     getPlaces
@@ -162,17 +162,17 @@ app.get('/decheteries.html', function(req,res){
             })
             .catch(function(err){ 
                 console.error('/', err, err.stack); 
-                redirectError(res, "Erreur de traitement, veuillez renouveller votre recherche");
+                redirectError(res, "Erreur de traitement, veuillez renouveler votre recherche");
             }); 
         })
         .catch(function(err){
             console.error('/', err, err.stack); 
-            redirectError(res, "Erreur de traitement, veuillez renouveller votre recherche");
+            redirectError(res, "Erreur de traitement, veuillez renouveler votre recherche");
         });
     })
     .catch(function(err){
         console.error('/', err, err.stack); 
-        redirectError(res, "Erreur de traitement, veuillez renouveller votre recherche");
+        redirectError(res, "Erreur de traitement, veuillez renouveler votre recherche");
     });
 });
 

@@ -17,6 +17,8 @@ api:
       - ./:/6element
       - ./backups:/backups/
    tty: true
+   dns:
+      - 8.8.8.8
 
 db:
    build: ./dockerfiles

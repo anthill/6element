@@ -25,6 +25,13 @@ function changeFavorite(e){
 	var cookie_places = getCookie('6element-places') || "";
 	if(isFavorite) 	setCookie('6element-places', cookie_places.replace(id + ';',''));// remove place in cookie
 	else 			setCookie('6element-places', cookie_places + id + ';');// add place in cookie
+
+	ga('send', {
+	  hitType: 'event',
+	  eventCategory: 'Favorites',
+	  eventAction: 'changeFavorite',
+	  eventLabel: id + ':' + isFavorite ? 'false' : true;
+	});
 }
 
 function initializeAllFavorites(){

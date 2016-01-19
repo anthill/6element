@@ -1,5 +1,3 @@
-- [ ] Google Analytics
-- [ ] Découper les courbes sur les périodes discontinues
 - [ ] Sockets
 - [ ] debugger css sur tel Romain
 - [ ] Photo d'accueil
@@ -32,6 +30,9 @@
 - [x] Il n'y a aucune décheterie à proximité
 - [X] le watch sur JSX fontionne mais ne modifie par le serveur
 - [X] Corriger faute d'orthographe sur le message d'erreur
+- [X] Google Analytics
+- [X] Découper les courbes sur les périodes discontinues
+- [X] Bug de décalage de dates
 
 
 delete from places where opening_hours is null;

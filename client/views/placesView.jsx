@@ -14,9 +14,6 @@ module.exports = React.createClass({
 				return (<PlaceView key={'place'+place.id} place={place} date={self.props.date} mode={self.props.mode} />);
 			});
 
-		/*<button id="btn-map">Afficher la carte</button>
-				<div id="map" className="hide-map"/>*/
-
 		return (
 			<div id="places">
 				{placesJSX}

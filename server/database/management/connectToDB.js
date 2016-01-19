@@ -1,16 +1,9 @@
 'use strict';
 
 var pg = require('pg');
+var PRIVATE = require('../PRIVATE.json');
 
-var conString = [
-    'postgres://',
-    process.env.POSTGRES_USER,
-    ':', 
-    process.env.POSTGRES_PASSWORD,
-    '@db/postgres'
-].join('');
-
-console.log('conString', conString);
+var conString = 'postgres://'+ PRIVATE.pg_user + ':' + PRIVATE.pg_pwd + '@localhost:5432/' + PRIVATE.db_name;
 
 var MAX_ATTEMPTS = 10;
 var INITIAL_TIMEOUT_TIME = 100;
@@ -27,11 +20,14 @@ module.exports = function(){
 
                 client.connect(function(err) {
                     if(err){
+                        console.log("Couldn't connect to db");
                         if(attempts >= MAX_ATTEMPTS)
                             reject(err); 
-                        else
+                        else {
                             // wait twice more to give time and not overwhelm the database with useless attempts to connect
+                            console.log("Retrying in ", 2*time);
                             tryConnect(2*time); 
+                        }
                     }
                     else{
                         resolve(client);

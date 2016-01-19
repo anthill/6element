@@ -1,7 +1,7 @@
 'use strict';
 
 var pg = require('pg');
-var PRIVATE = require('../PRIVATE.json');
+var PRIVATE = require('../../../PRIVATE.json');
 
 var conString = 'postgres://'+ PRIVATE.pg_user + ':' + PRIVATE.pg_pwd + '@localhost:5432/' + PRIVATE.db_name;
 

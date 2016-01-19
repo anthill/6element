@@ -40,7 +40,7 @@ module.exports = React.createClass({
 	 	// OPENING HOURS
 	 	var oh = place.opening_hours === null ? undefined :
             	new opening_hours(place.opening_hours);
-        var now = new Date(momentTZ().tz('Europe/Paris').format());
+        var now = momentTZ().tz('Europe/Paris').toDate();
         //console.log(now);
         //var now = fromUTC(momentTZ().tz('Europe/Paris').format());
  

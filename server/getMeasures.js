@@ -85,7 +85,6 @@ function processMeasures(place, start, end, mode){
         place.measures.today !== undefined){
 
         measures = place.measures.today.map(function(measure){
-            //console.log(measure.date, '->', measure.value.length);
             var date = new Date(measure.date);              
             return { date: date, signals: measure.value.length }
         });
@@ -95,13 +94,13 @@ function processMeasures(place, start, end, mode){
                 place.measures.latest !== undefined) ? 
                 place.measures.latest.max: 0;
     var nbTicksX = (20-8)*4; // every 15 minutes from 8am to 8pm
-    var now = new Date(momentTZ().tz('Europe/Paris').format());
+    var now = momentTZ().tz('Europe/Paris').toDate();
 
     // For each tick of 15 minutes
     for (var i = 0; i<nbTicksX; ++i) {
 
-        var beginTick   = new Date(start.getTime() + i*15*60*1000);
-        var endTick     = new Date(start.getTime() + (i+1)*15*60*1000);
+        var beginTick   = moment(start).add(15*i,'minutes').toDate();
+        var endTick     = moment(start).add(15*(i+1),'minutes').toDate();
         
         var date = new Date(now);
         date.setHours(8+Math.floor(i/4),i*15%60, 0);
@@ -182,8 +181,8 @@ function processMeasures(place, start, end, mode){
             var iTickXEnd = iTickXStart;
             for (var i = 0; i<nbTicksX; ++i) {
 
-                var beginTick   = new Date(start.getTime() + i*15*60*1000);
-                var endTick     = new Date(start.getTime() + (i+1)*15*60*1000);
+                var beginTick   = moment(start).add(15*i,'minutes').toDate();
+                var endTick     = moment(start).add(15*(i+1),'minutes').toDate();
 
                 if(measure.date < endTick) break;
                 if(endTick > now ) break;
@@ -207,10 +206,8 @@ function processMeasures(place, start, end, mode){
         // 2) For the rest of the day, we expand the last status of avilability
         for (var i = iTickXStart; i<=nbTicksX; ++i) {
             
-            var beginTick   = new Date(start.getTime() + i*15*60*1000);
-            var endTick     = new Date(start.getTime() + (i+1)*15*60*1000);
-
-            //if(endTick > now ) break;
+            var beginTick   = moment(start).add(15*i,'minutes').toDate();
+            var endTick     = moment(start).add(15*(i+1),'minutes').toDate();
 
             // This time, we go forward so do not invert values:
             var isOpen = oh ? oh.getState(beginTick) : true;
@@ -239,14 +236,14 @@ module.exports = function(selection){
 
             return new Promise(function(resolve, reject){
 
-                var strToday = moment(selection.date).format('YYYY-MM-DD');
-                var start = momentTZ.tz(strToday + ' 08:00', 'Europe/Paris');
-                var end = momentTZ.tz(strToday + ' 20:00', 'Europe/Paris');
+                var start   = momentTZ.tz(selection.date, 'Europe/Paris').add(8,'hours').toDate();
+                var end     = momentTZ.tz(selection.date, 'Europe/Paris').add(20,'hours').toDate();
+
                 var parameters = {
                     id: place.pheromon_id,
                     type: undefined,
-                    start: new Date(start.format()),
-                    end: new Date(end.format())
+                    start: start,
+                    end: end
                 }
                
                 if( place.pheromon_id === null ||

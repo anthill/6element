@@ -17,10 +17,10 @@ function getCookie(sName) {
 
 
 function changeFavorite(e){
-	var button = e.srcElement.parentNode;
+	var button = e.currentTarget;
 	var isFavorite = button.class === 'place-favorite';
 	button.class = isFavorite ? 'place-no-favorite' : 'place-favorite';
-	e.srcElement.src = isFavorite ? '../img/no-favorite.svg' : '../img/favorite.svg';
+	e.currentTarget.firstChild.src = isFavorite ? '../img/no-favorite.svg' : '../img/favorite.svg';
 	var id = button.id.replace('register-','');
 	var cookie_places = getCookie('6element-places') || '';
 	if(isFavorite) 	setCookie('6element-places', cookie_places.replace(id + ';',''));// remove place in cookie

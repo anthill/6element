@@ -2,5 +2,5 @@
     "secret": "fake",
     "pg_user": "postgres",
     "pg_pwd": "toto",
-    "db_name": "6element"
+    "db_name": "element"
 }

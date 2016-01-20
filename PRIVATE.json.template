@@ -1,3 +1,6 @@
 {
-    "secret": "fake"
+    "secret": "fake",
+    "pg_user": "postgres",
+    "pg_pwd": "toto",
+    "db_name": "element"
 }

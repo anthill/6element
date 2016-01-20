@@ -8,56 +8,41 @@
 ### Dependencies
 
 Install:
-* Docker
 * Node.js
+* Postgresql
 
 the use `npm install` to install all the dependencies.
-Create a `Tokens.json` following the [example](Tokens.example.json)
+Create a `PRIVATE.json` following the [example](PRIVATE.example.json)
 
 
 
 ### Initialize the database
 
-There are two way of loading the places in the db.
-
-#### Load with files
-
-Put your datafiles in `data`, then do:
+In the psql console (just type `psql` to access it), you can init your db with:
 
 ```
-npm run serve-dev
-
-# then in another window
-docker exec 6elementdev_api_1 tools/init-database.js
-docker exec 6elementdev_api_1 tools/loadFiles.js
+alter user postgres password 'toto';
+CREATE DATABASE element OWNER postgres;
 ```
 
-in production you can use `npm run prod` and change the names of the containers in the exec commands.
-
-#### Load from a backup
-
-In dev, `./backups` is linked to `/backups` and in prod, `/data/6element/backups` is linked to `/backups` where automatic backups (at 3AM) are persisted.
-At anytime you can backup the db using
+In your regular console:
 
 ```
-docker exec 6elementdev_api_1 tools/backup.js > backups/test.sql
+node tools/init-database.js
 ```
 
-to load it back **you must put it in your backups folder and give the path inside the container**:
+you can always use `psql` separately to load and dump data:
 
 ```
-docker exec 6elementdev_api_1 tools/restore.js /backups/test.sql
+psql -p5432 -U postgres -d element < Desktop/latest.sql
 ```
-
-you can also use a gziped file (comming from the automated backup for example).
-
 
 ### Running the app
 
 #### Daily routine in dev
 
 ```
-npm run start-dev 
+npm run dev 
 ```
 
 

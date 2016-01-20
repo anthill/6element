@@ -283,6 +283,7 @@ article{
 
 .border-open {  border: solid #7fdc2b 2px; font-size: 15px; }
 .border-closed { border: solid #ff3b6c 2px;  font-size: 15px; text-decoration : line-through;}
+.border-grey { border: solid #616161 2px;  font-size: 15px;}
 
 .chart {
 	width: 100%;

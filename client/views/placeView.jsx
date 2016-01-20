@@ -5,12 +5,30 @@ var React = require('react');
 var getColor = require('../js/getColor');
 var Calendar = require('./calendar');
 var opening_hours = require('opening_hours');
+var moment = require('moment');
+var momentTZ = require('moment-timezone');
 
 var NotEmpty = function(field){
 	if(field === undefined) return false;
 	if(field === null) return false;
 	if(field === '') return false;
 	return true;
+}
+
+function fromUTC(str){
+
+    var tmp = str.split('T');
+    var vDate = tmp[0].split('-');
+    var vTime = tmp[1].split(':');
+
+    var yyyy = parseInt(vDate[0]);
+    var MM = parseInt(vDate[1]);
+    var dd = parseInt(vDate[2]);
+    var hh = parseInt(vTime[0]);
+    var mm = parseInt(vTime[1]);
+    var ss = parseInt(vTime[2]);
+
+    return new Date(Date.UTC(yyyy,MM-1,dd,hh,mm,ss));
 }
 
 module.exports = React.createClass({
@@ -22,7 +40,11 @@ module.exports = React.createClass({
 	 	// OPENING HOURS
 	 	var oh = place.opening_hours === null ? undefined :
             	new opening_hours(place.opening_hours);
-    	var isOpen = oh ? oh.getState() : true;
+        var now = momentTZ().tz('Europe/Paris').toDate();
+        //console.log(now);
+        //var now = fromUTC(momentTZ().tz('Europe/Paris').format());
+ 
+ 		var isOpen = oh ? oh.getState(now) : true;
     	var calendarJSX = NotEmpty(place.opening_hours) ?
 		(<Calendar opening_hours={place.opening_hours} />) : "";
 
@@ -78,7 +100,7 @@ module.exports = React.createClass({
         {
         	binsJSX = place.bins
             .map(function(bin, num){
-                return (<li key={'bin'+id+num} className={bin.a?"border-open":"border-closed"}>{bin.t}</li>);
+                return (<li key={'bin'+id+num} className={!isOpen ? 'border-grey' : bin.a ? "border-open":"border-closed"}>{bin.t}</li>);
             });
         }
 

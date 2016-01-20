@@ -7,11 +7,6 @@ var path = require('path');
 
 var PRIVATE = require('../PRIVATE.json');
 
-// Dumps
-var spawn = require('child_process').spawn;
-var zlib = require('zlib');
-var schedule = require('node-schedule');
-
 // Express
 var express = require('express');
 var bodyParser = require('body-parser');
@@ -39,25 +34,6 @@ var server  = require('http').createServer(app);
 app.use(bodyParser.json({limit: '50mb'}));
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(compression());
-
-
-// ---------- BACKUPS ----------
-// Backup database everyday at 3AM
-if (process.env.NODE_ENV === "production") {
-    schedule.scheduleJob('0 3 * * *', function(){
-        console.log('Backup database');
-        var gzip = zlib.createGzip();
-        var today = new Date();
-        var wstream = fs.createWriteStream('/backups/' + today.getDay() + '.sql.gz');
-        var proc = spawn('pg_dump', ['-p', process.env.DB_PORT_5432_TCP_PORT, '-h', process.env.DB_PORT_5432_TCP_ADDR, '-U', process.env.POSTGRES_USER, '-w']);
-        proc.stdout
-            .pipe(gzip)
-            .pipe(wstream);
-        proc.stderr.on('data', function(buffer) {
-            console.log(buffer.toString().replace('\n', ''));
-        });
-    });
-}
 
 
 // ---------- SOCKETS ----------
@@ -136,7 +112,7 @@ app.get('/decheteries.html', function(req,res){
     }
 
     if(getPlaces === undefined) 
-        return redirectError(res, "Erreur de traitement, veuillez renouveller votre recherche");
+        return redirectError(res, "Erreur de traitement, veuillez renouveler votre recherche");
   
     // DB places
     getPlaces
@@ -162,17 +138,17 @@ app.get('/decheteries.html', function(req,res){
             })
             .catch(function(err){ 
                 console.error('/', err, err.stack); 
-                redirectError(res, "Erreur de traitement, veuillez renouveller votre recherche");
+                redirectError(res, "Erreur de traitement, veuillez renouveler votre recherche");
             }); 
         })
         .catch(function(err){
             console.error('/', err, err.stack); 
-            redirectError(res, "Erreur de traitement, veuillez renouveller votre recherche");
+            redirectError(res, "Erreur de traitement, veuillez renouveler votre recherche");
         });
     })
     .catch(function(err){
         console.error('/', err, err.stack); 
-        redirectError(res, "Erreur de traitement, veuillez renouveller votre recherche");
+        redirectError(res, "Erreur de traitement, veuillez renouveler votre recherche");
     });
 });
 

@@ -2,6 +2,8 @@
 
 var request = require('request');
 var opening_hours = require('opening_hours');
+var moment = require('moment');
+var momentTZ = require('moment-timezone');
 
 function makeSearchString(obj){
 
@@ -70,22 +72,6 @@ function sendRequest(url, place, attribute){
     );
 }
 
-var fromUTC = function(str){
-
-    var tmp = str.split('T');
-    var vDate = tmp[0].split('-');
-    var vTime = tmp[1].split(':');
-
-    var yyyy = parseInt(vDate[0]);
-    var MM = parseInt(vDate[1]);
-    var dd = parseInt(vDate[2]);
-    var hh = parseInt(vTime[0]);
-    var mm = parseInt(vTime[1]);
-    var ss = parseInt(vTime[2]);
-
-    return new Date(Date.UTC(yyyy,MM-1,dd,hh,mm,ss));
-}
-
 function processMeasures(place, start, end, mode){
 
     var oh = place.opening_hours === null ? undefined :
@@ -99,7 +85,7 @@ function processMeasures(place, start, end, mode){
         place.measures.today !== undefined){
 
         measures = place.measures.today.map(function(measure){
-            var date = fromUTC(measure.date); // UTC -> Local               
+            var date = new Date(measure.date);              
             return { date: date, signals: measure.value.length }
         });
     }
@@ -108,17 +94,18 @@ function processMeasures(place, start, end, mode){
                 place.measures.latest !== undefined) ? 
                 place.measures.latest.max: 0;
     var nbTicksX = (20-8)*4; // every 15 minutes from 8am to 8pm
-    var now = new Date();
+    var now = momentTZ().tz('Europe/Paris').toDate();
 
     // For each tick of 15 minutes
-    for (var i = 0; i<=nbTicksX; ++i) {
+    for (var i = 0; i<nbTicksX; ++i) {
 
-        var beginTick = new Date(start);
-        beginTick.setHours(8+Math.floor(i/4),i*15%60, 0);
-        var endTick = new Date(end);
-        endTick.setHours(8+Math.floor((i+1)/4),(i+1)*15%60, 0);
+        var beginTick   = moment(start).add(15*i,'minutes').toDate();
+        var endTick     = moment(start).add(15*(i+1),'minutes').toDate();
+        
+        var date = new Date(now);
+        date.setHours(8+Math.floor(i/4),i*15%60, 0);
 
-        var isOpen = oh ? oh.getState(beginTick) : true;
+        var isOpen = oh ? oh.getState(date) : true;
         if(!isOpen){
             results.Affluence.push(-2);//closed
         }
@@ -126,7 +113,6 @@ function processMeasures(place, start, end, mode){
             results.Affluence.push(-1);//unknown    
         }
         else{
-
             // Filter values
             var values = measures
             .filter(function(measure){
@@ -178,17 +164,13 @@ function processMeasures(place, start, end, mode){
             return measure.value.id === binName;
         })
         .map(function(measure){
-            var date = fromUTC(measure.date); // UTC -> Local                   
+            var date = new Date(measure.date); // UTC -> Local                   
             return { date: date, bin: measure.value }
         })
         .sort(function(m1, m2){
             return m1.date - m2.date;
         })
         .forEach(function(measure){
-
-            //console.log(measure.date, measure.bin.a);
-            //console.log(measure.date);
-            //console.log('iTickXStart', iTickXStart);
 
             // 1) we go Backward:
             // for each tick unfilled before a measure
@@ -197,12 +179,10 @@ function processMeasures(place, start, end, mode){
 
             // For each tick of 15 minutes included
             var iTickXEnd = iTickXStart;
-            for (var i = iTickXStart; i<=nbTicksX; ++i) {
-            
-                var beginTick = new Date(start);
-                beginTick.setHours(8+Math.floor(i/4),i*15%60, 0);
-                var endTick = new Date(end);
-                endTick.setHours(8+Math.floor((i+1)/4),(i+1)*15%60, 0);
+            for (var i = 0; i<nbTicksX; ++i) {
+
+                var beginTick   = moment(start).add(15*i,'minutes').toDate();
+                var endTick     = moment(start).add(15*(i+1),'minutes').toDate();
 
                 if(measure.date < endTick) break;
                 if(endTick > now ) break;
@@ -226,12 +206,8 @@ function processMeasures(place, start, end, mode){
         // 2) For the rest of the day, we expand the last status of avilability
         for (var i = iTickXStart; i<=nbTicksX; ++i) {
             
-            var beginTick = new Date(start);
-            beginTick.setHours(8+Math.floor(i/4),i*15%60, 0);
-            var endTick = new Date(end);
-            endTick.setHours(8+Math.floor((i+1)/4),(i+1)*15%60, 0);
-
-            //if(endTick > now ) break;
+            var beginTick   = moment(start).add(15*i,'minutes').toDate();
+            var endTick     = moment(start).add(15*(i+1),'minutes').toDate();
 
             // This time, we go forward so do not invert values:
             var isOpen = oh ? oh.getState(beginTick) : true;
@@ -260,21 +236,20 @@ module.exports = function(selection){
 
             return new Promise(function(resolve, reject){
 
-               var start = new Date(selection.date);
-                start.setHours(8,0,0,0);
-                var end = new Date(selection.date);
-                end.setHours(20,0,0,0);
+                var start   = momentTZ.tz(selection.date, 'Europe/Paris').add(8,'hours').toDate();
+                var end     = momentTZ.tz(selection.date, 'Europe/Paris').add(20,'hours').toDate();
+
                 var parameters = {
                     id: place.pheromon_id,
                     type: undefined,
                     start: start,
                     end: end
                 }
-
+               
                 if( place.pheromon_id === null ||
                     place.pheromon_id === undefined){
 
-                    place['results'] = processMeasures(place, start, end);
+                    place['results'] = processMeasures(place, parameters.start, parameters.end);
                     return resolve(place);
                 }
 
@@ -291,7 +266,7 @@ module.exports = function(selection){
                        
                         if(selection.mode === 'citizen'){
                              // Process measures 
-                            placeWithToday['results'] = processMeasures(placeWithToday, start, end, selection.mode);
+                            placeWithToday['results'] = processMeasures(placeWithToday, parameters.start, parameters.end, selection.mode);
                             return resolve(placeWithToday);
                         }
                         else {
@@ -302,7 +277,7 @@ module.exports = function(selection){
                             sendRequest(origin + '/measurements/place/raw' + makeSearchString(parameters), placeWithToday, 'bins')
                             .then(function(placeWithBins){
 
-                                placeWithBins['results'] = processMeasures(placeWithBins, start, end, selection.mode);
+                                placeWithBins['results'] = processMeasures(placeWithBins, parameters.start, parameters.end, selection.mode);
                                 return resolve(placeWithBins);
                             })
                             .catch(function(error){

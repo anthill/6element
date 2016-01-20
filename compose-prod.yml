@@ -15,7 +15,7 @@ api:
       - NODE_ENV=production
    volumes:
       - ./:/6element
-      - /data/6element/backups:/backups/
+      - ./backups:/backups/
    tty: true
 
 db:

@@ -23,8 +23,8 @@ var placesView  = require('../client/views/placesView.js');
 var places = require('./database/models/places.js');
 
 // Pheromon API calls
-var getMeasures     = require('./getMeasures');
-
+var pheromonUrl = process.env.PHEROMON_URL ? process.env.PHEROMON_URL : 'https://pheromon.ants.builders';
+var getMeasures     = require(pheromonUrl, './getMeasures');
 
 // ------- INIT SERVER ---------
 var PORT = process.env.VIRTUAL_PORT ? process.env.VIRTUAL_PORT: 8000;

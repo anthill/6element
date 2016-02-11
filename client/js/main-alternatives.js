@@ -1,11 +1,20 @@
 "use strict";
 
+/*
+    TODO
+    * Display the correct points
+    * When map moves, ask data again
+    * Filter on categories
+    * Legend
+    
+*/
+
 var mapboxTokens = {
     "mapbox_token": "pk.eyJ1IjoiYW50aGlsbCIsImEiOiJUR0FoRGdJIn0.ZygA4KxIt8hJ1LAvPPMHwQ",
     "map_id": "anthill.9c97b4cf"
 }
 
-var map = L.map('map').setView([44.8404, -0.5805], 13);
+var map = L.map('map').setView([44.8404, -0.5805], 14);
 
 L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
     attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
@@ -15,7 +24,14 @@ L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={
 }).addTo(map);
 
 
+var markersLayer;
+
 function displayPlaces(map, places){
+    
+    if(markersLayer){
+        map.removeLayer(markersLayer)
+        markersLayer = undefined;
+    }
     
     var markers = places.map(function(place){
         var isCenter = (place.properties.type === 'centre');
@@ -38,57 +54,59 @@ function displayPlaces(map, places){
         return marker;
     });
 
-    var markersLayer = L.layerGroup(markers);
+    markersLayer = L.layerGroup(markers);
     map.addLayer(markersLayer);
-    
 }
 
 
-
-
-
-
-
-fetch('/search', {
-    method: 'POST',
-    body: JSON.stringify({
-        boundingBox : {
-            minLon: -0.6,
-            maxLon: -0.5,
-            minLat: 44.8,
-            maxLat: 44.9
-        },
-        geoloc: {
-            lon: -0.5805,
-            lat: 44.8404
-        },
-        categories: ["All"]
-    }),
-    headers: {
-        'Content-Type': 'application/json'
-    }
-})
-.then(function(result){ return result.json() })
-.catch(function(err){ console.error('search error', err) })
-.then(function(result){
-    console.log('search results', result)
-    return displayPlaces(map, result.objects)
-})
-.catch(function(err){ console.error('display error', err) })
-
-
-
-/*
-function makeBounds(){
-    var bounds = this.state.map.getBounds(); 
-    var box = {
+function getCurrentBounds(map){
+    var bounds = map.getBounds(); 
+    return {
         'maxLat': bounds.getNorth(),
         'minLat': bounds.getSouth(),
         'maxLon': bounds.getEast(),
         'minLon': bounds.getWest()
-    }
-    this.props.onSearch(this.props.parameters, box, 3, 0);
+    };
 }
+
+
+function fetchAndDisplay(bounds){
+    return fetch('/search', {
+        method: 'POST',
+        body: JSON.stringify({
+            boundingBox : bounds,
+            geoloc: {
+                lon: -0.5805,
+                lat: 44.8404
+            },
+            categories: ["All"]
+        }),
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(function(result){ return result.json() })
+    .catch(function(err){ console.error('search error', err) })
+    .then(function(result){
+        console.log('search results', result)
+        return displayPlaces(map, result.objects)
+    })
+    .catch(function(err){ console.error('display error', err) })
+}
+
+
+
+
+
+map.on('moveend', function(){
+    fetchAndDisplay(getCurrentBounds(map));
+})
+
+fetchAndDisplay(getCurrentBounds(map));
+
+
+/*
+
 
 
 

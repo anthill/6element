@@ -19,6 +19,9 @@ var reactServer = require('react-dom/server');
 var parseHtml   = require('./parseHtml');
 var placesView  = require('../client/views/placesView.js');
 
+// Route
+var search = require('./searchPlaces.js');
+
 // Database
 var places = require('./database/models/places.js');
 
@@ -189,6 +192,8 @@ app.post('/bins/update', function(req, res){
     } else res.status(403).send({success: false, message: 'No token provided.'});
 });
 
+
+app.post('/search', search);
 
 
 app.use(express.static(__dirname + '/../client'));

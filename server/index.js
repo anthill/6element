@@ -19,6 +19,9 @@ var reactServer = require('react-dom/server');
 var parseHtml   = require('./parseHtml');
 var placesView  = require('../client/views/placesView.js');
 
+// Route
+var search = require('./searchPlaces.js');
+
 // Database
 var places = require('./database/models/places.js');
 
@@ -190,8 +193,14 @@ app.post('/bins/update', function(req, res){
 });
 
 
+app.post('/search', search);
+app.get('/networks', function(req, res){
+    res.setHeader('Content-Type', 'application/json')
+    fs.createReadStream(path.join(__dirname, '..', 'data', 'networks.json')).pipe(res);
+});
 
-app.use(express.static(__dirname + '/../client'));
+
+app.use(express.static(path.join(__dirname, '..', 'client'), {etag: false, maxAge: 60*60*1000}));
 
 // ---------- CATCH ERRORS ----------
 

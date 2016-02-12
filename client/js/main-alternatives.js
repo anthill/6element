@@ -1,108 +1,73 @@
 "use strict";
 
-/*
-    TODO
-    * Display the correct points
-    * When map moves, ask data again
-    * Filter on categories
-    * Legend
+(function(){
     
-*/
+    var map = createMap(document.querySelector('#map'));
+    var currentMapBoundsPlaces = [];
+    var filterValues = [];
 
-var mapboxTokens = {
-    "mapbox_token": "pk.eyJ1IjoiYW50aGlsbCIsImEiOiJUR0FoRGdJIn0.ZygA4KxIt8hJ1LAvPPMHwQ",
-    "map_id": "anthill.9c97b4cf"
-}
-
-var map = L.map('map').setView([44.8404, -0.5805], 14);
-
-L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
-    attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
-    maxZoom: 18,
-    id: mapboxTokens.map_id,
-    accessToken: mapboxTokens.mapbox_token
-}).addTo(map);
-
-
-var markersLayer;
-
-function displayPlaces(map, places){
-    
-    if(markersLayer){
-        map.removeLayer(markersLayer)
-        markersLayer = undefined;
+    function refreshMap(){
+        displayPlaces(map, currentMapBoundsPlaces, filterValues);
     }
     
-    var markers = places.map(function(place){
-        var isCenter = (place.properties.type === 'centre');
-        var options = {
-            color: 'black',
-            fill: true,
-            fillColor: place.color, 
-            fillOpacity: isCenter ? 1 : 0.7,
-            radius: isCenter ? 10 : 7,
-            clickable: true,
-            weight: isCenter ? 5 : 3 
+    function getCurrentBounds(map){
+        var bounds = map.getBounds(); 
+        return {
+            'maxLat': bounds.getNorth(),
+            'minLat': bounds.getSouth(),
+            'maxLon': bounds.getEast(),
+            'minLon': bounds.getWest()
         };
+    }
+
+
+    /*
+        FILTERS
+    */
+    fetch('/networks', {headers: {'Content-Type': 'application/json'}})
+    .then(function(result){ return result.json() })
+    .then(function(networks){
+        console.log('networks', networks)
+        filterValues = networks.map(function(network){
+            return { name: network.name, color: network.color, checked: true };
+        });
         
-        var lat = place.geometry.coordinates.lat;
-        var lon = place.geometry.coordinates.lon;
+        var filtersElement = document.querySelector('#filters');
+
+        var ul = createFilterList(filterValues, function(newFilterValues){
+            filterValues = newFilterValues;
+            refreshMap();
+        });
+
+        filtersElement.appendChild(ul);
         
-        var marker =  new L.CircleMarker(new L.LatLng(lat, lon), options);
-        
-        marker["idPoint"] = place.properties.id;
-        return marker;
+        refreshMap();
+    })
+    .catch(function(err){ console.error('fetch /networks error', err) });
+
+    
+
+    map.on('moveend', function(){
+        findPlaces(getCurrentBounds(map))
+        .then(function(res){
+            currentMapBoundsPlaces = res.objects;
+            refreshMap();
+        });
     });
 
-    markersLayer = L.layerGroup(markers);
-    map.addLayer(markersLayer);
-}
-
-
-function getCurrentBounds(map){
-    var bounds = map.getBounds(); 
-    return {
-        'maxLat': bounds.getNorth(),
-        'minLat': bounds.getSouth(),
-        'maxLon': bounds.getEast(),
-        'minLon': bounds.getWest()
-    };
-}
-
-
-function fetchAndDisplay(bounds){
-    return fetch('/search', {
-        method: 'POST',
-        body: JSON.stringify({
-            boundingBox : bounds,
-            geoloc: {
-                lon: -0.5805,
-                lat: 44.8404
-            },
-            categories: ["All"]
-        }),
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    })
-    .then(function(result){ return result.json() })
-    .catch(function(err){ console.error('search error', err) })
+    
+    /*
+        INIT
+    */
+    findPlaces(getCurrentBounds(map))
     .then(function(result){
-        console.log('search results', result)
-        return displayPlaces(map, result.objects)
+        currentMapBoundsPlaces = result.objects;
     })
-    .catch(function(err){ console.error('display error', err) })
-}
+    .then(refreshMap)
+    
+    
+})();
 
-
-
-
-
-map.on('moveend', function(){
-    fetchAndDisplay(getCurrentBounds(map));
-})
-
-fetchAndDisplay(getCurrentBounds(map));
 
 
 /*

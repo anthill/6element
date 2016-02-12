@@ -1,3 +1,70 @@
-#map{
-    height: 90vh;
+
+
+.alternatives{
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.alternatives header{
+    height: 10%;
+    position: static;
+}
+.alternatives header .adapt-width{
+    height: 100%;
+}
+
+.alternatives main{
+    height: 95%;
+    position: relative;
+}
+
+
+.alternatives main #map{
+    height: 100%;
+}
+.alternatives main #filters{
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    width: 12em;
+    overflow-y: scroll;
+    
+    background-color: rgba(255, 255, 255, 0.9);
+}
+
+.alternatives main #filters li{
+    padding: 1em;
+    cursor: pointer;
+    
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    z-index: 8; /* to be over leaflet credits */
+}
+
+.alternatives main #filters li:hover{
+    background-color: rgba(240, 240, 240, 1);
+
+}
+
+.alternatives main #filters li.disabled{
+    opacity: 0.5;
+    text-decoration: line-through;
+    background-color: rgb(230, 230, 230);
+
+}
+
+.alternatives main #filters li .color{
+    height: 1em;
+    width: 1em;
+    border-radius: 50%;
+    display: block;
+    padding-right: 1em;
+}
+
+.alternatives main #filters li .text{
+    margin-left: 1em;
 }

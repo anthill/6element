@@ -19,12 +19,15 @@ var reactServer = require('react-dom/server');
 var parseHtml   = require('./parseHtml');
 var placesView  = require('../client/views/placesView.js');
 
+// Route
+var search = require('./searchPlaces.js');
+
 // Database
 var places = require('./database/models/places.js');
 
 // Pheromon API calls
+var pheromonUrl = process.env.PHEROMON_URL ? process.env.PHEROMON_URL : 'https://pheromon.ants.builders';
 var getMeasures     = require('./getMeasures');
-
 
 // ------- INIT SERVER ---------
 var PORT = process.env.VIRTUAL_PORT ? process.env.VIRTUAL_PORT: 8000;
@@ -121,7 +124,7 @@ app.get('/decheteries.html', function(req,res){
         selection.places = placesFromDB;
         
         // + measures
-        getMeasures(selection)
+        getMeasures(pheromonUrl, selection)
         .then(function(placesWithMeasures){
 
             selection.places = placesWithMeasures;
@@ -190,8 +193,14 @@ app.post('/bins/update', function(req, res){
 });
 
 
+app.post('/search', search);
+app.get('/networks', function(req, res){
+    res.setHeader('Content-Type', 'application/json')
+    fs.createReadStream(path.join(__dirname, '..', 'data', 'networks.json')).pipe(res);
+});
 
-app.use(express.static(__dirname + '/../client'));
+
+app.use(express.static(path.join(__dirname, '..', 'client'), {etag: false, maxAge: 60*60*1000}));
 
 // ---------- CATCH ERRORS ----------
 

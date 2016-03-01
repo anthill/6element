@@ -226,9 +226,7 @@ function processMeasures(place, start, end, mode){
     return results;
 }
 
-module.exports = function(selection){
-
-    var origin = 'https://pheromon.ants.builders';
+module.exports = function(origin, selection){
     
     return Promise.all(
 

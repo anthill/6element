@@ -5,15 +5,21 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<meta content="" name="6Element" />
 		<title>6Element</title>
-		<link rel="stylesheet" media="screen" href="./css/main.css" />
-		<script defer src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-		<script defer type="text/javascript"
-		  src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyCLuhubHWNbDgBhmj61OUo07L-zjHsVkKw">
-		</script>
-		<script defer src="./js/location.js"></script>
-		<script defer src="./js/panels.js"></script>
-		<script defer src="./js/favorite.js"></script>
-		<script defer src="./js/charts.js"></script>
+        
+        <link rel="stylesheet" href="./css/lib/leaflet.css">
+		<link rel="stylesheet" media="screen" href="./css/main.css">
+		<link rel="stylesheet" media="screen" href="./css/alternatives.css">
+        
+        
+		<script defer src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyCLuhubHWNbDgBhmj61OUo07L-zjHsVkKw"></script>
+        <script defer src="./js/lib/leaflet.js"></script>
+        
+        <script defer src="js/createFilterList.js"></script>
+        <script defer src="js/createMap.js"></script>
+        <script defer src="js/displayPlaces.js"></script>
+        <script defer src="js/findPlaces.js"></script>
+        <script defer src="js/main-alternatives.js"></script>
+        
 		<script>
 			(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
 			(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -23,7 +29,7 @@
 			ga('send', 'pageview', location.pathname);
 		</script>
 	</head>
-	<body>
+	<body class="alternatives">
 		<header>
 			<div class="adapt-width">
 				<a id="back" href="/"><img src='./img/back.svg'/></a>
@@ -32,10 +38,9 @@
 				</form>
 			</div>
 		</header>
-		<article class="overflow">
-			<div class="adapt-width">
-				<div id="sheet" />
-			</div>
-		</article>
+		<main>
+            <div id="map"></div>
+            <div id="filters"></div>
+        </main>
 	</body>
 </html>

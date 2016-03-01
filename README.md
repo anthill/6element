@@ -8,27 +8,28 @@
 ### Dependencies
 
 Install:
-* Node.js
-* Postgresql
+* Node.js 4.0
+* Postgresql 9.4
+* [Postgis](http://postgis.net/install/)
 
-the use `npm install` to install all the dependencies.
+then use `npm install` to install all the dependencies.
 Create a `PRIVATE.json` following the [example](PRIVATE.example.json)
 
 tette	
 
 ### Initialize the database
 
-You should init your db with:
+In the psql console (just type `psql` to access it), you can init your db with:
 
 ```
 alter user postgres password 'toto';
-CREATE DATABASE element;
+CREATE DATABASE element OWNER postgres;
 ```
 
-and 
+In your regular console:
 
 ```
-tools/init-database.js
+node tools/init-database.js
 ```
 
 you can always use `psql` separately to load and dump data:
@@ -42,7 +43,7 @@ psql -p5432 -U postgres -d element < Desktop/latest.sql
 #### Daily routine in dev
 
 ```
-npm run start-dev 
+npm run dev 
 ```
 
 

@@ -68,5 +68,10 @@
     "npm-run-all": "^1.3.4",
     "reactify": "^1.1.1",
     "watchify": "^3.2.1"
-  }
+  },
+  "pre-commit": [
+    "lint",
+    "validate",
+    "test"
+  ]
 }

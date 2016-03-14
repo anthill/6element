@@ -15,10 +15,19 @@ function displayLoading(){
 
 
 /*** AUTOLOCATION ***/
+
+function getTarget(){
+    var list = document.getElementsByClassName("btn-active");
+    if(list.length > 0)
+        return list[0].innerText === 'Déchèteries' ? 'decheteries' : 'alternatives';
+    else
+        return window.location.pathname.substr(window.location.pathname.lastIndexOf("/") + 1).split('.')[0];
+}
+
 function success(position){
     var now = new Date();
     var strDate = now.getDate().toString()+'-'+(now.getMonth()+1).toString()+'-'+now.getFullYear().toString();
-    window.location.href = '/decheteries.html?position=['+position.coords.latitude+','+position.coords.longitude+']&date='+strDate;
+    window.location.href = '/'+getTarget()+'.html?position=['+position.coords.latitude+','+position.coords.longitude+']&date='+strDate;
 }
 
 function error(error){
@@ -73,9 +82,9 @@ function initializeAutocomplete(id) {
 }
 
 function onPlaceChanged() {
-    console.log('onPlaceChanged');
     var place = this.getPlace();
-
+    console.log(place.geometry.location);
+    
     if(place.geometry.location === undefined) return;
 
     //else console.log(place.geometry);
@@ -83,7 +92,7 @@ function onPlaceChanged() {
 
     var now = new Date();
     var strDate = now.getDate().toString()+'-'+(now.getMonth()+1).toString()+'-'+now.getFullYear().toString();
-    window.location.href = '/decheteries.html?position=['+place.geometry.location.lat()+','+place.geometry.location.lng()+']&date='+strDate;
+    window.location.href = '/'+getTarget()+'.html?position=['+place.geometry.location.lat()+','+place.geometry.location.lng()+']&date='+strDate;
 }
 
 initializeAutocomplete('where-input');

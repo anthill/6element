@@ -8,10 +8,11 @@
 ### Dependencies
 
 Install:
-* Node.js
-* Postgresql
+* Node.js 4.0
+* Postgresql 9.4
+* [Postgis](http://postgis.net/install/)
 
-the use `npm install` to install all the dependencies.
+then use `npm install` to install all the dependencies.
 Create a `PRIVATE.json` following the [example](PRIVATE.example.json)
 
 

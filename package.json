@@ -11,7 +11,7 @@
     "prod": "node server/index.js",
     "preprod": "npm run build",
     "monitor": "nodemon -L --watch server --watch client/*.js server/index.js",
-    "dev": "npm-run-all --parallel serve-dev watch monitor",
+    "dev": "npm-run-all --parallel watch monitor",
     "validate": "npm ls"
   },
   "babel": {

@@ -100,7 +100,7 @@ module.exports = React.createClass({
         {
         	binsJSX = place.bins
             .map(function(bin, num){
-                return (<li key={'bin'+id+num} className={!isOpen ? 'border-grey' : bin.a ? "border-open":"border-closed"}>{bin.t}</li>);
+                return (<li key={'bin'+id+num} className={bin.a ? "border-open":"border-closed"}>{bin.t}</li>);
             });
         }
 

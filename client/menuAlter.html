@@ -1,0 +1,59 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta content="" name="6element" />
+		<title>6element</title>
+		<link rel="stylesheet" media="screen" href="./css/main.css" />
+		<script defer type="text/javascript"
+		  src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyCLuhubHWNbDgBhmj61OUo07L-zjHsVkKw">
+		</script>
+		<script defer src="./js/location.js"></script>
+		<script defer src="./js/favorite.js"></script>
+		<script>
+			(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+			(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+			m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+			})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+			ga('create', 'UA-71148240-1', 'auto');
+			ga('send', 'pageview', location.pathname);
+		</script>
+	</head>
+	<body>
+		<header>
+			<div class="adapt-width">
+               	<a id="logo" href="/">6element</a>
+				<form id="searchbar"> 
+					<input type="text" id="where-input" placeholder="adresse, ville, code postal"/>
+				</form>
+			</div>
+		</header>
+		<article>
+			<div class="adapt-width">
+				<div id="sheet">
+					<menu id="location">
+						<button class="btn-favorite" onclick="getFavorites()">Mes alternatives</button>
+						<button class="btn-locate" onclick="getCurrentPosition()">A proximité</button>
+						<div id="errorposition"></div>
+					</menu>
+					<div id="mvp">
+						<p>
+							Consultez les alternatives à la déchèterie.<br/>
+							Point d'apport volontaire ou association,<br/> il existe sûrement une solution près de chez vous.
+						</p>
+                        <div class="background"></div>
+					</div>
+				</div>
+			</div>
+		</article>
+		<nav>
+			<div class="adapt-width">
+				<div id="navigation">
+					<a href="index.html"><button class="btn-recycling-center btn-inactive">Déchèteries</button></a>
+					<button class="btn-alternatives btn-active">Alternatives</button>
+				</div>
+			</div>
+		</nav>
+	</body>
+</html>

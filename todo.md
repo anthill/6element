@@ -3,6 +3,15 @@
 - [ ] Photo d'accueil
 - [ ] Plotly.relayout(graphDiv, update)
 - [ ] Meilleur alignement des coordonées et horaires
+- [ ] Bug sur Firefox
+- [ ] Bug de décalage horaire
+- [ ] Enlever la désactivation quand les décheteries sont fermées
+- [ ] Remettre le menu d'accueil normal
+- [ ] 2 onglets décheteries / alternatives
+- [ ] Onglet Proposer
+- [ ] Filtre sur les PAV
+
+
 
 - [x] Mettre les scripts en defer
 - [x] Ajouter la date à l'url

@@ -11,7 +11,8 @@ function makeSearchString(obj){
     
        // http://stackoverflow.com/a/3608791
     return '?' + Object.keys(obj).map(function(k){
-        return encodeURI(k) + '=' + encodeURI(obj[k]);
+        if(typeof obj[k] === 'object') return encodeURI(k) + '=' + encodeURI(obj[k].toISOString().replace('T',' ').replace('Z','0'));
+        else return encodeURI(k) + '=' + encodeURI(obj[k]);
     })
     .join('&');
 }
@@ -22,6 +23,7 @@ function sendRequest(url, place, attribute){
 
         function(resolve, reject){
 
+            //console.log(url);
             request({
                 method: 'GET',
                 url: url,
@@ -78,14 +80,18 @@ function processMeasures(place, start, end, mode){
             new opening_hours(place.opening_hours);
         
     var results = {'Affluence' : []};
+    //console.log('+++', place.name, place.pheromon_id);
+    //console.log(start, '->', end);  
 
     // Transform signal strength
     var measures = [];
+    //console.log(place.measures);
     if( place.measures !== undefined &&
         place.measures.today !== undefined){
 
         measures = place.measures.today.map(function(measure){
-            var date = new Date(measure.date);              
+            var date = momentTZ.tz(measure.date, 'Europe/Paris').toDate();  
+            //console.log('-', date, measure.value.length);            
             return { date: date, signals: measure.value.length }
         });
     }
@@ -105,7 +111,7 @@ function processMeasures(place, start, end, mode){
         var date = new Date(now);
         date.setHours(8+Math.floor(i/4),i*15%60, 0);
 
-        var isOpen = oh ? oh.getState(date) : true;
+        var isOpen = oh ? oh.getState(beginTick) : true;
         if(!isOpen){
             results.Affluence.push(-2);//closed
         }

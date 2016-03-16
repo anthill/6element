@@ -36,9 +36,8 @@ module.exports = function(bbox){
 	return resultP.then(function(result){
 		console.log('Nb of points', result.features.length);
 		result.features = converter(result.features);
-		fs.writeFile('osmDataConverted.json', JSON.stringify(result));
 
-
+		return result;
 	})
 	.catch(function(error){
 		console.log('Couldn\'t load OSM data', error);

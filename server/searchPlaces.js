@@ -1,5 +1,6 @@
 "use strict";
 
+var osmLoader = require('./osmLoader.js');
 var toGeoJson = require('./toGeoJson.js');
 var Places = require('./database/models/places.js');
 var withPlacesMeasurements = require('./withPlacesMeasurements.js');
@@ -39,44 +40,48 @@ module.exports = function(req, res){
     if(data.boundingBox !== null &&
         data.geoloc !== null){
 
-        Places.getWithin(data.geoloc, data.boundingBox, data.categories, 2000)
+        var dbDataP = Places.getWithin(data.geoloc, data.boundingBox, data.categories, 2000)
         .then(function(results){
-            toGeoJson(results)
-            .then(function(geoJson){
+            return toGeoJson(results);
+        });
 
-                var list = geoJson.map(function(place, index){
-                    return {'index': index, 'pheromon_id': place.properties.pheromon_id};
-                })
-                .filter(function(object){
-                    return (object.pheromon_id !== null && 
-                            object.pheromon_id !== undefined);
-                });
+        var osmDataP = osmLoader(data.boundingBox);
 
-                withPlacesMeasurements(list)
-                .then(function(measures){
+        Promise.all([dbDataP, osmDataP])
+        .then(function(dbData, osmData){
+            
+            var completeFeatures = dbData.features.concat(osmData.features);
+            var completeData = dbData;
+            completeData.features = completeFeatures;
 
-                    if(measures !== null){
-                        measures.forEach(function(measure, index){
-                            if (measure)
-                                geoJson[list[index].index]["measurements"] = {latest: measure.latest, max: measure.max};
-                            else
-                                geoJson[list[index].index]["measurements"] = undefined;
-                        });
-                    }
-                    result.objects = geoJson;
-                    res.setHeader('Content-Type', 'application/json');
-                    res.send(JSON.stringify(result));
-                })
-                .catch(function(err){
-                    console.error(err);
-                    result.objects = geoJson;
-                    res.setHeader('Content-Type', 'application/json');
-                    res.send(JSON.stringify(result));
-                });
+            var list = completeData.map(function(place, index){
+                return {'index': index, 'pheromon_id': place.properties.pheromon_id};
+            })
+            .filter(function(object){
+                return (object.pheromon_id !== null && 
+                        object.pheromon_id !== undefined);
+            });
+
+            withPlacesMeasurements(list)
+            .then(function(measures){
+
+                if(measures !== null){
+                    measures.forEach(function(measure, index){
+                        if (measure)
+                            completeData[list[index].index]["measurements"] = {latest: measure.latest, max: measure.max};
+                        else
+                            completeData[list[index].index]["measurements"] = undefined;
+                    });
+                }
+                result.objects = completeData;
+                res.setHeader('Content-Type', 'application/json');
+                res.send(JSON.stringify(result));
             })
             .catch(function(err){
                 console.error(err);
-                res.status(500).send(err);
+                result.objects = completeData;
+                res.setHeader('Content-Type', 'application/json');
+                res.send(JSON.stringify(result));
             });
         })
         .catch(function(err){
@@ -86,53 +91,66 @@ module.exports = function(req, res){
 
     } else if(data.geoloc !== null){
 
-        Places.getKNearest({"lon": data.geoloc.lon, "lat": data.geoloc.lat}, data.nbPlaces, data.categories)
+        var dbDataP = Places.getKNearest({"lon": data.geoloc.lon, "lat": data.geoloc.lat}, data.nbPlaces, data.categories)
         .then(function(results){
-            toGeoJson(results)
-            .then(function(geoJson){
-                
-                var list = geoJson.map(function(place, index){
-                    return {'index': index, 'pheromon_id': place.properties.pheromon_id};
-                })
-                .filter(function(object){
-                    return (object.pheromon_id !== null && 
-                            object.pheromon_id !== undefined);
-                });
+            return toGeoJson(results);
+        });
 
-                withPlacesMeasurements(list)
-                .then(function(measures){
+        // OSM Search
+        var bbox = { // raw approx of 50km bounding box around geoloc
+            north: data.geoloc.lat + 0.5,
+            south: data.geoloc.lat - 0.5,
+            east: data.geoloc.lon + 0.5,
+            west: data.geoloc.lon - 0.5
+        };
 
-                    if(measures !== null){
-                        measures.forEach(function(measure, index){
-                            if (measure)
-                                geoJson[list[index].index]["measurements"] = {latest: measure.latest, max: measure.max};
-                            else
-                                geoJson[list[index].index]["measurements"] = undefined;
-                        });
-                    }
-                    result.objects = geoJson;
-                    res.setHeader('Content-Type', 'application/json');
-                    res.send(JSON.stringify(result));
-                })
-                .catch(function(err){
-                    console.error(err);
-                    result.objects = geoJson;
-                    res.setHeader('Content-Type', 'application/json');
-                    res.send(JSON.stringify(result));
-                });
+        var osmDataP = osmLoader(bbox);
+
+        Promise.all([dbDataP, osmDataP])
+        .then(function(dbData, osmData){
+            
+            var completeFeatures = dbData.features.concat(osmData.features);
+            var completeData = dbData;
+            completeData.features = completeFeatures;
+
+
+            var list = completeData.map(function(place, index){
+                return {'index': index, 'pheromon_id': place.properties.pheromon_id};
+            })
+            .filter(function(object){
+                return (object.pheromon_id !== null && 
+                        object.pheromon_id !== undefined);
+            });
+
+            withPlacesMeasurements(list)
+            .then(function(measures){
+
+                if(measures !== null){
+                    measures.forEach(function(measure, index){
+                        if (measure)
+                            completeData[list[index].index]["measurements"] = {latest: measure.latest, max: measure.max};
+                        else
+                            completeData[list[index].index]["measurements"] = undefined;
+                    });
+                }
+                result.objects = completeData;
+                res.setHeader('Content-Type', 'application/json');
+                res.send(JSON.stringify(result));
             })
             .catch(function(err){
                 console.error(err);
-                res.status(500).send(err);
+                result.objects = completeData;
+                res.setHeader('Content-Type', 'application/json');
+                res.send(JSON.stringify(result));
             });
         })
         .catch(function(err){
             console.error(err);
             res.status(500).send(err);
-        });        
+        });
     }
     else{
-         console.log("-> request without centroid nor boundingBox");
+        console.log("-> request without centroid nor boundingBox");
         return;       
     }
 }

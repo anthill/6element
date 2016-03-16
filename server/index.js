@@ -84,7 +84,7 @@ app.get('/decheteries.html', function(req,res){
         mode: 'citizen',
         places: undefined
     }
-   
+
     // Default date = today
     if(req.query.date !== undefined){
         

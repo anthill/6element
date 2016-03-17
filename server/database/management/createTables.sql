@@ -60,6 +60,7 @@ CREATE TRIGGER updated_at_places BEFORE UPDATE ON places FOR EACH ROW EXECUTE PR
 
 CREATE TABLE IF NOT EXISTS osmPlaces (
     id           SERIAL PRIMARY KEY,
+    osm_id       text NOT NULL,
     tags         json NOT NULL,
     lat          real NOT NULL,
     lon          real NOT NULL,

@@ -1,4 +1,5 @@
 {
+	"france": "[out:json][timeout:600];area(3601403916)->.gironde;(node['amenity'='recycling']['recycling_type'='centre'](area.gironde);way['amenity'='recycling']['recycling_type'='centre'](area.gironde);node['amenity'='recycling']['recycling_type'='container'](area.gironde););out body;>;out skel qt;",
 	"gironde": "[out:json][timeout:25];area(3600007405)->.gironde;(node['amenity'='recycling']['recycling_type'='centre'](area.gironde);way['amenity'='recycling']['recycling_type'='centre'](area.gironde);node['amenity'='recycling']['recycling_type'='container'](area.gironde););out body;>;out skel qt;",
 	"viewport": "[out:json][timeout:25][bbox];(node['amenity'='recycling']['recycling_type'='centre'];way['amenity'='recycling']['recycling_type'='centre'];node['amenity'='recycling']['recycling_type'='container'];);out body;>;out skel qt;"
 }

@@ -10,8 +10,8 @@ module.exports = function(db){
     return new Promise(function(resolve, reject){
         db.query(createTableScript, function(err, result) {
             if(err)
-                reject('Coudn\'t create the tables: ' + err); 
+                reject('Coudn\'t create the tables: ' + err.stack); 
             else resolve(result);
         });
-    };
+    });
 };

@@ -32,6 +32,10 @@ In your regular console:
 node tools/init-database.js
 ```
 
+```
+node tools/update-tables.js // if you want to add or modify your tables, it doesnt drop the tables, so you're fine
+```
+
 you can always use `psql` separately to load and dump data:
 
 ```

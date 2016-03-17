@@ -2,7 +2,6 @@
 
 var pg = require('pg');
 var PRIVATE = require('../../../PRIVATE.json');
-
 var conString = 'postgres://'+ PRIVATE.pg_user + ':' + PRIVATE.pg_pwd + '@localhost:5432/' + PRIVATE.db_name;
 
 var MAX_ATTEMPTS = 10;

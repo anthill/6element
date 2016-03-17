@@ -12,19 +12,19 @@ connectToDB()
 .then(function(){
     return dropAllTables()
     .catch(function(err){
-        console.error("Couldn't drop tables", err);
+        console.error('Couldn t drop tables', err);
         process.exit();
     })
     .then(createTables)
     .catch(function(err){
-        console.error("Couldn't create tables", err);
+        console.error('Couldn t create tables', err);
         process.exit();
     })
     .then(function(){
-        console.log("Success!");
+        console.log('Success!');
         process.exit();
-    })
+    });
 })
 .catch(function(err){
-    console.error("Couldn't connect to database", err);
+    console.error('Couldn t connect to database', err);
 });

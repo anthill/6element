@@ -1,10 +1,12 @@
 'use strict';
 
 (function(global){
+
     var markersLayer;
 
    // Add a preview footer under the map when clicking marker
     var onClickMarker = function (e){
+        
         var place = e.target.place;
         
         var preview = document.querySelector('#preview');
@@ -37,7 +39,7 @@
         avatar.style.width = '40px';
 
         // title
-        var li = document.createElement('li');
+        li = document.createElement('li');
         placeHeader.appendChild(li);
         var title = document.createElement('span');
         title.classList.add('place-title');
@@ -59,7 +61,7 @@
     global.displayPlaces = function(map, places, filterValues){
 
         if(markersLayer){
-            map.removeLayer(markersLayer)
+            map.removeLayer(markersLayer);
             markersLayer = undefined;
         }
 
@@ -67,7 +69,7 @@
         .filter(function(place){
             var relevantFilter = filterValues.find(function(fv){
                 return fv.name === place.properties.file;
-            })
+            });
             
             if(!relevantFilter)
                 console.warn('No filter for place', place);
@@ -98,5 +100,6 @@
 
         markersLayer = L.layerGroup(markers);
         map.addLayer(markersLayer);
-    }
+    };
+
 })(this);

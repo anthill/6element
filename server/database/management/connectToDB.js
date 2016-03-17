@@ -22,7 +22,7 @@ module.exports = function(){
                     if(err){
                         console.error("Couldn't connect to db", conString, err);
                         if(attempts >= MAX_ATTEMPTS)
-                            reject(err); 
+                            reject("Couldn't connect: " + err); 
                         else {
                             // wait twice more to give time and not overwhelm the database with useless attempts to connect
                             console.warn("Retrying in ", 2*time);

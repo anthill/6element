@@ -9,19 +9,17 @@ var dropAllTables = require('../server/database/management/dropAllTables.js');
 var createTables = require('../server/database/management/createTables.js');
 
 connectToDB()
-.then(function(){
-    return dropAllTables()
-    .catch(function(err){
-        console.error("Couldn't drop tables", err);
-        process.exit();
-    })
-    .then(createTables)
-    .catch(function(err){
-        console.error("Couldn't create tables", err);
-        process.exit();
+.then(function(db){
+    return dropAllTables(db)
+    .then(function(){
+        return createTables(db);
     })
     .then(function(){
         console.log("Success!");
+        process.exit();
+    })
+    .catch(function(err){
+        console.error("DB error", err);
         process.exit();
     })
 })

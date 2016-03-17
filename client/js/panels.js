@@ -1,7 +1,7 @@
 'use strict';
 
 function setActivePanel(e){
-	var button = e.srcElement.parentNode;
+	var button = e.currentTarget;
 	var id = button.id.replace('activate-','');
 	
 	var panelCanvas = document.getElementById('panel-canvas-'+id);
@@ -9,7 +9,7 @@ function setActivePanel(e){
 	
 	panelCanvas.className = panelCanvas.className === 'panel-active' ? 'panel-hidden' : 'panel-active';
 	panelInfos.className  = panelInfos.className  === 'panel-active' ? 'panel-hidden' : 'panel-active';
-	e.srcElement.src = panelCanvas.className === 'panel-active' ? '../img/infos.svg' : '../img/chart.svg'; 	
+	e.currentTarget.src = panelCanvas.className === 'panel-active' ? '../img/infos.svg' : '../img/chart.svg'; 	
 }
 
 function initializeAllPanels(){

@@ -1,6 +1,8 @@
+leaflet.js
 node_modules
 **/*-bundle.js
 server/database/management/declarations.js
+client/js/lib/leaflet.js
 
 tests
 src/views

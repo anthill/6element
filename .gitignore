@@ -9,13 +9,8 @@
 
 node_modules
 
-
 Tokens.json
 PRIVATE.json
-
-data/*.json
-!data/dictionary.json
-!data/networks.json
 
 *.bak
 

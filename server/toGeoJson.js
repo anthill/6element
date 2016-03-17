@@ -33,10 +33,6 @@ module.exports = function(results){
                         type: 'Feature',
                         properties: result,
                         geometry: { "type": "Point", "coordinates": {"lat":result["lat"], "lon": result["lon"]} },
-                        distance: result.distance,
-                        color: result.color,
-                        file: result.file,
-                        rate: 3 
                     }
                     resolve(geoJson);
                 })

@@ -41,18 +41,27 @@ module.exports = function(req, res){
         data.geoloc !== null){
 
         var dbDataP = Places.getWithin(data.geoloc, data.boundingBox, data.categories, 2000)
-        .then(function(results){
-            return toGeoJson(results);
-        });
+        .then(toGeoJson);
 
-        var osmDataP = osmLoader(data.boundingBox);
+        // OSM Search
+        var bbox = {
+            north: data.boundingBox.maxLat,
+            south: data.boundingBox.minLat,
+            east: data.boundingBox.maxLon,
+            west: data.boundingBox.minLon
+        };
+
+        var osmDataP = osmLoader(bbox);
 
         Promise.all([dbDataP, osmDataP])
-        .then(function(dbData, osmData){
-            
-            var completeFeatures = dbData.features.concat(osmData.features);
-            var completeData = dbData;
-            completeData.features = completeFeatures;
+        .then(function(results){
+            var dbData = results[0];
+            var osmData = results[1];
+
+            console.log('Nb db', dbData.length);
+            console.log('Nb osm', osmData.length);
+
+            var completeData = dbData.concat(osmData);
 
             var list = completeData.map(function(place, index){
                 return {'index': index, 'pheromon_id': place.properties.pheromon_id};
@@ -107,12 +116,11 @@ module.exports = function(req, res){
         var osmDataP = osmLoader(bbox);
 
         Promise.all([dbDataP, osmDataP])
-        .then(function(dbData, osmData){
-            
-            var completeFeatures = dbData.features.concat(osmData.features);
-            var completeData = dbData;
-            completeData.features = completeFeatures;
+        .then(function(results){
+            var dbData = results[0];
+            var osmData = results[1];
 
+            var completeData = dbData.concat(osmData);
 
             var list = completeData.map(function(place, index){
                 return {'index': index, 'pheromon_id': place.properties.pheromon_id};

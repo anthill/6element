@@ -13,7 +13,7 @@
         var markers = places
         .filter(function(place){
             var relevantFilter = filterValues.find(function(fv){
-                return fv.name === place.file;
+                return fv.name === place.properties.file;
             })
             
             if(!relevantFilter)
@@ -26,15 +26,15 @@
             var options = {
                 color: 'black',
                 fill: true,
-                fillColor: place.color, 
+                fillColor: place.properties.color, 
                 fillOpacity: 1,
                 radius: isCenter ? 10 : 7,
                 clickable: true,
                 weight: isCenter ? 5 : 3 
             };
 
-            var lat = place.geometry.coordinates.lat;
-            var lon = place.geometry.coordinates.lon;
+            var lat = place.geometry.coordinates.lat || place.geometry.coordinates[1];
+            var lon = place.geometry.coordinates.lon || place.geometry.coordinates[0];
 
             var marker = new L.CircleMarker(new L.LatLng(lat, lon), options);
 

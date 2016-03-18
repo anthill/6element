@@ -1,6 +1,5 @@
 'use strict';
 
-var fs = require('fs');
 var osm = require('query-overpass');
 
 var queryDic = require('./query.json');
@@ -22,10 +21,8 @@ module.exports = function(bbox){
 
 	var resultP = new Promise(function(resolve, reject){
 		osm(query, function(error, data){
-			if (error)
-			    reject(error);
-			else
-				resolve(data);
+			if (error) reject(error);
+			else resolve(data);
 		});
 	});
 

@@ -1,6 +1,4 @@
-#!/usr/bin/env node
-
-"use strict";
+'use strict';
 
 require('es6-shim');
 
@@ -16,7 +14,7 @@ var CREATE_CHUNK_SIZE = 1000;
 function createPlacesByChunk(entries){
     return entries.length === 0 ? undefined : Places.create(entries.slice(0, CREATE_CHUNK_SIZE))
         .then(function(){
-            return createPlacesByChunk(entries.slice(CREATE_CHUNK_SIZE))
+            return createPlacesByChunk(entries.slice(CREATE_CHUNK_SIZE));
         });
 }
 
@@ -27,7 +25,7 @@ function fileToNetworks(dir, file){
         fs.readFile(path.join(dir,file), 'utf8', function (err, data) {
           
             if ( err !== null ) {
-                console.log("ERROR in file ", file, '', err);
+                console.log('ERROR in file ', file, '', err);
                 reject(err);
             }
 
@@ -35,7 +33,7 @@ function fileToNetworks(dir, file){
 
             Networks.createByChunk(networks)
             .then(function(entries){
-                console.log("Entries saved ", entries.length);
+                console.log('Entries saved ', entries.length);
                 resolve(entries);
             })
             .catch(function(error){
@@ -56,11 +54,10 @@ function fileToObjects(dir, file, networks){
         });
 
         var filepath = path.join(dir,file);
-        console.log('loading', filepath)
         fs.readFile(filepath, 'utf8', function (err, data) {
           
             if ( err !== null ) {
-                console.log("ERROR in file ", file, '', err);
+                console.log('ERROR in file ', file, '', err);
                 reject(err);
             }
 
@@ -73,15 +70,14 @@ function fileToObjects(dir, file, networks){
                     console.error('count error', e);
                 })
                 .then(function(){
-                    setTimeout(timeout, 5*1000)
-                })
+                    setTimeout(timeout, 5*1000);
+                });
             })();
             
             
             
             var doc = JSON.parse(data);
-            console.log(filepath, 'loaded and parsed')
-
+          
             var placesData = Object.keys(doc).map(function(key){
 
                 var toSave = doc[key].properties;
@@ -98,18 +94,18 @@ function fileToObjects(dir, file, networks){
                 })
                 .forEach(function(k){
                     wastes[k] = toSave.objects[k];
-                })
+                });
                 hstore.stringify(wastes, function(result) {
                     toSave.objects = result;
                 });
                 
                 var filteredObject = {};
                 placesDeclaration
-                    .columns.map(function(obj){return obj.name})
-                    .filter(function(name){return ['created_at', 'updated_at', 'id'].indexOf(name) === -1})
+                    .columns.map(function(obj){return obj.name;})
+                    .filter(function(name){return ['created_at', 'updated_at', 'id'].indexOf(name) === -1;})
                     .forEach(function(name){
                         filteredObject[name] = toSave[name];
-                    })
+                    });
 
                 return filteredObject;
          

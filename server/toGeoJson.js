@@ -1,10 +1,10 @@
-"use strict";
+'use strict';
 
 var hstore = require('pg-hstore')();
 var dictionnary = require('../data/dictionary.json');
 
 // Avalaible objects
-var parseObjects = function(row){
+function parseObjects(row){
     return new Promise(function(resolve){
 
         if (row.objects){
@@ -31,18 +31,18 @@ module.exports = function(results){
                 parseObjects(result)
                 .then(function(objects){
 
-                    result["objects"] = objects;
+                    result['objects'] = objects;
                     var geoJson = { 
                         type: 'Feature',
                         properties: result,
-                        geometry: { "type": "Point", "coordinates": {"lat":result["lat"], "lon": result["lon"]} },
-                    }
+                        geometry: { 'type': 'Point', 'coordinates': {'lat':result['lat'], 'lon': result['lon']} }
+                    };
                     resolve(geoJson);
                 })
                 .catch(function(err){
                     console.log('ERROR in toGeoJson', err);
                 });
-            })
+            });
         })
     );     
-}
+};

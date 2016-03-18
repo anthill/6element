@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 var request = require('request');
 
@@ -16,7 +16,7 @@ function allResolved(promises){
                 return res;
             })
             .catch(function(error){
-                console.log("Error in allResolved: ", error)
+                console.log('Error in allResolved: ', error);
                 return undefined; // move to "resolve channel"
             });
     }));   
@@ -43,7 +43,7 @@ module.exports = function(list){
                                 var json = JSON.parse(body);
                                 resolve(json);
                             } catch(e) {
-                                reject("Cannot parse body in withPlaceMeasurements ", e);
+                                reject('Cannot parse body in withPlaceMeasurements ', e);
                             }  
                         } else {
                             reject(Object.assign(
@@ -67,7 +67,7 @@ module.exports = function(list){
                             ));
                     }
                 });
-            })
+            });
         })
     );  
-}
+};

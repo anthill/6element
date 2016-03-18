@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 // var osmLoader = require('./osmLoader.js');
 var toGeoJson = require('./toGeoJson.js');
@@ -26,17 +26,15 @@ module.exports = function(req, res){
     
     var data = req.body;
     if(data === null){
-        console.log("-> request without parameters");
+        console.log('-> request without parameters');
         return;
     } 
-    
-    console.log('data', data)
     
     var result = {
         categories: data.categories,
         placeName: data.placeName,
         objects: []
-    }
+    };
 
     if(data.boundingBox !== null &&
         data.geoloc !== null){
@@ -71,9 +69,9 @@ module.exports = function(req, res){
                 if(measures !== null){
                     measures.forEach(function(measure, index){
                         if (measure)
-                            completeData[list[index].index]["measurements"] = {latest: measure.latest, max: measure.max};
+                            completeData[list[index].index]['measurements'] = {latest: measure.latest, max: measure.max};
                         else
-                            completeData[list[index].index]["measurements"] = undefined;
+                            completeData[list[index].index]['measurements'] = undefined;
                     });
                 }
                 result.objects = completeData;
@@ -121,9 +119,9 @@ module.exports = function(req, res){
                 if(measures !== null){
                     measures.forEach(function(measure, index){
                         if (measure)
-                            completeData[list[index].index]["measurements"] = {latest: measure.latest, max: measure.max};
+                            completeData[list[index].index]['measurements'] = {latest: measure.latest, max: measure.max};
                         else
-                            completeData[list[index].index]["measurements"] = undefined;
+                            completeData[list[index].index]['measurements'] = undefined;
                     });
                 }
                 result.objects = completeData;
@@ -143,7 +141,7 @@ module.exports = function(req, res){
         });
     }
     else{
-        console.log("-> request without centroid nor boundingBox");
+        console.log('-> request without centroid nor boundingBox');
         return;       
     }
-}
+};

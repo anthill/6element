@@ -253,7 +253,8 @@ article .adapt-width{
 .place-title,
 .place-infos,
 .place-favorite,
-.place-no-favorite{
+.place-no-favorite,
+.place-available{
 	display: block;
     text-align: left;
     border: none;
@@ -262,7 +263,8 @@ article .adapt-width{
 }
 .place-infos,
 .place-favorite,
-.place-no-favorite{
+.place-no-favorite,
+.place-available{
     padding: 10px 5px;
     border: none;
 }

@@ -58,7 +58,7 @@
     }
 
 
-    global.displayPlaces = function(map, places, filterValues){
+    global.displayPlaces = function(centroid, map, places, filterValues){
 
         if(markersLayer){
             map.removeLayer(markersLayer);
@@ -97,6 +97,21 @@
 
             return marker;
         });
+
+
+        var CentroidIcon = L.Icon.Default.extend({
+            options: {
+                iconUrl:     '/img/centroid.svg',
+                iconSize:     [40, 40],
+                shadowSize:   [0, 0], // size of the shadow
+                iconAnchor:   [10, 10], // point of the icon which will correspond to marker's location
+                shadowAnchor: [10, 10], // the same for the shadow
+                popupAnchor:  [-3, -40] // point from which the popup should open relative to the iconAnchor
+            }
+        });
+        var centroid = new L.Marker(new L.LatLng(centroid.lon, centroid.lat), {icon: new CentroidIcon()});
+        markers.push(centroid);
+        centroid.addTo(map); 
 
         markersLayer = L.layerGroup(markers);
         map.addLayer(markersLayer);

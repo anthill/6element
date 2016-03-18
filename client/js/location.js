@@ -13,6 +13,17 @@ function displayLoading(){
     nodeLog.appendChild(img);   
 }
 
+ function getCurrentSearch(){
+
+    var search = location.search.substring(1);
+    search = JSON.parse('{"' + decodeURI(search).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g,'":"') + '"}');
+
+    if(search.position === undefined) return undefined;
+        
+    var position = JSON.parse(search.position);
+
+    return {lon: position[0], lat: position[1]};
+}
 
 /*** AUTOLOCATION ***/
 

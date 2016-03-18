@@ -64,6 +64,7 @@ CREATE TABLE IF NOT EXISTS osmPlaces (
     tags         json NOT NULL,
     lat          real NOT NULL,
     lon          real NOT NULL,
+    network integer REFERENCES networks (id) NOT NULL,
     geom geometry
 ) INHERITS(lifecycle);
 

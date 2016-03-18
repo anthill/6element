@@ -7,10 +7,17 @@ var converter = require('./wayToPointConverter.js');
 
 module.exports = function(bbox){
 
-	var bboxCoords = [bbox.south, bbox.west, bbox.north, bbox.east].join(',');
-	var bboxString = 'bbox: ' + bboxCoords;
+	var query;
 
-	var query = queryDic.viewport.replace(/bbox/, bboxString);
+	if (bbox){
+		var bboxCoords = [bbox.south, bbox.west, bbox.north, bbox.east].join(',');
+		var bboxString = 'bbox: ' + bboxCoords;
+
+		query = queryDic.viewport.replace(/bbox/, bboxString);
+	}
+
+	else 
+		query = queryDic.france;
 
 	var resultP = new Promise(function(resolve, reject){
 		osm(query, function(error, data){

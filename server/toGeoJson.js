@@ -7,15 +7,18 @@ var dictionnary = require('../data/dictionary.json');
 function parseObjects(row){
     return new Promise(function(resolve){
 
-        hstore.parse(row.objects, function(fromHstore) {
+        if (row.objects){
+            hstore.parse(row.objects, function(fromHstore) {
 
-            var objects = {};
-            Object.keys(fromHstore).forEach(function(key){
-                var fr = dictionnary[key];
-                objects[fr]= fromHstore[key];
+                var objects = {};
+                Object.keys(fromHstore).forEach(function(key){
+                    var fr = dictionnary[key];
+                    objects[fr]= fromHstore[key];
+                });
+                resolve(objects);
             });
-            resolve(objects);
-        });
+        }
+        else resolve([]);
     });
 }
 

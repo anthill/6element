@@ -2,7 +2,6 @@
 
 var pg = require('pg');
 var PRIVATE = require('../../../PRIVATE.json');
-
 var conString = 'postgres://'+ PRIVATE.pg_user + ':' + PRIVATE.pg_pwd + '@localhost:5432/' + PRIVATE.db_name;
 
 var MAX_ATTEMPTS = 10;
@@ -22,7 +21,7 @@ module.exports = function(){
                     if(err){
                         console.error("Couldn't connect to db", conString, err);
                         if(attempts >= MAX_ATTEMPTS)
-                            reject(err); 
+                            reject("Couldn't connect: " + err); 
                         else {
                             // wait twice more to give time and not overwhelm the database with useless attempts to connect
                             console.warn("Retrying in ", 2*time);

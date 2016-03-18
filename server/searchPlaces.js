@@ -1,8 +1,9 @@
 'use strict';
 
-var osmLoader = require('./osmLoader.js');
+// var osmLoader = require('./osmLoader.js');
 var toGeoJson = require('./toGeoJson.js');
 var Places = require('./database/models/places.js');
+var OsmPlaces = require('./database/models/osmPlaces.js');
 var withPlacesMeasurements = require('./withPlacesMeasurements.js');
 
 /*
@@ -41,15 +42,8 @@ module.exports = function(req, res){
         var dbDataP = Places.getWithin(data.geoloc, data.boundingBox, data.categories, 2000)
         .then(toGeoJson);
 
-        // OSM Search
-        var bbox = {
-            north: data.boundingBox.maxLat,
-            south: data.boundingBox.minLat,
-            east: data.boundingBox.maxLon,
-            west: data.boundingBox.minLon
-        };
-
-        var osmDataP = osmLoader(bbox);
+        var osmDataP = OsmPlaces.getWithin(data.geoloc, data.boundingBox, data.categories, 2000)
+        .then(toGeoJson);
 
         Promise.all([dbDataP, osmDataP])
         .then(function(results){
@@ -98,20 +92,11 @@ module.exports = function(req, res){
 
     } else if(data.geoloc !== null){
 
-        dbDataP = Places.getKNearest({'lon': data.geoloc.lon, 'lat': data.geoloc.lat}, data.nbPlaces, data.categories)
-        .then(function(results){
-            return toGeoJson(results);
-        });
+        var dbDataP = Places.getKNearest({"lon": data.geoloc.lon, "lat": data.geoloc.lat}, data.nbPlaces, data.categories)
+        .then(toGeoJson);
 
-        // OSM Search
-        bbox = { // raw approx of 50km bounding box around geoloc
-            north: data.geoloc.lat + 0.5,
-            south: data.geoloc.lat - 0.5,
-            east: data.geoloc.lon + 0.5,
-            west: data.geoloc.lon - 0.5
-        };
-
-        osmDataP = osmLoader(bbox);
+        var osmDataP = OsmPlaces.getKNearest({"lon": data.geoloc.lon, "lat": data.geoloc.lat}, data.nbPlaces, data.categories)
+        .then(toGeoJson);
 
         Promise.all([dbDataP, osmDataP])
         .then(function(results){

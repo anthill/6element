@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 require('es6-shim');
 
@@ -10,7 +10,7 @@ var PRIVATE = require('../PRIVATE.json');
 // Express
 var express = require('express');
 var bodyParser = require('body-parser');
-var compression = require('compression')
+var compression = require('compression');
 
 // Server side rendering
 var jsdom       = require('jsdom');
@@ -69,10 +69,10 @@ app.get('/operator/:name', function(req,res){
     if (req.params.name){
         var now = new Date();
         var strDate = now.getDate().toString()+'-'+(now.getMonth()+1).toString()+'-'+now.getFullYear().toString();
-        res.redirect("/decheteries.html?operateur="+req.params.name+"&date="+strDate);
+        res.redirect('decheteries.html?operateur='+req.params.name+'&date='+strDate);
     }
     else{
-        redirectError(res, "La page que vous recherchez n'existe pas");
+        redirectError(res, 'La page que vous recherchez n\'existe pas');
     }
 });
 
@@ -83,7 +83,7 @@ app.get('/decheteries.html', function(req,res){
         date: new Date(),
         mode: 'citizen',
         places: undefined
-    }
+    };
 
     // Default date = today
     if(req.query.date !== undefined){
@@ -115,7 +115,7 @@ app.get('/decheteries.html', function(req,res){
     }
 
     if(getPlaces === undefined) 
-        return redirectError(res, "Erreur de traitement, veuillez renouveler votre recherche");
+        return redirectError(res, 'Erreur de traitement, veuillez renouveler votre recherche');
   
     // DB places
     getPlaces
@@ -141,17 +141,17 @@ app.get('/decheteries.html', function(req,res){
             })
             .catch(function(err){ 
                 console.error('/', err, err.stack); 
-                redirectError(res, "Erreur de traitement, veuillez renouveler votre recherche");
+                redirectError(res, 'Erreur de traitement, veuillez renouveler votre recherche');
             }); 
         })
         .catch(function(err){
             console.error('/', err, err.stack); 
-            redirectError(res, "Erreur de traitement, veuillez renouveler votre recherche");
+            redirectError(res, 'Erreur de traitement, veuillez renouveler votre recherche');
         });
     })
     .catch(function(err){
         console.error('/', err, err.stack); 
-        redirectError(res, "Erreur de traitement, veuillez renouveler votre recherche");
+        redirectError(res, 'Erreur de traitement, veuillez renouveler votre recherche');
     });
 });
 
@@ -195,7 +195,7 @@ app.post('/bins/update', function(req, res){
 
 app.post('/search', search);
 app.get('/networks', function(req, res){
-    res.setHeader('Content-Type', 'application/json')
+    res.setHeader('Content-Type', 'application/json');
     fs.createReadStream(path.join(__dirname, '..', 'data', 'networks.json')).pipe(res);
 });
 
@@ -223,7 +223,7 @@ function redirectError(res, error){
 
 // catchall
 app.use(function(req, res){
-    redirectError(res, "La page que vous recherchez n'existe pas");
+    redirectError(res, 'La page que vous recherchez n\'existe pas');
 });
 
 

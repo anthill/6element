@@ -35,5 +35,6 @@
         });
         
         return ul;
-    }
-})(this)
+    };
+
+})(this);

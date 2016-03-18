@@ -1,7 +1,7 @@
-"use strict";
+'use strict';
 
 var request = require('request');
-var opening_hours = require('opening_hours');
+var Opening_hours = require('opening_hours');
 var moment = require('moment');
 var momentTZ = require('moment-timezone');
 
@@ -21,7 +21,7 @@ function sendRequest(url, place, attribute){
 
     return new Promise(
 
-        function(resolve, reject){
+        function(resolve){
 
             //console.log(url);
             request({
@@ -39,7 +39,7 @@ function sendRequest(url, place, attribute){
                             clone.measures[attribute] = JSON.parse(body);
                             resolve(clone);
                         } catch(e) {
-                            console.log("Cannot parse body in request ", e);
+                            console.log('Cannot parse body in request ', e);
                             resolve(place);
                         }  
                     } 
@@ -77,7 +77,7 @@ function sendRequest(url, place, attribute){
 function processMeasures(place, start, end, mode){
 
     var oh = place.opening_hours === null ? undefined :
-            new opening_hours(place.opening_hours);
+            new Opening_hours(place.opening_hours);
         
     var results = {'Affluence' : []};
     //console.log('+++', place.name, place.pheromon_id);
@@ -92,7 +92,7 @@ function processMeasures(place, start, end, mode){
         measures = place.measures.today.map(function(measure){
             var date = momentTZ.tz(measure.date, 'Europe/Paris').toDate();  
             //console.log('-', date, measure.value.length);            
-            return { date: date, signals: measure.value.length }
+            return { date: date, signals: measure.value.length };
         });
     }
 
@@ -156,10 +156,10 @@ function processMeasures(place, start, end, mode){
         }
     });
 
-    ticksY.forEach(function(binName, index){
+    ticksY.forEach(function(binName){
 
         results[binName] = [];
-        for (var i = 0; i<=nbTicksX; ++i) results[binName].push(0);
+        for (i = 0; i<=nbTicksX; ++i) results[binName].push(0);
 
         //console.log('>', binName);
         var iTickXStart = 0;
@@ -170,8 +170,8 @@ function processMeasures(place, start, end, mode){
             return measure.value.id === binName;
         })
         .map(function(measure){
-            var date = new Date(measure.date); // UTC -> Local                   
-            return { date: date, bin: measure.value }
+            date = new Date(measure.date); // UTC -> Local                   
+            return { date: date, bin: measure.value };
         })
         .sort(function(m1, m2){
             return m1.date - m2.date;
@@ -185,10 +185,10 @@ function processMeasures(place, start, end, mode){
 
             // For each tick of 15 minutes included
             var iTickXEnd = iTickXStart;
-            for (var i = 0; i<nbTicksX; ++i) {
+            for (i = 0; i<nbTicksX; ++i) {
 
-                var beginTick   = moment(start).add(15*i,'minutes').toDate();
-                var endTick     = moment(start).add(15*(i+1),'minutes').toDate();
+                beginTick   = moment(start).add(15*i,'minutes').toDate();
+                endTick     = moment(start).add(15*(i+1),'minutes').toDate();
 
                 if(measure.date < endTick) break;
                 if(endTick > now ) break;
@@ -210,13 +210,12 @@ function processMeasures(place, start, end, mode){
         });
 
         // 2) For the rest of the day, we expand the last status of avilability
-        for (var i = iTickXStart; i<=nbTicksX; ++i) {
+        for (i = iTickXStart; i<=nbTicksX; ++i) {
             
-            var beginTick   = moment(start).add(15*i,'minutes').toDate();
-            var endTick     = moment(start).add(15*(i+1),'minutes').toDate();
+            beginTick   = moment(start).add(15*i,'minutes').toDate();
+            endTick     = moment(start).add(15*(i+1),'minutes').toDate();
 
             // This time, we go forward so do not invert values:
-            var isOpen = oh ? oh.getState(beginTick) : true;
             if(beginTick > now ){
                 results[binName][i] = -1;//unknown    
             }
@@ -238,7 +237,7 @@ module.exports = function(origin, selection){
 
         selection.places.map(function(place){
 
-            return new Promise(function(resolve, reject){
+            return new Promise(function(resolve){
 
                 var start   = momentTZ.tz(selection.date, 'Europe/Paris').add(8,'hours').toDate();
                 var end     = momentTZ.tz(selection.date, 'Europe/Paris').add(20,'hours').toDate();
@@ -248,7 +247,7 @@ module.exports = function(origin, selection){
                     type: undefined,
                     start: start,
                     end: end
-                }
+                };
                
                 if( place.pheromon_id === null ||
                     place.pheromon_id === undefined){
@@ -286,17 +285,17 @@ module.exports = function(origin, selection){
                             })
                             .catch(function(error){
                                 console.log(error);
-                            })  
+                            });
                         }
                     })
                     .catch(function(error){
                         console.log(error);
-                    })  
+                    });
                 }) 
                 .catch(function(error){
                     console.log(error);
-                })  
-            })         
+                });
+            });      
         })
     );  
-}
+};

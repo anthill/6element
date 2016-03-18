@@ -27,10 +27,10 @@ function changeFavorite(e){
 	else 			setCookie('6element-places', cookie_places + id + ';');// add place in cookie
 
 	ga('send', {
-	  hitType: 'event',
-	  eventCategory: 'Favorites',
-	  eventAction: 'changeFavorite',
-	  eventLabel: id + ':' + (isFavorite ? 'false' : 'true')
+		hitType: 'event',
+		eventCategory: 'Favorites',
+		eventAction: 'changeFavorite',
+		eventLabel: id + ':' + (isFavorite ? 'false' : 'true')
 	});
 }
 

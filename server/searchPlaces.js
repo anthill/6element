@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 var osmLoader = require('./osmLoader.js');
 var toGeoJson = require('./toGeoJson.js');
@@ -25,17 +25,15 @@ module.exports = function(req, res){
     
     var data = req.body;
     if(data === null){
-        console.log("-> request without parameters");
+        console.log('-> request without parameters');
         return;
     } 
-    
-    console.log('data', data)
     
     var result = {
         categories: data.categories,
         placeName: data.placeName,
         objects: []
-    }
+    };
 
     if(data.boundingBox !== null &&
         data.geoloc !== null){
@@ -77,9 +75,9 @@ module.exports = function(req, res){
                 if(measures !== null){
                     measures.forEach(function(measure, index){
                         if (measure)
-                            completeData[list[index].index]["measurements"] = {latest: measure.latest, max: measure.max};
+                            completeData[list[index].index]['measurements'] = {latest: measure.latest, max: measure.max};
                         else
-                            completeData[list[index].index]["measurements"] = undefined;
+                            completeData[list[index].index]['measurements'] = undefined;
                     });
                 }
                 result.objects = completeData;
@@ -100,20 +98,20 @@ module.exports = function(req, res){
 
     } else if(data.geoloc !== null){
 
-        var dbDataP = Places.getKNearest({"lon": data.geoloc.lon, "lat": data.geoloc.lat}, data.nbPlaces, data.categories)
+        dbDataP = Places.getKNearest({'lon': data.geoloc.lon, 'lat': data.geoloc.lat}, data.nbPlaces, data.categories)
         .then(function(results){
             return toGeoJson(results);
         });
 
         // OSM Search
-        var bbox = { // raw approx of 50km bounding box around geoloc
+        bbox = { // raw approx of 50km bounding box around geoloc
             north: data.geoloc.lat + 0.5,
             south: data.geoloc.lat - 0.5,
             east: data.geoloc.lon + 0.5,
             west: data.geoloc.lon - 0.5
         };
 
-        var osmDataP = osmLoader(bbox);
+        osmDataP = osmLoader(bbox);
 
         Promise.all([dbDataP, osmDataP])
         .then(function(results){
@@ -136,9 +134,9 @@ module.exports = function(req, res){
                 if(measures !== null){
                     measures.forEach(function(measure, index){
                         if (measure)
-                            completeData[list[index].index]["measurements"] = {latest: measure.latest, max: measure.max};
+                            completeData[list[index].index]['measurements'] = {latest: measure.latest, max: measure.max};
                         else
-                            completeData[list[index].index]["measurements"] = undefined;
+                            completeData[list[index].index]['measurements'] = undefined;
                     });
                 }
                 result.objects = completeData;
@@ -158,7 +156,7 @@ module.exports = function(req, res){
         });
     }
     else{
-        console.log("-> request without centroid nor boundingBox");
+        console.log('-> request without centroid nor boundingBox');
         return;       
     }
-}
+};

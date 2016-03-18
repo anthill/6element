@@ -46,14 +46,12 @@
 
 .alternatives main #filters li:hover{
     background-color: rgba(240, 240, 240, 1);
-
 }
 
 .alternatives main #filters li.disabled{
     opacity: 0.5;
     text-decoration: line-through;
     background-color: rgb(230, 230, 230);
-
 }
 
 .alternatives main #filters li .color{
@@ -66,4 +64,28 @@
 
 .alternatives main #filters li .text{
     margin-left: 1em;
+}
+
+#preview .adapt-width{
+    height: 55px;
+    background-color: white;
+    /*display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #BDBDBD;*/
+}
+
+#preview {
+ /* 
+    padding: 15px;
+    vertical-align: middle;
+    padding-left: 15px;
+    padding-right: 15px;
+    margin: 0px;
+    height: 60px;
+    border-bottom: solid 1px whitesmoke;
+    color: red;
+    font-size: 60px;
+    z-index: 7; *//* to be over leaflet credits */
 }

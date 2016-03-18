@@ -12,12 +12,12 @@ var generateDeclarations = require('../server/database/management/generateDecl.j
 connectToDB()
 .then(function(db){
     return dropAllTables(db)
-    .then(function(){
-        return createTables(db);
-    })
-    .then(function(){
-        return generateDeclarations();
-    });
+})
+.then(function(){
+    return createTables(db);
+})
+.then(function(){
+    return generateDeclarations();
 })
 .then(function(){
     console.log("Success!");

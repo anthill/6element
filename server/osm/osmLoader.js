@@ -6,6 +6,7 @@ var queryDic = require('./query.json');
 var converter = require('./wayToPointConverter.js');
 
 module.exports = function(bbox){
+	console.log('Fetching OSM Data');
 
 	var query;
 

@@ -25,7 +25,10 @@ CREATE TABLE IF NOT EXISTS networks (
     color       text NOT NULL,
     url         text DEFAULT NULL
 ) INHERITS(lifecycle);
+
+DROP TRIGGER IF EXISTS updated_at_networks on networks;
 CREATE TRIGGER updated_at_networks BEFORE UPDATE ON networks FOR EACH ROW EXECUTE PROCEDURE update_updated_at_column();
+
 
 CREATE TABLE IF NOT EXISTS places (
     id           SERIAL PRIMARY KEY,
@@ -50,6 +53,31 @@ CREATE TABLE IF NOT EXISTS places (
     lon          real NOT NULL,
     geom geometry
 ) INHERITS(lifecycle);
+
+DROP TRIGGER IF EXISTS updated_at_places on places;
 CREATE TRIGGER updated_at_places BEFORE UPDATE ON places FOR EACH ROW EXECUTE PROCEDURE update_updated_at_column();
 
+
+CREATE TABLE IF NOT EXISTS osmPlaces (
+    id           SERIAL PRIMARY KEY,
+    osm_id       text NOT NULL,
+    tags         json NOT NULL,
+    lat          real NOT NULL,
+    lon          real NOT NULL,
+    network integer REFERENCES networks (id) NOT NULL,
+    geom geometry
+) INHERITS(lifecycle);
+
+DROP TRIGGER IF EXISTS updated_at_osmPlaces on osmPlaces;
+CREATE TRIGGER updated_at_osmPlaces BEFORE UPDATE ON osmPlaces FOR EACH ROW EXECUTE PROCEDURE update_updated_at_column();
+
+
+
+-- INDEXES
+DROP INDEX IF EXISTS place_geo_index;
 CREATE INDEX place_geo_index ON places USING GIST (geom);
+
+DROP INDEX IF EXISTS osmPlace_geo_index;
+CREATE INDEX osmPlace_geo_index ON osmPlaces USING GIST (geom)
+
+

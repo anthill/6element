@@ -1,9 +1,21 @@
 'use strict';
 
-var loader = require('./osm/osmLoader');
+var connectToDB = require('./database/management/connectToDB.js');
+var loadOSM = require('./osm/osmLoader');
+var dropOSMTable = require('./database/management/dropOSMTable.js');
+var createTables = require('./database/management/createTables.js');
 var OsmPlaces = require('./database/models/osmPlaces.js');
 
-loader()
+connectToDB()
+.then(function(db){
+	return dropOSMTable(db)
+	.then(function(){
+		return createTables(db);
+	});
+})
+.then(function(){
+	return loadOSM();
+})
 .then(function(osmData){
 	console.log('Nb of points in OSM', osmData.length);
 

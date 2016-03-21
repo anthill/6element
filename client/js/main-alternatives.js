@@ -1,7 +1,7 @@
 "use strict";
 
 (function(){
-    
+
     function getCurrentSearch(){
 
         var search = location.search.substring(1);
@@ -33,6 +33,17 @@
         displayPlaces(getCurrentSearch(), map, currentMapBoundsPlaces, filterValues);
     }
 
+    function reloadMap(){
+
+        var certified = document.querySelector('#certified').className === 'btn-active';
+        findPlaces(getCurrentSearch(), getCurrentBounds(map), certified)
+        .then(function(res){
+            currentMapBoundsPlaces = res.objects;
+            refreshMap();
+        });
+
+    }
+
     /*
         FILTERS
     */
@@ -59,22 +70,15 @@
     
 
     map.on('moveend', function(){
-        findPlaces(getCurrentSearch(), getCurrentBounds(map))
-        .then(function(res){
-            currentMapBoundsPlaces = res.objects;
-            refreshMap();
-        });
+        reloadMap();
     });
 
     
     /*
         INIT
     */
-    findPlaces(getCurrentSearch(), getCurrentBounds(map))
-    .then(function(result){
-        currentMapBoundsPlaces = result.objects;
-    })
-    .then(refreshMap)
-    
-    
+    reloadMap();
+    document.querySelector('#uncertified').addEventListener('click', reloadMap);
+    document.querySelector('#certified').addEventListener('click', reloadMap);
+
 })();

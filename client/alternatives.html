@@ -18,6 +18,7 @@
         <script defer src="js/createMap.js"></script>
         <script defer src="js/displayPlaces.js"></script>
         <script defer src="js/findPlaces.js"></script>
+        <script src="js/alternative-sources.js"></script>
         <script defer src="js/main-alternatives.js"></script>
 		<script defer src="js/location.js"></script>
         
@@ -41,7 +42,13 @@
 		</header>
 		<main>
             <div id="map"></div>
-            <div id="filters"></div>
+            <div id="sources">
+            	<button id="uncertified" class="btn-active" onclick="activateUncertified()">Points non certifiés</button>
+            	<button id="certified" class="btn-inactive" onclick="activateCertified()">Points certifiés</button>
+            	<div id="filters"></div>
+            </div>
+            <!--<div id="filters">
+            </div>-->
         </main>
 	</body>
 </html>

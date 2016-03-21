@@ -94,7 +94,6 @@ function initializeAutocomplete(id) {
 
 function onPlaceChanged() {
     var place = this.getPlace();
-    console.log(place.geometry.location);
     
     if(place.geometry.location === undefined) return;
 

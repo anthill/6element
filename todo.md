@@ -1,18 +1,19 @@
-- [ ] Sockets
-- [ ] debugger css sur tel Romain
-- [ ] Photo d'accueil
-- [ ] Plotly.relayout(graphDiv, update)
-- [ ] Meilleur alignement des coordonées et horaires
-- [ ] Bug sur Firefox
-- [ ] Bug de décalage horaire
-- [ ] Enlever la désactivation quand les décheteries sont fermées
-- [ ] Remettre le menu d'accueil normal
-- [ ] 2 onglets décheteries / alternatives
-- [ ] Onglet Proposer
 - [ ] Filtre sur les PAV
+- [ ] Bug de décalage horaire !important
+- [ ] Bug de Galaxy Smax !important
+- [ ] Remettre le menu d'accueil up
+- [ ] Photos d'accueil
+- [ ] Lien OSM pour edition 
+- [ ] Bug distance
+- [ ] Bug largeur preview ...
+- [ ] Bouton Plein/Vide
+- [ ] Sockets ?
+- [ ] Meilleur alignement des coordonées et horaires
 
 
-
+- [x] 2 onglets décheteries / alternatives
+- [x] Enlever la désactivation quand les décheteries sont fermées
+- [x] Bug sur Firefox : boutons
 - [x] Mettre les scripts en defer
 - [x] Ajouter la date à l'url
 - [x] Afficher la carte ?
@@ -42,6 +43,3 @@
 - [X] Google Analytics
 - [X] Découper les courbes sur les périodes discontinues
 - [X] Bug de décalage de dates
-
-
-delete from places where opening_hours is null;

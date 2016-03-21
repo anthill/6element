@@ -3,7 +3,7 @@
 (function(global){
     global.createFilterList = function(filterValues, onFilterChange){
         var ul = document.createElement('ul');
-
+        
         filterValues.forEach(function(fv){
             var li = document.createElement('li');
 

@@ -18,18 +18,57 @@
     position: relative;
 }
 
-
 .alternatives main #map{
     height: 100%;
 }
+
+.alternatives main #sources {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    bottom: 0px;
+    border-top-right-radius:5px;
+    border-top-left-radius:5px;
+    background-color: rgba(255, 255, 255, 0.9);
+    border: solid #ff6666 1px;
+}
+
+.alternatives main #sources #uncertified,
+.alternatives main #sources #certified
+{
+    height: 40px;
+    width: 150px;
+    margin: 0px;
+    padding: 0px;
+    font-size: 14px;
+    border: none;
+}
+
+.alternatives main #sources #uncertified {
+    border-top-left-radius:5px;
+}
+
+.alternatives main #sources #certified {
+    border-top-right-radius:5px;
+}
+
+.alternatives main #sources .btn-inactive {
+    background-color: #ff6666;
+    color: #FFFFFF;
+}
+
+.alternatives main #sources .btn-active {
+    color: #ff6666;
+    background-color: #FFFFFF;
+}
+
 .alternatives main #filters{
     position: absolute;
-    top: 0;
-    bottom: 0;
-    right: 0;
-    width: 12em;
+    top: 50px;
+    bottom: 0px;
+    right: 10px;
+    width: 290px;
     overflow-y: scroll;
-    
     background-color: rgba(255, 255, 255, 0.9);
 }
 
@@ -44,17 +83,17 @@
     z-index: 8; /* to be over leaflet credits */
 }
 
-.alternatives main #filters li:hover{
+.alternatives #sources #filters li:hover{
     background-color: rgba(240, 240, 240, 1);
 }
 
-.alternatives main #filters li.disabled{
+.alternatives #sources #filters li.disabled{
     opacity: 0.5;
     text-decoration: line-through;
     background-color: rgb(230, 230, 230);
 }
 
-.alternatives main #filters li .color{
+.alternatives #sources #filters li .color{
     height: 1em;
     width: 1em;
     border-radius: 50%;
@@ -62,30 +101,11 @@
     padding-right: 1em;
 }
 
-.alternatives main #filters li .text{
+.alternatives #sources #filters li .text{
     margin-left: 1em;
 }
 
 #preview .adapt-width{
     height: 55px;
     background-color: white;
-    /*display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    background-color: #BDBDBD;*/
-}
-
-#preview {
- /* 
-    padding: 15px;
-    vertical-align: middle;
-    padding-left: 15px;
-    padding-right: 15px;
-    margin: 0px;
-    height: 60px;
-    border-bottom: solid 1px whitesmoke;
-    color: red;
-    font-size: 60px;
-    z-index: 7; *//* to be over leaflet credits */
 }

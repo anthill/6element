@@ -26,9 +26,7 @@
     position: absolute;
     right: 10px;
     top: 10px;
-    bottom: 0px;
-    border-top-right-radius:5px;
-    border-top-left-radius:5px;
+    border-radius:5px;
     background-color: rgba(255, 255, 255, 0.9);
     border: solid #ff6666 1px;
 }
@@ -37,45 +35,64 @@
 .alternatives main #sources #certified
 {
     height: 40px;
-    width: 150px;
+    width: 125px;
     margin: 0px;
     padding: 0px;
-    font-size: 14px;
+    font-size: 12px;
     border: none;
 }
 
 .alternatives main #sources #uncertified {
     border-top-left-radius:5px;
+    border-bottom-left-radius:5px;
 }
 
 .alternatives main #sources #certified {
     border-top-right-radius:5px;
+    border-bottom-right-radius:5px;
 }
 
-.alternatives main #sources .btn-inactive {
+.alternatives main #sources .btn-active {
     background-color: #ff6666;
     color: #FFFFFF;
 }
 
-.alternatives main #sources .btn-active {
+.alternatives main #sources .btn-inactive {
     color: #ff6666;
     background-color: #FFFFFF;
 }
 
 .alternatives main #filters{
     position: absolute;
-    top: 50px;
+    top: 60px;
     bottom: 0px;
     right: 10px;
-    width: 290px;
-    overflow-y: scroll;
+    width: 255px;
+    border-top-right-radius:5px;
+    border-top-left-radius:5px;
+    background-color: rgba(255, 255, 255, 0.9);
+    border: solid #ff6666 1px;
     background-color: rgba(255, 255, 255, 0.9);
 }
 
+.alternatives main #filters #filters-header{
+    border-bottom: solid #ff6666 1px;
+    background-color: #ff6666;
+    color: #FFFFFF;
+}
+
+.alternatives main #filters ul{
+    position: absolute;
+    overflow-y: scroll;
+    top: 50px;
+    bottom: 0px;
+}
+
+.alternatives main #filters #filters-header,
 .alternatives main #filters li{
+    font-size: 14px;
     padding: 1em;
-    cursor: pointer;
-    
+    cursor: pointer;    
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
@@ -83,25 +100,49 @@
     z-index: 8; /* to be over leaflet credits */
 }
 
-.alternatives #sources #filters li:hover{
+.alternatives main #show-filters{
+    padding: 5px; 
+    top: 60px;
+    right: 8px;    
+    width: 60px;
+    height: 60px;
+    border: none;
+    background: none;
+    z-index: 8;
+    position: absolute;
+}
+
+.alternatives #hide-filters{
+    padding: 5px; 
+    margin: 0;
+    position: absolute;
+    top: 6px;
+    right: 8px;    
+    background: none;
+    border: none;
+    z-index: 9;
+}
+
+.alternatives #filters li:hover{
     background-color: rgba(240, 240, 240, 1);
 }
 
-.alternatives #sources #filters li.disabled{
+.alternatives #filters li.disabled{
     opacity: 0.5;
     text-decoration: line-through;
     background-color: rgb(230, 230, 230);
 }
 
-.alternatives #sources #filters li .color{
+.alternatives #filters li .color{
     height: 1em;
     width: 1em;
     border-radius: 50%;
     display: block;
+    content: "¨¨¨¨";
     padding-right: 1em;
 }
 
-.alternatives #sources #filters li .text{
+.alternatives #filters li .text{
     margin-left: 1em;
 }
 

@@ -19,6 +19,7 @@
             li.appendChild(text);
 
             li.addEventListener('click', function(){
+                
                 fv.checked = !fv.checked;
 
                 if(fv.checked){

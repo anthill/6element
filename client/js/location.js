@@ -28,7 +28,7 @@ function displayLoading(){
 /*** AUTOLOCATION ***/
 
 function getTarget(){
-    var list = document.getElementsByClassName("btn-active");
+    var list = document.getElementsByClassName('btn-active');
     if(list.length > 0)
         return list[0].innerText === 'Déchèteries' ? 'decheteries' : 'alternatives';
     else

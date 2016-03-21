@@ -45,10 +45,14 @@
             <div id="sources">
             	<button id="uncertified" class="btn-active" onclick="activateUncertified()">Points non certifiés</button>
             	<button id="certified" class="btn-inactive" onclick="activateCertified()">Points certifiés</button>
-            	<div id="filters"></div>
             </div>
-            <!--<div id="filters">
-            </div>-->
+    		<button id="show-filters" onclick="showFilters()"><img src='./img/layers.svg'/></button>
+            <div id="filters" style="visibility:hidden;">
+            	<div id="filters-header">
+            		<span>Catégories</span>
+            		<button id="hide-filters" onclick="hideFilters()"><img src='./img/close.svg'/></button>
+            	</div>
+            </div>
         </main>
 	</body>
 </html>

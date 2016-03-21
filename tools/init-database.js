@@ -20,10 +20,10 @@ connectToDB()
     });
 })
 .then(function(){
-    console.log("Success!");
+    console.log('Success!');
     process.exit();
 })
 .catch(function(err){
-    console.error("Couldn't connect to database", err);
+    console.error('Couldn\'t connect to database', err);
     process.exit();
 });

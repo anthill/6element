@@ -7,7 +7,7 @@ var places = require('../management/declarations.js').places;
 var networks = require('../management/declarations.js').networks;
 
 
-var jsArrayToPg = function(nodeArray) {
+function jsArrayToPg(nodeArray) {
     return "ARRAY['" + nodeArray.join("','") + "']";
 }
 
@@ -33,13 +33,13 @@ module.exports = {
                 return new Promise(function (resolve, reject) {
                     db.query(query, function (err, result) {
                         if (err) {
-                            console.log("ERROR in createByChunk", query, err);
+                            console.log('ERROR in createByChunk', query, err);
                             reject(err);
                         }
                         else resolve(result.rows);
                     });
                 });
-            }))
+            }));
         })
         .catch(function(err){
             console.error('ERROR in createByChunk', err);
@@ -57,7 +57,7 @@ module.exports = {
             return new Promise(function (resolve, reject) {
                 db.query(query, function (err, result) {
                     if (err) {
-                        console.error("ERROR in count", query, err);
+                        console.error('ERROR in count', query, err);
                         reject(err);
                     }
                     else resolve(Number(result.rows[0].count));
@@ -206,7 +206,7 @@ module.exports = {
                 return new Promise(function (resolve, reject) {
                     var index = object.bins.findIndex(function(elt){
                         return elt.id === bin.id;
-                    })
+                    });
 
                     if(index === -1) reject('Bin with id=' + bin.id + ' unfound');
                     else {
@@ -217,7 +217,7 @@ module.exports = {
                         })
                         .catch(function(err){
                             reject(err);
-                        })
+                        });
                     }
                 });
             })

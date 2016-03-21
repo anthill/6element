@@ -19,12 +19,12 @@ module.exports = function(){
 
                 client.connect(function(err) {
                     if(err){
-                        console.error("Couldn't connect to db", conString, err);
+                        console.error('Couldn\'t connect to db', conString, err);
                         if(attempts >= MAX_ATTEMPTS)
-                            reject("Couldn't connect: " + err); 
+                            reject('Couldn\'t connect: ' + err); 
                         else {
                             // wait twice more to give time and not overwhelm the database with useless attempts to connect
-                            console.warn("Retrying in ", 2*time);
+                            console.warn('Retrying in ', 2*time);
                             tryConnect(2*time); 
                         }
                     }

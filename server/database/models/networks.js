@@ -18,13 +18,13 @@ module.exports = {
                 return new Promise(function (resolve, reject) {
                     db.query(query, function (err, result) {
                         if (err) {
-                            console.log("ERROR in saving entry", query);
+                            console.log('ERROR in saving entry', query);
                             reject(err);
                         }
                         else resolve(result.rows);
                     });
                 });
-            }))
+            }));
         })
         .catch(function(err){
             console.log('ERROR in create bulk', err);

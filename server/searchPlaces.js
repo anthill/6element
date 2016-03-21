@@ -48,8 +48,8 @@ module.exports = function(req, res){
     } else if(data.geoloc !== null) {
 
         todo = data.certified ?
-            OsmPlaces.getKNearest({"lon": data.geoloc.lon, "lat": data.geoloc.lat}, data.nbPlaces, data.categories) :
-            Places.getKNearest({"lon": data.geoloc.lon, "lat": data.geoloc.lat}, data.nbPlaces, data.categories);
+            OsmPlaces.getKNearest({'lon': data.geoloc.lon, 'lat': data.geoloc.lat}, data.nbPlaces, data.categories) :
+            Places.getKNearest({'lon': data.geoloc.lon, 'lat': data.geoloc.lat}, data.nbPlaces, data.categories);
     
     } else {
         console.log('-> request without centroid nor boundingBox');
@@ -70,7 +70,7 @@ module.exports = function(req, res){
         .then(function(measures){
 
             if(measures !== null){
-                
+
                 measures.forEach(function(measure, index){
                     results[list[index].index]['measurements'] = (measure) ?
                         {latest: measure.latest, max: measure.max} : undefined;

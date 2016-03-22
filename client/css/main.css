@@ -180,6 +180,8 @@ article .adapt-width{
 }
 
 #mvp{
+    display: flex;
+    flex-direction: column;
     flex: 1;
 }
 
@@ -187,7 +189,7 @@ article .adapt-width{
 	background: #ffffff url('../img/decheterie.jpg') no-repeat left center;
 	width: 100%;
 	height: 100%;
-	background-size: cover;
+    flex-grow: 20;
 }
 
 #mvp p {

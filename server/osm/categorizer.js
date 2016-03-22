@@ -1,7 +1,7 @@
 'use strict';
 
-var points = require('../../data/osmDataConverted.json').features;
-// var categories = require('../../data/categories.json');
+// var points = require('../../data/osmDataConverted.json').features;
+var categories = require('../../data/categories.json');
 var catMap = new Map();
 var invCatMap = new Map();
 
@@ -29,8 +29,7 @@ function categorizer(inputPoints){
 			opening_hours: point.properties.tags.opening_hours,
 			lat: lat,
 			lon: lon,
-			geom: 'POINT(' + lon + ' ' + lat + ')',
-			network: 5 // OSM, to be changed 
+			geom: 'POINT(' + lon + ' ' + lat + ')'
 		};
 
 		var output = [];

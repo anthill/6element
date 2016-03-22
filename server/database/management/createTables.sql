@@ -76,11 +76,10 @@ CREATE TABLE IF NOT EXISTS osmplaces (
     subcategories  text[] DEFAULT NULL,
     operator       text DEFAULT NULL,
     source         text DEFAULT NULL,
-    recycling_type text NOT NULL,
+    recycling_type text DEFAULT NULL,
     opening_hours  text DEFAULT NULL,
     lat            double precision NOT NULL,
     lon            double precision NOT NULL,
-    network        integer REFERENCES networks (id) NOT NULL,
     geom           geometry
 ) INHERITS(lifecycle);
 

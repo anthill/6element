@@ -8,7 +8,7 @@ var networks = require('../management/declarations.js').networks;
 var categories = require('../management/declarations.js').categories;
 
 
-var jsArrayToPg = function(nodeArray) {
+function jsArrayToPg(nodeArray) {
     return "ARRAY['" + nodeArray.join("','") + "']";
 }
 
@@ -40,7 +40,7 @@ module.exports = {
                         else resolve(result.rows);
                     });
                 });
-            }))
+            }));
         })
         .catch(function(err){
             console.error('ERROR in createByChunk', err.stack);

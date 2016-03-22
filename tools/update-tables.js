@@ -16,10 +16,10 @@ connectToDB()
     return generateDeclarations();
 })
 .then(function(){
-    console.log("Success!");
+    console.log('Success!');
     process.exit();
 })
 .catch(function(err){
-    console.error("ERROR ", err);
+    console.error('ERROR ', err);
     process.exit();
 });

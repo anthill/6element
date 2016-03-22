@@ -4,6 +4,13 @@
 
     var markersLayer;
 
+    var unselectMarker = function(){
+
+        var preview = document.querySelector('#preview');
+        if(preview !== null)
+            preview.parentNode.removeChild(preview);
+    }
+
    // Add a preview footer under the map when clicking marker
     var onClickMarker = function (e){
         
@@ -35,8 +42,6 @@
         avatar.classList.add('place-avatar');
         li.appendChild(avatar);
         avatar.style.backgroundColor = place.properties.color;
-        avatar.style.height = '40px';
-        avatar.style.width = '40px';
 
         // title
         li = document.createElement('li');
@@ -57,8 +62,7 @@
         ul.innerHTML += '<li><button class="place-available"><img src="../img/available.svg"/></button></li>';
     }
 
-
-    global.displayPlaces = function(map, places, filterValues){
+    global.displayPlaces = function(centroid, map, places, filterValues){
 
         if(markersLayer){
             map.removeLayer(markersLayer);
@@ -88,18 +92,34 @@
                 weight: isCenter ? 5 : 3 
             };
 
-            var lat = place.geometry.coordinates.lat || place.geometry.coordinates[1];
-            var lon = place.geometry.coordinates.lon || place.geometry.coordinates[0];
+            var lat = place.geometry.coordinates.lat || place.geometry.coordinates[0];
+            var lon = place.geometry.coordinates.lon || place.geometry.coordinates[1];
 
             var marker = new L.CircleMarker(new L.LatLng(lat, lon), options);
             marker['place'] = place;
-                    marker.on('click', onClickMarker); 
+            marker.on('click', onClickMarker); 
 
             return marker;
         });
 
+
+        var CentroidIcon = L.Icon.Default.extend({
+            options: {
+                iconUrl:     '/img/centroid.svg',
+                iconSize:     [40, 40],
+                shadowSize:   [0, 0], // size of the shadow
+                iconAnchor:   [10, 10], // point of the icon which will correspond to marker's location
+                shadowAnchor: [10, 10], // the same for the shadow
+                popupAnchor:  [-3, -40] // point from which the popup should open relative to the iconAnchor
+            }
+        });
+        var centroid = new L.Marker(new L.LatLng(centroid.lat, centroid.lon), {icon: new CentroidIcon()});
+        markers.push(centroid);
+        centroid.addTo(map); 
+
         markersLayer = L.layerGroup(markers);
         map.addLayer(markersLayer);
+        map.on('click', unselectMarker); 
     };
 
 })(this);

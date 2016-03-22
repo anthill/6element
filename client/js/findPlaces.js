@@ -2,15 +2,13 @@
 
 (function(global){
 
-    global.findPlaces = function(bounds){
+    global.findPlaces = function(centroid, bounds, certified){
         return fetch('/search', {
             method: 'POST',
             body: JSON.stringify({
                 boundingBox : bounds,
-                geoloc: {
-                    lon: -0.5805,
-                    lat: 44.8404
-                },
+                geoloc: centroid,
+                certified: certified,
                 categories: ["All"]
             }),
             headers: {

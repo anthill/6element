@@ -24,6 +24,6 @@ connectToDB()
     process.exit();
 })
 .catch(function(err){
-    console.error("Couldn't connect to database", err);
+    console.error("Couldn't init database", err);
     process.exit();
 });

@@ -4,13 +4,14 @@
 - [ ] Remettre le menu d'accueil up
 - [ ] Photos d'accueil
 - [ ] Lien OSM pour edition 
-- [ ] Clic sur la carte déselectionne la preview
+- [ ] Enlever le logo leaflet
 - [ ] Bug largeur preview ...
 - [ ] Bouton Plein/Vide
 - [ ] Sockets ?
 - [ ] Meilleur alignement des coordonées et horaires
 
 
+- [x] Clic sur la carte déselectionne la preview
 - [x] Bug avatar décheteries
 - [x] Bug distance
 - [x] 2 onglets décheteries / alternatives

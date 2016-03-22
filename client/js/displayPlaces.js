@@ -4,6 +4,13 @@
 
     var markersLayer;
 
+    var unselectMarker = function(){
+
+        var preview = document.querySelector('#preview');
+        if(preview !== null)
+            preview.parentNode.removeChild(preview);
+    }
+
    // Add a preview footer under the map when clicking marker
     var onClickMarker = function (e){
         
@@ -55,7 +62,6 @@
         ul.innerHTML += '<li><button class="place-available"><img src="../img/available.svg"/></button></li>';
     }
 
-
     global.displayPlaces = function(centroid, map, places, filterValues){
 
         if(markersLayer){
@@ -91,7 +97,7 @@
 
             var marker = new L.CircleMarker(new L.LatLng(lat, lon), options);
             marker['place'] = place;
-                    marker.on('click', onClickMarker); 
+            marker.on('click', onClickMarker); 
 
             return marker;
         });
@@ -113,6 +119,7 @@
 
         markersLayer = L.layerGroup(markers);
         map.addLayer(markersLayer);
+        map.on('click', unselectMarker); 
     };
 
 })(this);

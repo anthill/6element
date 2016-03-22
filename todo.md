@@ -1,7 +1,6 @@
 - [ ] Filtre sur les PAV
 - [ ] Bug de décalage horaire !important
 - [ ] Bug de Galaxy Smax !important
-- [ ] Remettre le menu d'accueil up
 - [ ] Photos d'accueil
 - [ ] Lien OSM pour edition 
 - [ ] Bug largeur preview ...
@@ -10,6 +9,7 @@
 - [ ] Meilleur alignement des coordonées et horaires
 
 
+- [x] Remettre le menu d'accueil up
 - [x] Déplacer le logo leaflet
 - [x] Clic sur la carte déselectionne la preview
 - [x] Bug avatar décheteries

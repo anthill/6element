@@ -35,8 +35,6 @@
         avatar.classList.add('place-avatar');
         li.appendChild(avatar);
         avatar.style.backgroundColor = place.properties.color;
-        avatar.style.height = '40px';
-        avatar.style.width = '40px';
 
         // title
         li = document.createElement('li');

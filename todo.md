@@ -4,12 +4,14 @@
 - [ ] Remettre le menu d'accueil up
 - [ ] Photos d'accueil
 - [ ] Lien OSM pour edition 
+- [ ] Clic sur la carte déselectionne la preview
 - [ ] Bug largeur preview ...
 - [ ] Bouton Plein/Vide
 - [ ] Sockets ?
 - [ ] Meilleur alignement des coordonées et horaires
 
 
+- [x] Bug avatar décheteries
 - [x] Bug distance
 - [x] 2 onglets décheteries / alternatives
 - [x] Enlever la désactivation quand les décheteries sont fermées

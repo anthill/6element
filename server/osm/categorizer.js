@@ -1,7 +1,7 @@
 'use strict';
 
 var points = require('../../data/osmDataConverted.json').features;
-var categories = require('../../data/recycling_types.json');
+// var categories = require('../../data/categories.json');
 var catMap = new Map();
 var invCatMap = new Map();
 
@@ -79,8 +79,6 @@ function categorizer(inputPoints){
 			i++;
 		});
 
-
-
 		if (output.length === 0)
 			return [basePoint];
 		else
@@ -93,6 +91,6 @@ function categorizer(inputPoints){
 	return newPoints;
 }
 
-categorizer(points);
+// categorizer(points);
 
 module.exports = categorizer;

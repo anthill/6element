@@ -68,7 +68,7 @@
         var markers = places
         .filter(function(place){
             var relevantFilter = filterValues.find(function(fv){
-                return fv.name === place.properties.file;
+                return fv.name === place.properties.name || true;
             });
             
             if(!relevantFilter)

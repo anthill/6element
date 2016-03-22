@@ -54,8 +54,6 @@ function fileToObjects(dir, file, networks){
             
             var doc = JSON.parse(data);
 
-            console.log(data.length);
-          
             var placesData = Object.keys(doc).map(function(key){
 
                 var toSave = doc[key].properties;

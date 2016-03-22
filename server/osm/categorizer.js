@@ -1,13 +1,14 @@
 'use strict';
 
+var points = require('../../data/osmDataConverted.json').features;
 var categories = require('../../data/recycling_types.json');
 var catMap = new Map();
 var invCatMap = new Map();
 
 // Build inverted categories Map
-Object.keys(categories).forEach(function(category){
-	categories[category].forEach(function(subCategory){
-		invCatMap.set(subCategory, category);
+categories.forEach(function(category){
+	category.objects.forEach(function(subCategory){
+		invCatMap.set(subCategory, category.name);
 	});
 });
 
@@ -60,11 +61,11 @@ function categorizer(inputPoints){
 
 		var i = 0;
 
-		pointCategories.forEach(function(category){
+		pointCategories.forEach(function(subCategories, mainCategory){
 			var newPoint = Object.assign({}, basePoint); // creating a sibling point, which will differ only by category, subcategories, and coords
 
-			newPoint.category = category;
-			newPoint.subcategories = pointCategories.get(category); // in DB, field name is all lowercase
+			newPoint.category = mainCategory;
+			newPoint.subcategories = subCategories; // in DB, field name is all lowercase
 
 			// offsetting points by about 1 m
 			var newLat = basePoint.lat + 0.00001 * Math.cos(2 * Math.PI * i / nb);
@@ -78,6 +79,8 @@ function categorizer(inputPoints){
 			i++;
 		});
 
+
+
 		if (output.length === 0)
 			return [basePoint];
 		else
@@ -89,5 +92,7 @@ function categorizer(inputPoints){
 
 	return newPoints;
 }
+
+categorizer(points);
 
 module.exports = categorizer;

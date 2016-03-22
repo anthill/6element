@@ -134,18 +134,12 @@ function fileToObjects(dir, file, networks){
    
 var dir = path.join(__dirname,'../data/');
 
-fileToNetworks(dir, 'networks.json')
-.then(function(networks){
-    return fileToObjects(dir, 'places.json', networks)
-    .then(function(){
-        console.log('completed');
-        process.exit();
-    })
-    .catch(function(err){
-        console.log('places:', err);
-    });
+fileToObjects(dir, 'places.json', networks)
+.then(function(){
+    console.log('completed');
+    process.exit();
 })
 .catch(function(err){
-    console.log('networks:', err);
+    console.log('places:', err);
 });
 

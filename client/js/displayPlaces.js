@@ -88,8 +88,8 @@
                 weight: isCenter ? 5 : 3 
             };
 
-            var lat = place.geometry.coordinates.lat || place.geometry.coordinates[1];
-            var lon = place.geometry.coordinates.lon || place.geometry.coordinates[0];
+            var lat = place.geometry.coordinates.lat || place.geometry.coordinates[0];
+            var lon = place.geometry.coordinates.lon || place.geometry.coordinates[1];
 
             var marker = new L.CircleMarker(new L.LatLng(lat, lon), options);
             marker['place'] = place;
@@ -109,7 +109,7 @@
                 popupAnchor:  [-3, -40] // point from which the popup should open relative to the iconAnchor
             }
         });
-        var centroid = new L.Marker(new L.LatLng(centroid.lon, centroid.lat), {icon: new CentroidIcon()});
+        var centroid = new L.Marker(new L.LatLng(centroid.lat, centroid.lon), {icon: new CentroidIcon()});
         markers.push(centroid);
         centroid.addTo(map); 
 

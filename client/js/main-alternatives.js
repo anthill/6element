@@ -11,7 +11,7 @@
             
         var position = JSON.parse(search.position);
 
-        return {lon: position[0], lat: position[1]};
+        return {lat: position[0], lon: position[1]};
     }
 
     var map = createMap(getCurrentSearch(), document.querySelector('#map'));

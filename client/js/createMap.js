@@ -7,7 +7,7 @@ function createMap(centroid, container){
         'map_id': 'anthill.9c97b4cf'
     }
 
-    var position =[centroid.lon, centroid.lat];
+    var position =[centroid.lat, centroid.lon];
 
     var map = L.map(container).setView(position, 16);
 

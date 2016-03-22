@@ -14,8 +14,10 @@ function createMap(centroid, container){
     L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
         maxZoom: 18,
         id: mapboxTokens.map_id,
-        accessToken: mapboxTokens.mapbox_token
+        accessToken: mapboxTokens.mapbox_token,
+        attributionControl: false
     }).addTo(map);
+    map.attributionControl.setPosition('bottomleft');
     
     return map;
 }

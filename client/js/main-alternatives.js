@@ -27,7 +27,7 @@
     // fetch('/networks', {headers: {'Content-Type': 'application/json'}})
     fetch('/categories', {headers: {'Content-Type': 'application/json'}})
     .then(function(result){ return result.json() })
-    .then(function(networks){
+    .then(function(categories){
         console.log('categories', categories)
         filterValues = categories.map(function(category){
             return { name: category.name, color: category.color, checked: true };

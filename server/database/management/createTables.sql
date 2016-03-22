@@ -58,18 +58,24 @@ DROP TRIGGER IF EXISTS updated_at_places on places;
 CREATE TRIGGER updated_at_places BEFORE UPDATE ON places FOR EACH ROW EXECUTE PROCEDURE update_updated_at_column();
 
 
-CREATE TABLE IF NOT EXISTS osmPlaces (
-    id           SERIAL PRIMARY KEY,
-    osm_id       text NOT NULL,
-    tags         json NOT NULL,
-    lat          real NOT NULL,
-    lon          real NOT NULL,
-    network integer REFERENCES networks (id) NOT NULL,
-    geom geometry
+CREATE TABLE IF NOT EXISTS osmplaces (
+    id             SERIAL PRIMARY KEY,
+    osm_id         text NOT NULL,
+    name           text DEFAULT NULL,
+    category       text DEFAULT NULL,
+    subcategories  text[] DEFAULT NULL,
+    operator       text DEFAULT NULL,
+    source         text DEFAULT NULL,
+    recycling_type text NOT NULL,
+    opening_hours  text DEFAULT NULL,
+    lat            double precision NOT NULL,
+    lon            double precision NOT NULL,
+    network        integer REFERENCES networks (id) NOT NULL,
+    geom           geometry
 ) INHERITS(lifecycle);
 
-DROP TRIGGER IF EXISTS updated_at_osmPlaces on osmPlaces;
-CREATE TRIGGER updated_at_osmPlaces BEFORE UPDATE ON osmPlaces FOR EACH ROW EXECUTE PROCEDURE update_updated_at_column();
+DROP TRIGGER IF EXISTS updated_at_osmplaces on osmplaces;
+CREATE TRIGGER updated_at_osmPlaces BEFORE UPDATE ON osmplaces FOR EACH ROW EXECUTE PROCEDURE update_updated_at_column();
 
 
 

@@ -18,7 +18,7 @@ module.exports = function(bbox){
 	}
 
 	else 
-		query = queryDic.france;
+		query = queryDic.gironde;
 
 	var resultP = new Promise(function(resolve, reject){
 		osm(query, function(error, data){

@@ -13,11 +13,10 @@ function displayLoading(){
     nodeLog.appendChild(img);   
 }
 
-
 /*** AUTOLOCATION ***/
 
 function getTarget(){
-    var list = document.getElementsByClassName("btn-active");
+    var list = document.getElementsByClassName('btn-active');
     if(list.length > 0)
         return list[0].innerText === 'Déchèteries' ? 'decheteries' : 'alternatives';
     else
@@ -83,7 +82,6 @@ function initializeAutocomplete(id) {
 
 function onPlaceChanged() {
     var place = this.getPlace();
-    console.log(place.geometry.location);
     
     if(place.geometry.location === undefined) return;
 

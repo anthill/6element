@@ -15,7 +15,6 @@ function getCookie(sName) {
     }
 }
 
-
 function changeFavorite(e){
 	var button = e.currentTarget;
 	var isFavorite = button.class === 'place-favorite';

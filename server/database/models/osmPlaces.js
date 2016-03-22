@@ -7,7 +7,7 @@ var osmPlaces = require('../management/declarations.js').osmplaces;
 var networks = require('../management/declarations.js').networks;
 
 
-var jsArrayToPg = function(nodeArray) {
+function jsArrayToPg(nodeArray) {
     return "ARRAY['" + nodeArray.join("','") + "']";
 }
 
@@ -39,7 +39,7 @@ module.exports = {
                         else resolve(result.rows);
                     });
                 });
-            }))
+            }));
         })
         .catch(function(err){
             console.error('ERROR in createByChunk', err.stack);

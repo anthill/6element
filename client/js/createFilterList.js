@@ -3,7 +3,7 @@
 (function(global){
     global.createFilterList = function(filterValues, onFilterChange){
         var ul = document.createElement('ul');
-
+        
         filterValues.forEach(function(fv){
             var li = document.createElement('li');
 
@@ -19,6 +19,7 @@
             li.appendChild(text);
 
             li.addEventListener('click', function(){
+                
                 fv.checked = !fv.checked;
 
                 if(fv.checked){

@@ -5,6 +5,7 @@ sql.setDialect('postgres');
 var databaseP = require('../management/databaseClientP');
 var osmPlaces = require('../management/declarations.js').osmplaces;
 var networks = require('../management/declarations.js').networks;
+var categories = require('../management/declarations.js').categories;
 
 
 var jsArrayToPg = function(nodeArray) {
@@ -94,15 +95,15 @@ module.exports = {
         }); 
     },
     
-    getWithin: function(coords, bbox, categories, limit){
+    getWithin: function(coords, bbox, subCategories, limit){
         return databaseP.then(function (db) {
             
             var strDistance = "st_distance_sphere(osmPlaces.geom, st_makepoint(" + coords.lon + ", " + coords.lat + ")) AS distance";
-            var filters = categories[0] === "All" ? "": " AND  osmPlaces.objects ?| " + jsArrayToPg(categories);
+            var filters = subCategories[0] === "All" ? "": " AND  osmPlaces.objects ?| " + jsArrayToPg(subCategories);
             var query = osmPlaces
-                .select(osmPlaces.star(),networks.name.as('file'), networks.color.as('color'), strDistance)
-                .from(osmPlaces.join(networks).on(osmPlaces.network.equals(networks.id)))
-                .where("osmPlaces.geom && ST_MakeEnvelope(" + bbox.minLon + ", " + bbox.minLat + ", " + bbox.maxLon + ", " + bbox.maxLat + ", 4326)" + filters)
+                .select(osmPlaces.star(), categories.name.as('category'), categories.color.as('color'), strDistance)
+                .from(osmPlaces.join(categories).on(osmPlaces.category.equals(categories.name)))
+                .where("osmPlaces.geom && ST_MakeEnvelope(" + bbox.minLon + ", " + bbox.minLat + ", " + bbox.maxLon + ", " + bbox.maxLat + ", 4326)")
                 .order("distance")
                 .limit(limit)
                 .toQuery();

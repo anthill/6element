@@ -35,12 +35,13 @@
     /*
         FILTERS
     */
-    fetch('/networks', {headers: {'Content-Type': 'application/json'}})
+    // fetch('/networks', {headers: {'Content-Type': 'application/json'}})
+    fetch('/categories', {headers: {'Content-Type': 'application/json'}})
     .then(function(result){ return result.json() })
-    .then(function(networks){
-        //console.log('networks', networks)
-        filterValues = networks.map(function(network){
-            return { name: network.name, color: network.color, checked: true };
+    .then(function(categories){
+        console.log('categories', categories)
+        filterValues = categories.map(function(category){
+            return { name: category.name, color: category.color, checked: true };
         });
         
         var filtersElement = document.querySelector('#filters');
@@ -54,8 +55,7 @@
         
         refreshMap();
     })
-    .catch(function(err){ console.error('fetch /networks error', err) });
-    
+    .catch(function(err){ console.error('fetch /categories error', err) });
 
     map.on('moveend', function(){
         reloadMap();

@@ -29,6 +29,16 @@ CREATE TABLE IF NOT EXISTS networks (
 DROP TRIGGER IF EXISTS updated_at_networks on networks;
 CREATE TRIGGER updated_at_networks BEFORE UPDATE ON networks FOR EACH ROW EXECUTE PROCEDURE update_updated_at_column();
 
+CREATE TABLE IF NOT EXISTS categories (
+    id          SERIAL PRIMARY KEY,
+    name        text NOT NULL,
+    objects     text[] DEFAULT NULL,
+    color       text NOT NULL
+) INHERITS(lifecycle);
+
+DROP TRIGGER IF EXISTS updated_at_categories on categories;
+CREATE TRIGGER updated_at_categories BEFORE UPDATE ON categories FOR EACH ROW EXECUTE PROCEDURE update_updated_at_column();
+
 
 CREATE TABLE IF NOT EXISTS places (
     id           SERIAL PRIMARY KEY,
@@ -58,18 +68,23 @@ DROP TRIGGER IF EXISTS updated_at_places on places;
 CREATE TRIGGER updated_at_places BEFORE UPDATE ON places FOR EACH ROW EXECUTE PROCEDURE update_updated_at_column();
 
 
-CREATE TABLE IF NOT EXISTS osmPlaces (
-    id           SERIAL PRIMARY KEY,
-    osm_id       text NOT NULL,
-    tags         json NOT NULL,
-    lat          real NOT NULL,
-    lon          real NOT NULL,
-    network integer REFERENCES networks (id) NOT NULL,
-    geom geometry
+CREATE TABLE IF NOT EXISTS osmplaces (
+    id             SERIAL PRIMARY KEY,
+    osm_id         text NOT NULL,
+    name           text DEFAULT NULL,
+    category       text DEFAULT NULL,
+    subcategories  text[] DEFAULT NULL,
+    operator       text DEFAULT NULL,
+    source         text DEFAULT NULL,
+    recycling_type text DEFAULT NULL,
+    opening_hours  text DEFAULT NULL,
+    lat            double precision NOT NULL,
+    lon            double precision NOT NULL,
+    geom           geometry
 ) INHERITS(lifecycle);
 
-DROP TRIGGER IF EXISTS updated_at_osmPlaces on osmPlaces;
-CREATE TRIGGER updated_at_osmPlaces BEFORE UPDATE ON osmPlaces FOR EACH ROW EXECUTE PROCEDURE update_updated_at_column();
+DROP TRIGGER IF EXISTS updated_at_osmplaces on osmplaces;
+CREATE TRIGGER updated_at_osmPlaces BEFORE UPDATE ON osmplaces FOR EACH ROW EXECUTE PROCEDURE update_updated_at_column();
 
 
 

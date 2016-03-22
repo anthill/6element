@@ -1,25 +1,38 @@
 'use strict';
 
-var loader = require('./osm/osmLoader');
-var OsmPlaces = require('./database/models/osmPlaces.js');
+var connectToDB = require('./database/management/connectToDB.js');
+var dropOSMTable = require('./database/management/dropOSMTable.js');
+var createTables = require('./database/management/createTables.js');
+var generateDeclarations = require('../server/database/management/generateDecl.js');
 
-loader()
+var loadOSM = require('./osm/osmLoader');
+var categorize = require('./osm/categorizer');
+
+connectToDB()
+.then(function(db){
+	return dropOSMTable(db)
+	.then(function(){
+		return createTables(db);
+	});
+})
+.then(function(){
+    return generateDeclarations();
+})
+.then(function(){
+	return loadOSM();
+})
 .then(function(osmData){
 	console.log('Nb of points in OSM', osmData.length);
 
-	var data = osmData.map(function(place){
-		var lat = place.geometry.coordinates[1];
-		var lon = place.geometry.coordinates[0];
+	var OsmPlaces = require('./database/models/osmPlaces.js'); // needs to be loaded after declarations are generated
 
-		return {
-			osm_id: place.properties.id,
-			tags: place.properties.tags,
-			lat: lat,
-			lon: lon,
-			geom: 'POINT(' + lon + ' ' + lat + ')',
-			network: 5 // Réseau Openstreetmap
-		};
+	var data = categorize(osmData)
+	.reduce(function(a, b){
+		return a.concat(b);
 	});
+
+	console.log('osmData', osmData.length);
+	console.log('data', data.length);
 
 	return OsmPlaces.create(data);
 })

@@ -14,16 +14,16 @@ connectToDB()
     return dropAllTables(db)
     .then(function(){
         return createTables(db);
-    })
-    .then(function(){
-        return generateDeclarations();
     });
 })
 .then(function(){
-    console.log('Success!');
+    return generateDeclarations();
+})
+.then(function(){
+    console.log("Success!");
     process.exit();
 })
 .catch(function(err){
-    console.error('Couldn\'t connect to database', err);
+    console.error("Couldn't init database", err);
     process.exit();
 });

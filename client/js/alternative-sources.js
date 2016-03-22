@@ -1,5 +1,18 @@
 'use strict';
 
+function getCurrentSearch(){
+
+    var search = location.search.substring(1);
+    search = JSON.parse('{"' + decodeURI(search).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g,'":"') + '"}');
+
+    if(search.position === undefined) return undefined;
+        
+    var position = JSON.parse(search.position);
+
+    return {lat: position[0], lon: position[1]};
+}
+
+
 function activateUncertified(){
 
 	var btnUncertified = document.querySelector('#uncertified');

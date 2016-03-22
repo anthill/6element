@@ -17,7 +17,7 @@ function createMap(centroid, container){
         accessToken: mapboxTokens.mapbox_token,
         attributionControl: false
     }).addTo(map);
-    map.attributionControl.setPosition('bottomleft');
+    map.attributionControl.setPrefix('');
     
     return map;
 }

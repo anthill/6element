@@ -18,38 +18,14 @@ function createPlacesByChunk(entries){
         });
 }
 
-function fileToNetworks(dir, file){
-    
-    return new Promise(function(resolve, reject){
-
-        fs.readFile(path.join(dir,file), 'utf8', function (err, data) {
-          
-            if ( err !== null ) {
-                console.log('ERROR in file ', file, '', err);
-                reject(err);
-            }
-
-            var networks = JSON.parse(data);
-
-            Networks.createByChunk(networks)
-            .then(function(entries){
-                console.log('Entries saved ', entries.length);
-                resolve(entries);
-            })
-            .catch(function(error){
-                console.log('error in network chunk creation', error);
-            });   
-        });
-    });
-}
-
 function fileToObjects(dir, file, networks){
 
     return new Promise(function(resolve, reject){
         var sources = {};
         networks.forEach(function(network){
-            network[0].sources.forEach(function(source){
-                sources[source] = network[0].id;
+
+            network.sources.forEach(function(source){
+                sources[source] = network.id;
             });
         });
 
@@ -77,6 +53,8 @@ function fileToObjects(dir, file, networks){
             
             
             var doc = JSON.parse(data);
+
+            console.log(data.length);
           
             var placesData = Object.keys(doc).map(function(key){
 
@@ -134,12 +112,18 @@ function fileToObjects(dir, file, networks){
    
 var dir = path.join(__dirname,'../data/');
 
-fileToObjects(dir, 'places.json', networks)
-.then(function(){
-    console.log('completed');
-    process.exit();
+Networks.getAll()
+.then(function(networks){
+    return fileToObjects(dir, 'places.json', networks)
+    .then(function(){
+        console.log('completed');
+        process.exit();
+    })
+    .catch(function(err){
+        console.log('places:', err);
+    });
 })
 .catch(function(err){
-    console.log('places:', err);
+    console.log('networks:', err);
 });
 

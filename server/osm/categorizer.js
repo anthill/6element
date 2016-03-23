@@ -74,7 +74,7 @@ function categorizer(inputPoints){
 	});
 
 	console.log('Unknown tags', unknown_tags);
-	fs.writeFileSync('../data/unknownOSMtags.json', JSON.stringify(unknown_tags));
+	fs.writeFile(__dirname + '../../data/unknownOSMtags.json', JSON.stringify(unknown_tags));
 
 	return newPoints;
 }

@@ -26,10 +26,7 @@ connectToDB()
 
 	var OsmPlaces = require('./database/models/osmPlaces.js'); // needs to be loaded after declarations are generated
 
-	var data = categorize(osmData)
-	.reduce(function(a, b){
-		return a.concat(b);
-	});
+	var data = categorize(osmData);
 
 	console.log('osmData', osmData.length);
 	console.log('data', data.length);

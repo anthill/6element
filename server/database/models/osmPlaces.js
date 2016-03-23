@@ -8,10 +8,6 @@ var osmPlaces = require('../management/declarations.js').osmplaces;
 
 var assignColors = require('../../assignColors.js');
 
-function jsArrayToPg(nodeArray) {
-    return "ARRAY['" + nodeArray.join("','") + "']";
-}
-
 module.exports = {
 
     // ------------- BASICS ---------------

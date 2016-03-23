@@ -1,5 +1,7 @@
 'use strict';
 
+var fs = require('fs');
+
 // var points = require('../../data/osmDataConverted.json').features;
 var categories = require('../../data/categories.json');
 var catMap = new Map();
@@ -71,8 +73,8 @@ function categorizer(inputPoints){
 		return point;
 	});
 
-	if (Object.keys(unknown_tags).length > 0)
-		console.log('Unknown tags', unknown_tags);
+	console.log('Unknown tags', unknown_tags);
+	fs.writeFileSync('../data/unknownOSMtags.json', JSON.stringify(unknown_tags));
 
 	return newPoints;
 }

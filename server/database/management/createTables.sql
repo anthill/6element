@@ -43,7 +43,7 @@ CREATE TRIGGER updated_at_categories BEFORE UPDATE ON categories FOR EACH ROW EX
 CREATE TABLE IF NOT EXISTS places (
     id            SERIAL PRIMARY KEY,
     pheromon_id   integer DEFAULT NULL,
-    osm_id        text DEFAULT NULL
+    osm_id        text DEFAULT NULL,
     name          text NOT NULL,
     type          text DEFAULT NULL, -- is it a center, a container, an association, a shop ...?
     operator      text DEFAULT NULL, -- who runs the place
@@ -69,7 +69,7 @@ CREATE TRIGGER updated_at_places BEFORE UPDATE ON places FOR EACH ROW EXECUTE PR
 CREATE TABLE IF NOT EXISTS osmplaces (
     id            SERIAL PRIMARY KEY,
     pheromon_id   integer DEFAULT NULL,
-    osm_id        text DEFAULT NULL
+    osm_id        text DEFAULT NULL,
     name          text NOT NULL,
     type          text DEFAULT NULL, -- is it a center, a container, an association, a shop ...?
     operator      text DEFAULT NULL, -- who runs the place

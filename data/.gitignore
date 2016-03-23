@@ -1,5 +1,6 @@
 # Ignore everything in this directory
 *
-!dictionary.json
 # Except this file
+!dictionary.json
+!categories.json
 !.gitignore

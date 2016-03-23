@@ -1,5 +1,7 @@
 'use strict';
 
+var fs = require('fs');
+
 // var points = require('../../data/osmDataConverted.json').features;
 var categories = require('../../data/categories.json');
 var catMap = new Map();
@@ -20,13 +22,14 @@ function categorizer(inputPoints){
 		var lon = point.geometry.coordinates[0];
 		
 		var tags = point.properties.tags;
-		var basePoint = {
+		var point = {
 			osm_id: point.properties.id,
 			name: point.properties.tags.name,
 			operator: point.properties.tags.operator,
 			source: point.properties.tags.source,
-			recycling_type: point.properties.tags.recycling_type,
+			type: point.properties.tags.recycling_type,
 			opening_hours: point.properties.tags.opening_hours,
+			bins: [],
 			lat: lat,
 			lon: lon,
 			geom: 'POINT(' + lon + ' ' + lat + ')'
@@ -56,36 +59,22 @@ function categorizer(inputPoints){
 			}
 		});
 
-		var nb = pointCategories.size;
-
-		var i = 0;
 
 		pointCategories.forEach(function(subCategories, mainCategory){
-			var newPoint = Object.assign({}, basePoint); // creating a sibling point, which will differ only by category, subcategories, and coords
-
-			newPoint.category = mainCategory;
-			newPoint.subcategories = subCategories; // in DB, field name is all lowercase
-
-			// offsetting points by about 1 m
-			var newLat = basePoint.lat + 0.00001 * Math.cos(2 * Math.PI * i / nb);
-			var newLon = basePoint.lon + 0.00001 * Math.sin(2 * Math.PI * i / nb);
-
-			newPoint.lat = newLat;
-			newPoint.lon = newLon;
-
-			output.push(newPoint);
-
-			i++;
+			point.bins.push({
+				t: mainCategory, // type
+				a: true, // availability
+				o: subCategories // objects accepted
+			});
 		});
 
-		if (output.length === 0)
-			return [basePoint];
-		else
-			return output;
+		console.log('Point', point);
+
+		return point;
 	});
 
-	if (Object.keys(unknown_tags).length > 0)
-		console.log('Unknown tags', unknown_tags);
+	console.log('Unknown tags', unknown_tags);
+	fs.writeFileSync('../data/unknownOSMtags.json', JSON.stringify(unknown_tags));
 
 	return newPoints;
 }

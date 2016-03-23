@@ -194,10 +194,6 @@ app.post('/bins/update', function(req, res){
 
 
 app.post('/search', search);
-app.get('/networks', function(req, res){
-    res.setHeader('Content-Type', 'application/json');
-    fs.createReadStream(path.join(__dirname, '..', 'data', 'networks.json')).pipe(res);
-});
 
 app.get('/categories', function(req, res){
     res.setHeader('Content-Type', 'application/json');

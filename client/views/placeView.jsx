@@ -92,7 +92,7 @@ module.exports = React.createClass({
         coordinatesJSX.push(<br/>);
         
         /*coordinatesJSX.push(<br/>);
-        coordinatesJSX.push(<span>Gestionnaire: {place.owner}</span>);*/
+        coordinatesJSX.push(<span>Gestionnaire: {place.operator}</span>);*/
 		
 		// BINS
 		var binsJSX = "";

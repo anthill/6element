@@ -2,11 +2,11 @@
 
 var sql = require('sql');
 sql.setDialect('postgres');
+
 var databaseP = require('../management/databaseClientP');
 var osmPlaces = require('../management/declarations.js').osmplaces;
-var networks = require('../management/declarations.js').networks;
-var categories = require('../management/declarations.js').categories;
 
+var assignColors = require('../../assignColors.js');
 
 function jsArrayToPg(nodeArray) {
     return "ARRAY['" + nodeArray.join("','") + "']";
@@ -86,7 +86,7 @@ module.exports = {
             return new Promise(function (resolve, reject) {
                 db.query(query, function (err, result) {
                     if (err) reject(err);
-                    else resolve(result.rows);
+                    else resolve(assignColors(result.rows));
                 });
             });
         })
@@ -99,10 +99,9 @@ module.exports = {
         return databaseP.then(function (db) {
             
             var strDistance = "st_distance_sphere(osmPlaces.geom, st_makepoint(" + coords.lon + ", " + coords.lat + ")) AS distance";
-            var filters = subCategories[0] === "All" ? "": " AND  osmPlaces.objects ?| " + jsArrayToPg(subCategories);
             var query = osmPlaces
-                .select(osmPlaces.star(), categories.name.as('category'), categories.color.as('color'), strDistance)
-                .from(osmPlaces.join(categories).on(osmPlaces.category.equals(categories.name)))
+                .select(osmPlaces.star(), strDistance)
+                .from(osmPlaces)
                 .where("osmPlaces.geom && ST_MakeEnvelope(" + bbox.minLon + ", " + bbox.minLat + ", " + bbox.maxLon + ", " + bbox.maxLat + ", 4326)")
                 .order("distance")
                 .limit(limit)
@@ -112,7 +111,7 @@ module.exports = {
                 db.query(query, function (err, result) {
                     if (err) reject(err);
 
-                    else resolve(result.rows);
+                    else resolve(assignColors(result.rows));
                 });
             });
         })

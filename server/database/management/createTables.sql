@@ -17,29 +17,6 @@ BEGIN
 END;
 $$ language 'plpgsql';
 
-
-CREATE TABLE IF NOT EXISTS networks (
-    id          SERIAL PRIMARY KEY,
-    name        text NOT NULL,
-    sources     text[] DEFAULT NULL,
-    color       text NOT NULL,
-    url         text DEFAULT NULL
-) INHERITS(lifecycle);
-
-DROP TRIGGER IF EXISTS updated_at_networks on networks;
-CREATE TRIGGER updated_at_networks BEFORE UPDATE ON networks FOR EACH ROW EXECUTE PROCEDURE update_updated_at_column();
-
-CREATE TABLE IF NOT EXISTS categories (
-    id          SERIAL PRIMARY KEY,
-    name        text NOT NULL,
-    objects     text[] DEFAULT NULL,
-    color       text NOT NULL
-) INHERITS(lifecycle);
-
-DROP TRIGGER IF EXISTS updated_at_categories on categories;
-CREATE TRIGGER updated_at_categories BEFORE UPDATE ON categories FOR EACH ROW EXECUTE PROCEDURE update_updated_at_column();
-
-
 CREATE TABLE IF NOT EXISTS places (
     id            SERIAL PRIMARY KEY,
     pheromon_id   integer DEFAULT NULL,

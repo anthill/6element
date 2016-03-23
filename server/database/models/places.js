@@ -2,10 +2,11 @@
 
 var sql = require('sql');
 sql.setDialect('postgres');
+
 var databaseP = require('../management/databaseClientP');
 var places = require('../management/declarations.js').places;
-var networks = require('../management/declarations.js').networks;
 
+var assignColors = require('../../assignColors.js');
 
 function jsArrayToPg(nodeArray) {
     return "ARRAY['" + nodeArray.join("','") + "']";
@@ -85,7 +86,7 @@ module.exports = {
             return new Promise(function (resolve, reject) {
                 db.query(query, function (err, result) {
                     if (err) reject(err);
-                    else resolve(result.rows);
+                    else resolve(assignColors(result.rows));
                 });
             });
         })
@@ -109,9 +110,7 @@ module.exports = {
                         console.log("ERROR in searching place", query);
                         reject(err);
                     }
-                    else {
-                        resolve(result.rows);
-                    } 
+                    else resolve(assignColors(result.rows));
                 });
             });
         })
@@ -135,9 +134,7 @@ module.exports = {
                         console.log("ERROR in searching place by operatorName", query);
                         reject(err);
                     }
-                    else {
-                        resolve(result.rows);
-                    } 
+                    else resolve(result.rows); 
                 });
             });
         })
@@ -230,11 +227,10 @@ module.exports = {
         return databaseP.then(function (db) {
             
             var strDistance = "st_distance_sphere(places.geom, st_makepoint(" + coords.lon + ", " + coords.lat + ")) AS distance";
-            var filters = categories[0] === "All" ? "": " AND  places.objects ?| " + jsArrayToPg(categories);
             var query = places
-                .select(places.star(),networks.name.as('file'), networks.color.as('color'), strDistance)
-                .from(places.join(networks).on(places.network.equals(networks.id)))
-                .where("places.geom && ST_MakeEnvelope(" + bbox.minLon + ", " + bbox.minLat + ", " + bbox.maxLon + ", " + bbox.maxLat + ", 4326)" + filters)
+                .select(places.star(), strDistance)
+                .from(places)
+                .where("places.geom && ST_MakeEnvelope(" + bbox.minLon + ", " + bbox.minLat + ", " + bbox.maxLon + ", " + bbox.maxLat + ", 4326)")
                 .order("distance")
                 .limit(limit)
                 .toQuery();
@@ -244,7 +240,7 @@ module.exports = {
                 db.query(query, function (err, result) {
                     if (err) reject(err);
 
-                    else resolve(result.rows);
+                    else resolve(assignColors(result.rows));
                 });
             });
         })

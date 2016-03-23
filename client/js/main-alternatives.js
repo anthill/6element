@@ -35,7 +35,6 @@
     /*
         FILTERS
     */
-    // fetch('/networks', {headers: {'Content-Type': 'application/json'}})
     fetch('/categories', {headers: {'Content-Type': 'application/json'}})
     .then(function(result){ return result.json() })
     .then(function(categories){

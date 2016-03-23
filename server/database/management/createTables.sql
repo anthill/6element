@@ -44,7 +44,7 @@ CREATE TABLE IF NOT EXISTS places (
     id            SERIAL PRIMARY KEY,
     pheromon_id   integer DEFAULT NULL,
     osm_id        text DEFAULT NULL,
-    name          text NOT NULL,
+    name          text DEFAULT NULL,
     type          text DEFAULT NULL, -- is it a center, a container, an association, a shop ...?
     operator      text DEFAULT NULL, -- who runs the place
     website       text DEFAULT NULL, -- the operator website
@@ -70,7 +70,7 @@ CREATE TABLE IF NOT EXISTS osmplaces (
     id            SERIAL PRIMARY KEY,
     pheromon_id   integer DEFAULT NULL,
     osm_id        text DEFAULT NULL,
-    name          text NOT NULL,
+    name          text DEFAULT NULL,
     type          text DEFAULT NULL, -- is it a center, a container, an association, a shop ...?
     operator      text DEFAULT NULL, -- who runs the place
     website       text DEFAULT NULL, -- the operator website

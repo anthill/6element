@@ -41,7 +41,7 @@
         var avatar = document.createElement('span');
         avatar.classList.add('place-avatar');
         li.appendChild(avatar);
-        avatar.style.backgroundColor = place.properties.color;
+        avatar.style.backgroundColor = place.properties.bins.length > 0 ? place.properties.bins[0].color : '#616161';
 
         // title
         li = document.createElement('li');
@@ -51,7 +51,13 @@
         var distance = (place.properties.distance > 1000) ? (place.properties.distance/1000).toFixed(2) + ' Km' : 
                                                   Math.round(place.properties.distance).toString() + ' m';
         li.appendChild(title);
-        title.innerHTML = place.properties.name+' - '+distance+'<br/><span class="place-subtitle">'+place.properties.file+'</span>';
+
+        var subtitle = place.properties.bins.map(function(bin){
+            console.log(place);
+            return bin.o.join(' - ');
+        }).join(' - ');
+
+        title.innerHTML = place.properties.name+' - '+distance+'<br/><span class="place-subtitle">'+subtitle+'</span>';
 
         // 2nd ul + icons
         var ul = document.createElement('ul');
@@ -81,24 +87,49 @@
             return relevantFilter.checked;
         })
         .map(function(place){
-            var isCenter = (place.properties.type === 'centre');
-            var options = {
-                color: 'black',
-                fill: true,
-                fillColor: place.properties.color, 
-                fillOpacity: 1,
-                radius: isCenter ? 10 : 7,
-                clickable: true,
-                weight: isCenter ? 5 : 3 
-            };
 
             var lat = place.geometry.coordinates.lat || place.geometry.coordinates[0];
             var lon = place.geometry.coordinates.lon || place.geometry.coordinates[1];
 
-            var marker = new L.CircleMarker(new L.LatLng(lat, lon), options);
-            marker['place'] = place;
-            marker.on('click', onClickMarker); 
+            var colors = place.properties.bins.map(function(bin){
+                return bin.color;
+            })
 
+            var marker = undefined;
+            if(colors.length === 1){
+            
+                var isCenter = (place.properties.type === 'centre');
+                var options = {
+                    color: 'black',
+                    fill: true,
+                    fillColor: colors[0], 
+                    fillOpacity: 1,
+                    radius: isCenter ? 10 : 7,
+                    clickable: true,
+                    weight: isCenter ? 5 : 3 
+                };
+                marker = new L.CircleMarker(new L.LatLng(lat, lon), options);
+            }
+            else 
+            {
+                var isCenter = (place.properties.type === 'centre');
+                var options = {
+                    color: 'black',
+                    fill: true,
+                    fillColor: colors[0], 
+                    fillOpacity: 1,
+                    radius: isCenter ? 10 : 7,
+                    clickable: true,
+                    weight: isCenter ? 5 : 3 
+                };
+                marker = new L.CircleMarker(new L.LatLng(lat, lon), options);
+            }
+
+            if(marker){
+                marker['place'] = place;
+                marker.on('click', onClickMarker); 
+            } 
+           
             return marker;
         });
 

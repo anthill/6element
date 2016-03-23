@@ -8,7 +8,10 @@ module.exports = function(points){
 	    
 		if (point.bins){
 			point.bins.forEach(function(bin){
-		        bin.color = categoryMap.get(bin.t).color;
+				var type = categoryMap.get(bin.t);
+				if (type)
+		        	bin.color = type.color;
+		        else bin.color = '000';
 		    });
 		}
 	    

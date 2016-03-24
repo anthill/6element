@@ -2,10 +2,15 @@
 
 var path = require('path');
 var fs   = require('fs');
+
+var makeMap = require('./makeMap');
+
 var Places = require('../server/database/models/places.js');
 var placesDeclaration = require('../server/database/management/declarations.js').places;
 
-var categories = require('../data/categories.json');
+var categories = require('../references/categories.json');
+var synonymMap = makeMap(require('../references/synonyms.json'));
+
 var invCatMap = new Map();
 
 var CREATE_CHUNK_SIZE = 1000;
@@ -68,6 +73,11 @@ function processFile(dir, file){
 
                         Object.keys(prop.objects).forEach(function(object){
                             var mainCat = invCatMap.get(object);
+
+                            if (synonymMap.has(object)){ // check for synonyms
+                                console.log('SYNONYM', object, synonymMap.get(object));
+                                object = synonymMap.get(object);
+                            }
 
                             if (pointCategories.has(object))
                                 pointCategories.get(mainCat).push(object);

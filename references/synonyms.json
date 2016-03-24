@@ -1,0 +1,20 @@
+{
+	"beverage_carton": "beverage_cartons",
+	"cardboard": "cartons",
+	"leaflet": "advertising",
+	"pet": "PET",
+	"styrofoam": "polystyrene_foam",
+	"garden_waste" : "green_waste",
+	"green": "green_waste",
+	"waste_oil" : "wasted_oil",
+	"oil" : "wasted_oil",
+	"metal": "scrap_metal",
+	"fridge_and_freezer" : "cold_devices",
+	"foil" : "aluminium",
+	"electrical" : "electrical_appliances",
+	"electrical_items" : "electrical_appliances",
+	"white_good" : "white_goods",
+	"printer_inkjet_cartridges": "printer_cartridges",
+	"hardcore" : "rubble",
+	"hardcode" : "rubble"
+}

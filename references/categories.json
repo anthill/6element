@@ -1,0 +1,80 @@
+[{
+	"name": "glass",
+	"objects": ["glass", "glass_bottles"],
+	"color": "#CFCE4B"
+},
+{
+	"name": "paper",
+	"objects": ["leaflet", "beverage_carton", "beverage_cartons", "books", "cardboard", "cartons", "magazines", "newspaper", "paper", "paper_packaging"],
+	"color": "#41B93D"
+},
+{
+	"name": "plastic",
+	"objects": ["packaging", "plastic_caps", "pet", "PET", "plastic", "plastic_bags", "plastic_bottles", "plastic_packaging", "polyester", "polystyrene_foam", "styrofoam"],
+	"color": "#E923D4"
+},
+{
+	"name": "batteries",
+	"objects": ["batteries", "car_batteries"],
+	"color": "#76561D"
+},
+{
+	"name": "clothes",
+	"objects": ["clothes", "shoes"],
+	"color": "#EBB30F"
+},
+{
+	"name": "organic",
+	"objects": ["fat_corp", "chipboard", "green", "christmas_trees", "cooking_oil", "cork", "engine_oil", "green_waste", "garden_waste", "organic", "wood", "oil", "waste_oil", "wasted_oil"],
+	"color": "#2DB8DE"
+},
+{
+	"name": "metal",
+	"objects": ["aluminium", "bicycles", "cans", "foil", "metal", "scrap_metal", "scrap_metal_no_iron", "sheet_metal"],
+	"color": "#ED7AEB"
+},
+{
+	"name": "electrical",
+	"objects": ["cold_devices", "small_appliances", "major_appliances", "fridge_and_freezer", "electrical_items", "fluorescent_tubes", "low_energy_bulbs", "light_bulbs", "white_goods", "white_good", "electrical_appliances"],
+	"color": "#D75267"
+},
+{
+	"name": "electronic",
+	"objects": ["computers", "mobile_phones", "tv_monitor", "cam"],
+	"color": "#D9B0B3"
+},
+{
+	"name": "furniture",
+	"objects": ["furniture"],
+	"color": "#E923D4"
+},
+{
+	"name": "chemical",
+	"objects": ["paint", "hazardous_waste", "waste_farming_chemical"],
+	"color": "#E923D4"
+},
+{
+	"name": "medical",
+	"objects": ["medical", "medical_items", "waste_medical", "waste_mix_medical", "syringe", "drugs"],
+	"color": "#E923D4"
+},
+{
+	"name": "construction",
+	"objects": ["plasterboard", "hardcode",  "hardcore", "rubble"],
+	"color": "#E923D4"
+},
+{
+	"name": "house",
+	"objects": ["bottles", "plastic_cartridges", "music", "cds", "coffee_capsules", "aerosol_cans", "printer_cartridges", "printer_toner_cartridges", "printer_inkjet_cartridges", "toys"],
+	"color": "#E923D4"
+},
+{
+	"name": "other",
+	"objects": ["all", "recyclable", "advertising", "blade", "car", "animal_waste", "gas_bottles", "tyres", "waste"],
+	"color": "#01760F"
+},
+{
+	"name": "operator",
+	"objects": ["operator"],
+	"color": "#0176FF"
+}]

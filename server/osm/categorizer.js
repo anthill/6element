@@ -3,7 +3,11 @@
 var fs = require('fs');
 
 // var points = require('../../data/osmDataConverted.json').features;
-var categories = require('../../data/categories.json');
+var makeMap = require('../../tools/makeMap');
+
+var categories = require('../../references/categories.json');
+var synonymMap = makeMap(require('../../references/synonyms.json'));
+
 var catMap = new Map();
 var invCatMap = new Map();
 
@@ -45,6 +49,11 @@ function categorizer(inputPoints){
 			if (match){ // if a match is found
 				var subCat = match[1];
 
+				if (synonymMap.has(subCat)){
+					console.log('SYNONYM', subCat, synonymMap.get(subCat));
+					subCat = synonymMap.get(subCat);
+				}
+
 				if (invCatMap.get(subCat) === undefined) // if tag is unknown, count how many occurences
 					unknown_tags[subCat] = unknown_tags[subCat] ? unknown_tags[subCat] + 1 : 1;
 
@@ -74,7 +83,7 @@ function categorizer(inputPoints){
 	});
 
 	console.log('Unknown tags', unknown_tags);
-	fs.writeFileSync('../data/unknownOSMtags.json', JSON.stringify(unknown_tags));
+	fs.writeFile(__dirname + '../../data/unknownOSMtags.json', JSON.stringify(unknown_tags));
 
 	return newPoints;
 }

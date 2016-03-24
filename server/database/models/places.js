@@ -18,24 +18,27 @@ module.exports = {
         
         return databaseP.then(function (db) {
 
-            return Promise.all(placesData.map(function(data){
-
-                var query = places
+            return Promise.all(placesData.map(function(data, index){
+                if (data){
+                    var query = places
                     .insert(data)
                     .returning('*')
                     .toQuery();
 
-                // console.log('places create query', query);
+                    // console.log('places create query', query);
 
-                return new Promise(function (resolve, reject) {
-                    db.query(query, function (err, result) {
-                        if (err) {
-                            console.log('ERROR in createByChunk', query, err);
-                            reject(err);
-                        }
-                        else resolve(result.rows);
+                    return new Promise(function (resolve, reject) {
+                        db.query(query, function (err, result) {
+                            if (err) {
+                                console.log('!!!! ERROR in createByChunk', query, err);
+                                reject(err);
+                            }
+                            else resolve(result.rows);
+                        });
                     });
-                });
+                }
+                else return Promise.reject(new Error('Place data is undefined'));
+            
             }));
         })
         .catch(function(err){

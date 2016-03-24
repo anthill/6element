@@ -1,6 +1,6 @@
 "use strict";
 
-(function(){
+(function(global){
 
     var map = createMap(getCurrentSearch(), document.querySelector('#map'));
     var currentMapBoundsPlaces = [];
@@ -17,7 +17,7 @@
         };
     }
 
-    function refreshMap(){
+    global.refreshMap = function(){
         displayPlaces(getCurrentSearch(), map, currentMapBoundsPlaces, filterValues);
     }
 
@@ -38,20 +38,9 @@
     fetch('/categories', {headers: {'Content-Type': 'application/json'}})
     .then(function(result){ return result.json() })
     .then(function(categories){
-        console.log('categories', categories)
-        filterValues = categories.map(function(category){
-            return { name: category.name, color: category.color, checked: true };
-        });
+        //console.log('categories', categories)
         
-        var filtersElement = document.querySelector('#filters');
-
-        var ul = createFilterList(filterValues, function(newFilterValues){
-            filterValues = newFilterValues;
-            refreshMap();
-        });
-
-        filtersElement.appendChild(ul);
-        
+        createFilterList(categories);
         refreshMap();
     })
     .catch(function(err){ console.error('fetch /categories error', err) });
@@ -68,4 +57,4 @@
     document.querySelector('#uncertified').addEventListener('click', reloadMap);
     document.querySelector('#certified').addEventListener('click', reloadMap);
     hideFilters();
-})();
+})(this);

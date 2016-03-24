@@ -41,7 +41,7 @@
         var avatar = document.createElement('span');
         avatar.classList.add('place-avatar');
         li.appendChild(avatar);
-        avatar.style.backgroundColor = place.properties.color;
+        avatar.style.backgroundColor = place.properties.bins.length > 0 ? place.properties.bins[0].color : '#616161';
 
         // title
         li = document.createElement('li');
@@ -51,7 +51,13 @@
         var distance = (place.properties.distance > 1000) ? (place.properties.distance/1000).toFixed(2) + ' Km' : 
                                                   Math.round(place.properties.distance).toString() + ' m';
         li.appendChild(title);
-        title.innerHTML = place.properties.name+' - '+distance+'<br/><span class="place-subtitle">'+place.properties.file+'</span>';
+
+        var subtitle = place.properties.bins.map(function(bin){
+            console.log(place);
+            return bin.o.join(' - ');
+        }).join(' - ');
+
+        title.innerHTML = place.properties.name+' - '+distance+'<br/><span class="place-subtitle">'+subtitle+'</span>';
 
         // 2nd ul + icons
         var ul = document.createElement('ul');
@@ -64,6 +70,14 @@
 
     global.displayPlaces = function(centroid, map, places, filterValues){
 
+        var allowed = [];
+        var list = document.querySelectorAll('#filters li.child .checked');
+        
+        for(var i = 0; i< list.length; ++i ){
+            allowed.push(list[i].nextSibling.nextSibling.innerText);
+        }
+
+
         if(markersLayer){
             map.removeLayer(markersLayer);
             markersLayer = undefined;
@@ -71,34 +85,75 @@
 
         var markers = places
         .filter(function(place){
-            var relevantFilter = filterValues.find(function(fv){
-                return fv.name === place.properties.name || true;
-            });
-            
-            if(!relevantFilter)
-                console.warn('No filter for place', place);
-            
-            return relevantFilter.checked;
+
+            return (place.properties.bins === null) ? false :
+            place.properties.bins
+            .map(function(bin){
+                return bin.o;
+            })
+            .reduceRight(function(a,b){
+                return a.concat(b);
+            }, [])
+            .some(function(object){
+                return (allowed.indexOf(object) !== -1);
+            })
+
         })
         .map(function(place){
-            var isCenter = (place.properties.type === 'centre');
-            var options = {
-                color: 'black',
-                fill: true,
-                fillColor: place.properties.color, 
-                fillOpacity: 1,
-                radius: isCenter ? 10 : 7,
-                clickable: true,
-                weight: isCenter ? 5 : 3 
-            };
 
             var lat = place.geometry.coordinates.lat || place.geometry.coordinates[0];
             var lon = place.geometry.coordinates.lon || place.geometry.coordinates[1];
 
-            var marker = new L.CircleMarker(new L.LatLng(lat, lon), options);
-            marker['place'] = place;
-            marker.on('click', onClickMarker); 
+            var colors = place.properties.bins === null ? [] : place.properties.bins.map(function(bin){
+                return bin.color;
+            })
 
+            var marker = undefined;
+            if(colors.length < 2){
+            
+                var isCenter = (place.properties.type === 'centre');
+                var options = {
+                    color: 'black',
+                    fill: true,
+                    fillColor: colors[0] || '#616161', 
+                    fillOpacity: 1,
+                    radius: isCenter ? 10 : 7,
+                    clickable: true,
+                    weight: isCenter ? 5 : 3 
+                };
+                marker = new L.CircleMarker(new L.LatLng(lat, lon), options);
+            }
+            else 
+            {
+
+                var html = '<div><div class="leaflet-pointer"></div>';
+                colors.slice(0,3).forEach(function(color){
+                    html += '<div style="display:inline-block;width:17px;height:17px;background-color:'+color+';border:solid rgba(0,0,0,0.5) 3px;border-radius:50%; margin: 0;"></div>';    
+                })
+                if(colors.length > 3){
+                    html += '<div class="leaflet-more">...</div>';                        
+                }
+                html += '</div>';
+
+
+                var multiIcon = L.divIcon({
+                    //iconUrl:     '/img/centroid.svg',
+                    html: html,
+                    iconSize:     [100, 40],
+                    shadowSize:   [0, 0], // size of the shadow
+                    iconAnchor:   [10, 10], // point of the icon which will correspond to marker's location
+                    shadowAnchor: [10, 10], // the same for the shadow
+                    popupAnchor:  [-3, -40] // point from which the popup should open relative to the iconAnchor
+                });
+                marker = new L.Marker([lat, lon], {icon: multiIcon});                
+            }
+
+            if(marker){
+
+                marker['place'] = place;
+                marker.on('click', onClickMarker); 
+            } 
+           
             return marker;
         });
 

@@ -7,6 +7,8 @@
 *.doc#
 *.log
 
+data
+
 node_modules
 
 Tokens.json
@@ -18,3 +20,4 @@ PRIVATE.json
 
 client/views/*.js
 
+requetesDB.md

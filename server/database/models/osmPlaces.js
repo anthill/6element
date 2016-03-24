@@ -19,27 +19,30 @@ module.exports = {
         return databaseP.then(function (db) {
 
             return Promise.all(osmPlacesData.map(function(data){
-
-                var query = osmPlaces
+                if (data){
+                    var query = osmPlaces
                     .insert(data)
                     .returning('*')
                     .toQuery();
 
-                // console.log('osmPlaces create query', query);
+                    // console.log('osmPlaces create query', query);
 
-                return new Promise(function (resolve, reject) {
-                    db.query(query, function (err, result) {
-                        if (err) {
-                            console.log("ERROR in createByChunk", query, err.stack);
-                            reject(err);
-                        }
-                        else resolve(result.rows);
+                    return new Promise(function (resolve, reject) {
+                        db.query(query, function (err, result) {
+                            if (err) {
+                                console.log("ERROR in createByChunk", query, err.stack);
+                                reject(err);
+                            }
+                            else resolve(result.rows);
+                        });
                     });
-                });
+                }
+                else return Promise.reject(new Error('OSM Place data is undefined'));
+                
             }));
         })
         .catch(function(err){
-            console.error('ERROR in createByChunk', err.stack);
+            console.error('ERROR in createByChunk', err);
         });
     },
 

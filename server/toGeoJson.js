@@ -1,7 +1,7 @@
 'use strict';
 
 var hstore = require('pg-hstore')();
-var dictionnary = require('../data/dictionary.json');
+var dictionnary = require('../references/dictionary.json');
 
 // Avalaible objects
 function parseObjects(row){

@@ -1,27 +1,27 @@
 [{
 	"name": "glass",
 	"objects": ["glass", "glass_bottles"],
-	"color": "#CFCE4B"
+	"color": "#41B93D"
 },
 {
 	"name": "paper",
 	"objects": ["beverage_carton", "beverage_cartons", "books", "cardboard", "cartons", "magazines", "newspaper", "paper", "paper_packaging"],
-	"color": "#41B93D"
+	"color": "#01760F"
 },
 {
 	"name": "plastic",
 	"objects": ["plastic_caps", "pet", "PET", "plasterboard", "plastic", "plastic_bags", "plastic_bottles", "plastic_packaging", "polyester", "polystyrene_foam", "styrofoam"],
-	"color": "#E923D4"
+	"color": "#0176FF"
 },
 {
 	"name": "batteries",
 	"objects": ["batteries", "car_batteries"],
-	"color": "#76561D"
+	"color": "#0176FF"
 },
 {
 	"name": "clothes",
 	"objects": ["clothes", "shoes"],
-	"color": "#EBB30F"
+	"color": "#E923D4"
 },
 {
 	"name": "organic",
@@ -31,27 +31,27 @@
 {
 	"name": "metal",
 	"objects": ["aluminium", "bicycles", "cans", "foil", "metal", "scrap_metal", "sheet_metal"],
-	"color": "#ED7AEB"
+	"color": "#0176FF"
 },
 {
 	"name": "electrical",
 	"objects": ["fridge_and_freezer", "electrical_items", "fluorescent_tubes", "low_energy_bulbs", "light_bulbs", "white_goods", "white_good", "electrical_appliances"],
-	"color": "#D75267"
+	"color": "#0176FF"
 },
 {
 	"name": "electronic",
 	"objects": ["chipboard", "computers", "mobile_phones", "tv_monitor"],
-	"color": "#D9B0B3"
+	"color": "#0176FF"
 },
 {
 	"name": "furniture",
 	"objects": ["furniture"],
-	"color": "#E923D4"
+	"color": "#0176FF"
 },
 {
 	"name": "other",
 	"objects": ["all", "bottles", "recyclable", "advertising", "syringe", "blade", "plastic_cartridges", "music", "hardcode", "medical_items", "cam", "car", "aerosol_cans", "animal_waste", "cds", "coffee_capsules", "drugs", "gas_bottles", "hazardous_waste", "hardcore", "paint", "printer_cartridges", "printer_toner_cartridges", "printer_inkjet_cartridges", "rubble", "small_appliances", "tyres", "waste", "toys"],
-	"color": "#01760F"
+	"color": "#0176FF"
 },
 {
 	"name": "operator",

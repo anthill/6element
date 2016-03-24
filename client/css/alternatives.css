@@ -1,4 +1,34 @@
+.leaflet-div-icon{
+    background: none;
+    border: none;
+    margin: 0;
+}
 
+.leaflet-div-icon .leaflet-pointer{
+    display:inline-block;
+    width:10px;
+    height:10px;
+    border-left: 
+    solid rgba(0,0,0,0.5) 3px;
+    border-bottom: solid rgba(0,0,0,0.5) 3px; 
+    margin: 0;
+    -ms-transform: rotate(45deg); /* IE 9 */
+    -webkit-transform: rotate(45deg); /* Chrome, Safari, Opera */
+    transform: rotate(45deg); 
+    margin-bottom: 3px;
+}
+
+/*.leaflet-div-icon {
+    background-color: rgba(255,255,255,0.5);
+}*/
+
+.leaflet-div-icon .leaflet-more{
+    display:inline-block;
+    width:10px;
+    height:10px;
+    color: rgba(0,0,0,0.5);
+    font-size: 20px;
+}
 
 .alternatives{
     display: flex;
@@ -84,14 +114,14 @@
 .alternatives main #filters ul{
     position: absolute;
     overflow-y: scroll;
-    top: 50px;
+    top: 30px;
     bottom: 0px;
 }
 
 .alternatives main #filters #filters-header,
 .alternatives main #filters li{
     font-size: 14px;
-    padding: 1em;
+    padding: 5px;
     cursor: pointer;    
     display: flex;
     flex-direction: row;
@@ -123,26 +153,48 @@
     z-index: 9;
 }
 
-.alternatives #filters li:hover{
-    background-color: rgba(240, 240, 240, 1);
+.alternatives #filters li div{
+    height: 20px;
+    width: 20px;
+    border: none;
+    margin: 0;
+    padding: 0;
 }
 
-.alternatives #filters li.disabled{
-    opacity: 0.5;
-    text-decoration: line-through;
-    background-color: rgb(230, 230, 230);
+.alternatives #filters li div{
+    border: none;
 }
-
+.alternatives #filters li div.checked{
+    background-image: url('../img/checked.svg');
+}
+.alternatives #filters li div.unchecked{
+    background-image: url('../img/unchecked.svg');
+}
+.alternatives #filters li div.partialChecked{
+    background-image: url('../img/partialChecked.svg');
+}
+.alternatives #filters li div.expanded{
+    background-image: url('../img/expanded.svg');
+}
+.alternatives #filters li div.collapsed{
+    background-image: url('../img/collapsed.svg');
+}
 .alternatives #filters li .color{
-    height: 1em;
-    width: 1em;
+    height: 20px;
+    width: 20px;
     border-radius: 50%;
     display: block;
-    padding-right: 1em;
+    margin: 5px;
+}
+.alternatives #filters li.li-hidden{
+    display: none; 
+}
+.alternatives #filters li.li-displayed{
+    display: flex;
 }
 
 .alternatives #filters li .text{
-    margin-left: 1em;
+    margin: 5px;
 }
 
 #preview .adapt-width{

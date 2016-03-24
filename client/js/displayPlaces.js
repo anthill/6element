@@ -76,7 +76,7 @@
         }
 
         var markers = places
-        .filter(function(place){
+        /*.filter(function(place){
             var relevantFilter = filterValues.find(function(fv){
                 return fv.name === place.properties.name || true;
             });
@@ -85,24 +85,24 @@
                 console.warn('No filter for place', place);
             
             return relevantFilter.checked;
-        })
+        })*/
         .map(function(place){
 
             var lat = place.geometry.coordinates.lat || place.geometry.coordinates[0];
             var lon = place.geometry.coordinates.lon || place.geometry.coordinates[1];
 
-            var colors = place.properties.bins.map(function(bin){
+            var colors = place.properties.bins === null ? [] : place.properties.bins.map(function(bin){
                 return bin.color;
             })
 
             var marker = undefined;
-            if(colors.length === 1){
+            if(colors.length < 2){
             
                 var isCenter = (place.properties.type === 'centre');
                 var options = {
                     color: 'black',
                     fill: true,
-                    fillColor: colors[0], 
+                    fillColor: colors[0] || '#616161', 
                     fillOpacity: 1,
                     radius: isCenter ? 10 : 7,
                     clickable: true,
@@ -112,20 +112,31 @@
             }
             else 
             {
-                var isCenter = (place.properties.type === 'centre');
-                var options = {
-                    color: 'black',
-                    fill: true,
-                    fillColor: colors[0], 
-                    fillOpacity: 1,
-                    radius: isCenter ? 10 : 7,
-                    clickable: true,
-                    weight: isCenter ? 5 : 3 
-                };
-                marker = new L.CircleMarker(new L.LatLng(lat, lon), options);
+
+                var html = '<div><div class="leaflet-pointer"></div>';
+                colors.slice(0,3).forEach(function(color){
+                    html += '<div style="display:inline-block;width:17px;height:17px;background-color:'+color+';border:solid rgba(0,0,0,0.5) 3px;border-radius:50%; margin: 0;"></div>';    
+                })
+                if(colors.length > 3){
+                    html += '<div class="leaflet-more">...</div>';                        
+                }
+                html += '</div>';
+
+
+                var multiIcon = L.divIcon({
+                    //iconUrl:     '/img/centroid.svg',
+                    html: html,
+                    iconSize:     [100, 40],
+                    shadowSize:   [0, 0], // size of the shadow
+                    iconAnchor:   [10, 10], // point of the icon which will correspond to marker's location
+                    shadowAnchor: [10, 10], // the same for the shadow
+                    popupAnchor:  [-3, -40] // point from which the popup should open relative to the iconAnchor
+                });
+                marker = new L.Marker([lat, lon], {icon: multiIcon});                
             }
 
             if(marker){
+
                 marker['place'] = place;
                 marker.on('click', onClickMarker); 
             } 

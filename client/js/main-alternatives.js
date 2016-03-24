@@ -38,14 +38,11 @@
     fetch('/categories', {headers: {'Content-Type': 'application/json'}})
     .then(function(result){ return result.json() })
     .then(function(categories){
-        console.log('categories', categories)
-        filterValues = categories.map(function(category){
-            return { name: category.name, color: category.color, checked: true };
-        });
+        //console.log('categories', categories)
         
         var filtersElement = document.querySelector('#filters');
 
-        var ul = createFilterList(filterValues, function(newFilterValues){
+        var ul = createFilterList(categories, function(newFilterValues){
             filterValues = newFilterValues;
             refreshMap();
         });

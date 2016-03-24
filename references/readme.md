@@ -1,4 +1,4 @@
-# Data
+# References
 
 ## networks.json
 
@@ -17,4 +17,7 @@ This is generated automatically after OSM points are loaded.
 
 Waste categories (in French and English)
 
+## synonyms.json
+
+Some osm tags are synonyms.
 

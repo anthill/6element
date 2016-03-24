@@ -29,6 +29,11 @@ var places = require('./database/models/places.js');
 var pheromonUrl = process.env.PHEROMON_URL ? process.env.PHEROMON_URL : 'https://pheromon.ants.builders';
 var getMeasures     = require('./getMeasures');
 
+// References Files
+var categoryFile = require('../references/categories.json'); 
+var dictionaryFile = require('../references/dictionary.json'); 
+var synonymFile = require('../references/synonyms.json'); 
+
 // ------- INIT SERVER ---------
 var PORT = process.env.VIRTUAL_PORT ? process.env.VIRTUAL_PORT: 8000;
 var app = express();
@@ -195,9 +200,9 @@ app.post('/bins/update', function(req, res){
 
 app.post('/search', search);
 
-app.get('/categories', function(req, res){
+app.get('/references', function(req, res){
     res.setHeader('Content-Type', 'application/json');
-    fs.createReadStream(path.join(__dirname, '..', 'references', 'categories.json')).pipe(res);
+    res.send({categories: categoryFile, dictionary: dictionaryFile, synonyms: synonymFile});
 });
 
 

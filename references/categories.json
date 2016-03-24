@@ -5,12 +5,12 @@
 },
 {
 	"name": "paper",
-	"objects": ["leaflet", "beverage_carton", "beverage_cartons", "books", "cardboard", "cartons", "magazines", "newspaper", "paper", "paper_packaging"],
+	"objects": ["beverage_cartons", "books", "cartons", "magazines", "newspaper", "paper", "paper_packaging"],
 	"color": "#41B93D"
 },
 {
 	"name": "plastic",
-	"objects": ["packaging", "plastic_caps", "pet", "PET", "plastic", "plastic_bags", "plastic_bottles", "plastic_packaging", "polyester", "polystyrene_foam", "styrofoam"],
+	"objects": ["packaging", "plastic_caps", "PET", "plastic", "plastic_bags", "plastic_bottles", "plastic_packaging", "polyester", "polystyrene_foam"],
 	"color": "#E923D4"
 },
 {
@@ -25,17 +25,17 @@
 },
 {
 	"name": "organic",
-	"objects": ["fat_corp", "chipboard", "green", "christmas_trees", "cooking_oil", "cork", "engine_oil", "green_waste", "garden_waste", "organic", "wood", "oil", "waste_oil", "wasted_oil"],
+	"objects": ["fat_corp", "chipboard", "green", "christmas_trees", "cooking_oil", "cork", "engine_oil", "green_waste", "organic", "wood", "wasted_oil"],
 	"color": "#2DB8DE"
 },
 {
 	"name": "metal",
-	"objects": ["aluminium", "bicycles", "cans", "foil", "metal", "scrap_metal", "scrap_metal_no_iron", "sheet_metal"],
+	"objects": ["aluminium", "bicycles", "cans", "scrap_metal", "scrap_metal_no_iron", "sheet_metal"],
 	"color": "#ED7AEB"
 },
 {
 	"name": "electrical",
-	"objects": ["cold_devices", "small_appliances", "major_appliances", "fridge_and_freezer", "electrical_items", "fluorescent_tubes", "low_energy_bulbs", "light_bulbs", "white_goods", "white_good", "electrical_appliances"],
+	"objects": ["cold_devices", "small_appliances", "major_appliances", "fluorescent_tubes", "low_energy_bulbs", "light_bulbs", "white_goods", "electrical_appliances"],
 	"color": "#D75267"
 },
 {
@@ -60,12 +60,12 @@
 },
 {
 	"name": "construction",
-	"objects": ["plasterboard", "hardcode",  "hardcore", "rubble"],
+	"objects": ["plasterboard", "rubble"],
 	"color": "#E923D4"
 },
 {
 	"name": "house",
-	"objects": ["bottles", "plastic_cartridges", "music", "cds", "coffee_capsules", "aerosol_cans", "printer_cartridges", "printer_toner_cartridges", "printer_inkjet_cartridges", "toys"],
+	"objects": ["bottles", "plastic_cartridges", "music", "cds", "coffee_capsules", "aerosol_cans", "printer_cartridges", "printer_toner_cartridges", "toys"],
 	"color": "#E923D4"
 },
 {

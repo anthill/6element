@@ -1,7 +1,7 @@
 'use strict';
 
 var makeMap = require('../tools/makeMap');
-var categoryMap = makeMap(require('../data/categories.json'), 'name');
+var categoryMap = makeMap(require('../references/categories.json'), 'name');
 
 module.exports = function(points){
 	points.forEach(function(point){

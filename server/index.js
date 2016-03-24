@@ -197,7 +197,7 @@ app.post('/search', search);
 
 app.get('/categories', function(req, res){
     res.setHeader('Content-Type', 'application/json');
-    fs.createReadStream(path.join(__dirname, '..', 'data', 'categories.json')).pipe(res);
+    fs.createReadStream(path.join(__dirname, '..', 'references', 'categories.json')).pipe(res);
 });
 
 

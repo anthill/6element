@@ -116,6 +116,7 @@
     overflow-y: scroll;
     top: 30px;
     bottom: 0px;
+    width: 100%;
 }
 
 .alternatives main #filters #filters-header,
@@ -143,11 +144,11 @@
 }
 
 .alternatives #hide-filters{
-    padding: 5px; 
+    padding: 0px; 
     margin: 0;
     position: absolute;
-    top: 6px;
-    right: 8px;    
+    top: 2px;
+    right: 2px;    
     background: none;
     border: none;
     z-index: 9;

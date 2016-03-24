@@ -57,6 +57,8 @@
             else if(cpt===nbChildren) checkIcon(parent,2);
             else checkIcon(parent,1);
         }
+
+        refreshMap();
     }
 
     var expandTree = function(e){
@@ -80,7 +82,7 @@
         }
     }
 
-    global.createFilterList = function(categories, onFilterChange){
+    global.createFilterList = function(categories){
         
         var ul = document.createElement('ul');
         
@@ -139,7 +141,7 @@
             });
         });
         
-        return ul;
+        document.querySelector('#filters').appendChild(ul);
     };
 
 })(this);

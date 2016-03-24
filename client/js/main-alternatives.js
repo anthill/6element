@@ -1,6 +1,6 @@
 "use strict";
 
-(function(){
+(function(global){
 
     var map = createMap(getCurrentSearch(), document.querySelector('#map'));
     var currentMapBoundsPlaces = [];
@@ -17,7 +17,7 @@
         };
     }
 
-    function refreshMap(){
+    global.refreshMap = function(){
         displayPlaces(getCurrentSearch(), map, currentMapBoundsPlaces, filterValues);
     }
 
@@ -40,15 +40,7 @@
     .then(function(categories){
         //console.log('categories', categories)
         
-        var filtersElement = document.querySelector('#filters');
-
-        var ul = createFilterList(categories, function(newFilterValues){
-            filterValues = newFilterValues;
-            refreshMap();
-        });
-
-        filtersElement.appendChild(ul);
-        
+        createFilterList(categories);
         refreshMap();
     })
     .catch(function(err){ console.error('fetch /categories error', err) });
@@ -65,4 +57,4 @@
     document.querySelector('#uncertified').addEventListener('click', reloadMap);
     document.querySelector('#certified').addEventListener('click', reloadMap);
     hideFilters();
-})();
+})(this);

@@ -70,22 +70,35 @@
 
     global.displayPlaces = function(centroid, map, places, filterValues){
 
+        var allowed = [];
+        var list = document.querySelectorAll('#filters li.child .checked');
+        
+        for(var i = 0; i< list.length; ++i ){
+            allowed.push(list[i].nextSibling.nextSibling.innerText);
+        }
+
+
         if(markersLayer){
             map.removeLayer(markersLayer);
             markersLayer = undefined;
         }
 
         var markers = places
-        /*.filter(function(place){
-            var relevantFilter = filterValues.find(function(fv){
-                return fv.name === place.properties.name || true;
-            });
-            
-            if(!relevantFilter)
-                console.warn('No filter for place', place);
-            
-            return relevantFilter.checked;
-        })*/
+        .filter(function(place){
+
+            return (place.properties.bins === null) ? false :
+            place.properties.bins
+            .map(function(bin){
+                return bin.o;
+            })
+            .reduceRight(function(a,b){
+                return a.concat(b);
+            }, [])
+            .some(function(object){
+                return (allowed.indexOf(object) !== -1);
+            })
+
+        })
         .map(function(place){
 
             var lat = place.geometry.coordinates.lat || place.geometry.coordinates[0];

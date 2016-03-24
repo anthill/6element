@@ -5,12 +5,12 @@
 },
 {
 	"name": "paper",
-	"objects": ["beverage_carton", "beverage_cartons", "books", "cardboard", "cartons", "magazines", "newspaper", "paper", "paper_packaging"],
+	"objects": ["leaflet", "beverage_carton", "beverage_cartons", "books", "cardboard", "cartons", "magazines", "newspaper", "paper", "paper_packaging"],
 	"color": "#41B93D"
 },
 {
 	"name": "plastic",
-	"objects": ["plastic_caps", "pet", "PET", "plasterboard", "plastic", "plastic_bags", "plastic_bottles", "plastic_packaging", "polyester", "polystyrene_foam", "styrofoam"],
+	"objects": ["packaging", "plastic_caps", "pet", "PET", "plastic", "plastic_bags", "plastic_bottles", "plastic_packaging", "polyester", "polystyrene_foam", "styrofoam"],
 	"color": "#E923D4"
 },
 {
@@ -25,22 +25,22 @@
 },
 {
 	"name": "organic",
-	"objects": ["green", "leaflet", "packaging", "christmas_trees", "cooking_oil", "cork", "engine_oil", "green_waste", "garden_waste", "organic", "wood", "oil", "waste_oil", "wasted_oil"],
+	"objects": ["fat_corp", "chipboard", "green", "christmas_trees", "cooking_oil", "cork", "engine_oil", "green_waste", "garden_waste", "organic", "wood", "oil", "waste_oil", "wasted_oil"],
 	"color": "#2DB8DE"
 },
 {
 	"name": "metal",
-	"objects": ["aluminium", "bicycles", "cans", "foil", "metal", "scrap_metal", "sheet_metal"],
+	"objects": ["aluminium", "bicycles", "cans", "foil", "metal", "scrap_metal", "scrap_metal_no_iron", "sheet_metal"],
 	"color": "#ED7AEB"
 },
 {
 	"name": "electrical",
-	"objects": ["fridge_and_freezer", "electrical_items", "fluorescent_tubes", "low_energy_bulbs", "light_bulbs", "white_goods", "white_good", "electrical_appliances"],
+	"objects": ["cold_devices", "small_appliances", "major_appliances", "fridge_and_freezer", "electrical_items", "fluorescent_tubes", "low_energy_bulbs", "light_bulbs", "white_goods", "white_good", "electrical_appliances"],
 	"color": "#D75267"
 },
 {
 	"name": "electronic",
-	"objects": ["chipboard", "computers", "mobile_phones", "tv_monitor"],
+	"objects": ["computers", "mobile_phones", "tv_monitor", "cam"],
 	"color": "#D9B0B3"
 },
 {
@@ -49,8 +49,28 @@
 	"color": "#E923D4"
 },
 {
+	"name": "chemical",
+	"objects": ["paint", "hazardous_waste", "waste_farming_chemical"],
+	"color": "#E923D4"
+},
+{
+	"name": "medical",
+	"objects": ["medical", "medical_items", "waste_medical", "waste_mix_medical", "syringe", "drugs"],
+	"color": "#E923D4"
+},
+{
+	"name": "construction",
+	"objects": ["plasterboard", "hardcode",  "hardcore", "rubble"],
+	"color": "#E923D4"
+},
+{
+	"name": "house",
+	"objects": ["bottles", "plastic_cartridges", "music", "cds", "coffee_capsules", "aerosol_cans", "printer_cartridges", "printer_toner_cartridges", "printer_inkjet_cartridges", "toys"],
+	"color": "#E923D4"
+},
+{
 	"name": "other",
-	"objects": ["all", "bottles", "recyclable", "advertising", "syringe", "blade", "plastic_cartridges", "music", "hardcode", "medical_items", "cam", "car", "aerosol_cans", "animal_waste", "cds", "coffee_capsules", "drugs", "gas_bottles", "hazardous_waste", "hardcore", "paint", "printer_cartridges", "printer_toner_cartridges", "printer_inkjet_cartridges", "rubble", "small_appliances", "tyres", "waste", "toys"],
+	"objects": ["all", "recyclable", "advertising", "blade", "car", "animal_waste", "gas_bottles", "tyres", "waste"],
 	"color": "#01760F"
 },
 {

@@ -109,23 +109,14 @@
             
             var li = document.createElement('li');
             ul.appendChild(li);
-            li.innerHTML = '<span>'+bin.t+'</span><span class="hidden" style="display: none;">'+JSON.stringify(bin)+'</span>';
+            li.innerHTML = '<span>'+translate(bin.t)+'</span><span class="hidden" style="display: none;">'+JSON.stringify(bin)+'</span>';
             li.classList.add(bin.a?'border-open':'border-closed');
 
             li.addEventListener('click', updateBinById)
         });
-
-        /*// 2nd ul + icons
-        ul = document.createElement('ul');
-        placeHeader.appendChild(ul);
-        ul.style.float = 'right';
-        ul.style.listStyleType = 'none';
-        ul.innerHTML =  '<li><button class="place-infos"><img src="../img/infos.svg"/></button></li>';
-        ul.innerHTML += '<li><button class="place-available"><img src="../img/available.svg"/></button></li>';
-        */
     }
 
-    global.displayPlaces = function(centroid, map, places, filterValues){
+    global.displayPlaces = function(centroid, map, places){
 
         var allowed = [];
         var list = document.querySelectorAll('#filters li.child .checked');
@@ -146,7 +137,10 @@
             return (place.properties.bins === null) ? false :
             place.properties.bins
             .map(function(bin){
-                return bin.o;
+                return bin.o === undefined ? [] :
+                bin.o.map(function(object){
+                    return translate(object);
+                });
             })
             .reduceRight(function(a,b){
                 return a.concat(b);

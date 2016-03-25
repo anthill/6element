@@ -100,7 +100,7 @@
 
             var text = document.createElement('span');
             text.classList.add('text');
-            text.textContent = category.name;
+            text.textContent = translate(category.name);
 
             var expand = document.createElement('div');
             expand.classList.add('collapsed');
@@ -130,7 +130,7 @@
 
                 var text = document.createElement('span');
                 text.classList.add('text');
-                text.textContent = object;
+                text.textContent = translate(object);
 
                 li.appendChild(checkbox);
                 li.appendChild(color);

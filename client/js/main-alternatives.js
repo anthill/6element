@@ -2,10 +2,13 @@
 
 (function(global){
 
+    var dictionary = undefined;
     var map = createMap(getCurrentSearch(), document.querySelector('#map'));
     var currentMapBoundsPlaces = [];
-    var filterValues = [];
 
+    global.translate = function(en){
+        return dictionary ? (dictionary[en] || en ) : en;
+    }
 
     function getCurrentBounds(map){
         var bounds = map.getBounds(); 
@@ -18,7 +21,7 @@
     }
 
     global.refreshMap = function(){
-        displayPlaces(getCurrentSearch(), map, currentMapBoundsPlaces, filterValues);
+        displayPlaces(getCurrentSearch(), map, currentMapBoundsPlaces);
     }
 
     global.reloadMap = function(){
@@ -38,8 +41,8 @@
     fetch('/references', {headers: {'Content-Type': 'application/json'}})
     .then(function(result){ return result.json() })
     .then(function(references){
-        //console.log('categories', categories)
         
+        dictionary = references.dictionary;
         createFilterList(references.categories);
         refreshMap();
     })

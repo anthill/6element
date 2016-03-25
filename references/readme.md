@@ -15,7 +15,8 @@ This is generated automatically after OSM points are loaded.
 
 ## dictionary.json
 
-Waste categories (in French and English)
+Waste categories (in French and English).
+The `verifyWords.js` scripts checks for words that the dictionary doesn't know.
 
 ## synonyms.json
 

@@ -6,7 +6,6 @@ var fs   = require('fs');
 var makeMap = require('./makeMap');
 
 var Places = require('../server/database/models/places.js');
-var placesDeclaration = require('../server/database/management/declarations.js').places;
 
 var categories = require('../references/categories.json');
 var synonymMap = makeMap(require('../references/synonyms.json'));
@@ -54,8 +53,6 @@ function processFile(dir, file){
                 console.log('Processing', file, ':', Object.keys(points).length, 'points');
                 count += Object.keys(points).length;
 
-                var leRelais = 0;
-
                 var newPoints = [];
 
                 Object.keys(points).map(function(key){
@@ -64,9 +61,9 @@ function processFile(dir, file){
                     var lat = points[key].geometry.coordinates.lat || points[key].geometry.coordinates[1];
                     var lon = points[key].geometry.coordinates.lon || points[key].geometry.coordinates[0];
 
-                    var isLaFibreLeRelais = (file === 'lafibredutrie.json' && prop.owner.match(/^Le Relais/))
-                    var isRC = prop.name.match(/^dechet/i) || prop.name.match(/^déchèt/i);
-                    var hasCoords = lat && lon;
+                    var isLaFibreLeRelais = (file === 'lafibredutrie.json' && prop.owner.match(/^Le Relais/)); // LaFibre has some LeRelais points
+                    var isRC = prop.name.match(/^dechet/i) || prop.name.match(/^déchèt/i); // we don't want RCs from these files
+                    var hasCoords = lat && lon; // some points don't have coordinates...
 
                     if (!isLaFibreLeRelais && !isRC && hasCoords){
                         var pointCategories = new Map();
@@ -155,5 +152,5 @@ readDir(__dirname + '/../data/point_ref/')
 })
 .catch(function(err){
     console.log('ERROR', err);
-    process.exit()
+    process.exit();
 });

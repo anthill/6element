@@ -20,10 +20,10 @@ connectToDB()
     return generateDeclarations();
 })
 .then(function(){
-    console.log("Success!");
+    console.log('Success!');
     process.exit();
 })
 .catch(function(err){
-    console.error("Couldn't init database", err);
+    console.error('Couldn\'t init database', err);
     process.exit();
 });

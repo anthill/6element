@@ -10,7 +10,7 @@ module.exports = function(db){
     return new Promise(function(resolve, reject){
         db.query(dropOSMTableScript, function(err, result) {
             if(err)
-            	reject('Coudn\'t drop OSM table: ' + err); 
+                reject('Coudn\'t drop OSM table: ' + err); 
             else resolve(result);
         });
     });

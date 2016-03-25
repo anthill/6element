@@ -36,6 +36,10 @@ button {
 }
 
 header .adapt-width{
+	display: -webkit-flex;
+    -webkit-flex-direction: row;
+    -webkit-justify-content: space-between;
+    -webkit-align-items: center;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -147,6 +151,8 @@ article .adapt-width{
 }
 #sheet{
 	height: 100%;
+	display: -webkit-flex;
+    -webkit-flex-direction: column;
     display: flex;
     flex-direction: column;
 }
@@ -180,6 +186,8 @@ article .adapt-width{
 }
 
 #mvp{
+	-webkit-display: flex;
+    -webkit-flex-direction: column;
     display: flex;
     flex-direction: column;
     flex: 1;

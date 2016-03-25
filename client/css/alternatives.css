@@ -31,6 +31,8 @@
 }
 
 .alternatives{
+    display: -webkit-flex;
+    -webkit-flex-direction: column;
     display: flex;
     flex-direction: column;
     height: 100%;
@@ -124,7 +126,10 @@
     font-size: 14px;
     padding: 5px;
     cursor: pointer;    
-    display: flex;
+    display: -webkit-flex;
+    -webkit-flex-direction: row;
+    -webkit-justify-content: flex-start;
+    -webkit-align-items: center;
     flex-direction: row;
     justify-content: flex-start;
     align-items: center;
@@ -191,6 +196,7 @@
     display: none; 
 }
 .alternatives #filters li.li-displayed{
+    display: -webkit-flex;
     display: flex;
 }
 

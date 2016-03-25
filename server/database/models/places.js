@@ -124,7 +124,7 @@ module.exports = {
             var query = places
                         .select('*')
                         .from(places)
-                        .where(places.owner.equals(operatorName))
+                        .where(places.operator.equals(operatorName))
                         .toQuery();
 
             return new Promise(function (resolve, reject) {
@@ -174,7 +174,7 @@ module.exports = {
         return databaseP.then(function (db) {
 
             var query = places
-                .select(places.bins, places.owner)
+                .select(places.bins, places.operator)
                 .where(places.pheromon_id.equals(pheromonId))
                 .toQuery();
 

@@ -115,7 +115,7 @@ module.exports = {
             });
         })
         .catch(function(err){
-            console.log('ERROR in getWithin', err, err.stack);
+            console.log('ERROR in getWithin', err);
         }); 
     },
 
@@ -126,6 +126,50 @@ module.exports = {
             .update({'bins': bins})
             .where(osmPlaces.id.equals(id))
             .returning(osmPlaces.bins)
+            .toQuery();
+
+            return new Promise(function (resolve, reject) {
+                db.query(query, function (err, result) {
+                    if (err) reject(err);
+                    else resolve(result.rows[0]);
+                });
+            });
+        })
+        .catch(function(err){
+            console.log('ERROR in update Bins', err);
+        });
+    },
+
+    // ------------- BINS ---------------
+
+    getAllBins: function(){
+        return databaseP.then(function (db) {
+            
+            var query = osmPlaces
+                .select(osmPlaces.bins, osmPlaces.osm_id)
+                .from(osmPlaces)
+                .toQuery();
+   
+            return new Promise(function (resolve, reject) {
+                db.query(query, function (err, result) {
+                    if (err) reject(err);
+
+                    else resolve(result.rows);
+                });
+            });
+        })
+        .catch(function(err){
+            console.log('ERROR in getAllBins', err);
+        }); 
+    },
+
+    updateBins: function(osmId, bins){
+        return databaseP.then(function (db) {
+            
+            var query = places
+            .update({'bins': bins})
+            .where(places.osm_id.equals(osmId))
+            .returning(places.bins)
             .toQuery();
 
             return new Promise(function (resolve, reject) {

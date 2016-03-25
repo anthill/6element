@@ -49,10 +49,8 @@ function categorizer(inputPoints){
 			if (match){ // if a match is found
 				var subCat = match[1];
 
-				if (synonymMap.has(subCat)){
-					console.log('SYNONYM', subCat, synonymMap.get(subCat));
+				if (synonymMap.has(subCat))
 					subCat = synonymMap.get(subCat);
-				}
 
 				if (invCatMap.get(subCat) === undefined) // if tag is unknown, count how many occurences
 					unknown_tags[subCat] = unknown_tags[subCat] ? unknown_tags[subCat] + 1 : 1;
@@ -71,14 +69,13 @@ function categorizer(inputPoints){
 
 		pointCategories.forEach(function(subCategories, mainCategory){
 			point.bins.push({
+				id: mainCategory + '_1',
 				t: mainCategory, // type
 				a: true, // availability
 				o: subCategories, // objects accepted
 				id: mainCategory+'_1'
 			});
 		});
-
-		console.log('Point', point);
 
 		return point;
 	});

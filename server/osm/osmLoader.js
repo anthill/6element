@@ -6,7 +6,7 @@ var queryDic = require('./query.json');
 var converter = require('./wayToPointConverter.js');
 
 module.exports = function(bbox){
-	console.log('Fetching OSM Data');
+	console.log('Fetching OSM Data ...');
 
 	var query;
 
@@ -29,7 +29,6 @@ module.exports = function(bbox){
 
 
 	return resultP.then(function(result){
-		console.log('Nb of points', result.features.length);
 		return converter(result.features);
 	})
 	.catch(function(error){

@@ -217,6 +217,27 @@ module.exports = {
         });
     },
 
+    updateBinsById: function(id, bins){
+        return databaseP.then(function (db) {
+            
+            var query = places
+            .update({'bins': bins})
+            .where(places.id.equals(id))
+            .returning(places.bins)
+            .toQuery();
+
+            return new Promise(function (resolve, reject) {
+                db.query(query, function (err, result) {
+                    if (err) reject(err);
+                    else resolve(result.rows[0]);
+                });
+            });
+        })
+        .catch(function(err){
+            console.log('ERROR in update Bins', err);
+        });
+    },
+
     updateBin: function(pheromonId, bin){
 
         var self = this;

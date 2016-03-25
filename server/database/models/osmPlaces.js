@@ -117,5 +117,26 @@ module.exports = {
         .catch(function(err){
             console.log('ERROR in getWithin', err, err.stack);
         }); 
+    },
+
+    updateBinsById: function(id, bins){
+        return databaseP.then(function (db) {
+            
+            var query = osmPlaces
+            .update({'bins': bins})
+            .where(osmPlaces.id.equals(id))
+            .returning(osmPlaces.bins)
+            .toQuery();
+
+            return new Promise(function (resolve, reject) {
+                db.query(query, function (err, result) {
+                    if (err) reject(err);
+                    else resolve(result.rows[0]);
+                });
+            });
+        })
+        .catch(function(err){
+            console.log('ERROR in update Bins', err);
+        });
     }
 };

@@ -21,7 +21,7 @@
         displayPlaces(getCurrentSearch(), map, currentMapBoundsPlaces, filterValues);
     }
 
-    function reloadMap(){
+    global.reloadMap = function(){
 
         var certified = document.querySelector('#certified').className === 'btn-active';
         findPlaces(getCurrentSearch(), getCurrentBounds(map), certified)
@@ -35,12 +35,12 @@
     /*
         FILTERS
     */
-    fetch('/categories', {headers: {'Content-Type': 'application/json'}})
+    fetch('/references', {headers: {'Content-Type': 'application/json'}})
     .then(function(result){ return result.json() })
-    .then(function(categories){
+    .then(function(references){
         //console.log('categories', categories)
         
-        createFilterList(categories);
+        createFilterList(references.categories);
         refreshMap();
     })
     .catch(function(err){ console.error('fetch /categories error', err) });

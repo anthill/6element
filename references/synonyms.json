@@ -10,6 +10,7 @@
 	"oil" : "wasted_oil",
 	"metal": "scrap_metal",
 	"fridge_and_freezer" : "cold_devices",
+	"cold_device" : "cold_devices",
 	"foil" : "aluminium",
 	"electrical" : "electrical_appliances",
 	"electrical_items" : "electrical_appliances",

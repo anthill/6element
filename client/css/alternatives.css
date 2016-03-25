@@ -199,6 +199,10 @@
 }
 
 #preview .adapt-width{
-    height: 55px;
+    min-height: 55px;
     background-color: white;
+}
+
+#preview .bins li{
+    cursor: pointer;
 }

@@ -73,7 +73,8 @@ function categorizer(inputPoints){
 			point.bins.push({
 				t: mainCategory, // type
 				a: true, // availability
-				o: subCategories // objects accepted
+				o: subCategories, // objects accepted
+				id: mainCategory+'_1'
 			});
 		});
 

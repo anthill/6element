@@ -70,6 +70,7 @@ function categorizer(inputPoints){
 				t: mainCategory, // type
 				a: true, // availability
 				o: subCategories, // objects accepted
+			});
 		});
 
 		return pointForDB;

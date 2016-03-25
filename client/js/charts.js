@@ -136,7 +136,7 @@ function draw(node, data){
         
             if(isAffluence){
                 xSignals.push(strDate);
-                ySignals.push(value >= 0 ? value : {undefined});
+                ySignals.push(value >= 0 ? value : undefined);
             }
 
              // Color 
@@ -167,6 +167,7 @@ function draw(node, data){
     
     });
     
+
     var traces = getSeries(xSignals, ySignals, xGreen, yGreen, xOrange, yOrange, xRed, yRed, xGrey, yGrey);
     
     // Legend on left

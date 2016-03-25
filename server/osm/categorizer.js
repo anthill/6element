@@ -8,7 +8,6 @@ var makeMap = require('../../tools/makeMap');
 var categories = require('../../references/categories.json');
 var synonymMap = makeMap(require('../../references/synonyms.json'));
 
-var catMap = new Map();
 var invCatMap = new Map();
 
 // Build inverted categories Map
@@ -26,7 +25,7 @@ function categorizer(inputPoints){
 		var lon = point.geometry.coordinates[0];
 		
 		var tags = point.properties.tags;
-		var point = {
+		var pointForDB = {
 			osm_id: point.properties.id,
 			name: point.properties.tags.name,
 			operator: point.properties.tags.operator,
@@ -38,8 +37,6 @@ function categorizer(inputPoints){
 			lon: lon,
 			geom: 'POINT(' + lon + ' ' + lat + ')'
 		};
-
-		var output = [];
 
 		var pointCategories = new Map();
 
@@ -68,16 +65,14 @@ function categorizer(inputPoints){
 
 
 		pointCategories.forEach(function(subCategories, mainCategory){
-			point.bins.push({
+			pointForDB.bins.push({
 				id: mainCategory + '_1',
 				t: mainCategory, // type
 				a: true, // availability
 				o: subCategories, // objects accepted
-				id: mainCategory+'_1'
-			});
 		});
 
-		return point;
+		return pointForDB;
 	});
 
 	console.log('Unknown tags', unknown_tags);

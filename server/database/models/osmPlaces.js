@@ -30,7 +30,7 @@ module.exports = {
                     return new Promise(function (resolve, reject) {
                         db.query(query, function (err, result) {
                             if (err) {
-                                console.log("ERROR in createByChunk", query, err.stack);
+                                console.log('ERROR in createByChunk', query, err.stack);
                                 reject(err);
                             }
                             else resolve(result.rows);
@@ -57,7 +57,7 @@ module.exports = {
             return new Promise(function (resolve, reject) {
                 db.query(query, function (err, result) {
                     if (err) {
-                        console.error("ERROR in count", query, err);
+                        console.error('ERROR in count', query, err);
                         reject(err);
                     }
                     else resolve(Number(result.rows[0].count));
@@ -72,13 +72,13 @@ module.exports = {
     getKNearest: function(coords, k){
         return databaseP.then(function (db) {
             
-            var strDistance = "st_distance_sphere(osmPlaces.geom, st_makepoint(" + coords.lon + ", " + coords.lat + ")) ";
-            var strDistanceAS = strDistance + "AS distance";
+            var strDistance = 'st_distance_sphere(osmPlaces.geom, st_makepoint(' + coords.lon + ', ' + coords.lat + ')) ';
+            var strDistanceAS = strDistance + 'AS distance';
             var query = osmPlaces
                 .select(osmPlaces.star(), strDistanceAS)
                 .from(osmPlaces)
-                .where(strDistance + "< 50000 and type = 'centre'")
-                .order("distance")
+                .where(strDistance + '< 50000 and type = \'centre\'')
+                .order('distance')
                 .limit(k)
                 .toQuery();
 
@@ -97,12 +97,12 @@ module.exports = {
     getWithin: function(coords, bbox, subCategories, limit){
         return databaseP.then(function (db) {
             
-            var strDistance = "st_distance_sphere(osmPlaces.geom, st_makepoint(" + coords.lon + ", " + coords.lat + ")) AS distance";
+            var strDistance = 'st_distance_sphere(osmPlaces.geom, st_makepoint(' + coords.lon + ', ' + coords.lat + ')) AS distance';
             var query = osmPlaces
                 .select(osmPlaces.star(), strDistance)
                 .from(osmPlaces)
-                .where("osmPlaces.geom && ST_MakeEnvelope(" + bbox.minLon + ", " + bbox.minLat + ", " + bbox.maxLon + ", " + bbox.maxLat + ", 4326)")
-                .order("distance")
+                .where('osmPlaces.geom && ST_MakeEnvelope(' + bbox.minLon + ', ' + bbox.minLat + ', ' + bbox.maxLon + ', ' + bbox.maxLat + ', 4326)')
+                .order('distance')
                 .limit(limit)
                 .toQuery();
    
@@ -166,10 +166,10 @@ module.exports = {
     updateBins: function(osmId, bins){
         return databaseP.then(function (db) {
             
-            var query = places
+            var query = osmPlaces
             .update({'bins': bins})
-            .where(places.osm_id.equals(osmId))
-            .returning(places.bins)
+            .where(osmPlaces.osm_id.equals(osmId))
+            .returning(osmPlaces.bins)
             .toQuery();
 
             return new Promise(function (resolve, reject) {

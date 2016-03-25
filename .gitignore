@@ -8,6 +8,7 @@
 *.log
 
 data
+server/osm/osmBinStatusDump.json
 
 node_modules
 

@@ -24,6 +24,7 @@ var search = require('./searchPlaces.js');
 
 // Database
 var places = require('./database/models/places.js');
+var osmPlaces = require('./database/models/osmPlaces.js');
 
 // Pheromon API calls
 var pheromonUrl = process.env.PHEROMON_URL ? process.env.PHEROMON_URL : 'https://pheromon.ants.builders';
@@ -195,6 +196,27 @@ app.post('/bins/update', function(req, res){
             console.log('error in /bins/update/' + pheromonId, error);
         });
     } else res.status(403).send({success: false, message: 'No token provided.'});
+});
+
+app.post('/bins/updateById', function(req, res){
+    //if(req.query.s === PRIVATE.secret) {
+        var id = req.body.id;
+        var certified = req.body.certified;
+        console.log('requesting UPDATE bins for id', id);
+        
+        var promise = certified ?
+        osmPlaces.updateBinsById(id, req.body.bins) :
+        places.updateBinsById(id, req.body.bins);
+
+        promise
+        .then(function(data){
+            res.status(200).send(data);
+        })
+        .catch(function(error){
+            res.status(500).send('Couldn\'t update Bins');
+            console.log('error in /bins/updateById/' + id, error);
+        });
+    //} else res.status(403).send({success: false, message: 'No token provided.'});
 });
 
 

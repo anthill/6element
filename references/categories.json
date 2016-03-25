@@ -1,80 +1,80 @@
 [{
 	"name": "glass",
 	"objects": ["glass", "glass_bottles"],
-	"color": "#CFCE4B"
+	"color": "#41B93D"
 },
 {
 	"name": "paper",
 	"objects": ["beverage_cartons", "books", "cartons", "magazines", "newspaper", "paper", "paper_packaging"],
-	"color": "#41B93D"
-},
-{
-	"name": "plastic",
-	"objects": ["packaging", "plastic_caps", "PET", "plastic", "plastic_bags", "plastic_bottles", "plastic_packaging", "polyester", "polystyrene_foam"],
-	"color": "#E923D4"
-},
-{
-	"name": "batteries",
-	"objects": ["batteries", "car_batteries"],
-	"color": "#76561D"
-},
-{
-	"name": "clothes",
-	"objects": ["clothes", "shoes"],
-	"color": "#EBB30F"
+	"color": "#CFCE4B"
 },
 {
 	"name": "organic",
 	"objects": ["fat_corp", "chipboard", "green", "christmas_trees", "cooking_oil", "cork", "engine_oil", "green_waste", "organic", "wood", "wasted_oil"],
-	"color": "#2DB8DE"
+	"color": "#01760F"
+},
+{
+	"name": "batteries",
+	"objects": ["batteries", "car_batteries"],
+	"color": "#9933ff"
+},
+{
+	"name": "clothes",
+	"objects": ["clothes", "shoes"],
+	"color": "#E923D4"
+},
+{
+	"name": "plastic",
+	"objects": ["packaging", "plastic_caps", "PET", "plastic", "plastic_bags", "plastic_bottles", "plastic_packaging", "polyester", "polystyrene_foam"],
+	"color": "#33cccc"
 },
 {
 	"name": "metal",
 	"objects": ["aluminium", "bicycles", "cans", "scrap_metal", "scrap_metal_no_iron", "sheet_metal"],
-	"color": "#ED7AEB"
+	"color": "#334d4d"
 },
 {
 	"name": "electrical",
 	"objects": ["cold_devices", "small_appliances", "major_appliances", "fluorescent_tubes", "low_energy_bulbs", "light_bulbs", "white_goods", "electrical_appliances"],
-	"color": "#D75267"
+	"color": "#0000ff"
 },
 {
 	"name": "electronic",
 	"objects": ["computers", "mobile_phones", "tv_monitor", "cam"],
-	"color": "#D9B0B3"
+	"color": "#3366ff"
 },
 {
 	"name": "furniture",
 	"objects": ["furniture"],
-	"color": "#E923D4"
+	"color": "#ffffcc"
 },
 {
 	"name": "chemical",
 	"objects": ["paint", "hazardous_waste", "waste_farming_chemical"],
-	"color": "#E923D4"
+	"color": "#ccff66"
 },
 {
 	"name": "medical",
 	"objects": ["medical", "medical_items", "waste_medical", "waste_mix_medical", "syringe", "drugs"],
-	"color": "#E923D4"
+	"color": "#e6ffb3"
 },
 {
 	"name": "construction",
 	"objects": ["plasterboard", "rubble"],
-	"color": "#E923D4"
+	"color": "#ff6600"
 },
 {
 	"name": "house",
 	"objects": ["bottles", "plastic_cartridges", "music", "cds", "coffee_capsules", "aerosol_cans", "printer_cartridges", "printer_toner_cartridges", "toys"],
-	"color": "#E923D4"
+	"color": "#ff944d"
 },
 {
 	"name": "other",
 	"objects": ["all", "recyclable", "advertising", "blade", "car", "animal_waste", "gas_bottles", "tyres", "waste"],
-	"color": "#01760F"
+	"color": "#000000"
 },
 {
 	"name": "operator",
 	"objects": ["operator"],
-	"color": "#0176FF"
+	"color": "#000000"
 }]

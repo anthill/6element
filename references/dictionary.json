@@ -44,6 +44,7 @@
 	"blade": "lames",
 	"cold_devices" : "frigidaires, congélateurs",
 	"electrical_appliances" : "equipements électriques",
+	"electrical" : "materiel électrique",
 	"fluorescent_tubes": "néons",
 	"low_energy_bulbs": "ampoules basse consommation",
 	"light_bulbs" : "ampoules",

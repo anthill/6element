@@ -72,7 +72,8 @@ function categorizer(inputPoints){
 				id: mainCategory + '_1',
 				t: mainCategory, // type
 				a: true, // availability
-				o: subCategories // objects accepted
+				o: subCategories, // objects accepted
+				id: mainCategory+'_1'
 			});
 		});
 

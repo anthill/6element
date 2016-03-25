@@ -32,7 +32,7 @@
         if(isParent === true)
         {
             var child = node.nextSibling;
-            while(child.classList.contains('child')){
+            while(child != null && child.classList.contains('child')){
 
                 checkIcon(child,checked?2:0);
                 child = child.nextSibling;
@@ -41,13 +41,13 @@
         else{
 
             var parent = node.previousSibling;
-            while(!parent.classList.contains('parent')){
+            while(parent != null && !parent.classList.contains('parent')){
                 parent = parent.previousSibling;
             }
             var child = parent.nextSibling;
             var nbChildren = 0;
             var cpt = 0;
-            while(child.classList.contains('child')){
+            while(child != null && child.classList.contains('child')){
                 ++nbChildren;
                 var iconChild = child.childNodes[0];
                 if(iconChild.classList.contains('checked')) ++cpt;
@@ -74,7 +74,7 @@
         if(isParent === false) return;
 
         var child = node.nextSibling;
-        while(child.classList.contains('child')){
+        while(child != null && child.classList.contains('child')){
 
             child.classList.remove(expanded ? 'li-displayed' : 'li-hidden'); 
             child.classList.add(expanded ? 'li-hidden' : 'li-displayed'); 
@@ -100,7 +100,7 @@
 
             var text = document.createElement('span');
             text.classList.add('text');
-            text.textContent = category.name;
+            text.textContent = translate(category.name);
 
             var expand = document.createElement('div');
             expand.classList.add('collapsed');
@@ -130,7 +130,7 @@
 
                 var text = document.createElement('span');
                 text.classList.add('text');
-                text.textContent = object;
+                text.textContent = translate(object);
 
                 li.appendChild(checkbox);
                 li.appendChild(color);

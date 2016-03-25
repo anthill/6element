@@ -2,10 +2,13 @@
 
 (function(global){
 
+    var dictionary = undefined;
     var map = createMap(getCurrentSearch(), document.querySelector('#map'));
     var currentMapBoundsPlaces = [];
-    var filterValues = [];
 
+    global.translate = function(en){
+        return dictionary ? (dictionary[en] || en ) : en;
+    }
 
     function getCurrentBounds(map){
         var bounds = map.getBounds(); 
@@ -18,10 +21,10 @@
     }
 
     global.refreshMap = function(){
-        displayPlaces(getCurrentSearch(), map, currentMapBoundsPlaces, filterValues);
+        displayPlaces(getCurrentSearch(), map, currentMapBoundsPlaces);
     }
 
-    function reloadMap(){
+    global.reloadMap = function(){
 
         var certified = document.querySelector('#certified').className === 'btn-active';
         findPlaces(getCurrentSearch(), getCurrentBounds(map), certified)
@@ -35,12 +38,12 @@
     /*
         FILTERS
     */
-    fetch('/categories', {headers: {'Content-Type': 'application/json'}})
+    fetch('/references', {headers: {'Content-Type': 'application/json'}})
     .then(function(result){ return result.json() })
-    .then(function(categories){
-        //console.log('categories', categories)
+    .then(function(references){
         
-        createFilterList(categories);
+        dictionary = references.dictionary;
+        createFilterList(references.categories);
         refreshMap();
     })
     .catch(function(err){ console.error('fetch /categories error', err) });

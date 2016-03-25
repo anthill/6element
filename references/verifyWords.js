@@ -1,6 +1,5 @@
 'use strict';
 
-var fs = require('fs');
 var makeMap = require('../tools/makeMap');
 var dic = makeMap(require('./dictionary.json'));
 

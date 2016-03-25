@@ -18,7 +18,7 @@ module.exports = {
         
         return databaseP.then(function (db) {
 
-            return Promise.all(placesData.map(function(data, index){
+            return Promise.all(placesData.map(function(data){
                 if (data){
                     var query = places
                     .insert(data)
@@ -72,13 +72,13 @@ module.exports = {
     getKNearest: function(coords, k){
         return databaseP.then(function (db) {
             
-            var strDistance = "st_distance_sphere(places.geom, st_makepoint(" + coords.lon + ", " + coords.lat + ")) ";
-            var strDistanceAS = strDistance + "AS distance";
+            var strDistance = 'st_distance_sphere(places.geom, st_makepoint(' + coords.lon + ', ' + coords.lat + ')) ';
+            var strDistanceAS = strDistance + 'AS distance';
             var query = places
                 .select(places.star(), strDistanceAS)
                 .from(places)
-                .where(strDistance + "< 50000 and type = 'centre'")
-                .order("distance")
+                .where(strDistance + '< 50000 and type = \'centre\'')
+                .order('distance')
                 .limit(k)
                 .toQuery();
 
@@ -106,7 +106,7 @@ module.exports = {
             return new Promise(function (resolve, reject) {
                 db.query(query, function (err, result) {
                     if (err) {
-                        console.log("ERROR in searching place", query);
+                        console.log('ERROR in searching place', query);
                         reject(err);
                     }
                     else resolve(assignColors(result.rows));
@@ -122,7 +122,7 @@ module.exports = {
         return databaseP.then(function (db) {
 
             var query = places
-                        .select("*")
+                        .select('*')
                         .from(places)
                         .where(places.owner.equals(operatorName))
                         .toQuery();
@@ -130,7 +130,7 @@ module.exports = {
             return new Promise(function (resolve, reject) {
                 db.query(query, function (err, result) {
                     if (err) {
-                        console.log("ERROR in searching place by operatorName", query);
+                        console.log('ERROR in searching place by operatorName', query);
                         reject(err);
                     }
                     else resolve(result.rows); 
@@ -145,12 +145,12 @@ module.exports = {
     getWithin: function(coords, bbox, categories, limit){
         return databaseP.then(function (db) {
             
-            var strDistance = "st_distance_sphere(places.geom, st_makepoint(" + coords.lon + ", " + coords.lat + ")) AS distance";
+            var strDistance = 'st_distance_sphere(places.geom, st_makepoint(' + coords.lon + ', ' + coords.lat + ')) AS distance';
             var query = places
                 .select(places.star(), strDistance)
                 .from(places)
-                .where("places.geom && ST_MakeEnvelope(" + bbox.minLon + ", " + bbox.minLat + ", " + bbox.maxLon + ", " + bbox.maxLat + ", 4326)")
-                .order("distance")
+                .where('places.geom && ST_MakeEnvelope(' + bbox.minLon + ', ' + bbox.minLat + ', ' + bbox.maxLon + ', ' + bbox.maxLat + ', 4326)')
+                .order('distance')
                 .limit(limit)
                 .toQuery();
 
@@ -181,7 +181,7 @@ module.exports = {
             return new Promise(function (resolve, reject) {
                 db.query(query, function (err, result) {
                     if (err) {
-                        console.log("ERROR in searching bins", query);
+                        console.log('ERROR in searching bins', query);
                         reject(err);
                     }
                     else{

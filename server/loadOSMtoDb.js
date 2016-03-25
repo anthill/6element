@@ -12,37 +12,37 @@ var loadBinStatus = require('./osm/loadBinStatus');
 
 saveBinStatus()
 .then(function(savedBins){
-	return connectToDB()
-	.then(function(db){
-		return dropOSMTable(db)
-		.then(function(){
-			return createTables(db);
-		});
-	})
-	.then(function(){
-	    return generateDeclarations();
-	})
-	.then(function(){
-		return loadOSM();
-		// return require(__dirname + '/../data/osmDataConverted.json').features; // if you need to load manually a OSM file
-	})
-	.then(function(osmData){
-		var OsmPlaces = require('./database/models/osmPlaces.js'); // needs to be loaded after declarations are generated
+    return connectToDB()
+    .then(function(db){
+        return dropOSMTable(db)
+        .then(function(){
+            return createTables(db);
+        });
+    })
+    .then(function(){
+        return generateDeclarations();
+    })
+    .then(function(){
+        return loadOSM();
+        // return require(__dirname + '/../data/osmDataConverted.json').features; // if you need to load manually a OSM file
+    })
+    .then(function(osmData){
+        var OsmPlaces = require('./database/models/osmPlaces.js'); // needs to be loaded after declarations are generated
 
-		var data = loadBinStatus(categorize(osmData), savedBins);
+        var data = loadBinStatus(categorize(osmData), savedBins);
 
-		console.log('Recycling points in OSM:', data.length);
-		console.log('New points:', data.length - Object.keys(savedBins).length);
-		console.log('Creating points in DB ...');
+        console.log('Recycling points in OSM:', data.length);
+        console.log('New points:', data.length - Object.keys(savedBins).length);
+        console.log('Creating points in DB ...');
 
-		return OsmPlaces.create(data);
-	});
+        return OsmPlaces.create(data);
+    });
 })
 .then(function(){
-	console.log('All OSM Places created');
-	process.exit();
+    console.log('All OSM Places created');
+    process.exit();
 })
 .catch(function(err){
-	console.error('ERROR creating OSM Place', err.stack);
-	process.exit();
+    console.error('ERROR creating OSM Place', err.stack);
+    process.exit();
 });

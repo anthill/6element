@@ -9,13 +9,13 @@ module.exports = React.createClass({
 		
 		var self = this;
 
-		var placesJSX = this.props.places.length === 0 ? (<p className="no-results"><em>Aucune déchèterie enregistrée ne correpond à votre recherche.</em></p>) :
+		var placesJSX = this.props.places.length === 0 ? (<p className='no-results'><em>Aucune déchèterie enregistrée ne correpond à votre recherche.</em></p>) :
 			this.props.places.map(function(place){
 				return (<PlaceView key={'place'+place.id} place={place} date={self.props.date} mode={self.props.mode} />);
 			});
 
 		return (
-			<div id="places">
+			<div id='places'>
 				{placesJSX}
 			</div>)
 	}

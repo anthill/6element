@@ -10,7 +10,7 @@ var generateDeclarations = require('../server/database/management/generateDecl.j
 
 connectToDB()
 .then(function(db){
-    return createTables(db)
+    return createTables(db);
 })
 .then(function(){
     return generateDeclarations();

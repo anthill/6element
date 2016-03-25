@@ -15,7 +15,7 @@ module.exports = function(){
 	console.log('== Generating definitions ==');
 
 	return new Promise(function(resolve, reject){
-		generateSqlDefinition({ dsn: conString }, function(err, definitions) {
+		generateSqlDefinition({ dsn: conString, omitComments: true }, function(err, definitions) {
 			if (err)
 				reject('Coudn\'t generate definitions: ' + err);
 

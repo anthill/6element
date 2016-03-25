@@ -5,10 +5,11 @@ var path = require('path');
 
 var makeMap = require('../../tools/makeMap');
 
-var saved = makeMap(require('./osmBinStatusDump.json'), 'osm_id');
+function load(newOsmPoints, savedBins){
+	console.log('Loading bin status ...');
 
-function load(newOsmPoints){
-	console.log('Loading bin status');
+	var saved = makeMap(savedBins, 'osm_id'); // savedBins is the data in osmBinStatusDump.json
+
 	return newOsmPoints.map(function(point){
 
 		var savedPoint = saved.get(point.osm_id);

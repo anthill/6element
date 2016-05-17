@@ -204,11 +204,23 @@
     margin: 5px;
 }
 
+#preview{
+    bottom: 0;
+    min-height: 75px;
+}
+
 #preview .adapt-width{
-    min-height: 55px;
+    min-height: 75px;
     background-color: white;
 }
 
 #preview .bins li{
     cursor: pointer;
+}
+
+#preview .legend{
+    display: block;
+    padding: 5px;
+    color: #616161;
+    font-size: 14px;
 }

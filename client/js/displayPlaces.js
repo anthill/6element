@@ -76,6 +76,7 @@
         // adapt-width
         var adaptWidth = document.createElement('div');
         adaptWidth.classList.add('adapt-width');
+        //adaptWidth.classList.add('overflow');
         preview.appendChild(adaptWidth);
 
         // place-header
@@ -98,6 +99,11 @@
 
         li = document.createElement('li');
         placeHeader.appendChild(li);
+
+        var legend = document.createElement('span');
+        legend.classList.add('legend');
+        legend.textContent = 'Cliquez sur chaque élément pour modifier sa disponibilité';
+        li.appendChild(legend);
 
         var ul = document.createElement('ul');
         li.appendChild(ul);

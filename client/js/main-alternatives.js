@@ -59,5 +59,5 @@
     reloadMap();
     document.querySelector('#uncertified').addEventListener('click', reloadMap);
     document.querySelector('#certified').addEventListener('click', reloadMap);
-    hideFilters();
+    showFilters();
 })(this);

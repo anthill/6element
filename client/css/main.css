@@ -385,3 +385,12 @@ article .adapt-width{
 	color: #616161;
 }
 
+#doorbell-button{
+	color: #FFFFFF;
+    background-color: #616161;
+    right: -45px;
+    bottom: 20%;
+    -ms-transform: rotate(-90deg); /* IE 9 */
+    -webkit-transform: rotate(-90deg); /* Chrome, Safari, Opera */
+    transform: rotate(-90deg);
+}

@@ -186,7 +186,13 @@ module.exports = {
                     }
                     else{
                         if(result.rows[0].bins === undefined) resolve (undefined);
-                        else resolve(result.rows[0]);
+                        else{
+                            var to_rename = result.rows[0];
+                            resolve({
+                                bins: to_rename.bins,
+                                owner: to_rename.operator
+                            });
+                        }
                     } 
                 });
             });

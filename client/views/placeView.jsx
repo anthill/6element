@@ -105,10 +105,10 @@ module.exports = React.createClass({
         }
 
         // Adapt the height of panels to number of lines to display in charts
-        var heightPanel = place.results ? 140 + Object.keys(place.results).length * 20 : 140;
+        var heightPanel = 40 + place.results ? Object.keys(place.results).length * 20 : 40;
         var stylePanel = {'height': heightPanel.toString()+'px'};
-
-        var disclaimer = place.pheromon_id ? "" :  (<p className="disclaimer"><em>Ce centre n&apos;est équipé de capteur d&apos;affluence</em></p>);
+        
+        var disclaimer = place.pheromon_id ? "" :  (<p className="disclaimer"><em>Ce centre n&apos;est pas équipé de capteur d&apos;affluence</em></p>);
 		
 		return (
 			<div id={id} className="place">
@@ -121,17 +121,10 @@ module.exports = React.createClass({
 						</span>
 					</li>
 					<ul style={{"float":"right","listStyleType":"none", "padding": "0"}}>
-						<li><button id={'activate-'+id} className="place-infos"><img src='../img/infos.svg'/></button></li>
 						<li><button id={'register-'+id} className="place-no-favorite"><img src='../img/no-favorite.svg'/></button></li>
 					</ul>
 				</ul>
-				<div id={'panel-canvas-'+id} className={"panel-active"} style={stylePanel}>
-					<div id={'chart-'+id} className="chart"/>
-					<div id={'data-'+id} className="data">
-						{JSON.stringify(place.results)}
-					</div>
-				</div> 
-				<div id={'panel-infos-'+id} className={"panel-hidden"} style={stylePanel}>
+				<div id={'panel-infos-'+id} className={"panel-active"}>
 					<div className="coordinates">
 						<div className="address">
 							{coordinatesJSX}
@@ -141,6 +134,12 @@ module.exports = React.createClass({
 						</div>
 					</div>
 				</div>
+				<div id={'panel-canvas-'+id} className={"panel-active"} style={stylePanel}>
+					<div id={'chart-'+id} className="chart"/>
+					<div id={'data-'+id} className="data">
+						{JSON.stringify(place.results)}
+					</div>
+				</div> 
 				<ul className="bins">
 					{binsJSX}
 				</ul>

@@ -17,23 +17,11 @@ function formatDate (date) {
         '.000000';
  }
 
- function getSeries (xSignals, ySignals, xGreen, yGreen, xOrange, yOrange, xRed, yRed, xGrey, yGrey){
+ function getSeries (xGreen, yGreen, xOrange, yOrange, xRed, yRed, xGrey, yGrey){
 
+    var size = 11;
     // Bind chart structure
-    return [{
-            type: 'scatter',
-            name: 'Saturation(%)',
-            showlegend: false,
-            x: xSignals,
-            y: ySignals,
-            line: {
-                shape: 'spline',
-                color: '#E400B9',
-                connectgaps: false
-            },
-            mode: 'lines',
-            hoverinfo: 'none'
-        },
+    return [
         {
             type: 'scatter',
             name: 'green',
@@ -41,7 +29,8 @@ function formatDate (date) {
             x: xGreen,
             y: yGreen,
             marker: {
-                symbol: 'square',
+                size: size,
+                symbol: 'circle',
                 color: '#7fdc2b'
             },
             mode: 'markers',
@@ -54,7 +43,8 @@ function formatDate (date) {
             x: xOrange,
             y: yOrange,
             marker: {
-                symbol: 'square',
+                size: size,
+                symbol: 'circle',
                 color: '#ffb800'
             },
             mode: 'markers',
@@ -67,7 +57,8 @@ function formatDate (date) {
             x: xRed,
             y: yRed,
             marker: {
-                symbol: 'square',
+                size: size,
+                symbol: 'circle',
                 color: '#ff3b6c'
             },
             mode: 'markers',
@@ -80,8 +71,9 @@ function formatDate (date) {
             x: xGrey,
             y: yGrey,
             marker: {
-                symbol: 'square',
-                color: '#FFFFFF'
+                size: size,
+                symbol: 'circle',
+                color: '#F5F5F5'
             },
             mode: 'markers',
             hoverinfo: 'none'
@@ -95,7 +87,6 @@ function draw(node, data){
     var width = node.offsetWidth;
 
     // Series
-    var xSignals = [], ySignals = []; // Signal curve
     var xGreen = [], yGreen = []; // Colored squares
     var xOrange = [], yOrange = []; 
     var xRed = [], yRed = []; 
@@ -134,31 +125,28 @@ function draw(node, data){
                     ticksX.push(strDate);
             }
         
-            if(isAffluence){
-                xSignals.push(strDate);
-                ySignals.push(value >= 0 ? value : undefined);
-            }
-
-             // Color 
-            if(value === -2){
+            // Color 
+            if(value === -2 && isAffluence){
                 //nothing, it's closed
+                xGrey.push(strDate);
+                yGrey.push(-10);
             } 
             else if(value === -1){
                 //unknown, let's put in grey
                 xGrey.push(strDate);
-                yGrey.push(isAffluence?-10 : -20*index-30);
+                yGrey.push(isAffluence?-10 : -20*index-20);
             }
             else if(value < 30){
                 xGreen.push(strDate);
-                yGreen.push(isAffluence?-10 : -20*index-30);
+                yGreen.push(isAffluence?-10 : -20*index-20);
             } 
             else if(30 <= value && value < 50){
                 xOrange.push(strDate);
-                yOrange.push(isAffluence?-10 : -20*index-30);
+                yOrange.push(isAffluence?-10 : -20*index-20);
             }
             else {         
                 xRed.push(strDate);
-                yRed.push(isAffluence?-10 : -20*index-30);
+                yRed.push(isAffluence?-10 : -20*index-20);
             }
 
             prev = value;
@@ -168,7 +156,7 @@ function draw(node, data){
     });
     
 
-    var traces = getSeries(xSignals, ySignals, xGreen, yGreen, xOrange, yOrange, xRed, yRed, xGrey, yGrey);
+    var traces = getSeries(xGreen, yGreen, xOrange, yOrange, xRed, yRed, xGrey, yGrey);
     
     // Legend on left
     var tickvals = []; 
@@ -180,7 +168,7 @@ function draw(node, data){
 
         // Value on Yaxis
         if(index === 0) tickvals.push(-10);
-        else tickvals.push(-20*index-30);
+        else tickvals.push(-20*index-20);
         
         // Label
         if(tickY.length > nbCaractMax+1)
@@ -189,25 +177,27 @@ function draw(node, data){
         if(tickY.length > nbCaractMax)
             nbCaractMax = tickY.length;
     });
-    var minTick = ticksY.length*-20 - 40;
+    var minTick = ticksY.length*-20-20;
         
+    console.log(start.valueOf());
     Plotly.newPlot( node, traces, // eslint-disable-line
     {
         xaxis:{
             type: 'date',
             tickformat:'%H:%M',
             tickvals: ticksX,
-            range: [start.valueOf(), end.valueOf()],
-            showgrid: true
+            range: [start.valueOf()-10*60*1000, end.valueOf()+10*60*1000],
+            //showgrid: true
         },
         yaxis:{
-            range: [minTick,100],
+            range: [minTick,0],
             tickvals: tickvals,
             ticktext: ticktext,
             showline: false,
-            showgrid: false
+            showgrid: false,
+            zeroline: false
         },
-        margin: { t: 0, b: 30, l: nbCaractMax*7, r: 20} 
+        margin: { t: 0, b: 0, l: nbCaractMax*7+10, r: 10} 
     }, {showLink: false, displayModeBar: false} );
 
 }

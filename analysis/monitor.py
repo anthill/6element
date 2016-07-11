@@ -37,8 +37,8 @@ last = datetime.datetime.fromtimestamp(0)
 before = last
 
 # Processing for each measure
-for measure in enumerate(measures):
-    measures_date = dateutil.parser.parse(measure["date"])
+for measure in measures:
+    measure_date = dateutil.parser.parse(measure["date"])
 
     # If the date has changed, we have to process the last day's data
     if (measure_date.day > last.day) or (measure_date.month > last.month):

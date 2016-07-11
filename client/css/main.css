@@ -312,6 +312,7 @@ article .adapt-width{
 }
 .panel-active{
 	display: block;
+	margin: 5px;
 }
 .panel-hidden {
 	display: none;
@@ -346,6 +347,11 @@ article .adapt-width{
 .opening_hours{
 	background-image: url("../img/access_time.svg");
 }
+.center{
+	margin: 0 auto;
+	display: block;
+	max-width: 300px;
+}
 
 .bins{
 	text-align: left;
@@ -370,7 +376,6 @@ article .adapt-width{
 .chart {
 	width: 100%;
 	height: 100%;
-
 }
 .data{
 	display: none;

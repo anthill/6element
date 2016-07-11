@@ -127,10 +127,14 @@ module.exports = React.createClass({
 				<div id={'panel-infos-'+id} className={"panel-active"}>
 					<div className="coordinates">
 						<div className="address">
-							{coordinatesJSX}
+							<div className="center">
+								{coordinatesJSX}
+							</div>
 						</div>
 						<div className="opening_hours">
-							{calendarJSX}
+							<div className="center">
+								{calendarJSX}
+							</div>
 						</div>
 					</div>
 				</div>

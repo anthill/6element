@@ -90,7 +90,7 @@ for sensor in places:
     values = [0] * len(X)
     maximums = []
 
-    for measure in measures:
+    for i, measure in enumerate(measures):
         measure_date = dateutil.parser.parse(measure["date"])
         if (i > 0) and ((measure_date.day > last.day)
                 or (measure_date.month > last.month)):

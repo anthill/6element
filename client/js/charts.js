@@ -179,7 +179,6 @@ function draw(node, data){
     });
     var minTick = ticksY.length*-20-20;
         
-    console.log(start.valueOf());
     Plotly.newPlot( node, traces, // eslint-disable-line
     {
         xaxis:{

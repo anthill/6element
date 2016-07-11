@@ -72,14 +72,15 @@ for sensor in places:
 
     last = dateutil.parser.parse("1970-01-01T00:00:00.000Z")
     before = last
-    res = [0 for i in range(0, len(X))]
-    nb_duplicatas = [0 for i in range(0, len(X))]
-    values = [0 for i in range(0, len(X))]
+    res = [0] * len(X)
+    nb_duplicatas = [0] * len(X)
+    values = [0] * len(X)
     maximums = []
 
-    for i in range(0, len(measures)):
-        if (i > 0) and ((dateutil.parser.parse(measures[i]["date"]).day > last.day)
-                or (dateutil.parser.parse(measures[i]["date"]).month > last.month)):
+    for measure in enumerate(measures):
+        measure_date = dateutil.parser.parse(measure["date"])
+        if (i > 0) and ((measure_date.day > last.day)
+                or (measure_date.month > last.month)):
             #plt.plot(X, res)
             max_in_day = 0
             for j in range(0, len(X)):
@@ -98,23 +99,23 @@ for sensor in places:
                 nb_duplicatas[j] = 0
                 values[j] = 0
 
-        res[dateutil.parser.parse(measures[i]["date"]).hour] += 1
-        if (values[dateutil.parser.parse(measures[i]["date"]).hour] < len(measures[i]["value"])):
-            values[dateutil.parser.parse(measures[i]["date"]).hour] = len(measures[i]["value"])
+        res[measure_date.hour] += 1
+        if (values[measure_date.hour] < len(measure["value"])):
+            values[measure_date.hour] = len(measure["value"])
 
-        if (len(maximums) < 10) or (maximums[0]["nb"] < len(measures[i]["value"])):
+        if (len(maximums) < 10) or (maximums[0]["nb"] < len(measure["value"])):
             maximums.append({
-                "nb" : len(measures[i]["value"]),
-                "date" : dateutil.parser.parse(measures[i]["date"]).strftime("%Y-%m-%dT")})
+                "nb" : len(measure["value"]),
+                "date" : measure_date.strftime("%Y-%m-%dT")})
             maximums.sort(key = lambda arr: arr["nb"])
             if (len(maximums) > 10):
                 maximums = maximums[len(maximums) - 10:]
 
-        if (before == dateutil.parser.parse(measures[i]["date"])):
-            nb_duplicatas[dateutil.parser.parse(measures[i]["date"]).hour] += 1
-        before = dateutil.parser.parse(measures[i]["date"])
-        if (int(last.strftime("%Y%m%d%H")) != int(dateutil.parser.parse(measures[i]["date"]).strftime("%Y%m%d%H"))):
-            last = dateutil.parser.parse(measures[i]["date"])
+        if (before == measure_date):
+            nb_duplicatas[measure_date.hour] += 1
+        before = measure_date
+        if (int(last.strftime("%Y%m%d%H")) != int(measure_date.strftime("%Y%m%d%H"))):
+            last = measure_date
 
     allsensors.append({
         "sensor" : sensor["id"],
@@ -131,5 +132,6 @@ for sensor in places:
 
 #plt.show()
 
+print "Writing JSON..."
 json_output = open(sys.argv[1], 'w+')
 json_output.write(json.dumps(allsensors))

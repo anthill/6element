@@ -4,7 +4,6 @@ from matplotlib.pyplot import figure, show
 import datetime
 import dateutil.parser
 import json
-import numpy as npy
 import os
 import pprint
 import sys
@@ -16,7 +15,7 @@ if (len(sys.argv) == 1 or sys.argv[1] == "-h"):
     print
     print " `-> Print the analysis as json into the json_output file, and,"
     print "     if another file is given, write as CSV the informations concerning"
-    print "     the maximum amount of WiFi devices measured by day, by captor, into"
+    print "     the maximum amount of WiFi devices measured by day, by sensor, into"
     print "     the csv_output file."
     print
     exit()
@@ -26,9 +25,9 @@ with open(secret_json) as configuration_json:
     configuration = json.load(configuration_json)
 
 pp = pprint.PrettyPrinter(indent=4)
-allinfos_url = configuration["data_source"] + "/allPlacesInfos"
-allinfos = json.loads(urllib.urlopen(allinfos_url).read())
-allcaptors = []
+places_url = configuration["data_source"] + "/allPlacesInfos"
+places = json.loads(urllib.urlopen(places_url).read())
+allsensors = []
 base = datetime.datetime.today()
 
 opening_hours_url = configuration["data_source"] + "/sensor/getAll?s=" + configuration["secret"]
@@ -38,14 +37,14 @@ csv_output = open("/dev/null", "w+")
 if (len(sys.argv) > 2):
     csv_output = open(sys.argv[2], "w+")
 
-def nb_measures_expected(captor_id, hour, month, day):
+def nb_measures_expected(place_id, hour, month, day):
     hour += 1
     if (month > 3) or (month == 3 and day > 27):
         hour += 1
-    for captor in opening_hours:
-        if (captor["installed_at"] == captor_id):
-            if ((hour >= captor["start_hour"]) and (hour < captor["stop_hour"])):
-                if (hour == captor["start_hour"]):
+    for sensor in opening_hours:
+        if (sensor["installed_at"] == place_id):
+            if ((hour >= sensor["start_hour"]) and (hour < sensor["stop_hour"])):
+                if (hour == sensor["start_hour"]):
                     return 11
                 return 12
             return 0
@@ -58,10 +57,10 @@ for x in range(0, 300):
     max_all_days[x] = 0
 csv_output.write("\n")
 
-for captor in allinfos:
-    csv_output.write(captor["name"].encode('utf-8') + ", " + str(captor["id"]))
-    print "Processing captor: \"" + captor["name"].encode('utf-8') + "\"..."
-    url = configuration["data_source"] + "/measurements/places?ids=" + str(captor["id"]) + "&types=wifi"
+for sensor in places:
+    csv_output.write(sensor["name"].encode('utf-8') + ", " + str(sensor["id"]))
+    print "Processing sensor: \"" + sensor["name"].encode('utf-8') + "\"..."
+    url = configuration["data_source"] + "/measurements/places?ids=" + str(sensor["id"]) + "&types=wifi"
     measures = json.loads(urllib.urlopen(url).read())
     measures.sort(key = lambda arr: arr["date"])
 
@@ -90,7 +89,7 @@ for captor in allinfos:
 
                 date_list[last.strftime("%Y-%m-%d")].append({
                     "datetime" : last.strftime("%Y-%m-%dT") + str(j) + ":00:00.000Z",
-                    "expected" : nb_measures_expected(captor["id"], j, last.month, last.day),
+                    "expected" : nb_measures_expected(sensor["id"], j, last.month, last.day),
                     "nb" : res[j],
                     "nb_uniques" : res[j] - nb_duplicatas[j],
                     "max_measures" : values[j]})
@@ -117,9 +116,9 @@ for captor in allinfos:
         if (int(last.strftime("%Y%m%d%H")) != int(dateutil.parser.parse(measures[i]["date"]).strftime("%Y%m%d%H"))):
             last = dateutil.parser.parse(measures[i]["date"])
 
-    allcaptors.append({
-        "captor" : captor["id"],
-        "name" : captor["name"].encode("utf-8"),
+    allsensors.append({
+        "sensor" : sensor["id"],
+        "name" : sensor["name"].encode("utf-8"),
         "measures" : date_list,
         "max_measures" : maximums})
 
@@ -127,10 +126,10 @@ for captor in allinfos:
         csv_output.write(", " + str(max_all_days[x]))
     csv_output.write("\n");
 
-    #plt.title("Captor " + str(captor["id"]) + " - " + captor["name"])
+    #plt.title("Captor " + str(sensor["id"]) + " - " + sensor["name"])
     #plt.figure()
 
 #plt.show()
 
 json_output = open(sys.argv[1], 'w+')
-json_output.write(json.dumps(allcaptors))
+json_output.write(json.dumps(allsensors))

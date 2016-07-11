@@ -11,20 +11,20 @@ import sys
 import urllib
 
 if (len(sys.argv) < 2):
-    print "Usage: " + sys.argv[0] + " captor_id"
+    print "Usage: " + sys.argv[0] + " sensor_id"
     print
-    print " `-> Prints the hours when too many measures were took for the captor whose id was given in argument."
+    print " `-> Prints the hours when too many measures were took for the sensor whose id was given in argument."
     print "     A graph is built with one curve by day displaying the number of measures by hour"
     print
     exit()
 
-captor = sys.argv[1]
+sensor = sys.argv[1]
 
 secret_json = os.path.dirname(os.path.abspath(__file__)) + "/../PRIVATE.json"
 with open(secret_json) as configuration_json:
     configuration = json.load(configuration_json)
 
-url = configuration["data_source"] + "/measurements/places?ids=" + captor + "&types=wifi"
+url = configuration["data_source"] + "/measurements/places?ids=" + sensor + "&types=wifi"
 measures = json.loads(urllib.urlopen(url).read())
 measures.sort(key=lambda arr: arr["date"])
 

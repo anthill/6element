@@ -328,6 +328,7 @@ article .adapt-width{
 	width: 100%;
 	height: 100%;
 	background-color: #FFFFFF;
+	margin-bottom: 20px; 
 }
 .address,
 .opening_hours {

@@ -1,8 +1,6 @@
 #!/usr/bin/python
 
-#from matplotlib.pyplot import figure, show
-#import pylab as plt
-from promise import Promise
+from multiprocessing import Pool
 import datetime
 import dateutil.parser
 import grequests
@@ -42,6 +40,11 @@ base = datetime.datetime.today()
 pp = pprint.PrettyPrinter(indent = 4)
 X = range(0, 24)
 
+# Analyzing dates up to 300 days back
+date_list = {}
+for x in range(0, 300):
+    date_list[(base - datetime.timedelta(days = x)).strftime("%Y-%m-%d")] = []
+
 # This function returns the expected number of measures at a specific hour (UTC) from a particular date
 # It considers the jet lag from France, from summer or winter
 def nb_measures_expected(place_id, hour, month, day):
@@ -57,22 +60,15 @@ def nb_measures_expected(place_id, hour, month, day):
             return 0
     return 0
 
-def error_handling(err):
-    print "Something *really* very bad happened:"
-    print
-    print err
-    print err.stack()
-    print
-    print "Good luck"
-    exit()
-
+# Creating streams to prepare the download of data in JSON from the API
 def retrieve_sensors_data(sensor):
-
     # Loading all the measures and sorting them by date, to process them in order
     url = configuration["data_source"] + "/measurements/places?ids=" + str(sensor["id"]) + "&types=wifi"
     return grequests.get(url)
 
+# Processing statistics from the JSON got from the API
 def process_sensor(sensor, response):
+    # If there was an error retrieving data (via the API)
     if response is None or response.status_code != 200:
         print "Fatal error retrieving sensor data for \"" + sensor["name"].encode('utf-8') + "\""
         return ("", "")
@@ -94,9 +90,6 @@ def process_sensor(sensor, response):
         measure_date = dateutil.parser.parse(measure["date"])
         if (i > 0) and ((measure_date.day > last.day)
                 or (measure_date.month > last.month)):
-
-            # Add a curve with number of measures by hour
-            #plt.plot(X, res)
 
             max_in_day = 0
             for j in range(0, len(X)):
@@ -153,28 +146,10 @@ def process_sensor(sensor, response):
         csv_content += ", " + str(max_all_days[x])
     csv_content += "\n"
 
-    # Preparing graphs
-    #plt.title("Captor " + str(sensor["id"]) + " - " + sensor["name"])
-    #plt.figure()
-
     return (json_content, csv_content)
 
-# Analyzing dates up to 300 days back
-date_list = {}
-for x in range(0, 300):
-    date_list[(base - datetime.timedelta(days = x)).strftime("%Y-%m-%d")] = []
-
-# For each sensor
-#for index, sensor in enumerate(places):
-#    process_sensorP.append(retrieve_sensors_data(sensor).then(process_sensor).catch(error_handling))
-sensor_streams = map(retrieve_sensors_data, places)
-requests = grequests.map(sensor_streams)
-#processed_sensors_res = map(lambda (index, response): process_sensor(places[index], response), enumerate(requests))
-process_sensorP = map(lambda (index, response): Promise(lambda res, rej: res(process_sensor(places[index], response))).catch(error_handling), enumerate(requests))
-
+# This function will output into files given in parameters
 def final_writes(res):
-    #plt.show()
-
     final_json = []
 
     # Opening the CSV file to save measures' counts to
@@ -198,4 +173,14 @@ def final_writes(res):
     json_output = open(sys.argv[1], 'w+')
     json_output.write(json.dumps(final_json))
 
-Promise.all(process_sensorP).then(final_writes).catch(error_handling)
+# This function will be given as parameter to the thread pool
+def parallelize((index, response)):
+    return process_sensor(places[index], response)
+
+# Processing get requests
+sensor_streams = map(retrieve_sensors_data, places)
+requests = grequests.map(sensor_streams)
+
+# Processing datas in multithread
+processed_sensors_res = Pool(len(requests)).map(parallelize, enumerate(requests))
+final_writes(processed_sensors_res)

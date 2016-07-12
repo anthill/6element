@@ -196,7 +196,7 @@ function draw(node, data){
             showgrid: false,
             zeroline: false
         },
-        margin: { t: 0, b: 0, l: nbCaractMax*7+10, r: 10} 
+        margin: { t: 10, b: 30, l: nbCaractMax*7+10, r: 10} 
     }, {showLink: false, displayModeBar: false} );
 
 }

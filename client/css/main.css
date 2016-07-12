@@ -310,12 +310,9 @@ article .adapt-width{
 	color: #616161;
 	font-size: 14px;
 }
-.panel-active{
+.panel{
 	display: block;
 	margin: 5px;
-}
-.panel-hidden {
-	display: none;
 }
 
 .place-no-infos {
@@ -329,28 +326,30 @@ article .adapt-width{
 	width: 100%;
 	height: 100%;
 	background-color: #FFFFFF;
-	margin-bottom: 20px; 
+	margin-bottom: 10px; 
 }
-.address,
-.opening_hours {
+.map-box {
 	display: table-cell;
 	width: 50%;
+}
+
+.details {
+	display: table-cell;
 	padding: 0 10px;
-	background-size: 100px 100px;
+	background-size: 120px 120px;
 	background-repeat: no-repeat;
-	background-position: center center;
+	background-position: 75% center;
 	font-size: 14px;
+	background-image: url("../img/details.svg");
 }
-.address{
-	background-image: url("../img/gps_fixed.svg");
-}
-.opening_hours{
-	background-image: url("../img/access_time.svg");
+.map{
+	height: 100%;
+    width: 100%;
+    display: list-item;
+    color: #FAFAFA;
 }
 .center{
-	margin: 0 auto;
 	display: block;
-	max-width: 300px;
 }
 
 .bins{
@@ -384,7 +383,7 @@ article .adapt-width{
 	height: 0;
 }
 .disclaimer{
-	margin: 5px;
+	margin: 15px;
 	text-align: center;
 	font-size: 12px;
 	vertical-align: baseline;

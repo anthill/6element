@@ -303,7 +303,6 @@ article .adapt-width{
 	}
 	.place-avatar,
 	.place-header > li:first-child {
-		/*width: 0;*/
 		padding: 0;
 		margin: 0;
 	}

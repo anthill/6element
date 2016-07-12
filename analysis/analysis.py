@@ -1,14 +1,17 @@
 #!/usr/bin/python
 
 #from matplotlib.pyplot import figure, show
+#import pylab as plt
+from promise import Promise
 import datetime
 import dateutil.parser
+import grequests
 import json
 import os
 import pprint
 import sys
+import time
 import urllib
-#import pylab as plt
 
 # Help message
 if (len(sys.argv) == 1 or sys.argv[1] == "-h"):
@@ -34,6 +37,11 @@ places = json.loads(urllib.urlopen(places_url).read())
 opening_hours_url = configuration["data_source"] + "/sensor/getAll?s=" + configuration["secret"]
 opening_hours = json.loads(urllib.urlopen(opening_hours_url).read())
 
+allsensors = []
+base = datetime.datetime.today()
+pp = pprint.PrettyPrinter(indent = 4)
+X = range(0, 24)
+
 # This function returns the expected number of measures at a specific hour (UTC) from a particular date
 # It considers the jet lag from France, from summer or winter
 def nb_measures_expected(place_id, hour, month, day):
@@ -49,46 +57,38 @@ def nb_measures_expected(place_id, hour, month, day):
             return 0
     return 0
 
-allsensors = []
-base = datetime.datetime.today()
-pp = pprint.PrettyPrinter(indent = 4)
-X = range(0, 24)
+def error_handling(err):
+    print "Something *really* very bad happened:"
+    print
+    print err
+    print err.stack()
+    print
+    print "Good luck"
+    exit()
 
-# Analyzing dates up to 300 days back
-date_list = {}
-for x in range(0, 300):
-    date_list[(base - datetime.timedelta(days = x)).strftime("%Y-%m-%d")] = []
-
-# Opening the CSV file to save measures' counts to
-csv_output = open("/dev/null", "w+")
-if (len(sys.argv) > 2):
-    csv_output = open(sys.argv[2], "w+")
-
-# Printing head of the CSV
-csv_output.write("Place, Captor ID")
-max_all_days = {}
-for x in range(0, 300):
-    csv_output.write(", " + (base - datetime.timedelta(days = x)).strftime("%Y-%m-%d"))
-    max_all_days[x] = 0
-csv_output.write("\n")
-
-# For each sensor
-for sensor in places:
-    print "Processing sensor: \"" + sensor["name"].encode('utf-8') + "\"..."
-    csv_output.write(sensor["name"].encode('utf-8') + ", " + str(sensor["id"]))
+def retrieve_sensors_data(sensor):
 
     # Loading all the measures and sorting them by date, to process them in order
     url = configuration["data_source"] + "/measurements/places?ids=" + str(sensor["id"]) + "&types=wifi"
-    measures = json.loads(urllib.urlopen(url).read())
-    measures.sort(key = lambda arr: arr["date"])
+    return grequests.get(url)
+
+def process_sensor(sensor, response):
+    if response is None or response.status_code != 200:
+        print "Fatal error retrieving sensor data for \"" + sensor["name"].encode('utf-8') + "\""
+        return ("", "")
+
+    print "Processing sensor: \"" + sensor["name"].encode('utf-8') + "\"..."
 
     # Inits
     last = dateutil.parser.parse("1970-01-01T00:00:00.000Z")
     before = last
-    res = [0] * len(X)
-    nb_duplicatas = [0] * len(X)
-    values = [0] * len(X)
     maximums = []
+    nb_duplicatas = [0] * len(X)
+    res = [0] * len(X)
+    values = [0] * len(X)
+    measures = json.loads(response.content)
+    measures.sort(key = lambda arr: arr["date"])
+    max_all_days = [0] * 300
 
     for i, measure in enumerate(measures):
         measure_date = dateutil.parser.parse(measure["date"])
@@ -141,23 +141,61 @@ for sensor in places:
             last = measure_date
 
     # Appending to JSON all data of the concerned sensor
-    allsensors.append({
-        "sensor" : sensor["id"],
-        "name" : sensor["name"].encode("utf-8"),
-        "measures" : date_list,
-        "max_measures" : maximums})
+    json_content = {
+        "sensor"       : sensor["id"],
+        "name"         : sensor["name"].encode("utf-8"),
+        "measures"     : date_list,
+        "max_measures" : maximums}
 
     # Printing maximums of WiFi emitters for these 300 days back
+    csv_content = sensor["name"].encode('utf-8') + ", " + str(sensor["id"])
     for x in range(0, 300):
-        csv_output.write(", " + str(max_all_days[x]))
-    csv_output.write("\n");
+        csv_content += ", " + str(max_all_days[x])
+    csv_content += "\n"
 
     # Preparing graphs
     #plt.title("Captor " + str(sensor["id"]) + " - " + sensor["name"])
     #plt.figure()
 
-#plt.show()
+    return (json_content, csv_content)
 
-print "Writing JSON..."
-json_output = open(sys.argv[1], 'w+')
-json_output.write(json.dumps(allsensors))
+# Analyzing dates up to 300 days back
+date_list = {}
+for x in range(0, 300):
+    date_list[(base - datetime.timedelta(days = x)).strftime("%Y-%m-%d")] = []
+
+# For each sensor
+#for index, sensor in enumerate(places):
+#    process_sensorP.append(retrieve_sensors_data(sensor).then(process_sensor).catch(error_handling))
+sensor_streams = map(retrieve_sensors_data, places)
+requests = grequests.map(sensor_streams)
+#processed_sensors_res = map(lambda (index, response): process_sensor(places[index], response), enumerate(requests))
+process_sensorP = map(lambda (index, response): Promise(lambda res, rej: res(process_sensor(places[index], response))).catch(error_handling), enumerate(requests))
+
+def final_writes(res):
+    #plt.show()
+
+    final_json = []
+
+    # Opening the CSV file to save measures' counts to
+    csv_output = open("/dev/null", "w+")
+    if (len(sys.argv) > 2):
+        csv_output = open(sys.argv[2], "w+")
+
+    # Printing head of the CSV
+    csv_output.write("Place, Captor ID")
+    for x in range(0, 300):
+        csv_output.write(", " + (base - datetime.timedelta(days = x)).strftime("%Y-%m-%d"))
+    csv_output.write("\n")
+
+    # Printing body of the CSV and building JSON
+    for json_data, csv_data in res:
+        csv_output.write(csv_data)
+        final_json.append(json_data)
+
+    # Opening and writing JSON to save stats to
+    print "Writing JSON..."
+    json_output = open(sys.argv[1], 'w+')
+    json_output.write(json.dumps(final_json))
+
+Promise.all(process_sensorP).then(final_writes).catch(error_handling)

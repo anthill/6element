@@ -312,7 +312,7 @@ article .adapt-width{
 }
 .panel{
 	display: block;
-	margin: 5px;
+	margin: 10px;
 }
 
 .place-no-infos {
@@ -332,7 +332,6 @@ article .adapt-width{
 	display: table-cell;
 	width: 50%;
 }
-
 .details {
 	display: table-cell;
 	padding: 0 10px;
@@ -342,16 +341,6 @@ article .adapt-width{
 	font-size: 14px;
 	background-image: url("../img/details.svg");
 }
-.map{
-	height: 100%;
-    width: 100%;
-    display: list-item;
-    color: #FAFAFA;
-}
-.center{
-	display: block;
-}
-
 .bins{
 	text-align: left;
 	padding: 0px;

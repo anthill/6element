@@ -89,9 +89,9 @@ module.exports = React.createClass({
 		}
 
         coordinatesJSX.push(<br/>);
-        coordinatesJSX.push(<span>Particuliers: {place.public_access === 1 ? "oui" : "non"}</span>);
+        coordinatesJSX.push(<span>Particuliers: <em>{place.public_access ? "oui" : "non"}</em></span>);
         coordinatesJSX.push(<br/>);
-        coordinatesJSX.push(<span>Professionnels: {place.pro_access === 1 ? "oui" : "non"}</span>);
+        coordinatesJSX.push(<span>Professionnels: <em>{place.pro_access ? "oui" : "non"}</em></span>);
         coordinatesJSX.push(<br/>);
         
         /*coordinatesJSX.push(<br/>);
@@ -139,13 +139,9 @@ module.exports = React.createClass({
 				</ul>
 				<div id={'panel-infos-'+id} className="panel">
 					<div className="coordinates">
-						<div className="map-box">
-							<div id={'map-'+id} className="map"/>
-						</div>
+						<div id={'map-'+id} className="map-box"/>
 						<div className="details">
-							<div className="center">
-								{coordinatesJSX}
-							</div>
+							{coordinatesJSX}
 						</div>
 					</div>
 				</div>

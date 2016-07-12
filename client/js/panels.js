@@ -11,11 +11,8 @@ function initializeAllPanels(){
     	var CentroidIcon = L.Icon.Default.extend({
             options: {
                 iconUrl:     '/img/locate.svg',
-                iconSize:     [18, 18],
-                shadowSize:   [0, 0], // size of the shadow
-                iconAnchor:   [10, 10], // point of the icon which will correspond to marker's location
-                shadowAnchor: [10, 10], // the same for the shadow
-                popupAnchor:  [-3, -40] // point from which the popup should open relative to the iconAnchor
+                iconSize:     [30, 30],
+                shadowSize:   [5, 5] // size of the shadow
             }
         });
         var centroid = new L.Marker(new L.LatLng(centroid.lat, centroid.lon), {icon: new CentroidIcon()});

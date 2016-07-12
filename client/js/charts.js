@@ -118,29 +118,35 @@ function draw(node, data){
             var value = data[tickY][i];
 
             // If opening or closing, new tick
+            var indicator = value;
             if( isAffluence &&
                 ((prev===-2 && value!==-2) || 
                 (prev!==-2 && value===-2))){
+
                 if(ticksX.indexOf(strDate) === -1)
                     ticksX.push(strDate);
+
+                if(prev!==-2 && value===-2){
+                    indicator = prev;
+                }
             }
         
             // Color 
-            if(value === -2 && isAffluence){
+            if(indicator === -2 && isAffluence){
                 //nothing, it's closed
                 xGrey.push(strDate);
                 yGrey.push(-10);
             } 
-            else if(value === -1){
+            else if(indicator === -1){
                 //unknown, let's put in grey
                 xGrey.push(strDate);
                 yGrey.push(isAffluence?-10 : -20*index-20);
             }
-            else if(value < 30){
+            else if(indicator < 40){
                 xGreen.push(strDate);
                 yGreen.push(isAffluence?-10 : -20*index-20);
             } 
-            else if(30 <= value && value < 50){
+            else if(40 <= indicator && indicator < 70){
                 xOrange.push(strDate);
                 yOrange.push(isAffluence?-10 : -20*index-20);
             }
@@ -150,9 +156,7 @@ function draw(node, data){
             }
 
             prev = value;
-        }
-
-    
+        }    
     });
     
 

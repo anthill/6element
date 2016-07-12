@@ -140,9 +140,9 @@ def process_sensor(sensor, response):
         "max_measures" : maximums}
 
     # Printing maximums of WiFi emitters for these 300 days back
-    csv_content = sensor["name"].encode('utf-8') + ", " + str(sensor["id"])
+    csv_content = sensor["name"].encode('utf-8') + "," + str(sensor["id"])
     for x in range(0, 300):
-        csv_content += ", " + str(max_all_days[x])
+        csv_content += "," + str(max_all_days[x])
     csv_content += "\n"
 
     return (json_content, csv_content)
@@ -159,7 +159,7 @@ def final_writes(res):
     # Printing head of the CSV
     csv_output.write("Place, Captor ID")
     for x in range(0, 300):
-        csv_output.write(", " + (base - datetime.timedelta(days = x)).strftime("%Y-%m-%d"))
+        csv_output.write("," + (base - datetime.timedelta(days = x)).strftime("%Y-%m-%d"))
     csv_output.write("\n")
 
     # Printing body of the CSV and building JSON

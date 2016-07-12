@@ -45,8 +45,6 @@ module.exports = React.createClass({
         //var now = fromUTC(momentTZ().tz('Europe/Paris').format());
  
  		var isOpen = oh ? oh.getState(now) : true;
-    	var calendarJSX = NotEmpty(place.opening_hours) ?
-		(<Calendar opening_hours={place.opening_hours} />) : "";
 
 		// COLOR
 		var color = "grey";
@@ -81,9 +79,14 @@ module.exports = React.createClass({
             coordinatesJSX.push(<br/>);
         }
         
-        coordinatesJSX.push(<a id={'pos-'+id} href={"http://maps.apple.com/?q="
-			+place.lat+","+place.lon}><em>afficher le plan</em></a>);
+        coordinatesJSX.push(<a id={'pos-'+id} className="map-url" href={"http://maps.apple.com/?q="
+			+place.lat+","+place.lon}><em>ouvrir le plan</em></a>);
         coordinatesJSX.push(<br/>);
+
+		if(NotEmpty(place.opening_hours)){
+			coordinatesJSX.push(<br/>);
+	        coordinatesJSX.push(<Calendar opening_hours={place.opening_hours} />);
+		}
 
         coordinatesJSX.push(<br/>);
         coordinatesJSX.push(<span>Particuliers: {place.public_access === 1 ? "oui" : "non"}</span>);
@@ -105,11 +108,21 @@ module.exports = React.createClass({
         }
 
         // Adapt the height of panels to number of lines to display in charts
-        var heightPanel = 40 + place.results ? Object.keys(place.results).length * 20 : 40;
+		var heightPanel = 40 + (place.results ? Object.keys(place.results).length * 22 : 40);
         var stylePanel = {'height': heightPanel.toString()+'px'};
         
-        var disclaimer = place.pheromon_id ? "" :  (<p className="disclaimer"><em>Ce centre n&apos;est pas équipé de capteur d&apos;affluence</em></p>);
-		
+        var chartJSX = place.pheromon_id ? 
+        	(<div id={'panel-canvas-'+id} className="panel" style={stylePanel}>
+				<div id={'chart-'+id} className="chart"/>
+				<div id={'data-'+id} className="data">
+					{JSON.stringify(place.results)}
+				</div>
+			</div> ) :  
+			(<p className="disclaimer"><em>Ce centre n&apos;est pas équipé de capteur pour mesurer l&apos;affluence et le niveau des bennes.</em></p>);
+	
+
+
+
 		return (
 			<div id={id} className="place">
 				<ul className="place-header">
@@ -124,30 +137,22 @@ module.exports = React.createClass({
 						<li><button id={'register-'+id} className="place-no-favorite"><img src='../img/no-favorite.svg'/></button></li>
 					</ul>
 				</ul>
-				<div id={'panel-infos-'+id} className={"panel-active"}>
+				<div id={'panel-infos-'+id} className="panel">
 					<div className="coordinates">
-						<div className="address">
+						<div className="map-box">
+							<div id={'map-'+id} className="map"/>
+						</div>
+						<div className="details">
 							<div className="center">
 								{coordinatesJSX}
 							</div>
 						</div>
-						<div className="opening_hours">
-							<div className="center">
-								{calendarJSX}
-							</div>
-						</div>
 					</div>
 				</div>
-				<div id={'panel-canvas-'+id} className={"panel-active"} style={stylePanel}>
-					<div id={'chart-'+id} className="chart"/>
-					<div id={'data-'+id} className="data">
-						{JSON.stringify(place.results)}
-					</div>
-				</div> 
+				{chartJSX}
 				<ul className="bins">
 					{binsJSX}
-				</ul>
-				{disclaimer}				
+				</ul>				
 			</div>);
 	}
 });

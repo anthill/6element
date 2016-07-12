@@ -3,7 +3,7 @@
 (function(global){
 
     var dictionary = undefined;
-    var map = createMap(getCurrentSearch(), document.querySelector('#map'));
+    var map = createMap(getCurrentSearch(), document.querySelector('#map'), 14);
     var currentMapBoundsPlaces = [];
 
     global.translate = function(en){

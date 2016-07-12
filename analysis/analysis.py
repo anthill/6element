@@ -8,7 +8,6 @@ import json
 import os
 import pprint
 import sys
-import time
 import urllib
 
 # Help message

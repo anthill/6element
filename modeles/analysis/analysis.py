@@ -3,12 +3,9 @@
 from multiprocessing import Pool
 import datetime
 import dateutil.parser
-import grequests
 import json
 import os
-import pprint
 import sys
-import urllib
 
 # Help message
 if (len(sys.argv) == 1 or sys.argv[1] == "-h"):
@@ -31,7 +28,6 @@ opening_hours = json_from_file("../sensors/opening_hours.json")
 
 allsensors = []
 base = datetime.datetime.today()
-pp = pprint.PrettyPrinter(indent = 4)
 X = range(0, 24)
 
 # Analyzing dates up to 300 days back
@@ -53,12 +49,6 @@ def nb_measures_expected(place_id, hour, month, day):
                 return 12
             return 0
     return 0
-
-# Creating streams to prepare the download of data in JSON from the API
-def retrieve_sensors_data(sensor):
-    # Loading all the measures and sorting them by date, to process them in order
-    url = configuration["data_source"] + "/measurements/places?ids=" + str(sensor["id"]) + "&types=wifi"
-    return grequests.get(url)
 
 # Processing statistics from the JSON got from the API
 def process_sensor(sensor, measures):

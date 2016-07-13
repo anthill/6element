@@ -4,11 +4,9 @@ from matplotlib.pyplot import figure, show
 import datetime
 import dateutil.parser
 import json
-import numpy as npy
 import os
 import pylab as plt
 import sys
-import urllib
 
 if (len(sys.argv) < 2):
     print "Usage: " + sys.argv[0] + " place_id"

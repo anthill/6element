@@ -4,10 +4,8 @@ from multiprocessing import Pool
 import pandas as pd
 import datetime
 import dateutil.parser
-import grequests
 import json
 import os
-import pprint
 import sys
 
 # Help message
@@ -31,7 +29,6 @@ opening_hours = json_from_file("../sensors/opening_hours.json")
 
 allsensors = []
 base = datetime.datetime.today()
-pp = pprint.PrettyPrinter(indent = 4)
 X = range(0, 24)
 
 # Analyzing dates up to 300 days back

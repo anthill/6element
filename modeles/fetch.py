@@ -1,6 +1,7 @@
 #!/usr/bin/python
 
 import urllib
+import grequests
 import os
 import json
 
@@ -8,8 +9,8 @@ def save_to_file(relative_path, data):
     fs = open(os.path.dirname(os.path.abspath(__file__)) + "/" + relative_path, 'w+')
     fs.write(data)
 
-def retrieve_data(sensor):
-    data = json.loads(urllib.urlopen(configuration["data_source"] + "/measurements/places?ids=" + str(sensor["id"]) + "&types=wifi").read())
+def order_data(res):
+    data = json.loads(res)
     data.sort(key = lambda arr: arr["date"])
     return json.dumps(data)
 
@@ -28,4 +29,8 @@ save_to_file("sensors/all_places_infos.json", places)
 opening_hours_url = configuration["data_source"] + "/sensor/getAll?s=" + configuration["secret"]
 save_to_file("sensors/opening_hours.json", urllib.urlopen(opening_hours_url).read())
 
-map(lambda sensor: save_to_file("sensors/sensor-" + str(sensor["id"]) + "_wifi.json", retrieve_data(sensor)), json.loads(places))
+json_places = json.loads(places)
+
+requests = map(lambda place: grequests.get(configuration["data_source"] + "/measurements/places?ids=" + str(place["id"]) + "&types=wifi"), json_places)
+results = grequests.map(requests)
+map(lambda (index, result): save_to_file("sensors/sensor-" + str(json_places[index]["id"]) + "_wifi.json", order_data(result.content)), enumerate(results))

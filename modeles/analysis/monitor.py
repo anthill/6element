@@ -21,7 +21,7 @@ if (len(sys.argv) < 2):
 place_id = sys.argv[1]
 
 # Opening configuration, needed for selecting the API's source
-secret_json = os.path.dirname(os.path.abspath(__file__)) + "/../PRIVATE.json"
+secret_json = os.path.dirname(os.path.abspath(__file__)) + "/../../PRIVATE.json"
 with open(secret_json) as configuration_json:
     configuration = json.load(configuration_json)
 

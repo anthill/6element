@@ -22,7 +22,7 @@ if (len(sys.argv) == 1 or sys.argv[1] == "-h"):
     exit()
 
 # Loading configuration, needed for data_source and secret
-secret_json = os.path.dirname(os.path.abspath(__file__)) + "/../PRIVATE.json"
+secret_json = os.path.dirname(os.path.abspath(__file__)) + "/../../PRIVATE.json"
 with open(secret_json) as configuration_json:
     configuration = json.load(configuration_json)
 

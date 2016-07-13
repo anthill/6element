@@ -290,11 +290,24 @@ article .adapt-width{
     padding: 10px 10px;
 }
 @media screen and (max-width: 400px) {
+	nav{
+		bottom: 0;
+		height: 95px;
+	}	
+	#navigation{
+		height: 95px;
+		background-color: #616161; 
+	}
+	.place-header li {
+	    float: none;
+	}
 	.place-avatar,
 	.place-header > li:first-child {
-		width: 0;
 		padding: 0;
 		margin: 0;
+	}
+	span.legend{
+		display: none !important;
 	}
 }
 

@@ -20,16 +20,9 @@ if (len(sys.argv) < 2):
 
 place_id = sys.argv[1]
 
-# Opening configuration, needed for selecting the API's source
-secret_json = os.path.dirname(os.path.abspath(__file__)) + "/../../PRIVATE.json"
-with open(secret_json) as configuration_json:
-    configuration = json.load(configuration_json)
-
-# Loading measures for the selected place, and sorting them by date
-# beacause we will need to process each measure in order
-url = configuration["data_source"] + "/measurements/places?ids=" + place_id + "&types=wifi"
-measures = json.loads(urllib.urlopen(url).read())
-measures.sort(key = lambda arr: arr["date"])
+# Loading measures for the selected place
+with open(os.path.dirname(os.path.abspath(__file__)) + "/../sensors/sensor-" + place_id + "_wifi.json") as fs:
+    measures = json.load(fs)
 
 X = range(0, 24)
 res = [0] * len(X)
@@ -45,7 +38,7 @@ for measure in measures:
 
         # Adding plot to the chart
         plt.plot(X, res)
-        
+
         # Display contradictions in measures counts, by hour
         for index, nb_in_an_hour in enumerate(res):
             date_log = last.strftime("%Y-%m-%d") + ", at " + str(index) + " o'clock, with " + str(nb_in_an_hour) + " measures"

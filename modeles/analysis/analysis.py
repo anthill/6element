@@ -21,18 +21,13 @@ if (len(sys.argv) == 1 or sys.argv[1] == "-h"):
     print
     exit()
 
-# Loading configuration, needed for data_source and secret
-secret_json = os.path.dirname(os.path.abspath(__file__)) + "/../../PRIVATE.json"
-with open(secret_json) as configuration_json:
-    configuration = json.load(configuration_json)
+def json_from_file(relative_path):
+    with open(os.path.dirname(os.path.abspath(__file__)) + "/" + relative_path) as fs:
+        return json.load(fs)
 
-# Getting infos of all places
-places_url = configuration["data_source"] + "/allPlacesInfos"
-places = json.loads(urllib.urlopen(places_url).read())
-
-# Retrieving datas of opening hours of each places
-opening_hours_url = configuration["data_source"] + "/sensor/getAll?s=" + configuration["secret"]
-opening_hours = json.loads(urllib.urlopen(opening_hours_url).read())
+# Loading all sensors' datas
+places = json_from_file("/../sensors/all_places_infos.json")
+opening_hours = json_from_file("../sensors/opening_hours.json")
 
 allsensors = []
 base = datetime.datetime.today()
@@ -66,9 +61,9 @@ def retrieve_sensors_data(sensor):
     return grequests.get(url)
 
 # Processing statistics from the JSON got from the API
-def process_sensor(sensor, response):
+def process_sensor(sensor, measures):
     # If there was an error retrieving data (via the API)
-    if response is None or response.status_code != 200:
+    if len(measures) == 0:
         print "Fatal error retrieving sensor data for \"" + sensor["name"].encode('utf-8') + "\""
         return ("", "")
 
@@ -81,8 +76,6 @@ def process_sensor(sensor, response):
     nb_duplicatas = [0] * len(X)
     res = [0] * len(X)
     values = [0] * len(X)
-    measures = json.loads(response.content)
-    measures.sort(key = lambda arr: arr["date"])
     max_all_days = [0] * 300
 
     for i, measure in enumerate(measures):
@@ -173,13 +166,9 @@ def final_writes(res):
     json_output.write(json.dumps(final_json))
 
 # This function will be given as parameter to the thread pool
-def parallelize((index, response)):
-    return process_sensor(places[index], response)
-
-# Processing get requests
-sensor_streams = map(retrieve_sensors_data, places)
-requests = grequests.map(sensor_streams)
+def parallelize(sensor):
+    return process_sensor(sensor, json_from_file("../sensors/sensor-" + str(sensor["id"]) + "_wifi.json"))
 
 # Processing datas in multithread
-processed_sensors_res = Pool(len(requests)).map(parallelize, enumerate(requests))
+processed_sensors_res = Pool(len(places) / 2).map(parallelize, places)
 final_writes(processed_sensors_res)

@@ -165,6 +165,19 @@ app.get('/decheteries.html', function(req,res){
 
 // ---------- API ----------
 
+app.get('/places', function(req,res){
+
+    // DB places
+    getPlaces
+    .then(function(placesFromDB){
+        res.status(200).send(placesFromDB);
+    })
+    .catch(function(error){
+        console.error('error in GET places /places', error); 
+	res.status(500).send('Couldn\'t retrieve places infos');
+    });
+});
+
 app.get('/bins/get/:pheromonId', function(req, res){
     if(req.query.s === PRIVATE.secret) {
         var pheromonId = req.params.pheromonId;

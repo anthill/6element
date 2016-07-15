@@ -31,6 +31,13 @@ opening_hours = json_from_file("../sensors/opening_hours.json")
 allsensors = []
 base = datetime.datetime.today()
 X = range(0, 24)
+week_day = {"Mon": 0,
+        "Tue": 1,
+        "Wed": 2,
+        "Thu": 3,
+        "Fri": 4,
+        "Sat": 5,
+        "Sun": 6}
 
 # Analyzing dates up to 300 days back
 date_list = {}
@@ -82,7 +89,7 @@ def process_sensor(sensor, measures):
 
     # Building dataset
     df = pd.DataFrame(data = list(zip(map(retrieve_hour, measures), map(retrieve_nb_measured, measures))), columns = ["Date", "Nb_measured"])
-    median = math.ceil(df["Nb_measured"].median())
+    median = math.ceil(df["Nb_measured"].median() + 0.01)
     df = df.groupby("Date").mean()
 
     # Removing measures when it's closed
@@ -91,7 +98,7 @@ def process_sensor(sensor, measures):
     del df["Expected"]
 
     # Adding features
-    df["Day_of_week"] = df.apply(lambda row: row.name.strftime("%j"), axis = 1)
+    df["Day_of_week"] = df.apply(lambda row: week_day[row.name.strftime("%a")], axis = 1)
     df["Hour_of_day"] = df.apply(lambda row: row.name.hour, axis = 1)
     df["Month"] = df.apply(lambda row: row.name.month, axis = 1)
     df["Level"] = df.apply(lambda row: get_level(median, row["Nb_measured"]), axis = 1)
@@ -106,4 +113,4 @@ def parallelize(sensor):
     return process_sensor(sensor, json_from_file("../sensors/sensor-" + str(sensor["id"]) + "_wifi.json"))
 
 # Processing datas in multithread
-processed_sensors_res = map(parallelize, places)
+processed_sensors_res = Pool(len(places) / 2).map(parallelize, places)

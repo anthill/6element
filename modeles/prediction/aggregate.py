@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/ipython
 
 from multiprocessing import Pool
 import pandas as pd
@@ -7,6 +7,7 @@ import dateutil.parser
 import json
 import os
 import sys
+import math
 
 # Help message
 if (len(sys.argv) == 1 or sys.argv[1] == "-h") and 0 == 1:
@@ -56,15 +57,23 @@ def nb_measures_expected(place_id, hour, month, day):
 
 def retrieve_hour(measure):
     date = dateutil.parser.parse(measure["date"])
-    return date.strftime("%Y-%m-%dT%H:00:00.000Z")
+    date = date - datetime.timedelta(minutes = date.minute, seconds = date.second, microseconds = date.microsecond)
+    return date
 
 def retrieve_nb_measured(measure):
     return len(measure["value"])
 
+def get_level(median, nb):
+    if (nb <= median):
+        return (0)
+    if (nb <= 2 * median):
+        return (1)
+    return (2)
+
 # Processing statistics from the JSON got from the API
 def process_sensor(sensor, measures):
-    measures
 
+    # If no measures were retrieved
     if (len(measures) == 0):
         print "No measures acquired for " + sensor["name"].encode("utf-8") + ", aborting process for the sensor..."
         return (None)
@@ -72,14 +81,23 @@ def process_sensor(sensor, measures):
     print "Processing sensor: \"" + sensor["name"].encode("utf-8") + "\"..."
 
     # Building dataset
-    df = pd.DataFrame(data = list(zip(map(retrieve_hour, measures), map(retrieve_nb_measured, measures))), columns = ["Date", "Nb measured"])
-    df["Expected"] = df.apply(lambda df: nb_measures_expected(sensor["id"], dateutil.parser.parse(df["Date"]).hour, dateutil.parser.parse(df["Date"]).month, dateutil.parser.parse(df["Date"]).day), axis = 1)
+    df = pd.DataFrame(data = list(zip(map(retrieve_hour, measures), map(retrieve_nb_measured, measures))), columns = ["Date", "Nb_measured"])
+    median = math.ceil(df["Nb_measured"].median())
+    df = df.groupby("Date").mean()
+
+    # Removing measures when it's closed
+    df["Expected"] = df.apply(lambda row: nb_measures_expected(sensor["id"], row.name.hour, row.name.month, row.name.day), axis = 1)
     df = df[df["Expected"] > 0]
-    df = df.groupby("Date").median()
     del df["Expected"]
 
+    # Adding features
+    df["Day_of_week"] = df.apply(lambda row: row.name.strftime("%j"), axis = 1)
+    df["Hour_of_day"] = df.apply(lambda row: row.name.hour, axis = 1)
+    df["Month"] = df.apply(lambda row: row.name.month, axis = 1)
+    df["Level"] = df.apply(lambda row: get_level(median, row["Nb_measured"]), axis = 1)
+
     # Output the mean number of people spotted by hour
-    df.to_excel("dataset_sensor-" + str(sensor["id"]) + ".xls")
+    df.to_csv("dataset_sensor-" + str(sensor["id"]) + ".csv")
 
     return (df)
 
@@ -88,4 +106,4 @@ def parallelize(sensor):
     return process_sensor(sensor, json_from_file("../sensors/sensor-" + str(sensor["id"]) + "_wifi.json"))
 
 # Processing datas in multithread
-processed_sensors_res = Pool(len(places) / 2).map(parallelize, places)
+processed_sensors_res = map(parallelize, places)

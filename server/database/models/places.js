@@ -94,6 +94,30 @@ module.exports = {
         }); 
     },
 
+    getByPheromonIds: function(placePheromonIds){
+        return databaseP.then(function (db) {
+
+            var query = places
+                .select(places.star())
+                .from(places)
+                .where(places.pheromon_id.in(placePheromonIds))
+                .toQuery();
+
+            return new Promise(function (resolve, reject) {
+                db.query(query, function (err, result) {
+                    if (err) {
+                        console.log('ERROR in searching place', query);
+                        reject(err);
+                    }
+                    else resolve(assignColors(result.rows));
+                });
+            });
+        })
+        .catch(function(err){
+            console.log('ERROR in get Place', err);
+        });
+    },
+
     getByIds: function(placeIds){
         return databaseP.then(function (db) {
 

@@ -173,12 +173,12 @@ app.get('/place/:placeId', function(req,res){
     }
 
     // DB places
-    places.getByIds(req.params.placeId.split(','))
+    places.getByPheromonIds(req.params.placeId.split(','))
     .then(function(placesFromDB){
         res.status(200).send(placesFromDB);
     })
     .catch(function(error){
-        console.error('error in GET places /places', error);
+        console.error('error in GET places /place', error);
 	res.status(500).send('Couldn\'t retrieve places infos');
     });
 });

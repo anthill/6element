@@ -23,4 +23,4 @@ client/views/*.js
 
 requetesDB.md
 
-server/database/management/declarations.js
+declarations.js

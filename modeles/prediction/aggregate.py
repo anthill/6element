@@ -77,6 +77,12 @@ def get_level(median, nb):
         return (1)
     return (2)
 
+def get_prev(df, date):
+    date = date - datetime.timedelta(hours = 1)
+    if (date in df.index):
+        return df.loc[date]["Nb_measured"]
+    return 0
+
 # Processing statistics from the JSON got from the API
 def process_sensor(sensor, measures):
 
@@ -98,6 +104,7 @@ def process_sensor(sensor, measures):
     del df["Expected"]
 
     # Adding features
+    df["Previous"] = df.apply(lambda row: get_prev(df, row.name), axis = 1)
     df["Day_of_week"] = df.apply(lambda row: week_day[row.name.strftime("%a")], axis = 1)
     df["Hour_of_day"] = df.apply(lambda row: row.name.hour, axis = 1)
     df["Month"] = df.apply(lambda row: row.name.month, axis = 1)

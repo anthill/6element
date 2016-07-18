@@ -165,15 +165,20 @@ app.get('/decheteries.html', function(req,res){
 
 // ---------- API ----------
 
-app.get('/places', function(req,res){
+app.get('/place/:placeId', function(req,res){
+
+    if(req.params.placeId === undefined){
+        console.error('/', err, err.stack);
+        redirectError(res, 'Erreur de traitement, veuillez renouveler votre recherche');
+    }
 
     // DB places
-    getPlaces
+    places.getByIds(req.params.placeId.split(','))
     .then(function(placesFromDB){
         res.status(200).send(placesFromDB);
     })
     .catch(function(error){
-        console.error('error in GET places /places', error); 
+        console.error('error in GET places /places', error);
 	res.status(500).send('Couldn\'t retrieve places infos');
     });
 });

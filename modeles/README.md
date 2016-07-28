@@ -53,6 +53,6 @@ Those JSON datas are save in the file given as first argument, while CSV in the 
 `./analysis.py json_output [csv_output]`
 
 
-## `prediction/prediction.py`
+## `prediction/*`
 
-*Work in progress*
+Please have a look at [the other README](prediction/README.md).

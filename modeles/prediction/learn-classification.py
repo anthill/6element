@@ -1,4 +1,4 @@
-#!/usr/bin/ipython
+#!/usr/bin/python
 
 import pandas as pd
 import datetime
@@ -6,6 +6,7 @@ import dateutil.parser
 import json
 import os
 from sklearn.tree import DecisionTreeClassifier
+from sklearn.tree import export_graphviz
 from sklearn import metrics
 from sklearn import svm
 from sklearn import cross_validation
@@ -37,7 +38,7 @@ for place in places:
 print "Scoring..."
 del X["Level"]
 del X["Nb_measured"]
-cv = cross_validation.ShuffleSplit(X.shape[0], test_size = 0.2, random_state = 0)
+cv = cross_validation.ShuffleSplit(X.shape[0], test_size = 0.2, random_state = 0, n_iter = 4)
 scores = cross_validation.cross_val_score(clf, X, y["Level"], scoring = "f1_weighted", cv = cv)
 if (scores.mean() < 0.8):
     print("   Accuracy: %0.2f (+/- %0.2f)" % (scores.mean(), scores.std() * 2))
@@ -52,3 +53,9 @@ cm = metrics.confusion_matrix(y_test, y_pred)
 print
 print "Confusion matrix:"
 print cm
+
+with open('tree.dot', 'w') as dotfile:
+    export_graphviz(
+        dt,
+        dotfile,
+        feature_names=X.columns)

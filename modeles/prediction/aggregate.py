@@ -1,7 +1,6 @@
-#!/usr/bin/ipython
+#!/usr/bin/python
 
 from multiprocessing import Pool
-from osm_time.opening_hours import OpeningHours
 from opening_hours import OpeningHours
 import datetime
 import dateutil.parser
@@ -9,6 +8,7 @@ import json
 import math
 import os
 import pandas as pd
+import pytz
 import sys
 
 # Help message
@@ -27,6 +27,7 @@ def json_from_file(relative_path):
         return json.load(fs)
 
 # Loading all sensors' datas
+weather_forecast = json_from_file('../sensors/weather.json')
 places = json_from_file("/../sensors/all_places_infos.json")
 opening_hours = {}
 for place in places:
@@ -34,7 +35,6 @@ for place in places:
 
 allsensors = []
 base = datetime.datetime.today()
-X = range(0, 24)
 week_day = {"Mon": 0,
         "Tue": 1,
         "Wed": 2,
@@ -42,6 +42,10 @@ week_day = {"Mon": 0,
         "Fri": 4,
         "Sat": 5,
         "Sun": 6}
+
+# Initializing timezone
+paris = pytz.timezone('Europe/Paris')
+utc = pytz.utc
 
 # Analyzing dates up to 300 days back
 date_list = {}
@@ -83,21 +87,47 @@ def process_sensor(sensor, measures):
 
     # Building dataset
     df = pd.DataFrame(data = list(zip(map(retrieve_hour, measures), map(retrieve_nb_measured, measures))), columns = ["Date", "Nb_measured"])
-    median = math.ceil(df["Nb_measured"].median() + 0.01)
+    df["is_open"] = df.apply(lambda row: opening_hours[str(sensor["id"])].is_open(row["Date"].astimezone(paris)), axis = 1)
+
+    median = math.ceil(df[df["is_open"] == 1]["Nb_measured"].median() + 0.01)
+
+    # Grouping duplicates:
     df = df.groupby("Date").mean()
 
-    # Removing measures when it's closed
-    print "Opening hours for " + sensor['name'].encode('utf-8') + " (" + str(sensor["id"]) + "):\n" + str(opening_hours[str(sensor["id"])])
-    df["is_open"] = df.apply(lambda row: opening_hours[str(sensor["id"])].is_open(row.name), axis = 1)
 
     # Adding features
-    #df["Previous"] = df.apply(lambda row: get_prev(df, row.name), axis = 1)
-    df["Day_of_week"] = df.apply(lambda row: week_day[row.name.strftime("%a")], axis = 1)
-    df["Hour_of_day"] = df.apply(lambda row: row.name.hour, axis = 1)
-    df["Month"] = df.apply(lambda row: row.name.month, axis = 1)
-    df["Level"] = df.apply(lambda row: (get_level(median, row["Nb_measured"]) if (row["is_open"]) else 0), axis = 1)
 
-    # Output the mean number of people spotted by hour
+    df["Previous"]            = df.apply(lambda row: get_prev(df, row.name), axis = 1)
+    df["Day_of_week"]         = df.apply(lambda row: week_day[row.name.strftime("%a")], axis = 1)
+    df["Hour_of_day"]         = df.apply(lambda row: row.name.hour, axis = 1)
+    df["Month"]               = df.apply(lambda row: row.name.month, axis = 1)
+
+    df["Weather"]             = df.apply(lambda row: int(weather_forecast[str(row.name.year)][str(row.name.month)][str(row.name.day)]["weather"][str(row.name.hour - 1 if row.name.hour else 0)]), axis = 1)
+
+    # Additionnal features (disabled by default due to decreasing of accuracy):
+
+    #df["Weather_Quality"]     = df.apply(lambda row: int(weather_forecast[str(row.name.year)][str(row.name.month)][str(row.name.day)]["weather_quality"][str(row.name.hour - 1)]), axis = 1)
+    #df["Weather_Type"]        = df.apply(lambda row: int(weather_forecast[str(row.name.year)][str(row.name.month)][str(row.name.day)]["weather_type"][str(row.name.hour - 1)]), axis = 1)
+    #df["Weather_Temperature"] = df.apply(lambda row: int(weather_forecast[str(row.name.year)][str(row.name.month)][str(row.name.day)]["temperature"][str(row.name.hour - 1)] / 10), axis = 1)
+
+
+    # Get the level of the number of people measured, depending on the median of the list
+    #  - The first one set the lower level to each measures got on closed hours of the place
+    #  - The second one set the level for each hours including closed ones
+    #
+    # Please comment out the method you want to use
+
+    df["Level"]               = df.apply(lambda row: (get_level(median, row["Nb_measured"]) if (row["is_open"]) else 0), axis = 1)
+    #df["Level"]               = df.apply(lambda row: (get_level(median, row["Nb_measured"])), axis = 1)
+
+
+    # Removing measures on closed hours:
+
+    #df = df[df["is_open"] == 1]
+    #del df["is_open"]
+
+
+    # Output the mean number of people spotted by hour:
     df.to_csv("dataset_sensor-" + str(sensor["id"]) + ".csv")
 
     return (df)
@@ -107,4 +137,4 @@ def parallelize(sensor):
     return process_sensor(sensor, json_from_file("../sensors/sensor-" + str(sensor["id"]) + "_wifi.json"))
 
 # Processing datas in multithread
-processed_sensors_res = Pool(len(places) / 2).map(parallelize, places)
+Pool(len(places) / 2).map(parallelize, places)

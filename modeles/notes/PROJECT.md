@@ -92,6 +92,6 @@ reality - predicted
 As we can see, the badly predicted values are the peaks we precisely wanted to predict; for this reason, a regression tree really can't meet our needs here.
 
 
-## Next tries and models
+## [Next tries and models](MODELS.md)
 
 The next models we will try are models that aren't predicting if a worst case *will* happen at a specific moment, but what is the probability that it happens knowing all the features. This is a better idea when we cannot have all of the features of a model, or when we consider some of them are random, or are more or less likely to happen.

@@ -6,7 +6,9 @@ Here the description of some of the models I found and why are they interesting 
 
 The Bayesian method is a way to learn probabilities from patterns, and to gradually improve the quality of the statistics as we have more data.
 
-This can be an interesting approach as we have better data to predict affluence over time ([I mentioned here including the previous hour's affluence improved the prediction](PROJECT.md)); however as people won't need to throw their waste because a lot of people also needed to at the beginning of the day, I think we can find a better model that doesn't only matter on the previous affluence.
+[It's a way to say](http://fastml.com/bayesian-machine-learning/): "oh, so this event happened at this moment. Known that, the probability of the happening of our target is...".
+
+This can be an interesting approach as we have better data to predict affluence over time ([I mentioned here including the previous hour's affluence improved the prediction](PROJECT.md)); moreover, it's a model that learn from previous cases to compute the probability. However, that's a model which can't estimate correctly unknown cases, and as we don't have a lot of measures (time features are based on the current's period of the year, and as we don't have a year of measures, some of time features values were never met yet), Bayesian may tell there is a 0% chances for our target's event to happen. Same problem if we only have a single measure including this case: either we have a 0% chances, or a 100% chances, only depending on what happened during the previous case with the same features.
 
 ## [Predicting rare events in event sequences](http://storm.cis.fordham.edu/~gweiss/papers/kdd98.pdf)
 
